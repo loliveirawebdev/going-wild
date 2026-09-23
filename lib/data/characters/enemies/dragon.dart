@@ -23,6 +23,7 @@ const Character dragon = Character(
     Stat.armor: 2.5,
     Stat.shield: 1,
     Stat.attackSpeed: 0.7,
+    Stat.moveSpeed: 1.2,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 90,

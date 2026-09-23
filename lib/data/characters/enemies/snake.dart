@@ -24,6 +24,7 @@ const Character snake = Character(
     Stat.armor: 0.6,
     Stat.shield: 1,
     Stat.attackSpeed: 0.9,
+    Stat.moveSpeed: 0.7,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 50,

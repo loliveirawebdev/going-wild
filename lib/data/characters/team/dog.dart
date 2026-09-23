@@ -31,6 +31,7 @@ const Character dog = Character(
     Stat.armor: 1.9,
     Stat.shield: 1,
     Stat.attackSpeed: 1,
+    Stat.moveSpeed: 1.6,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 20,
     Stat.manaMax: 70,

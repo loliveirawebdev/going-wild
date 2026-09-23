@@ -22,6 +22,7 @@ const Character kraken = Character(
     Stat.armor: 2.8,
     Stat.shield: 1,
     Stat.attackSpeed: 0.5,
+    Stat.moveSpeed: 0.4,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 20,
     Stat.manaMax: 70,

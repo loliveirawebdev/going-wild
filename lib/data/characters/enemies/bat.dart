@@ -23,6 +23,7 @@ const Character bat = Character(
     Stat.armor: 0.4,
     Stat.shield: 1,
     Stat.attackSpeed: 1.1,
+    Stat.moveSpeed: 1.4,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 50,

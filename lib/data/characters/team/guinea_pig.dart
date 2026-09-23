@@ -23,6 +23,7 @@ const Character guineaPig = Character(
     Stat.armor: 1,
     Stat.shield: 1,
     Stat.attackSpeed: 1,
+    Stat.moveSpeed: 0.8,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 50,

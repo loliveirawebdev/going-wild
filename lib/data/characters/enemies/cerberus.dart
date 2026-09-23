@@ -31,6 +31,7 @@ const Character cerberus = Character(
     Stat.armor: 2.4,
     Stat.shield: 1,
     Stat.attackSpeed: 0.8,
+    Stat.moveSpeed: 1.5,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 80,

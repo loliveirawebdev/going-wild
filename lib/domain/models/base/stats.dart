@@ -7,6 +7,7 @@ class Stats {
     required this.armor,
     required this.shield,
     required this.attackSpeed,
+    required this.moveSpeed,
     required this.damageTakenPercentage,
     required this.manaStart,
     required this.manaMax,
@@ -18,6 +19,7 @@ class Stats {
   final double armor;
   final double shield;
   final double attackSpeed;
+  final double moveSpeed;
   final double damageTakenPercentage;
   final double manaStart;
   final double manaMax;
@@ -29,6 +31,7 @@ class Stats {
     Stat.armor => armor,
     Stat.shield => shield,
     Stat.attackSpeed => attackSpeed,
+    Stat.moveSpeed => moveSpeed,
     Stat.damageTakenPercentage => damageTakenPercentage,
     Stat.manaStart => manaStart,
     Stat.manaMax => manaMax,
@@ -41,6 +44,7 @@ class Stats {
     Stat.armor => copyWith(armor: value),
     Stat.shield => copyWith(shield: value),
     Stat.attackSpeed => copyWith(attackSpeed: value),
+    Stat.moveSpeed => copyWith(moveSpeed: value),
     Stat.damageTakenPercentage => copyWith(damageTakenPercentage: value),
     Stat.manaStart => copyWith(manaStart: value),
     Stat.manaMax => copyWith(manaMax: value),
@@ -53,6 +57,7 @@ class Stats {
     double? armor,
     double? shield,
     double? attackSpeed,
+    double? moveSpeed,
     double? damageTakenPercentage,
     double? manaStart,
     double? manaMax,
@@ -63,6 +68,7 @@ class Stats {
     armor: armor ?? this.armor,
     shield: shield ?? this.shield,
     attackSpeed: attackSpeed ?? this.attackSpeed,
+    moveSpeed: moveSpeed ?? this.moveSpeed,
     damageTakenPercentage: damageTakenPercentage ?? this.damageTakenPercentage,
     manaStart: manaStart ?? this.manaStart,
     manaMax: manaMax ?? this.manaMax,

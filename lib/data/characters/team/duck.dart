@@ -23,6 +23,7 @@ const Character duck = Character(
     Stat.armor: 0.75,
     Stat.shield: 1,
     Stat.attackSpeed: 1.05,
+    Stat.moveSpeed: 0.8,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 60,

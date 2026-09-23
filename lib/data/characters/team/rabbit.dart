@@ -34,6 +34,7 @@ const Character rabbit = Character(
     Stat.armor: 0.75,
     Stat.shield: 1,
     Stat.attackSpeed: 1.2,
+    Stat.moveSpeed: 1.5,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 40,

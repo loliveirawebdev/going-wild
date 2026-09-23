@@ -28,6 +28,7 @@ const Character goat = Character(
     Stat.armor: 2.05,
     Stat.shield: 1,
     Stat.attackSpeed: 0.95,
+    Stat.moveSpeed: 1.1,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 60,

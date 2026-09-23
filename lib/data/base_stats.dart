@@ -6,6 +6,7 @@ const Stats baseStats = Stats(
   armor: 20,
   shield: 0,
   attackSpeed: 0.7,
+  moveSpeed: 1,
   damageTakenPercentage: 1,
   manaStart: 1,
   manaMax: 1,

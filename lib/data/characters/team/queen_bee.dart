@@ -24,6 +24,7 @@ const Character queenBee = Character(
     Stat.armor: 1.05,
     Stat.shield: 1,
     Stat.attackSpeed: 1.15,
+    Stat.moveSpeed: 1.4,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 60,

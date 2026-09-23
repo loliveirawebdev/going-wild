@@ -28,6 +28,7 @@ const Character boar = Character(
     Stat.armor: 1.5,
     Stat.shield: 1,
     Stat.attackSpeed: 0.7,
+    Stat.moveSpeed: 1.3,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 70,

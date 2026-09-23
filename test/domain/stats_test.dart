@@ -8,6 +8,7 @@ void main() {
     armor: 5,
     shield: 0,
     attackSpeed: 0.7,
+    moveSpeed: 1,
     damageTakenPercentage: 1,
     manaStart: 0,
     manaMax: 60,

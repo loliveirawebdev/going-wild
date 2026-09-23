@@ -28,6 +28,7 @@ const Character alligator = Character(
     Stat.armor: 2,
     Stat.shield: 1,
     Stat.attackSpeed: 0.6,
+    Stat.moveSpeed: 0.8,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 80,

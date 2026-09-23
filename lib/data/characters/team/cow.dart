@@ -30,6 +30,7 @@ const Character cow = Character(
     Stat.armor: 2.3,
     Stat.shield: 1,
     Stat.attackSpeed: 0.85,
+    Stat.moveSpeed: 1.1,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 80,

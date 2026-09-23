@@ -23,6 +23,7 @@ const Character fox = Character(
     Stat.armor: 0.6,
     Stat.shield: 1,
     Stat.attackSpeed: 1.2,
+    Stat.moveSpeed: 1.8,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 40,

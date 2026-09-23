@@ -27,6 +27,7 @@ const Character cat = Character(
     Stat.armor: 0.9,
     Stat.shield: 1,
     Stat.attackSpeed: 1.2,
+    Stat.moveSpeed: 1.6,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 0,
     Stat.manaMax: 60,

@@ -8,5 +8,4 @@ enum EffectTarget {
   nearbyEnemies,
   enemiesAroundFocus,
   allEnemies,
-  line,
 }

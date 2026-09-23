@@ -4,6 +4,7 @@ enum Stat {
   armor,
   shield,
   attackSpeed,
+  moveSpeed,
   damageTakenPercentage,
   manaStart,
   manaMax,
