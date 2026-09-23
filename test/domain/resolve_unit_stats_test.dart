@@ -10,6 +10,7 @@ Stats resolve(Character c, int stars) => resolveUnitStats(
   stars: stars,
   base: baseStats,
   curve: mergeCurveFor(c.role),
+  activeSets: const [],
 );
 
 double power(Character c, int stars) {
