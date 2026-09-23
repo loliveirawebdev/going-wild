@@ -5,6 +5,7 @@ export 'base/stat_multipliers.dart';
 export 'base/stats.dart';
 export 'character/ability/ability.dart';
 export 'character/ability/ability_effect.dart';
+export 'character/ability/ability_trigger.dart';
 export 'character/ability/effect_target.dart';
 export 'character/character.dart';
 export 'character/merge_curve.dart';

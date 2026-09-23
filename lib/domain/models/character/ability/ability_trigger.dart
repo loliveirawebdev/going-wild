@@ -1,0 +1,4 @@
+enum AbilityTrigger {
+  manaFull,
+  lowHealth,
+}

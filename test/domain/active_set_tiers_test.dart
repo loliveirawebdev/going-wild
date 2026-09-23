@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/team/sets/sets.dart';
+import 'package:going_wild/data/sets/sets.dart';
 import 'package:going_wild/domain/models/models.dart';
 import 'package:going_wild/domain/use_cases/active_set_tiers.dart';
 

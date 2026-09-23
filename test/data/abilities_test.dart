@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/team/characters/characters.dart';
+import 'package:going_wild/data/characters/team/team.dart';
 import 'package:going_wild/domain/models/models.dart';
 
 Iterable<AbilityEffect> flatten(Iterable<AbilityEffect> effects) sync* {
@@ -21,19 +21,22 @@ List<StarValues> starValuesOf(AbilityEffect e) => switch (e) {
   NextHitsStatBuffEffect() => [e.value],
   StatDebuffEffect() => [e.value, e.seconds],
   ManaRefundOnKillEffect() => [],
+  LifestealEffect() => [e.value],
+  PullEffect() => [],
+  AmbushEffect() => [e.seconds],
 };
 
 void main() {
   final snake = RegExp(r'^[a-z]+(_[a-z]+)*$');
 
   test('ability ids are unique and snake_case', () {
-    final ids = allCharacters.map((c) => c.ability.id).toSet();
-    expect(ids.length, allCharacters.length);
+    final ids = allTeamCharacters.map((c) => c.ability.id).toSet();
+    expect(ids.length, allTeamCharacters.length);
     for (final id in ids) expect(id, matches(snake), reason: id);
   });
 
   test('every ability has at least one effect', () {
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       expect(
         c.ability.effects,
         isNotEmpty,
@@ -43,14 +46,14 @@ void main() {
   });
 
   test('mana starts below max', () {
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       expect(c.statMultipliers[Stat.manaStart], lessThan(c.statMultipliers[Stat.manaMax]), reason: c.id);
       expect(c.statMultipliers[Stat.manaStart], greaterThanOrEqualTo(0), reason: c.id);
     }
   });
 
   test('star values are positive and never shrink with stars', () {
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       for (final e in flatten(c.ability.effects)) {
         for (final s in starValuesOf(e)) {
           expect(s.star1, greaterThan(0), reason: '${c.id} ${e.runtimeType}');
@@ -62,7 +65,7 @@ void main() {
   });
 
   test('debuffs weaken and buffs strengthen', () {
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       for (final e in flatten(c.ability.effects)) {
         if (e is StatDebuffEffect && e.changeType == StatChangeType.multiplier) {
           expect(
@@ -84,7 +87,7 @@ void main() {
   });
 
   test('knockbacks move at least one cell and refunds are a valid percentage', () {
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       for (final e in flatten(c.ability.effects)) {
         if (e is KnockbackEffect) expect(e.cells, greaterThanOrEqualTo(1), reason: c.id);
         if (e is ManaRefundOnKillEffect) expect(e.percentage, inInclusiveRange(1, 100), reason: c.id);
@@ -93,7 +96,7 @@ void main() {
   });
 
   test('every character defines every stat explicitly', () {
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       for (final stat in Stat.values) {
         expect(
           c.statMultipliers.defines(stat),
@@ -105,7 +108,7 @@ void main() {
   });
 
   test('multipliers are positive and range is 1, 2 or 4 cells', () {
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       for (final stat in Stat.values.where((s) => s != Stat.manaStart)) {
         expect(
           c.statMultipliers[stat],

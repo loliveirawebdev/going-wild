@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/team/base_stats.dart';
-import 'package:going_wild/data/team/characters/characters.dart';
-import 'package:going_wild/data/team/merge_curves/merge_curves.dart';
-import 'package:going_wild/data/team/sets/sets.dart';
+import 'package:going_wild/data/base_stats.dart';
+import 'package:going_wild/data/characters/team/team.dart';
+import 'package:going_wild/data/merge_curves/merge_curves.dart';
+import 'package:going_wild/data/sets/sets.dart';
 import 'package:going_wild/domain/models/models.dart';
 import 'package:going_wild/domain/use_cases/active_set_tiers.dart';
 import 'package:going_wild/domain/use_cases/resolve_unit_stats.dart';
@@ -21,12 +21,12 @@ ActiveSet activeWith(List<SetEffect> effects, {List<Character> members = const [
 }
 
 const melee = chicken;
-final rangedCharacter = allCharacters.firstWhere((c) => c.statMultipliers[Stat.range] > 1);
-final meleeCharacter = allCharacters.firstWhere((c) => c.statMultipliers[Stat.range] == 1);
+final rangedCharacter = allTeamCharacters.firstWhere((c) => c.statMultipliers[Stat.range] > 1);
+final meleeCharacter = allTeamCharacters.firstWhere((c) => c.statMultipliers[Stat.range] == 1);
 
 void main() {
   test('no active sets equals the plain resolution', () {
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       for (final stat in Stat.values) {
         expect(resolve(c, [])[stat], resolve(c, const [])[stat], reason: '${c.id} $stat');
       }
@@ -37,7 +37,7 @@ void main() {
     final set = activeWith([
       const SetEffect(target: SetTarget.entireTeam, stat: Stat.damage, changeType: StatChangeType.multiplier, value: 2),
     ]);
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       expect(resolve(c, [set]).damage, closeTo(resolve(c, []).damage * 2, 0.001), reason: c.id);
     }
   });
@@ -104,7 +104,7 @@ void main() {
         value: 0.5,
       ),
     ]);
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       expect(resolve(c, [set]).armor, resolve(c, []).armor, reason: c.id);
     }
   });

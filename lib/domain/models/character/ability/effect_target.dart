@@ -1,11 +1,12 @@
 enum EffectTarget {
   self,
-  line,
   focus,
-  allEnemies,
-  nearbyAllies,
-  nearbyEnemies,
   lowestHealthAlly,
   lowestHealthEnemy,
+  farthestEnemy,
+  nearbyAllies,
+  nearbyEnemies,
   enemiesAroundFocus,
+  allEnemies,
+  line,
 }

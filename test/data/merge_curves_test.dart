@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/team/merge_curves/merge_curves.dart';
+import 'package:going_wild/data/merge_curves/merge_curves.dart';
 import 'package:going_wild/domain/models/models.dart';
 
 void main() {

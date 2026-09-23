@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/team/base_stats.dart';
-import 'package:going_wild/data/team/characters/characters.dart';
-import 'package:going_wild/data/team/merge_curves/merge_curves.dart';
+import 'package:going_wild/data/base_stats.dart';
+import 'package:going_wild/data/characters/team/team.dart';
+import 'package:going_wild/data/merge_curves/merge_curves.dart';
 import 'package:going_wild/domain/models/models.dart';
 import 'package:going_wild/domain/use_cases/resolve_unit_stats.dart';
 
@@ -18,11 +18,11 @@ double power(Character c, int stars) {
   return s.health * s.damage * s.attackSpeed;
 }
 
-Iterable<Character> ofRarity(Rarity r) => allCharacters.where((c) => c.rarity == r);
+Iterable<Character> ofRarity(Rarity r) => allTeamCharacters.where((c) => c.rarity == r);
 
 void main() {
   test('1 star is the base times the character multipliers', () {
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       final s = resolve(c, 1);
 
       for (final stat in Stat.values) {
@@ -36,7 +36,7 @@ void main() {
   });
 
   test('every star is base times multipliers times the merge curve', () {
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       final curve = mergeCurveFor(c.role);
       for (final stars in [1, 2, 3]) {
         final s = resolve(c, stars);
@@ -54,7 +54,7 @@ void main() {
       role: Role.support,
       rarity: Rarity.common,
       statMultipliers: StatMultipliers({}),
-      ability: Ability(id: 'none', effects: []),
+      ability: Ability(id: 'none', trigger: AbilityTrigger.manaFull, effects: []),
     );
 
     final s = resolve(plain, 1);
@@ -69,7 +69,7 @@ void main() {
   });
 
   test('stars scale health and damage and keep attack speed, mana and range', () {
-    for (final c in allCharacters) {
+    for (final c in allTeamCharacters) {
       final one = resolve(c, 1);
       final three = resolve(c, 3);
       expect(three.health, greaterThan(one.health), reason: c.id);
@@ -106,7 +106,7 @@ void main() {
 
   test('an epic at 3 stars beats any non-epic at 3 stars', () {
     for (final epic in ofRarity(Rarity.epic)) {
-      for (final other in allCharacters.where((c) => c.rarity != Rarity.epic)) {
+      for (final other in allTeamCharacters.where((c) => c.rarity != Rarity.epic)) {
         expect(
           power(epic, 3),
           greaterThan(power(other, 3)),
