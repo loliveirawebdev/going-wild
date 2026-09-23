@@ -1,0 +1,4 @@
+enum StatChangeType {
+  multiplier,
+  absoluteValue,
+}
