@@ -4,8 +4,6 @@ const Character goat = Character(
   id: 'goat',
   role: Role.tank,
   rarity: Rarity.uncommon,
-  range: AttackRange.melee,
-  mana: Mana(start: 0, max: 60),
 
   ability: Ability(
     id: 'headbutt',
@@ -23,12 +21,15 @@ const Character goat = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 1.25,
-    damage: 0.9,
-    armor: 1.65,
-    shield: 1,
-    attackSpeed: 0.95,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 1.5,
+    Stat.damage: 1.1,
+    Stat.armor: 2.05,
+    Stat.shield: 1,
+    Stat.attackSpeed: 0.95,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 0,
+    Stat.manaMax: 60,
+    Stat.range: 1,
+  }),
 );

@@ -1,11 +1,9 @@
 import 'package:going_wild/domain/models/models.dart';
 
 const Character guineaPig = Character(
-  id: 'guinea-pig',
+  id: 'guinea_pig',
   role: Role.guard,
   rarity: Rarity.common,
-  range: AttackRange.midRange,
-  mana: Mana(start: 0, max: 50),
 
   ability: Ability(
     id: 'shriek',
@@ -18,12 +16,15 @@ const Character guineaPig = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 0.9,
-    damage: 0.9,
-    armor: 1,
-    shield: 1,
-    attackSpeed: 1,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 0.9,
+    Stat.damage: 0.9,
+    Stat.armor: 1,
+    Stat.shield: 1,
+    Stat.attackSpeed: 1,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 0,
+    Stat.manaMax: 50,
+    Stat.range: 2,
+  }),
 );

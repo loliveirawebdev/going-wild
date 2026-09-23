@@ -4,8 +4,6 @@ const Character cow = Character(
   id: 'cow',
   role: Role.tank,
   rarity: Rarity.rare,
-  range: AttackRange.melee,
-  mana: Mana(start: 0, max: 80),
 
   ability: Ability(
     id: 'moo',
@@ -25,12 +23,15 @@ const Character cow = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 1.3,
-    damage: 0.8,
-    armor: 1.55,
-    shield: 1,
-    attackSpeed: 0.85,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 1.9,
+    Stat.damage: 1.1,
+    Stat.armor: 2.3,
+    Stat.shield: 1,
+    Stat.attackSpeed: 0.85,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 0,
+    Stat.manaMax: 80,
+    Stat.range: 1,
+  }),
 );

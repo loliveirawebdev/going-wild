@@ -4,11 +4,9 @@ const Character sow = Character(
   id: 'sow',
   role: Role.support,
   rarity: Rarity.uncommon,
-  range: AttackRange.melee,
-  mana: Mana(start: 0, max: 70),
 
   ability: Ability(
-    id: 'mud-roll',
+    id: 'mud_roll',
 
     effects: [
       StatDebuffEffect(
@@ -26,12 +24,15 @@ const Character sow = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 1.15,
-    damage: 0.9,
-    armor: 1.3,
-    shield: 1,
-    attackSpeed: 0.95,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 1.4,
+    Stat.damage: 1.1,
+    Stat.armor: 1.6,
+    Stat.shield: 1,
+    Stat.attackSpeed: 0.95,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 0,
+    Stat.manaMax: 70,
+    Stat.range: 1,
+  }),
 );

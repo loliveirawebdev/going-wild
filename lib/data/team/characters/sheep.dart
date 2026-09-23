@@ -4,11 +4,9 @@ const Character sheep = Character(
   id: 'sheep',
   role: Role.support,
   rarity: Rarity.uncommon,
-  range: AttackRange.melee,
-  mana: Mana(start: 30, max: 80),
 
   ability: Ability(
-    id: 'wool-cloak',
+    id: 'wool_cloak',
 
     effects: [
       ShieldEffect(
@@ -19,12 +17,15 @@ const Character sheep = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 1.1,
-    damage: 0.8,
-    armor: 1.1,
-    shield: 1,
-    attackSpeed: 0.95,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 1.3,
+    Stat.damage: 0.95,
+    Stat.armor: 1.4,
+    Stat.shield: 1,
+    Stat.attackSpeed: 0.95,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 30,
+    Stat.manaMax: 80,
+    Stat.range: 1,
+  }),
 );

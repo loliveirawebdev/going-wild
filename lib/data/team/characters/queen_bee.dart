@@ -1,11 +1,9 @@
 import 'package:going_wild/domain/models/models.dart';
 
 const Character queenBee = Character(
-  id: 'queen-bee',
+  id: 'queen_bee',
   role: Role.support,
   rarity: Rarity.rare,
-  range: AttackRange.longRange,
-  mana: Mana(start: 0, max: 60),
 
   ability: Ability(
     id: 'swarm',
@@ -19,12 +17,15 @@ const Character queenBee = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 0.9,
-    damage: 0.85,
-    armor: 0.7,
-    shield: 1,
-    attackSpeed: 1.15,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 1.3,
+    Stat.damage: 1.2,
+    Stat.armor: 1.05,
+    Stat.shield: 1,
+    Stat.attackSpeed: 1.15,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 0,
+    Stat.manaMax: 60,
+    Stat.range: 4,
+  }),
 );

@@ -4,8 +4,6 @@ const Character chicken = Character(
   id: 'chicken',
   role: Role.support,
   rarity: Rarity.common,
-  range: AttackRange.midRange,
-  mana: Mana(start: 0, max: 60),
 
   ability: Ability(
     id: 'brood',
@@ -19,12 +17,15 @@ const Character chicken = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 1,
-    damage: 1,
-    armor: 1,
-    shield: 1,
-    attackSpeed: 1,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 1,
+    Stat.damage: 1,
+    Stat.armor: 1,
+    Stat.shield: 1,
+    Stat.attackSpeed: 1,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 0,
+    Stat.manaMax: 60,
+    Stat.range: 2,
+  }),
 );

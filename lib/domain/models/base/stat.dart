@@ -1,10 +1,11 @@
 enum Stat {
-  mana,
-  armor,
-  range,
   health,
   damage,
+  armor,
   shield,
   attackSpeed,
   damageTakenPercentage,
+  manaStart,
+  manaMax,
+  range,
 }

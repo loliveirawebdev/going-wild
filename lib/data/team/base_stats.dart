@@ -1,11 +1,13 @@
 import 'package:going_wild/domain/models/models.dart';
 
-const BaseStats baseStats = BaseStats(
+const Stats baseStats = Stats(
+  health: 550,
+  damage: 40,
   armor: 20,
   shield: 0,
-  damage: 40,
-  health: 550,
-  manaPerHit: 10,
   attackSpeed: 0.7,
   damageTakenPercentage: 1,
+  manaStart: 1,
+  manaMax: 1,
+  range: 1,
 );

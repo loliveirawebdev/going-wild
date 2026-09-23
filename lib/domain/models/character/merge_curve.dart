@@ -1,23 +1,11 @@
 import '../base/star_values.dart';
+import '../base/stat.dart';
 
 class MergeCurve {
-  const MergeCurve({
-    required this.health,
-    required this.damage,
-    required this.armor,
-    required this.shield,
-    required this.attackSpeed,
-    required this.damageTakenPercentage,
-    required this.mana,
-    required this.range,
-  });
+  const MergeCurve(this._multipliers);
+  final Map<Stat, StarValues> _multipliers;
+  static const StarValues _unscaled = StarValues(star1: 1, star2: 1, star3: 1);
+  StarValues operator [](Stat stat) => _multipliers[stat] ?? _unscaled;
 
-  final StarValues health;
-  final StarValues damage;
-  final StarValues armor;
-  final StarValues shield;
-  final StarValues attackSpeed;
-  final StarValues damageTakenPercentage;
-  final StarValues mana;
-  final StarValues range;
+  bool defines(Stat stat) => _multipliers.containsKey(stat);
 }

@@ -4,8 +4,6 @@ const Character cat = Character(
   id: 'cat',
   role: Role.damage,
   rarity: Rarity.uncommon,
-  range: AttackRange.melee,
-  mana: Mana(start: 0, max: 60),
 
   ability: Ability(
     id: 'pounce',
@@ -22,12 +20,15 @@ const Character cat = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 0.9,
-    damage: 1.3,
-    armor: 0.7,
-    shield: 1,
-    attackSpeed: 1.2,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 1.1,
+    Stat.damage: 1.55,
+    Stat.armor: 0.9,
+    Stat.shield: 1,
+    Stat.attackSpeed: 1.2,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 0,
+    Stat.manaMax: 60,
+    Stat.range: 1,
+  }),
 );

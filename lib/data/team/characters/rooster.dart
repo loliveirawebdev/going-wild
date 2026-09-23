@@ -4,11 +4,9 @@ const Character rooster = Character(
   id: 'rooster',
   role: Role.damage,
   rarity: Rarity.common,
-  range: AttackRange.midRange,
-  mana: Mana(start: 0, max: 50),
 
   ability: Ability(
-    id: 'dawn-call',
+    id: 'dawn_call',
 
     effects: [
       StatBuffEffect(
@@ -21,12 +19,15 @@ const Character rooster = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 0.85,
-    damage: 1.3,
-    armor: 0.5,
-    shield: 1,
-    attackSpeed: 1.15,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 0.85,
+    Stat.damage: 1.3,
+    Stat.armor: 0.5,
+    Stat.shield: 1,
+    Stat.attackSpeed: 1.15,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 0,
+    Stat.manaMax: 50,
+    Stat.range: 2,
+  }),
 );

@@ -4,8 +4,6 @@ const Character horse = Character(
   id: 'horse',
   role: Role.damage,
   rarity: Rarity.rare,
-  range: AttackRange.melee,
-  mana: Mana(start: 0, max: 70),
 
   ability: Ability(
     id: 'gallop',
@@ -18,12 +16,15 @@ const Character horse = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 0.95,
-    damage: 1.3,
-    armor: 0.8,
-    shield: 1,
-    attackSpeed: 1.15,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 1.4,
+    Stat.damage: 1.8,
+    Stat.armor: 1.2,
+    Stat.shield: 1,
+    Stat.attackSpeed: 1.15,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 0,
+    Stat.manaMax: 70,
+    Stat.range: 1,
+  }),
 );

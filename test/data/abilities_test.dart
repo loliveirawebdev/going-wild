@@ -24,12 +24,12 @@ List<StarValues> starValuesOf(AbilityEffect e) => switch (e) {
 };
 
 void main() {
-  final kebab = RegExp(r'^[a-z]+(-[a-z]+)*$');
+  final snake = RegExp(r'^[a-z]+(_[a-z]+)*$');
 
-  test('ability ids are unique and kebab-case', () {
+  test('ability ids are unique and snake_case', () {
     final ids = allCharacters.map((c) => c.ability.id).toSet();
     expect(ids.length, allCharacters.length);
-    for (final id in ids) expect(id, matches(kebab), reason: id);
+    for (final id in ids) expect(id, matches(snake), reason: id);
   });
 
   test('every ability has at least one effect', () {
@@ -44,8 +44,8 @@ void main() {
 
   test('mana starts below max', () {
     for (final c in allCharacters) {
-      expect(c.mana.start, lessThan(c.mana.max), reason: c.id);
-      expect(c.mana.start, greaterThanOrEqualTo(0), reason: c.id);
+      expect(c.statMultipliers[Stat.manaStart], lessThan(c.statMultipliers[Stat.manaMax]), reason: c.id);
+      expect(c.statMultipliers[Stat.manaStart], greaterThanOrEqualTo(0), reason: c.id);
     }
   });
 
@@ -92,16 +92,29 @@ void main() {
     }
   });
 
-  test('base stat multipliers are positive', () {
+  test('every character defines every stat explicitly', () {
     for (final c in allCharacters) {
-      final m = c.baseStatMultipliers;
-      for (final v in [m.health, m.damage, m.armor, m.shield, m.attackSpeed, m.damageTakenPercentage]) {
+      for (final stat in Stat.values) {
         expect(
-          v,
-          greaterThan(0),
-          reason: c.id,
+          c.statMultipliers.defines(stat),
+          isTrue,
+          reason: '${c.id} $stat',
         );
       }
+    }
+  });
+
+  test('multipliers are positive and range is 1, 2 or 4 cells', () {
+    for (final c in allCharacters) {
+      for (final stat in Stat.values.where((s) => s != Stat.manaStart)) {
+        expect(
+          c.statMultipliers[stat],
+          greaterThan(0),
+          reason: '${c.id} $stat',
+        );
+      }
+
+      expect([1, 2, 4], contains(c.statMultipliers[Stat.range]), reason: c.id);
     }
   });
 }

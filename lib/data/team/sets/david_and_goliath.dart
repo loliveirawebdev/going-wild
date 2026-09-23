@@ -2,7 +2,7 @@ import 'package:going_wild/data/team/characters/characters.dart';
 import 'package:going_wild/domain/models/models.dart';
 
 const TeamSet davidAndGoliath = TeamSet(
-  id: 'david-and-goliath',
+  id: 'david_and_goliath',
 
   members: [
     bull,

@@ -2,7 +2,7 @@ import 'package:going_wild/data/team/characters/characters.dart';
 import 'package:going_wild/domain/models/models.dart';
 
 const TeamSet dayAndNight = TeamSet(
-  id: 'day-and-night',
+  id: 'day_and_night',
 
   members: [
     rooster,

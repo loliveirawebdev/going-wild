@@ -4,8 +4,6 @@ const Character bull = Character(
   id: 'bull',
   role: Role.tank,
   rarity: Rarity.epic,
-  range: AttackRange.melee,
-  mana: Mana(start: 0, max: 90),
 
   ability: Ability(
     id: 'charge',
@@ -28,12 +26,15 @@ const Character bull = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 1.15,
-    damage: 0.9,
-    armor: 1.2,
-    shield: 1,
-    attackSpeed: 0.95,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 2.05,
+    Stat.damage: 1.65,
+    Stat.armor: 2.15,
+    Stat.shield: 1,
+    Stat.attackSpeed: 0.95,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 0,
+    Stat.manaMax: 90,
+    Stat.range: 1,
+  }),
 );

@@ -4,11 +4,9 @@ const Character duck = Character(
   id: 'duck',
   role: Role.damage,
   rarity: Rarity.common,
-  range: AttackRange.midRange,
-  mana: Mana(start: 0, max: 60),
 
   ability: Ability(
-    id: 'sharp-feathers',
+    id: 'sharp_feathers',
 
     effects: [
       DamageEffect(
@@ -18,12 +16,15 @@ const Character duck = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 0.9,
-    damage: 1.2,
-    armor: 0.75,
-    shield: 1,
-    attackSpeed: 1.05,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 0.9,
+    Stat.damage: 1.2,
+    Stat.armor: 0.75,
+    Stat.shield: 1,
+    Stat.attackSpeed: 1.05,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 0,
+    Stat.manaMax: 60,
+    Stat.range: 2,
+  }),
 );

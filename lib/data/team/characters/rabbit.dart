@@ -4,11 +4,9 @@ const Character rabbit = Character(
   id: 'rabbit',
   role: Role.damage,
   rarity: Rarity.common,
-  range: AttackRange.midRange,
-  mana: Mana(start: 0, max: 40),
 
   ability: Ability(
-    id: 'quick-paws',
+    id: 'quick_paws',
 
     effects: [
       NextHitsStatBuffEffect(
@@ -29,12 +27,15 @@ const Character rabbit = Character(
     ],
   ),
 
-  baseStatMultipliers: BaseStatMultipliers(
-    health: 0.95,
-    damage: 1.05,
-    armor: 0.75,
-    shield: 1,
-    attackSpeed: 1.2,
-    damageTakenPercentage: 1,
-  ),
+  statMultipliers: StatMultipliers({
+    Stat.health: 0.95,
+    Stat.damage: 1.05,
+    Stat.armor: 0.75,
+    Stat.shield: 1,
+    Stat.attackSpeed: 1.2,
+    Stat.damageTakenPercentage: 1,
+    Stat.manaStart: 0,
+    Stat.manaMax: 40,
+    Stat.range: 2,
+  }),
 );

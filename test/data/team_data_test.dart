@@ -4,18 +4,18 @@ import 'package:going_wild/data/team/sets/sets.dart';
 import 'package:going_wild/domain/models/models.dart';
 
 void main() {
-  final kebab = RegExp(r'^[a-z]+(-[a-z]+)*$');
+  final snake = RegExp(r'^[a-z]+(_[a-z]+)*$');
 
-  test('character ids are unique and kebab-case', () {
+  test('character ids are unique and snake_case', () {
     final ids = allCharacters.map((c) => c.id).toSet();
     expect(ids.length, allCharacters.length);
-    for (final id in ids) expect(id, matches(kebab), reason: id);
+    for (final id in ids) expect(id, matches(snake), reason: id);
   });
 
-  test('set ids are unique and kebab-case', () {
+  test('set ids are unique and snake_case', () {
     final ids = allSets.map((s) => s.id).toSet();
     expect(ids.length, allSets.length);
-    for (final id in ids) expect(id, matches(kebab), reason: id);
+    for (final id in ids) expect(id, matches(snake), reason: id);
   });
 
   test('set members are distinct and listed in allCharacters', () {
