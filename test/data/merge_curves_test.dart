@@ -37,13 +37,19 @@ void main() {
 
     test('$role star 3 is star 2 squared', () {
       for (final s in statsOf(curve)) {
-        expect(s.star3, closeTo(s.star2 * s.star2, 0.01));
+        expect(
+          s.star3,
+          closeTo(s.star2 * s.star2, 0.01),
+        );
       }
     });
 
     test('$role does not scale attack speed, range or mana', () {
       for (final s in [curve.attackSpeed, curve.range, curve.mana]) {
-        expect([s.star1, s.star2, s.star3], everyElement(1));
+        expect(
+          [s.star1, s.star2, s.star3],
+          everyElement(1),
+        );
       }
     });
   }

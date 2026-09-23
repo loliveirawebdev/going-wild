@@ -29,14 +29,16 @@ void main() {
   test('ability ids are unique and kebab-case', () {
     final ids = allCharacters.map((c) => c.ability.id).toSet();
     expect(ids.length, allCharacters.length);
-    for (final id in ids) {
-      expect(id, matches(kebab), reason: id);
-    }
+    for (final id in ids) expect(id, matches(kebab), reason: id);
   });
 
   test('every ability has at least one effect', () {
     for (final c in allCharacters) {
-      expect(c.ability.effects, isNotEmpty, reason: c.id);
+      expect(
+        c.ability.effects,
+        isNotEmpty,
+        reason: c.id,
+      );
     }
   });
 
@@ -63,10 +65,19 @@ void main() {
     for (final c in allCharacters) {
       for (final e in flatten(c.ability.effects)) {
         if (e is StatDebuffEffect && e.changeType == StatChangeType.multiplier) {
-          expect(e.value.star1, lessThan(1), reason: c.id);
+          expect(
+            e.value.star1,
+            lessThan(1),
+            reason: c.id,
+          );
         }
+
         if (e is StatBuffEffect && e.changeType == StatChangeType.multiplier) {
-          expect(e.value.star1, greaterThan(1), reason: c.id);
+          expect(
+            e.value.star1,
+            greaterThan(1),
+            reason: c.id,
+          );
         }
       }
     }
@@ -85,7 +96,11 @@ void main() {
     for (final c in allCharacters) {
       final m = c.baseStatMultipliers;
       for (final v in [m.health, m.damage, m.armor, m.shield, m.attackSpeed, m.damageTakenPercentage]) {
-        expect(v, greaterThan(0), reason: c.id);
+        expect(
+          v,
+          greaterThan(0),
+          reason: c.id,
+        );
       }
     }
   });

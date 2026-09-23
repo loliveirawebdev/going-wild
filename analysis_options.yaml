@@ -21,14 +21,15 @@ formatter:
 
 linter:
   rules:
-    - always_declare_return_types
-    - avoid_dynamic_calls
-    - avoid_print
-    - prefer_const_constructors
-    - prefer_const_declarations
-    - prefer_final_locals
-    - prefer_single_quotes
-    - sort_pub_dependencies
-    - unawaited_futures
-    - unnecessary_lambdas
-    - use_super_parameters
+    always_declare_return_types: true
+    curly_braces_in_flow_control_structures: false
+    avoid_dynamic_calls: true
+    avoid_print: true
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    prefer_final_locals: true
+    prefer_single_quotes: true
+    sort_pub_dependencies: true
+    unawaited_futures: true
+    unnecessary_lambdas: true
+    use_super_parameters: true

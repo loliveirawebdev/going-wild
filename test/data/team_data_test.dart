@@ -9,25 +9,19 @@ void main() {
   test('character ids are unique and kebab-case', () {
     final ids = allCharacters.map((c) => c.id).toSet();
     expect(ids.length, allCharacters.length);
-    for (final id in ids) {
-      expect(id, matches(kebab), reason: id);
-    }
+    for (final id in ids) expect(id, matches(kebab), reason: id);
   });
 
   test('set ids are unique and kebab-case', () {
     final ids = allSets.map((s) => s.id).toSet();
     expect(ids.length, allSets.length);
-    for (final id in ids) {
-      expect(id, matches(kebab), reason: id);
-    }
+    for (final id in ids) expect(id, matches(kebab), reason: id);
   });
 
   test('set members are distinct and listed in allCharacters', () {
     for (final s in allSets) {
       expect(s.members.toSet().length, s.members.length, reason: s.id);
-      for (final m in s.members) {
-        expect(allCharacters, contains(m), reason: '${s.id} -> ${m.id}');
-      }
+      for (final m in s.members) expect(allCharacters, contains(m), reason: '${s.id} -> ${m.id}');
     }
   });
 
@@ -35,7 +29,11 @@ void main() {
     for (final s in allSets) {
       for (final effect in s.tiers.expand((t) => t.effects)) {
         if (effect.target == SetTarget.specificCharacter) {
-          expect(s.members, contains(effect.character), reason: s.id);
+          expect(
+            s.members,
+            contains(effect.character),
+            reason: s.id,
+          );
         }
       }
     }
