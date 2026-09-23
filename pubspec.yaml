@@ -1,7 +1,7 @@
 name: going_wild
-description: "Going Wild"
-publish_to: 'none'
 version: 0.1.0+1
+publish_to: 'none'
+description: "Going Wild"
 
 environment:
   sdk: ^3.13.2

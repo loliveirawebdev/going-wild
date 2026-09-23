@@ -1,42 +1,22 @@
 {
-  "editor.formatOnSave": true,
   "[dart]": {
-    "editor.rulers": [
-      120
-    ],
+    "editor.rulers": [ 120 ],
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "Dart-Code.dart-code",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
-      "source.organizeImports": "explicit"
-    },
     "editor.selectionHighlight": false,
     "editor.suggestSelection": "first",
+    "editor.wordBasedSuggestions": "off",
     "editor.tabCompletion": "onlySnippets",
-    "editor.wordBasedSuggestions": "off"
+    "editor.defaultFormatter": "Dart-Code.dart-code",
+    "editor.codeActionsOnSave": { "source.fixAll": "explicit", "source.organizeImports": "explicit" },
   },
+
   "dart.lineLength": 120,
-  "dart.previewFlutterUiGuides": true,
-  "files.exclude": {
-    "**/.dart_tool": true,
-    "**/build": true
-  },
-  "search.exclude": {
-    "**/.dart_tool": true,
-    "**/build": true
-  },
-  "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features",
-    "editor.formatOnSave": true
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features",
-    "editor.formatOnSave": true
-  },
+  "editor.formatOnSave": true,
   "json.format.keepLines": true,
-  "[yaml]": {
-    "editor.formatOnSave": true,
-    "editor.insertSpaces": true,
-    "editor.tabSize": 2
-  }
+  "dart.previewFlutterUiGuides": true,
+  "files.exclude": { "**/.dart_tool": true, "**/build": true },
+  "search.exclude": { "**/.dart_tool": true, "**/build": true },
+  "[yaml]": { "editor.formatOnSave": true, "editor.insertSpaces": true, "editor.tabSize": 2 },
+  "[json]": { "editor.defaultFormatter": "vscode.json-language-features", "editor.formatOnSave": true },
+  "[jsonc]": { "editor.defaultFormatter": "vscode.json-language-features", "editor.formatOnSave": true },
 }
