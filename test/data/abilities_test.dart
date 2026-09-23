@@ -11,8 +11,8 @@ Iterable<AbilityEffect> flatten(Iterable<AbilityEffect> effects) sync* {
 
 List<StarValues> starValuesOf(AbilityEffect e) => switch (e) {
   DamageEffect() => [e.value],
-  DamageOverTimeEffect() => [e.valuePerSecond, e.seconds],
-  HealEffect() => [e.valuePerSecond, e.seconds],
+  DamageOverTimeEffect() => [e.damagePerSecond, e.seconds],
+  HealEffect() => [e.healPerSecond, e.seconds],
   ShieldEffect() => [e.value, e.seconds],
   StunEffect() => [e.seconds],
   TauntEffect() => [e.seconds],

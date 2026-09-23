@@ -19,6 +19,7 @@ void main() {
     for (final stat in Stat.values) {
       final changed = stats.withStat(stat, 42);
       expect(changed[stat], 42, reason: '$stat');
+
       for (final other in Stat.values.where((s) => s != stat)) {
         expect(
           changed[other],

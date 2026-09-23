@@ -16,7 +16,7 @@ analyzer:
     - ios/**
 
 formatter:
-  page_width: 120
+  page_width: 140
   trailing_commas: preserve
 
 linter:

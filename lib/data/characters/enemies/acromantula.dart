@@ -25,7 +25,7 @@ const Character acromantula = Character(
     Stat.attackSpeed: 0.8,
     Stat.moveSpeed: 1,
     Stat.damageTakenPercentage: 1,
-    Stat.manaStart: 0,
+    Stat.manaStart: 60,
     Stat.manaMax: 150,
     Stat.range: 2,
   }),

@@ -12,21 +12,21 @@ const Character snake = Character(
     effects: [
       DamageOverTimeEffect(
         target: EffectTarget.focus,
-        valuePerSecond: StarValues(star1: 30, star2: 45, star3: 70),
+        damagePerSecond: StarValues(star1: 30, star2: 45, star3: 70),
         seconds: StarValues(star1: 4, star2: 4, star3: 4),
       ),
     ],
   ),
 
   statMultipliers: StatMultipliers({
-    Stat.health: 0.7,
-    Stat.damage: 0.9,
-    Stat.armor: 0.6,
+    Stat.health: 0.9,
+    Stat.damage: 1,
+    Stat.armor: 0.8,
     Stat.shield: 1,
-    Stat.attackSpeed: 0.9,
+    Stat.attackSpeed: 1,
     Stat.moveSpeed: 0.7,
     Stat.damageTakenPercentage: 1,
-    Stat.manaStart: 0,
+    Stat.manaStart: 20,
     Stat.manaMax: 50,
     Stat.range: 1,
   }),

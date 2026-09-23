@@ -17,11 +17,11 @@ const Character kraken = Character(
   ),
 
   statMultipliers: StatMultipliers({
-    Stat.health: 5,
+    Stat.health: 4,
     Stat.damage: 1.5,
-    Stat.armor: 2.8,
+    Stat.armor: 2.2,
     Stat.shield: 1,
-    Stat.attackSpeed: 0.5,
+    Stat.attackSpeed: 0.9,
     Stat.moveSpeed: 0.4,
     Stat.damageTakenPercentage: 1,
     Stat.manaStart: 20,

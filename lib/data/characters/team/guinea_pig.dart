@@ -11,16 +11,16 @@ const Character guineaPig = Character(
 
     effects: [
       StunEffect(
-        target: EffectTarget.focus,
+        target: EffectTarget.enemiesAroundFocus,
         seconds: StarValues(star1: 1, star2: 1.5, star3: 2.5),
       ),
     ],
   ),
 
   statMultipliers: StatMultipliers({
-    Stat.health: 0.9,
-    Stat.damage: 0.9,
-    Stat.armor: 1,
+    Stat.health: 1.2,
+    Stat.damage: 1,
+    Stat.armor: 1.3,
     Stat.shield: 1,
     Stat.attackSpeed: 1,
     Stat.moveSpeed: 0.8,

@@ -25,7 +25,7 @@ const Character horse = Character(
     Stat.attackSpeed: 1.15,
     Stat.moveSpeed: 2,
     Stat.damageTakenPercentage: 1,
-    Stat.manaStart: 0,
+    Stat.manaStart: 20,
     Stat.manaMax: 70,
     Stat.range: 1,
   }),

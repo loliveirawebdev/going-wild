@@ -12,7 +12,7 @@ const Character queenBee = Character(
     effects: [
       DamageOverTimeEffect(
         target: EffectTarget.enemiesAroundFocus,
-        valuePerSecond: StarValues(star1: 60, star2: 90, star3: 135),
+        damagePerSecond: StarValues(star1: 60, star2: 90, star3: 135),
         seconds: StarValues(star1: 4, star2: 4, star3: 4),
       ),
     ],

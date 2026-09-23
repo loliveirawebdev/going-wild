@@ -12,7 +12,7 @@ const Character chicken = Character(
     effects: [
       HealEffect(
         target: EffectTarget.nearbyAllies,
-        valuePerSecond: StarValues(star1: 40, star2: 60, star3: 90),
+        healPerSecond: StarValues(star1: 40, star2: 60, star3: 90),
         seconds: StarValues(star1: 3, star2: 3, star3: 3),
       ),
     ],

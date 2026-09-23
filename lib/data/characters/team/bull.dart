@@ -35,7 +35,7 @@ const Character bull = Character(
     Stat.attackSpeed: 0.95,
     Stat.moveSpeed: 1.3,
     Stat.damageTakenPercentage: 1,
-    Stat.manaStart: 0,
+    Stat.manaStart: 30,
     Stat.manaMax: 90,
     Stat.range: 1,
   }),
