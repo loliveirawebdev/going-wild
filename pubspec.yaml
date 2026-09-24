@@ -15,6 +15,8 @@ dependencies:
   go_router: ^18.0.1
   slang: ^4.19.2
   slang_flutter: ^4.19.0
+  talker_bloc_logger: ^5.1.20
+  talker_flutter: ^5.1.20
 
 dev_dependencies:
   flutter_lints: ^6.0.0

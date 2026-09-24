@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/phase/phases.dart';
 import 'package:going_wild/app.dart';
+import 'package:going_wild/data/phase/phases.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/routing/router.dart';
 import 'package:going_wild/ui/core/localization/configure_plural_resolvers.dart';
@@ -10,10 +10,20 @@ import 'package:going_wild/ui/game/widgets/game_screen.dart';
 import 'package:going_wild/ui/home/widgets/home_screen.dart';
 import 'package:going_wild/ui/phase_selection/widgets/phase_selection_screen.dart';
 import 'package:going_wild/ui/settings/widgets/settings_screen.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 Future<void> openTheApp(WidgetTester tester) async {
   configurePluralResolvers();
-  await tester.pumpWidget(TranslationProvider(child: MainApp(router: buildRouter())));
+  final silentTalker = Talker(settings: TalkerSettings(useConsoleLogs: false));
+
+  await tester.pumpWidget(
+    TranslationProvider(
+      child: MainApp(
+        talker: silentTalker,
+        router: buildRouter(talker: silentTalker),
+      ),
+    ),
+  );
   await tester.pumpAndSettle();
 }
 

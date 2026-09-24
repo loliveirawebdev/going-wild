@@ -13,6 +13,7 @@
   "dart.lineLength": 140,
   "editor.formatOnSave": true,
   "json.format.keepLines": true,
+  "debug.showInStatusBar": "always",
   "dart.previewFlutterUiGuides": true,
   "files.exclude": { "**/.dart_tool": true, "**/build": true },
   "search.exclude": { "**/.dart_tool": true, "**/build": true },
