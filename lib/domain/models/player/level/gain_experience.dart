@@ -1,5 +1,5 @@
-import '../player.dart';
 import '../../shop/shop_rules.dart';
+import '../player.dart';
 
 void gainExperience(Player player, ShopRules rules, int experienceAmount) {
   if (player.level >= rules.maxLevel) return;

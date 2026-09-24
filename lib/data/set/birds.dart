@@ -1,14 +1,14 @@
-import 'package:going_wild/data/characters/team/team.dart';
+import 'package:going_wild/data/character/team/team.dart';
 import 'package:going_wild/domain/models/models.dart';
 
-const TeamSet brutes = TeamSet(
-  id: 'brutes',
+const TeamSet birds = TeamSet(
+  id: 'birds',
 
   members: [
-    bull,
-    horse,
-    sow,
-    cow,
+    chicken,
+    rooster,
+    duck,
+    queenBee,
   ],
 
   tiers: [
@@ -17,7 +17,7 @@ const TeamSet brutes = TeamSet(
       effects: [
         SetEffect(
           value: 1.15,
-          stat: Stat.health,
+          stat: Stat.damage,
           target: SetTarget.setMembers,
           changeType: StatChangeType.multiplier,
         ),
@@ -28,8 +28,15 @@ const TeamSet brutes = TeamSet(
       count: 4,
       effects: [
         SetEffect(
-          value: 1.35,
-          stat: Stat.health,
+          value: 1.3,
+          stat: Stat.damage,
+          target: SetTarget.setMembers,
+          changeType: StatChangeType.multiplier,
+        ),
+
+        SetEffect(
+          value: 1.2,
+          stat: Stat.attackSpeed,
           target: SetTarget.setMembers,
           changeType: StatChangeType.multiplier,
         ),

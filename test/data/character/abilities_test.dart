@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/characters/team/team.dart';
+import 'package:going_wild/data/character/team/team.dart';
 import 'package:going_wild/domain/models/models.dart';
 
 Iterable<AbilityEffect> flatten(Iterable<AbilityEffect> effects) sync* {

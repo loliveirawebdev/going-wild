@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/characters/team/team.dart';
+import 'package:going_wild/data/character/team/team.dart';
 import 'package:going_wild/domain/models/models.dart';
 import 'package:going_wild/domain/models/player/player.dart';
 import 'package:going_wild/domain/models/shop/refresh_shop_offers.dart';

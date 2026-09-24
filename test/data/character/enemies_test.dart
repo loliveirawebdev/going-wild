@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/characters/enemies/enemies.dart';
-import 'package:going_wild/data/characters/team/team.dart';
+import 'package:going_wild/data/character/enemies/enemies.dart';
+import 'package:going_wild/data/character/team/team.dart';
 import 'package:going_wild/domain/models/models.dart';
 
 void main() {

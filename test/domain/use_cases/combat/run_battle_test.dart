@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/base_stats.dart';
-import 'package:going_wild/data/characters/enemies/enemies.dart';
-import 'package:going_wild/data/characters/team/team.dart';
-import 'package:going_wild/data/merge_curves/merge_curves.dart';
-import 'package:going_wild/data/rules.dart' as rules;
-import 'package:going_wild/data/sets/sets.dart';
+import 'package:going_wild/data/character/base_stats.dart';
+import 'package:going_wild/data/character/enemies/enemies.dart';
+import 'package:going_wild/data/character/merge_curves/merge_curves.dart';
+import 'package:going_wild/data/character/team/team.dart';
+import 'package:going_wild/data/combat/battle_rules.dart' as rules;
+import 'package:going_wild/data/set/sets.dart';
 import 'package:going_wild/domain/models/combat/battle_result.dart';
 import 'package:going_wild/domain/models/combat/battle_rules.dart';
 import 'package:going_wild/domain/models/combat/board/faction.dart';

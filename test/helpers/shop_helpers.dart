@@ -1,9 +1,9 @@
-import 'package:going_wild/data/characters/team/team.dart';
-import 'package:going_wild/data/player_levels.dart';
-import 'package:going_wild/data/rules.dart';
+import 'package:going_wild/data/character/team/team.dart';
+import 'package:going_wild/data/player/player_levels.dart';
+import 'package:going_wild/data/shop/shop_rules.dart';
 import 'package:going_wild/domain/models/models.dart';
-import 'package:going_wild/domain/models/shop/owned_character.dart';
 import 'package:going_wild/domain/models/player/player.dart';
+import 'package:going_wild/domain/models/shop/owned_character.dart';
 import 'package:going_wild/domain/models/shop/shop_rules.dart';
 
 const testShopRules = ShopRules(

@@ -1,6 +1,6 @@
+import '../../models/player/player.dart';
 import '../../models/shop/merge_owned_characters.dart';
 import '../../models/shop/owned_character.dart';
-import '../../models/player/player.dart';
 import '../../models/shop/shop_rules.dart';
 
 bool buyShopOffer(Player player, ShopRules rules, int offerIndex) {

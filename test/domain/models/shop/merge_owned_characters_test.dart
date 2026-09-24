@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/characters/team/team.dart';
+import 'package:going_wild/data/character/team/team.dart';
 import 'package:going_wild/domain/models/shop/merge_owned_characters.dart';
 
 import '../../../helpers/shop_helpers.dart';

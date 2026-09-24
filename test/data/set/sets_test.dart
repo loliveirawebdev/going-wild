@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/sets/sets.dart';
+import 'package:going_wild/data/set/sets.dart';
 import 'package:going_wild/domain/models/models.dart';
 
 extension<T> on List<T> {

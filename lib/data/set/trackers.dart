@@ -1,12 +1,12 @@
-import 'package:going_wild/data/characters/team/team.dart';
+import 'package:going_wild/data/character/team/team.dart';
 import 'package:going_wild/domain/models/models.dart';
 
-const TeamSet dayAndNight = TeamSet(
-  id: 'day_and_night',
+const TeamSet trackers = TeamSet(
+  id: 'trackers',
 
   members: [
-    rooster,
-    cat,
+    sow,
+    rabbit,
   ],
 
   tiers: [
@@ -14,9 +14,9 @@ const TeamSet dayAndNight = TeamSet(
       count: 2,
       effects: [
         SetEffect(
-          value: 1.25,
-          stat: Stat.damage,
-          target: SetTarget.setMembers,
+          value: 0.8,
+          stat: Stat.armor,
+          target: SetTarget.allEnemies,
           changeType: StatChangeType.multiplier,
         ),
       ],

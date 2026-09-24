@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:going_wild/data/rules.dart';
+import 'package:going_wild/data/combat/battle_rules.dart';
 import 'package:going_wild/domain/models/combat/battle.dart';
 import 'package:going_wild/domain/models/combat/battle_rules.dart';
 import 'package:going_wild/domain/models/combat/board/board.dart';

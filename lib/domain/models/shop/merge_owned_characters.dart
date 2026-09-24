@@ -1,5 +1,5 @@
-import 'owned_character.dart';
 import '../player/player.dart';
+import 'owned_character.dart';
 import 'shop_rules.dart';
 
 void mergeOwnedCharacters(Player player, ShopRules rules) {

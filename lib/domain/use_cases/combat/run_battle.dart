@@ -15,8 +15,8 @@ import '../../models/combat/systems/cast_ability_if_ready.dart';
 import '../../models/combat/systems/move_toward_target.dart';
 import '../../models/combat/unit/unit.dart';
 import '../../models/models.dart';
-import '../set/active_set_tiers.dart';
 import '../character/resolve_unit_stats.dart';
+import '../set/active_set_tiers.dart';
 
 BattleResult runBattle({
   required Board board,

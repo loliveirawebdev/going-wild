@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/base_stats.dart';
-import 'package:going_wild/data/characters/team/team.dart';
-import 'package:going_wild/data/merge_curves/merge_curves.dart';
-import 'package:going_wild/data/sets/sets.dart';
+import 'package:going_wild/data/character/base_stats.dart';
+import 'package:going_wild/data/character/merge_curves/merge_curves.dart';
+import 'package:going_wild/data/character/team/team.dart';
+import 'package:going_wild/data/set/sets.dart';
 import 'package:going_wild/domain/models/models.dart';
-import 'package:going_wild/domain/use_cases/set/active_set_tiers.dart';
 import 'package:going_wild/domain/use_cases/character/resolve_unit_stats.dart';
+import 'package:going_wild/domain/use_cases/set/active_set_tiers.dart';
 
 Stats resolve(Character c, List<ActiveSet> activeSets) => resolveUnitStats(
   character: c,
