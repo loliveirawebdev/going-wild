@@ -1,13 +1,12 @@
-import 'dart:math';
-
-import '../../models/player/player.dart';
+import '../../models/phase/phase_run.dart';
 import '../../models/shop/refresh_shop_offers.dart';
-import '../../models/shop/shop_rules.dart';
 
-bool rerollShop(Player player, ShopRules rules, Random randomGenerator) {
-  if (player.coins < rules.rerollCostInCoins) return false;
+bool rerollShop(PhaseRun phaseRun) {
+  final player = phaseRun.player;
+  final rerollCostInCoins = phaseRun.rules.shopRules.rerollCostInCoins;
+  if (player.coins < rerollCostInCoins) return false;
 
-  player.coins -= rules.rerollCostInCoins;
-  refreshShopOffers(player, rules, randomGenerator);
+  player.coins -= rerollCostInCoins;
+  refreshShopOffers(phaseRun);
   return true;
 }

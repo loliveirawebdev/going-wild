@@ -1,6 +1,6 @@
 import '../../models.dart';
 import '../battle.dart';
-import '../events/battle_event.dart';
+import '../../events/combat/battle_event.dart';
 import '../unit/status_effect/status_effect.dart';
 import '../unit/unit.dart';
 import 'deal_damage.dart';

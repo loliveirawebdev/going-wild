@@ -6,7 +6,7 @@ import '../../models/combat/battle_rules.dart';
 import '../../models/combat/board/board.dart';
 import '../../models/combat/board/faction.dart';
 import '../../models/combat/board/placement.dart';
-import '../../models/combat/events/battle_event.dart';
+import '../../models/events/combat/battle_event.dart';
 import '../../models/combat/systems/acquire_target.dart';
 import '../../models/combat/systems/advance_statuses_by_one_tick.dart';
 import '../../models/combat/systems/apply_ability_effects.dart';

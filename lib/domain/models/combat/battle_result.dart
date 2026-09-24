@@ -1,5 +1,5 @@
 import 'board/faction.dart';
-import 'events/battle_event.dart';
+import '../events/combat/battle_event.dart';
 import 'unit/unit.dart';
 
 class BattleResult {

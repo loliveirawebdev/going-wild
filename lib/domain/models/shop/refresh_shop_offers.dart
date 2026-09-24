@@ -1,11 +1,16 @@
 import 'dart:math';
 
 import '../models.dart';
+import '../events/phase/phase_event.dart';
+import '../phase/phase_run.dart';
 import '../player/player.dart';
 import 'cap_shop_odds_per_character.dart';
 import 'shop_rules.dart';
 
-void refreshShopOffers(Player player, ShopRules rules, Random randomGenerator) {
+void refreshShopOffers(PhaseRun phaseRun) {
+  final player = phaseRun.player;
+  final rules = phaseRun.rules.shopRules;
+  final randomGenerator = phaseRun.randomGenerator;
   final purchasableCharacters = rules.purchasableCharacters.where((character) => !_isOwnedAtMaxStars(player, rules, character)).toList();
   final oddsPercentageByRarity = rules.playerLevels[player.level - 1].shopOddsPercentageByRarity;
 
@@ -26,6 +31,8 @@ void refreshShopOffers(Player player, ShopRules rules, Random randomGenerator) {
     final charactersOfRarity = purchasableCharacters.where((character) => character.rarity == rarity).toList();
     return charactersOfRarity[randomGenerator.nextInt(charactersOfRarity.length)];
   });
+
+  phaseRun.recordEvent(ShopOffersRefreshed(roundNumber: phaseRun.currentRoundNumber, shopOffers: List.unmodifiable(player.shopOffers)));
 }
 
 bool _isOwnedAtMaxStars(Player player, ShopRules rules, Character character) {

@@ -1,11 +1,12 @@
+import '../../models/phase/phase_run.dart';
 import '../../models/player/level/gain_experience.dart';
-import '../../models/player/player.dart';
-import '../../models/shop/shop_rules.dart';
 
-bool buyExperience(Player player, ShopRules rules) {
+bool buyExperience(PhaseRun phaseRun) {
+  final player = phaseRun.player;
+  final rules = phaseRun.rules.shopRules;
   if (player.level >= rules.maxLevel || player.coins < rules.experiencePurchaseCostInCoins) return false;
 
   player.coins -= rules.experiencePurchaseCostInCoins;
-  gainExperience(player, rules, rules.experiencePerPurchase);
+  gainExperience(phaseRun, rules.experiencePerPurchase);
   return true;
 }

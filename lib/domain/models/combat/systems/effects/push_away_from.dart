@@ -1,5 +1,5 @@
 import '../../battle.dart';
-import '../../events/battle_event.dart';
+import '../../../events/combat/battle_event.dart';
 import '../../unit/unit.dart';
 
 void pushAwayFrom(Battle battle, Unit pusherUnit, Unit targetUnit, int cells) {

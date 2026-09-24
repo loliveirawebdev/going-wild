@@ -5,7 +5,7 @@ import 'battle_rules.dart';
 import 'board/board.dart';
 import 'board/faction.dart';
 import 'board/position.dart';
-import 'events/battle_event.dart';
+import '../events/combat/battle_event.dart';
 import 'unit/unit.dart';
 
 typedef DeferredEffects = ({

@@ -3,7 +3,7 @@ import 'dart:collection';
 import '../../models.dart';
 import '../battle.dart';
 import '../board/position.dart';
-import '../events/battle_event.dart';
+import '../../events/combat/battle_event.dart';
 import '../unit/unit.dart';
 import 'is_target_in_range.dart';
 

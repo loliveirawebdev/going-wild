@@ -11,7 +11,7 @@ import 'package:going_wild/domain/models/combat/battle_result.dart';
 import 'package:going_wild/domain/models/combat/battle_rules.dart';
 import 'package:going_wild/domain/models/combat/board/faction.dart';
 import 'package:going_wild/domain/models/combat/board/placement.dart';
-import 'package:going_wild/domain/models/combat/events/battle_event.dart';
+import 'package:going_wild/domain/models/events/combat/battle_event.dart';
 import 'package:going_wild/domain/models/combat/unit/status_effect/status_effect_kind.dart';
 import 'package:going_wild/domain/models/combat/unit/unit.dart';
 import 'package:going_wild/domain/models/models.dart';

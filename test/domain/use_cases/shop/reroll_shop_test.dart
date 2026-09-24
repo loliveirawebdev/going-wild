@@ -1,34 +1,36 @@
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
+import 'package:going_wild/domain/models/events/phase/phase_event.dart';
 import 'package:going_wild/domain/models/shop/refresh_shop_offers.dart';
 import 'package:going_wild/domain/use_cases/shop/reroll_shop.dart';
 
+import '../../../helpers/phase_helpers.dart';
 import '../../../helpers/shop_helpers.dart';
 
 void main() {
   test('rerolling costs coins and replaces the offers', () {
-    final player = playerWith(coins: 5, level: 6);
-    refreshShopOffers(player, testShopRules, Random(1));
-    final offersBeforeReroll = [...player.shopOffers];
+    final phaseRun = phaseRunWith(coins: 5, level: 6);
+    refreshShopOffers(phaseRun);
+    final offersBeforeReroll = [...phaseRun.player.shopOffers];
 
-    final hasRerolled = rerollShop(player, testShopRules, Random(2));
+    final hasRerolled = rerollShop(phaseRun);
 
     expect(hasRerolled, isTrue);
-    expect(player.coins, 5 - testShopRules.rerollCostInCoins);
-    expect(player.shopOffers, hasLength(testShopRules.shopSize));
-    expect(player.shopOffers, isNot(offersBeforeReroll));
+    expect(phaseRun.player.coins, 5 - testShopRules.rerollCostInCoins);
+    expect(phaseRun.player.shopOffers, hasLength(testShopRules.shopSize));
+    expect(phaseRun.player.shopOffers, isNot(offersBeforeReroll));
+    expect(phaseRun.events.whereType<ShopOffersRefreshed>(), hasLength(2));
   });
 
   test('rerolling without enough coins changes nothing', () {
-    final player = playerWith(coins: testShopRules.rerollCostInCoins - 1, level: 6);
-    refreshShopOffers(player, testShopRules, Random(1));
-    final offersBeforeReroll = [...player.shopOffers];
+    final phaseRun = phaseRunWith(coins: testShopRules.rerollCostInCoins - 1, level: 6);
+    refreshShopOffers(phaseRun);
+    final offersBeforeReroll = [...phaseRun.player.shopOffers];
 
-    final hasRerolled = rerollShop(player, testShopRules, Random(2));
+    final hasRerolled = rerollShop(phaseRun);
 
     expect(hasRerolled, isFalse);
-    expect(player.coins, testShopRules.rerollCostInCoins - 1);
-    expect(player.shopOffers, offersBeforeReroll);
+    expect(phaseRun.player.coins, testShopRules.rerollCostInCoins - 1);
+    expect(phaseRun.player.shopOffers, offersBeforeReroll);
+    expect(phaseRun.events.whereType<ShopOffersRefreshed>(), hasLength(1));
   });
 }

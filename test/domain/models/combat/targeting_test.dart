@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/domain/models/combat/board/faction.dart';
-import 'package:going_wild/domain/models/combat/events/battle_event.dart';
+import 'package:going_wild/domain/models/events/combat/battle_event.dart';
 import 'package:going_wild/domain/models/combat/systems/acquire_target.dart';
 import 'package:going_wild/domain/models/combat/unit/status_effect/status_effect.dart';
 

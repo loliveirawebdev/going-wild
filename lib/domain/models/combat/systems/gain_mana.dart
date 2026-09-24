@@ -1,6 +1,6 @@
 import '../../models.dart';
 import '../battle.dart';
-import '../events/battle_event.dart';
+import '../../events/combat/battle_event.dart';
 import '../unit/unit.dart';
 
 void gainMana(Battle battle, Unit unit, double manaAmount) {

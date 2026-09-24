@@ -1,6 +1,6 @@
-import '../board/faction.dart';
-import '../board/position.dart';
-import '../unit/status_effect/status_effect_kind.dart';
+import '../../combat/board/faction.dart';
+import '../../combat/board/position.dart';
+import '../../combat/unit/status_effect/status_effect_kind.dart';
 
 part 'battle_ended.dart';
 part 'battle_started.dart';

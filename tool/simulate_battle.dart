@@ -11,7 +11,7 @@ import 'package:going_wild/domain/models/combat/battle_rules.dart';
 import 'package:going_wild/domain/models/combat/board/board.dart';
 import 'package:going_wild/domain/models/combat/board/placement.dart';
 import 'package:going_wild/domain/models/combat/board/position.dart';
-import 'package:going_wild/domain/models/combat/events/battle_event.dart';
+import 'package:going_wild/domain/models/events/combat/battle_event.dart';
 import 'package:going_wild/domain/models/models.dart';
 import 'package:going_wild/domain/use_cases/combat/run_battle.dart';
 
