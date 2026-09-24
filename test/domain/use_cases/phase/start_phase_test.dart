@@ -25,7 +25,7 @@ void main() {
   test('the first round is already open: coins paid, experience given and shop filled', () {
     final phaseRun = startPhase(backyard, phaseRules, Random(1));
 
-    expect(phaseRun.player.coins, testShopRules.coinsPerRound);
+    expect(phaseRun.player.coins, backyard.enemyWaves.first.coinsReward);
     expect(phaseRun.player.level, 2);
     expect(phaseRun.player.shopOffers, hasLength(testShopRules.shopSize));
     expect(phaseRun.player.shopOffers, everyElement(isNotNull));

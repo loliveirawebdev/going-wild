@@ -12,7 +12,6 @@ import 'package:going_wild/data/set/sets.dart';
 import 'package:going_wild/data/shop/shop_rules.dart' as rules;
 import 'package:going_wild/domain/models/combat/battle_rules.dart';
 import 'package:going_wild/domain/models/combat/board/board.dart';
-import 'package:going_wild/domain/models/combat/board/placement.dart';
 import 'package:going_wild/domain/models/combat/board/position.dart';
 import 'package:going_wild/domain/models/phase/phase_rules.dart';
 import 'package:going_wild/domain/models/phase/phase_run.dart';
@@ -31,6 +30,7 @@ const phaseRules = PhaseRules(
   sets: allSets,
   baseStats: baseStats,
   mergeCurveFor: mergeCurveFor,
+  benchSize: rules.benchSize,
   startingPlayerLives: rules.startingPlayerLives,
   battleRules: BattleRules(
     tickSeconds: rules.tickSeconds,
@@ -43,7 +43,6 @@ const phaseRules = PhaseRules(
     maxStars: rules.maxStars,
     shopSize: rules.shopSize,
     playerLevels: playerLevels,
-    coinsPerRound: rules.coinsPerRound,
     copiesPerMerge: rules.copiesPerMerge,
     rerollCostInCoins: rules.rerollCostInCoins,
     experiencePerRound: rules.experiencePerRound,
@@ -68,7 +67,8 @@ void main() {
       shopGreedily(phaseRun);
       roundsReachedPerRound[roundIndex] += 1;
       levelPerRound[roundIndex] += phaseRun.player.level;
-      final roundResult = fightRound(phaseRun, strongestTeamPlacements(phaseRun))!;
+      arrangeStrongestOnField(phaseRun);
+      final roundResult = fightRound(phaseRun)!;
       livesTakenPerRound[roundIndex] += roundResult.livesTaken;
       if (phaseRun.status == PhaseStatus.lost) lossesPerRound[roundIndex] += 1;
     }
@@ -97,22 +97,32 @@ void shopGreedily(PhaseRun phaseRun) {
   }
 }
 
-List<Placement> strongestTeamPlacements(PhaseRun phaseRun) {
+void arrangeStrongestOnField(PhaseRun phaseRun) {
+  final player = phaseRun.player;
   final board = phaseRun.rules.board;
+
   final teamPositions = [
     for (var row = board.rows - 2; row >= board.rows ~/ 2; row--)
       for (var column = 0; column < board.columns; column++) Position(row: row, column: column),
     for (var column = 0; column < board.columns; column++) Position(row: board.rows - 1, column: column),
   ];
+
   int strengthOf(int coins, int stars) => coins * (1 << (stars - 1));
-  final strongestFirst = [...phaseRun.player.ownedCharacters]
+
+  final strongestFirst = [...player.ownedCharacters]
     ..sort(
       (first, second) =>
           strengthOf(second.character.rarity.coins, second.stars).compareTo(strengthOf(first.character.rarity.coins, first.stars)),
     );
 
-  return [
-    for (final (index, ownedCharacter) in strongestFirst.take(phaseRun.player.level).indexed)
-      Placement(character: ownedCharacter.character, stars: ownedCharacter.stars, position: teamPositions[index]),
-  ];
+  player.field.clear();
+  player.bench.fillRange(0, player.bench.length, null);
+
+  for (final (index, ownedCharacter) in strongestFirst.indexed) {
+    if (index < player.level) {
+      player.field[teamPositions[index]] = ownedCharacter;
+      continue;
+    }
+    player.bench[index - player.level] = ownedCharacter;
+  }
 }

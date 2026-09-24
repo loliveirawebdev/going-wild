@@ -12,6 +12,8 @@ class Board {
     return rowIsInside && columnIsInside;
   }
 
+  bool isPositionOnTeamHalf(Position position) => isPositionWithinBounds(position) && position.row >= rows ~/ 2;
+
   Iterable<Position> neighborPositionsAround(Position center) sync* {
     for (var rowStep = -1; rowStep <= 1; rowStep++) {
       for (var columnStep = -1; columnStep <= 1; columnStep++) {

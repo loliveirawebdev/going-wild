@@ -74,17 +74,17 @@ void main() {
   });
 
   test('a character owned at max stars stops showing up', () {
-    final phaseRun = phaseRunWith(level: 10, ownedCharacters: [owned(bull, stars: testShopRules.maxStars)]);
+    final phaseRun = phaseRunWith(level: 10, benchCharacters: [owned(bull, stars: testShopRules.maxStars)]);
     expect(offersAfterManyRefreshes(phaseRun), isNot(contains(bull)));
   });
 
   test('a character below max stars keeps showing up', () {
-    final phaseRun = phaseRunWith(level: 10, ownedCharacters: [owned(bull, stars: testShopRules.maxStars - 1)]);
+    final phaseRun = phaseRunWith(level: 10, benchCharacters: [owned(bull, stars: testShopRules.maxStars - 1)]);
     expect(offersAfterManyRefreshes(phaseRun), contains(bull));
   });
 
   test('when a whole rarity is maxed out its odds go to the other rarities', () {
-    final phaseRun = phaseRunWith(level: 10, ownedCharacters: [owned(bull, stars: testShopRules.maxStars)]);
+    final phaseRun = phaseRunWith(level: 10, benchCharacters: [owned(bull, stars: testShopRules.maxStars)]);
     final allOffers = offersAfterManyRefreshes(phaseRun);
     expect(allOffers, everyElement(isNotNull));
     expect(allOffers.where((character) => character!.rarity == Rarity.epic), isEmpty);
@@ -95,7 +95,7 @@ void main() {
         .where((character) => character.rarity == Rarity.common)
         .map((character) => owned(character, stars: testShopRules.maxStars))
         .toList();
-    final phaseRun = phaseRunWith(level: 1, ownedCharacters: allCommonsAtMaxStars);
+    final phaseRun = phaseRunWith(level: 1, benchCharacters: allCommonsAtMaxStars);
 
     refreshShopOffers(phaseRun);
 

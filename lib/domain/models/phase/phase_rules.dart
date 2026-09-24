@@ -14,10 +14,12 @@ class PhaseRules {
     required this.shopRules,
     required this.battleRules,
     required this.mergeCurveFor,
+    required this.benchSize,
     required this.startingPlayerLives,
   });
 
   final Board board;
+  final int benchSize;
   final Stats baseStats;
   final int startingPlayerLives;
   final ShopRules shopRules;

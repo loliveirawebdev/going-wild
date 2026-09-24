@@ -6,13 +6,14 @@ import '../../models/shop/refresh_shop_offers.dart';
 void startRound(PhaseRun phaseRun) {
   final player = phaseRun.player;
   final rules = phaseRun.rules.shopRules;
+  final coinsReward = phaseRun.currentEnemyWave.coinsReward;
   final roundNumber = phaseRun.currentRoundNumber;
 
   phaseRun.recordEvent(RoundStarted(roundNumber: roundNumber));
 
-  player.coins += rules.coinsPerRound;
-  phaseRun.recordEvent(PlayerReceivedCoins(roundNumber: roundNumber, amount: rules.coinsPerRound, coinsAfterReceived: player.coins));
+  player.coins += coinsReward;
+  phaseRun.recordEvent(PlayerReceivedCoins(roundNumber: roundNumber, amount: coinsReward, coinsAfterReceived: player.coins));
 
   gainExperience(phaseRun, rules.experiencePerRound);
-  refreshShopOffers(phaseRun);
+  if (!player.isShopLocked) refreshShopOffers(phaseRun);
 }

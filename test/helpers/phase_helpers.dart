@@ -18,13 +18,18 @@ import 'package:going_wild/domain/models/shop/shop_rules.dart';
 import 'combat_helpers.dart';
 import 'shop_helpers.dart';
 
-PhaseRules phaseRulesWith({int startingPlayerLives = rules.startingPlayerLives, ShopRules shopRules = testShopRules}) => PhaseRules(
+PhaseRules phaseRulesWith({
+  int startingPlayerLives = rules.startingPlayerLives,
+  int benchSize = rules.benchSize,
+  ShopRules shopRules = testShopRules,
+}) => PhaseRules(
   board: testBoard,
   sets: allSets,
   baseStats: baseStats,
   shopRules: shopRules,
   battleRules: testRules,
   mergeCurveFor: mergeCurveFor,
+  benchSize: benchSize,
   startingPlayerLives: startingPlayerLives,
 );
 
@@ -41,22 +46,30 @@ PhaseRun phaseRunWith({
   int level = 1,
   int experience = 0,
   int seed = 1,
-  List<OwnedCharacter> ownedCharacters = const [],
+  int benchSize = rules.benchSize,
+  List<OwnedCharacter> benchCharacters = const [],
+  Map<Position, OwnedCharacter> fieldCharacters = const {},
   List<Character?> shopOffers = const [],
   ShopRules shopRules = testShopRules,
   List<EnemyWave>? enemyWaves,
 }) {
-  final player = playerWith(coins: coins, level: level, experience: experience, ownedCharacters: ownedCharacters)
-    ..shopOffers = [...shopOffers];
+  final player = playerWith(
+    coins: coins,
+    level: level,
+    experience: experience,
+    benchSize: benchSize,
+    benchCharacters: benchCharacters,
+    fieldCharacters: fieldCharacters,
+  )..shopOffers = [...shopOffers];
 
   return PhaseRun(
     phase: phaseWith(
       enemyWaves ??
           [
-            EnemyWave(enemies: [placed(rat, 1, 2)]),
+            EnemyWave(coinsReward: 10, enemies: [placed(rat, 1, 2)]),
           ],
     ),
-    rules: phaseRulesWith(shopRules: shopRules),
+    rules: phaseRulesWith(benchSize: benchSize, shopRules: shopRules),
     player: player,
     randomGenerator: Random(seed),
   );

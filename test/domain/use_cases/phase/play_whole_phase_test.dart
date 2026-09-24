@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/data/phase/phases.dart';
-import 'package:going_wild/domain/models/combat/board/placement.dart';
 import 'package:going_wild/domain/models/combat/board/position.dart';
 import 'package:going_wild/domain/models/phase/phase_run.dart';
 import 'package:going_wild/domain/models/phase/phase_status.dart';
@@ -14,7 +13,8 @@ import 'package:going_wild/domain/use_cases/shop/buy_shop_offer.dart';
 
 import '../../../helpers/phase_helpers.dart';
 
-List<Placement> strongestTeamPlacements(PhaseRun phaseRun) {
+void arrangeStrongestOnField(PhaseRun phaseRun) {
+  final player = phaseRun.player;
   final board = phaseRun.rules.board;
 
   final teamPositions = [
@@ -25,16 +25,23 @@ List<Placement> strongestTeamPlacements(PhaseRun phaseRun) {
 
   int strengthOf(int coins, int stars) => coins * (1 << (stars - 1));
 
-  final strongestFirst = [...phaseRun.player.ownedCharacters]
+  final strongestFirst = [...player.ownedCharacters]
     ..sort(
       (first, second) =>
           strengthOf(second.character.rarity.coins, second.stars).compareTo(strengthOf(first.character.rarity.coins, first.stars)),
     );
 
-  return [
-    for (final (index, ownedCharacter) in strongestFirst.take(phaseRun.player.level).indexed)
-      Placement(character: ownedCharacter.character, stars: ownedCharacter.stars, position: teamPositions[index]),
-  ];
+  player.field.clear();
+  player.bench.fillRange(0, player.bench.length, null);
+
+  for (final (index, ownedCharacter) in strongestFirst.indexed) {
+    if (index < player.level) {
+      player.field[teamPositions[index]] = ownedCharacter;
+      continue;
+    }
+
+    player.bench[index - player.level] = ownedCharacter;
+  }
 }
 
 List<RoundResult> playWholePhaseBuyingEverything(int seed) {
@@ -44,7 +51,8 @@ List<RoundResult> playWholePhaseBuyingEverything(int seed) {
   while (phaseRun.status == PhaseStatus.inProgress) {
     for (var offerIndex = 0; offerIndex < phaseRun.player.shopOffers.length; offerIndex++) buyShopOffer(phaseRun, offerIndex);
     while (phaseRun.player.coins >= phaseRun.rules.shopRules.experiencePurchaseCostInCoins + 6) buyExperience(phaseRun);
-    roundResults.add(fightRound(phaseRun, strongestTeamPlacements(phaseRun))!);
+    arrangeStrongestOnField(phaseRun);
+    roundResults.add(fightRound(phaseRun)!);
   }
 
   return roundResults;

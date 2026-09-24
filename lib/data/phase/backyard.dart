@@ -9,12 +9,16 @@ const Phase backyard = Phase(
   id: 'backyard',
   enemyWaves: [
     EnemyWave(
+      coinsReward: 10,
+
       enemies: [
         Placement(character: rat, stars: 1, position: Position(row: 2, column: 1)),
         Placement(character: rat, stars: 1, position: Position(row: 2, column: 3)),
       ],
     ),
     EnemyWave(
+      coinsReward: 10,
+
       enemies: [
         Placement(character: rat, stars: 1, position: Position(row: 2, column: 1)),
         Placement(character: rat, stars: 1, position: Position(row: 2, column: 3)),
@@ -22,6 +26,8 @@ const Phase backyard = Phase(
       ],
     ),
     EnemyWave(
+      coinsReward: 10,
+
       enemies: [
         Placement(character: rat, stars: 1, position: Position(row: 3, column: 0)),
         Placement(character: rat, stars: 1, position: Position(row: 3, column: 4)),
@@ -30,6 +36,8 @@ const Phase backyard = Phase(
       ],
     ),
     EnemyWave(
+      coinsReward: 10,
+
       enemies: [
         Placement(character: boar, stars: 1, position: Position(row: 3, column: 2)),
         Placement(character: rat, stars: 1, position: Position(row: 2, column: 0)),
@@ -38,6 +46,8 @@ const Phase backyard = Phase(
       ],
     ),
     EnemyWave(
+      coinsReward: 10,
+
       enemies: [
         Placement(character: boar, stars: 1, position: Position(row: 3, column: 2)),
         Placement(character: snake, stars: 1, position: Position(row: 2, column: 1)),
@@ -47,6 +57,8 @@ const Phase backyard = Phase(
       ],
     ),
     EnemyWave(
+      coinsReward: 10,
+
       enemies: [
         Placement(character: bear, stars: 1, position: Position(row: 3, column: 2)),
         Placement(character: snake, stars: 1, position: Position(row: 2, column: 1)),
@@ -55,6 +67,8 @@ const Phase backyard = Phase(
       ],
     ),
     EnemyWave(
+      coinsReward: 10,
+
       enemies: [
         Placement(character: alligator, stars: 1, position: Position(row: 3, column: 2)),
         Placement(character: boar, stars: 2, position: Position(row: 3, column: 0)),
@@ -64,6 +78,8 @@ const Phase backyard = Phase(
       ],
     ),
     EnemyWave(
+      coinsReward: 10,
+
       enemies: [
         Placement(character: bear, stars: 2, position: Position(row: 3, column: 2)),
         Placement(character: alligator, stars: 1, position: Position(row: 3, column: 0)),
@@ -72,6 +88,8 @@ const Phase backyard = Phase(
       ],
     ),
     EnemyWave(
+      coinsReward: 10,
+
       enemies: [
         Placement(character: bear, stars: 2, position: Position(row: 3, column: 1)),
         Placement(character: boar, stars: 2, position: Position(row: 3, column: 3)),
@@ -81,6 +99,8 @@ const Phase backyard = Phase(
       ],
     ),
     EnemyWave(
+      coinsReward: 10,
+
       enemies: [
         Placement(character: cerberus, stars: 1, position: Position(row: 3, column: 2)),
         Placement(character: bear, stars: 2, position: Position(row: 3, column: 0)),

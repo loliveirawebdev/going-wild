@@ -1,11 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/data/character/team/team.dart';
-import 'package:going_wild/domain/models/models.dart';
 import 'package:going_wild/domain/models/events/phase/phase_event.dart';
+import 'package:going_wild/domain/models/models.dart';
 import 'package:going_wild/domain/models/phase/phase_run.dart';
+import 'package:going_wild/domain/models/player/team_slot/team_slot.dart';
 import 'package:going_wild/domain/models/shop/refresh_shop_offers.dart';
 import 'package:going_wild/domain/use_cases/shop/buy_shop_offer.dart';
 
+import '../../../helpers/combat_helpers.dart' show at;
 import '../../../helpers/phase_helpers.dart';
 import '../../../helpers/shop_helpers.dart';
 
@@ -38,7 +40,7 @@ void main() {
   });
 
   test('a purchase that completes a pair records the purchase and then the merge', () {
-    final phaseRun = phaseRunWith(coins: 10, ownedCharacters: [owned(cat)]);
+    final phaseRun = phaseRunWith(coins: 10, benchCharacters: [owned(cat)]);
 
     buyOneCopy(phaseRun, cat);
 
@@ -81,7 +83,7 @@ void main() {
   });
 
   test('different characters and different stars do not merge', () {
-    final phaseRun = phaseRunWith(coins: 10, ownedCharacters: [owned(cat, stars: 2)]);
+    final phaseRun = phaseRunWith(coins: 10, benchCharacters: [owned(cat, stars: 2)]);
 
     buyOneCopy(phaseRun, cat);
     buyOneCopy(phaseRun, dog);
@@ -93,7 +95,7 @@ void main() {
   });
 
   test('max stars never merge further', () {
-    final phaseRun = phaseRunWith(coins: 20, ownedCharacters: [owned(cat, stars: testShopRules.maxStars)]);
+    final phaseRun = phaseRunWith(coins: 20, benchCharacters: [owned(cat, stars: testShopRules.maxStars)]);
 
     for (var copy = 0; copy < 4; copy++) buyOneCopy(phaseRun, cat);
 
@@ -111,5 +113,38 @@ void main() {
       refreshShopOffers(phaseRun);
       expect(phaseRun.player.shopOffers, isNot(contains(bull)));
     }
+  });
+
+  test('a bought character goes to the first free bench slot', () {
+    final phaseRun = phaseRunWith(coins: 10, benchCharacters: [owned(dog)], shopOffers: [cat]);
+
+    buyShopOffer(phaseRun, 0);
+
+    expect(phaseRun.player.bench[1]!.character, cat);
+  });
+
+  test('a full bench refuses a purchase that does not merge', () {
+    final phaseRun = phaseRunWith(coins: 10, benchSize: 1, benchCharacters: [owned(dog)], shopOffers: [cat]);
+
+    expect(buyShopOffer(phaseRun, 0), isFalse);
+    expect(phaseRun.player.coins, 10);
+    expect(phaseRun.player.shopOffers, [cat]);
+  });
+
+  test('a full bench accepts a purchase that completes a merge', () {
+    final phaseRun = phaseRunWith(coins: 10, benchSize: 1, benchCharacters: [owned(cat)], shopOffers: [cat]);
+
+    expect(buyShopOffer(phaseRun, 0), isTrue);
+    expect(ownedCharactersOf(phaseRun.player), [(character: cat, stars: 2)]);
+  });
+
+  test('the merged character takes the place of the copy on the field', () {
+    final phaseRun = phaseRunWith(coins: 10, benchCharacters: [owned(dog)], fieldCharacters: {at(6, 2): owned(cat)}, shopOffers: [cat]);
+
+    buyShopOffer(phaseRun, 0);
+
+    expect((phaseRun.player.field[at(6, 2)]!.character, phaseRun.player.field[at(6, 2)]!.stars), (cat, 2));
+    expect(phaseRun.player.bench.nonNulls.map((ownedCharacter) => ownedCharacter.character), [dog]);
+    expect(phaseRun.events.whereType<CharactersMerged>().single.slot, FieldSlot(position: at(6, 2)));
   });
 }

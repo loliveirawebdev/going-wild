@@ -6,7 +6,6 @@ class ShopRules {
     required this.maxStars,
     required this.shopSize,
     required this.playerLevels,
-    required this.coinsPerRound,
     required this.copiesPerMerge,
     required this.rerollCostInCoins,
     required this.experiencePerRound,
@@ -18,7 +17,6 @@ class ShopRules {
 
   final int maxStars;
   final int shopSize;
-  final int coinsPerRound;
   final int copiesPerMerge;
   final int rerollCostInCoins;
   final int experiencePerRound;

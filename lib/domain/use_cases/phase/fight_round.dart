@@ -5,11 +5,16 @@ import '../../models/phase/phase_run.dart';
 import '../../models/phase/phase_status.dart';
 import '../../models/phase/round_result.dart';
 import '../combat/run_battle.dart';
-import 'are_team_placements_valid.dart';
 import 'start_round.dart';
 
-RoundResult? fightRound(PhaseRun phaseRun, List<Placement> teamPlacements) {
-  if (!areTeamPlacementsValid(phaseRun, teamPlacements)) return null;
+RoundResult? fightRound(PhaseRun phaseRun) {
+  final player = phaseRun.player;
+  if (phaseRun.status != PhaseStatus.inProgress || player.field.length > player.level) return null;
+
+  final teamPlacements = [
+    for (final MapEntry(key: position, value: ownedCharacter) in player.field.entries)
+      Placement(character: ownedCharacter.character, stars: ownedCharacter.stars, position: position),
+  ];
 
   final rules = phaseRun.rules;
 

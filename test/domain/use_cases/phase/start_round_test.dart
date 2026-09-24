@@ -11,7 +11,7 @@ void main() {
 
     startRound(phaseRun);
 
-    expect(phaseRun.player.coins, 3 + testShopRules.coinsPerRound);
+    expect(phaseRun.player.coins, 3 + phaseRun.currentEnemyWave.coinsReward);
     expect(phaseRun.player.experience, testShopRules.experiencePerRound);
     expect(phaseRun.player.shopOffers, hasLength(testShopRules.shopSize));
     expect(phaseRun.player.shopOffers, everyElement(isNotNull));
@@ -25,8 +25,8 @@ void main() {
     expect(phaseRun.events, [isA<RoundStarted>(), isA<PlayerReceivedCoins>(), isA<PlayerReceivedExperience>(), isA<ShopOffersRefreshed>()]);
     expect(phaseRun.events, everyElement(predicate<PhaseEvent>((event) => event.roundNumber == phaseRun.currentRoundNumber)));
     final coinsReceived = phaseRun.events.whereType<PlayerReceivedCoins>().single;
-    expect(coinsReceived.amount, testShopRules.coinsPerRound);
-    expect(coinsReceived.coinsAfterReceived, 3 + testShopRules.coinsPerRound);
+    expect(coinsReceived.amount, phaseRun.currentEnemyWave.coinsReward);
+    expect(coinsReceived.coinsAfterReceived, 3 + phaseRun.currentEnemyWave.coinsReward);
   });
 
   test('the first round takes a new player from level 1 to level 2', () {
