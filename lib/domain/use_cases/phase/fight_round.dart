@@ -30,19 +30,12 @@ RoundResult? fightRound(PhaseRun phaseRun) {
   );
 
   final foughtRoundNumber = phaseRun.currentRoundNumber;
-  final survivingEnemyCount = battleResult.survivingUnits.where((unit) => unit.faction == Faction.enemy).length;
-  final livesTaken = survivingEnemyCount < phaseRun.remainingLives ? survivingEnemyCount : phaseRun.remainingLives;
-  final roundResult = RoundResult(roundNumber: foughtRoundNumber, livesTaken: livesTaken, battleResult: battleResult);
+  final isRoundLost = battleResult.winningFaction != Faction.team;
+  final roundResult = RoundResult(roundNumber: foughtRoundNumber, isLost: isRoundLost, battleResult: battleResult);
 
-  phaseRun.remainingLives -= livesTaken;
-  if (livesTaken > 0) {
-    phaseRun.recordEvent(
-      PlayerLivesLost(
-        roundNumber: foughtRoundNumber,
-        amount: livesTaken,
-        remainingPlayerLives: phaseRun.remainingLives,
-      ),
-    );
+  if (isRoundLost) {
+    phaseRun.remainingLives -= 1;
+    phaseRun.recordEvent(PlayerLifeLost(roundNumber: foughtRoundNumber, remainingPlayerLives: phaseRun.remainingLives));
   }
 
   if (phaseRun.remainingLives == 0) {

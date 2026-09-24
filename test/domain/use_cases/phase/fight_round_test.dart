@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/data/character/enemies/enemies.dart';
 import 'package:going_wild/data/character/team/team.dart';
+import 'package:going_wild/domain/models/combat/battle_rules.dart';
 import 'package:going_wild/domain/models/combat/board/faction.dart';
 import 'package:going_wild/domain/models/events/phase/phase_event.dart';
 import 'package:going_wild/domain/models/phase/enemy_wave.dart';
@@ -60,7 +61,7 @@ void main() {
 
     expect(roundResult.roundNumber, 1);
     expect(roundResult.battleResult.winningFaction, Faction.team);
-    expect(roundResult.livesTaken, 0);
+    expect(roundResult.isLost, isFalse);
     expect(phaseRun.currentRoundNumber, 2);
     expect(phaseRun.currentEnemyWave, twoRats);
     expect(phaseRun.player.coins, coinsBefore + twoRats.coinsReward);
@@ -76,23 +77,45 @@ void main() {
     expect(phaseRun.player.field[at(6, 2)]!.character, bull);
   });
 
-  test('every enemy still alive at the end takes one life', () {
-    final phaseRun = phaseRunWithThreeStarBull([twoRats, oneRat], isBullOnField: false);
+  test('a lost round takes exactly one life, however many enemies survived', () {
+    final phaseRun = phaseRunWithThreeStarBull([fiveRats, oneRat], isBullOnField: false);
 
     final roundResult = fightRound(phaseRun)!;
 
-    expect(roundResult.livesTaken, 2);
-    expect(phaseRun.remainingLives, phaseRun.rules.startingPlayerLives - 2);
+    expect(roundResult.isLost, isTrue);
+    expect(phaseRun.remainingLives, phaseRun.rules.startingPlayerLives - 1);
     expect(phaseRun.status, PhaseStatus.inProgress);
   });
 
-  test('losing the last life loses the phase and stops the rounds', () {
-    final phaseRun = phaseRunWithThreeStarBull([fiveRats, oneRat], isBullOnField: false);
-    final coinsBefore = phaseRun.player.coins;
+  test('a draw counts as a lost round', () {
+    const rulesWithShortBattles = BattleRules(
+      tickSeconds: 0.1,
+      manaPerHit: 10,
+      nearbyRadius: 2,
+      lowHealthTriggerPercentage: 30,
+      maxSeconds: 0.3,
+    );
+    final phaseRun = startPhase(phaseWith([oneRat]), phaseRulesWith(battleRules: rulesWithShortBattles), Random(1));
+    phaseRun.player.field[at(6, 2)] = owned(bull, stars: 3);
 
     final roundResult = fightRound(phaseRun)!;
 
-    expect(roundResult.livesTaken, phaseRun.rules.startingPlayerLives);
+    expect(roundResult.battleResult.isDraw, isTrue);
+    expect(roundResult.isLost, isTrue);
+    expect(phaseRun.remainingLives, phaseRun.rules.startingPlayerLives - 1);
+  });
+
+  test('losing as many rounds as there are lives loses the phase and stops the rounds', () {
+    final phaseRun = phaseRunWithThreeStarBull([fiveRats, fiveRats, fiveRats, oneRat], isBullOnField: false);
+    expect(phaseRun.rules.startingPlayerLives, 3);
+
+    fightRound(phaseRun);
+    fightRound(phaseRun);
+    expect(phaseRun.status, PhaseStatus.inProgress);
+    final coinsBefore = phaseRun.player.coins;
+
+    fightRound(phaseRun);
+
     expect(phaseRun.remainingLives, 0);
     expect(phaseRun.status, PhaseStatus.lost);
     expect(phaseRun.player.coins, coinsBefore);
@@ -129,31 +152,32 @@ void main() {
     fightRound(phaseRun);
 
     final eventsOfTheFight = phaseRun.events.skip(eventCountBeforeFight).toList();
-    expect(eventsOfTheFight.whereType<PlayerLivesLost>(), isEmpty);
+    expect(eventsOfTheFight.whereType<PlayerLifeLost>(), isEmpty);
     expect(eventsOfTheFight.first, isA<RoundStarted>());
     expect(eventsOfTheFight.first.roundNumber, 2);
   });
 
-  test('lost lives are recorded with what is left', () {
+  test('a lost life is recorded with what is left', () {
     final phaseRun = phaseRunWithThreeStarBull([twoRats, oneRat], isBullOnField: false);
 
     fightRound(phaseRun);
 
-    final livesLost = phaseRun.events.whereType<PlayerLivesLost>().single;
-    expect(livesLost.roundNumber, 1);
-    expect(livesLost.amount, 2);
-    expect(livesLost.remainingPlayerLives, phaseRun.rules.startingPlayerLives - 2);
+    final lifeLost = phaseRun.events.whereType<PlayerLifeLost>().single;
+    expect(lifeLost.roundNumber, 1);
+    expect(lifeLost.remainingPlayerLives, phaseRun.rules.startingPlayerLives - 1);
   });
 
-  test('losing the phase records the lost lives and then the defeat, with no new round', () {
-    final phaseRun = phaseRunWithThreeStarBull([fiveRats, oneRat], isBullOnField: false);
-    final eventCountBeforeFight = phaseRun.events.length;
+  test('losing the phase records the last life lost and then the defeat, with no new round', () {
+    final phaseRun = phaseRunWithThreeStarBull([fiveRats, fiveRats, fiveRats, oneRat], isBullOnField: false);
+    fightRound(phaseRun);
+    fightRound(phaseRun);
+    final eventCountBeforeLastFight = phaseRun.events.length;
 
     fightRound(phaseRun);
 
-    expect(phaseRun.events.skip(eventCountBeforeFight), [isA<PlayerLivesLost>(), isA<PhaseLost>()]);
-    expect(phaseRun.events.last.roundNumber, 1);
-    expect(phaseRun.currentRoundNumber, 1);
+    expect(phaseRun.events.skip(eventCountBeforeLastFight), [isA<PlayerLifeLost>(), isA<PhaseLost>()]);
+    expect(phaseRun.events.last.roundNumber, 3);
+    expect(phaseRun.currentRoundNumber, 3);
   });
 
   test('winning the phase records the victory on the last round, with no new round', () {

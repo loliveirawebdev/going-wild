@@ -8,7 +8,7 @@ part 'owned_character_moved.dart';
 part 'phase_lost.dart';
 part 'phase_won.dart';
 part 'player_leveled_up.dart';
-part 'player_lives_lost.dart';
+part 'player_life_lost.dart';
 part 'player_received_coins.dart';
 part 'player_received_experience.dart';
 part 'round_started.dart';

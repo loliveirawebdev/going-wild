@@ -1,13 +1,13 @@
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:math';
 
 import 'package:going_wild/data/character/base_stats.dart';
-import 'package:going_wild/data/character/enemies/enemies.dart';
 import 'package:going_wild/data/character/merge_curves/merge_curves.dart';
 import 'package:going_wild/data/character/team/team.dart';
-import 'package:going_wild/data/phase/phases.dart';
 import 'package:going_wild/data/combat/battle_rules.dart' as rules;
 import 'package:going_wild/data/phase/phase_rules.dart' as rules;
+import 'package:going_wild/data/phase/phases.dart';
 import 'package:going_wild/data/player/player_levels.dart';
 import 'package:going_wild/data/set/sets.dart';
 import 'package:going_wild/data/shop/shop_rules.dart' as rules;
@@ -28,12 +28,10 @@ import 'package:going_wild/domain/use_cases/phase/fight_round.dart';
 import 'package:going_wild/domain/use_cases/phase/start_phase.dart';
 import 'package:going_wild/domain/use_cases/player/buy_experience.dart';
 import 'package:going_wild/domain/use_cases/shop/buy_shop_offer.dart';
+import 'package:going_wild/domain/use_cases/shop/reroll_shop.dart';
 import 'package:going_wild/domain/use_cases/shop/sell_owned_character.dart';
 
-const seedCount = 100;
-const roundCount = 10;
-const budgets = <(int, int)>[];
-const rewards = [(9, 9), (10, 10), (11, 11), (12, 12), (8, 14)];
+const runsPerProfile = 1000;
 
 const phaseRules = PhaseRules(
   board: Board(rows: rules.boardRows, columns: rules.boardColumns),
@@ -64,88 +62,152 @@ const phaseRules = PhaseRules(
   ),
 );
 
-typedef Bot = void Function(PhaseRun phaseRun, Random random);
-typedef PhaseConfig = ({String name, Phase phase});
-typedef Outcome = ({int wins, int livesLost, List<int> lossesPerRound, List<int> livesLostPerRound});
+typedef Shopping = void Function(PhaseRun phaseRun, Random random);
+typedef Placement2 = void Function(PhaseRun phaseRun, Random random);
+typedef Profile = ({String name, String description, Shopping shopping, Placement2 placement});
+typedef Report = ({String profileName, int wins, List<int> lostRoundsPerRound, List<int> gameOversPerRound, List<int> reachedPerRound});
 
-void main(List<String> arguments) {
-  final bots = <String, Bot>{'smart': smartBot, 'greedy': greedyBot, 'random': randomBot};
+final profiles = <Profile>[
+  (
+    name: 'smart',
+    description: 'compra merges e caros, vende fraco, XP quando sobra boneco, tanque na frente',
+    shopping: smartShopping,
+    placement: rolesPlacement,
+  ),
+  (
+    name: 'smart, random placement',
+    description: 'compra como o smart, mas posiciona ao acaso',
+    shopping: smartShopping,
+    placement: randomPlacement,
+  ),
+  (
+    name: 'greedy',
+    description: 'compra tudo, XP quando sobra, mais fortes na frente sem olhar papel',
+    shopping: buyEverythingThenExperience,
+    placement: strongestFrontFirst,
+  ),
+  (
+    name: 'greedy, back row',
+    description: 'compra tudo, todo mundo na ultima fileira',
+    shopping: buyEverythingThenExperience,
+    placement: backRowOnly,
+  ),
+  (name: 'hoarder', description: 'compra tudo, nunca compra XP', shopping: buyEverything, placement: rolesPlacement),
+  (
+    name: 'leveler',
+    description: 'toda moeda em XP primeiro, compra com o que sobra',
+    shopping: experienceFirstThenEverything,
+    placement: rolesPlacement,
+  ),
+  (
+    name: 'reroller',
+    description: 'dois rerolls por round antes de comprar tudo',
+    shopping: rerollTwiceThenBuyEverything,
+    placement: rolesPlacement,
+  ),
+  (name: 'commons only', description: 'so compra personagem de 1 moeda', shopping: buyOnlyCommons, placement: rolesPlacement),
+  (name: 'front liners only', description: 'so compra tanque e guarda', shopping: buyOnlyFrontLiners, placement: rolesPlacement),
+  (name: 'damage only', description: 'so compra dano e suporte', shopping: buyOnlyBackLiners, placement: rolesPlacement),
+  (
+    name: 'weak board',
+    description: 'compra tudo, deixa duas vagas do campo vazias',
+    shopping: buyEverythingThenExperience,
+    placement: leaveTwoSlotsEmpty,
+  ),
+  (
+    name: 'random',
+    description: 'compra metade das ofertas ao acaso, nunca XP, posiciona ao acaso',
+    shopping: buyHalfAtRandom,
+    placement: randomPlacement,
+  ),
+];
 
-  final configs = <PhaseConfig>[
-    (name: 'backyard', phase: backyard),
-    for (final budget in budgets)
-      for (final reward in rewards)
-        (
-          name: 'budget ${budget.$1}+${budget.$2}/round, reward ${reward.$1}->${reward.$2}',
-          phase: generatedPhase(
-            id: 'b${budget.$1}_${budget.$2}_r${reward.$1}_${reward.$2}',
-            startBudget: budget.$1,
-            budgetGrowth: budget.$2,
-            firstReward: reward.$1,
-            lastReward: reward.$2,
-          ),
-        ),
-  ];
+List<(Character, int)> picksOf(EnemyWave wave) => wave.enemies.map((enemy) => (enemy.character, enemy.stars)).toList();
+
+final candidatePhases = <Phase>[];
+
+Future<void> main(List<String> arguments) async {
+  final onlyIndex = arguments.indexOf('--only');
+  final selectedProfiles = onlyIndex == -1
+      ? profiles
+      : profiles.where((profile) => arguments[onlyIndex + 1].split(',').contains(profile.name)).toList();
+  final phases = [...allPhases, ...candidatePhases];
 
   final wavesToPrint = arguments.indexOf('--waves');
   if (wavesToPrint != -1) {
-    final chosen = configs.firstWhere((config) => config.phase.id == arguments[wavesToPrint + 1]);
-    final outcome = play(chosen.phase, smartBot);
-    stdout.writeln('${chosen.name}: smart wins ${outcome.wins}%');
-    for (final (index, wave) in chosen.phase.enemyWaves.indexed) {
-      final strength = wave.enemies.fold(0, (sum, enemy) => sum + enemy.character.rarity.coins * (1 << (enemy.stars - 1)));
+    final phase = phases.firstWhere((phase) => phase.id == arguments[wavesToPrint + 1]);
+    for (final (index, wave) in phase.enemyWaves.indexed) {
       final enemies = wave.enemies.map((enemy) => '${enemy.character.id}${'*' * enemy.stars}').join(' ');
-      stdout.writeln(
-        'round ${'${index + 1}'.padLeft(2)}  strength ${'$strength'.padLeft(3)}  reward ${wave.coinsReward}  '
-        'lives lost/run ${(outcome.livesLostPerRound[index] / seedCount).toStringAsFixed(2)}  lost here ${outcome.lossesPerRound[index]}   $enemies',
-      );
+      stdout.writeln('round ${'${index + 1}'.padLeft(2)}  reward ${wave.coinsReward}  $enemies');
     }
-    if (arguments.contains('--dart')) stdout.writeln(dartSourceOf(chosen.phase));
+    if (arguments.contains('--dart')) stdout.writeln(dartSourceOf(phase));
     return;
   }
 
-  stdout.writeln('$seedCount seeds per cell, ${phaseRules.startingPlayerLives} lives, $roundCount rounds. win% / avg lives lost');
-  stdout.writeln('${'config'.padRight(44)}${bots.keys.map((name) => name.padLeft(14)).join()}   smart losses by round');
-  for (final config in configs) {
-    final cells = <String>[];
-    var smartLosses = <int>[];
-    for (final MapEntry(key: botName, value: bot) in bots.entries) {
-      final outcome = play(config.phase, bot);
-      cells.add('${'${outcome.wins}%'.padLeft(5)} ${(outcome.livesLost / seedCount).toStringAsFixed(2).padLeft(5)}'.padLeft(14));
-      if (botName == 'smart') smartLosses = outcome.lossesPerRound;
-    }
-    stdout.writeln('${config.name.padRight(44)}${cells.join()}   ${smartLosses.join(' ')}');
+  for (final phase in phases) {
+    stdout.writeln(
+      'phase ${phase.id}: $runsPerProfile runs per profile, ${phaseRules.startingPlayerLives} lives, ${phase.roundCount} rounds',
+    );
+    final reports = await Future.wait([for (final profile in selectedProfiles) Isolate.run(() => play(phase, profile))]);
+    for (final (index, report) in reports.indexed) printReport(selectedProfiles[index], report, phase.roundCount);
   }
 }
 
-Outcome play(Phase phase, Bot bot) {
+Report play(Phase phase, Profile profile) {
   var wins = 0;
-  var livesLost = 0;
-  final lossesPerRound = List.filled(phase.roundCount, 0);
-  final livesLostPerRound = List.filled(phase.roundCount, 0);
+  final lostRoundsPerRound = List.filled(phase.roundCount, 0);
+  final gameOversPerRound = List.filled(phase.roundCount, 0);
+  final reachedPerRound = List.filled(phase.roundCount, 0);
 
-  for (var seed = 1; seed <= seedCount; seed++) {
+  for (var seed = 1; seed <= runsPerProfile; seed++) {
     final phaseRun = startPhase(phase, phaseRules, Random(seed));
-    final botRandom = Random(seed * 7919);
+    final random = Random(seed * 7919);
     while (phaseRun.status == PhaseStatus.inProgress) {
-      bot(phaseRun, botRandom);
+      final roundIndex = phaseRun.currentRoundNumber - 1;
+      reachedPerRound[roundIndex] += 1;
+      profile.shopping(phaseRun, random);
+      profile.placement(phaseRun, random);
       final roundResult = fightRound(phaseRun)!;
-      livesLost += roundResult.livesTaken;
-      livesLostPerRound[roundResult.roundNumber - 1] += roundResult.livesTaken;
-      if (phaseRun.status == PhaseStatus.lost) lossesPerRound[roundResult.roundNumber - 1] += 1;
+      if (roundResult.isLost) lostRoundsPerRound[roundIndex] += 1;
+      if (phaseRun.status == PhaseStatus.lost) gameOversPerRound[roundIndex] += 1;
     }
     if (phaseRun.status == PhaseStatus.won) wins += 1;
   }
 
-  return (wins: wins, livesLost: livesLost, lossesPerRound: lossesPerRound, livesLostPerRound: livesLostPerRound);
+  return (
+    profileName: profile.name,
+    wins: wins,
+    lostRoundsPerRound: lostRoundsPerRound,
+    gameOversPerRound: gameOversPerRound,
+    reachedPerRound: reachedPerRound,
+  );
+}
+
+void printReport(Profile profile, Report report, int roundCount) {
+  String percentage(int count, int total) => total == 0 ? '   -  ' : '${(count / total * 100).toStringAsFixed(1)}%'.padLeft(6);
+  final totalLostRounds = report.lostRoundsPerRound.fold(0, (sum, count) => sum + count);
+
+  stdout.writeln('');
+  stdout.writeln('== ${profile.name}: ${profile.description}');
+  stdout.writeln(
+    '   wins ${percentage(report.wins, runsPerProfile)}   rounds lost per run ${(totalLostRounds / runsPerProfile).toStringAsFixed(2)}',
+  );
+  stdout.writeln('   round   reached   lost the round   game over here');
+  for (var roundIndex = 0; roundIndex < roundCount; roundIndex++) {
+    final reached = report.reachedPerRound[roundIndex];
+    stdout.writeln(
+      '   ${'${roundIndex + 1}'.padLeft(5)}   ${percentage(reached, runsPerProfile)}   '
+      '${percentage(report.lostRoundsPerRound[roundIndex], reached).padLeft(14)}   ${percentage(report.gameOversPerRound[roundIndex], runsPerProfile).padLeft(14)}',
+    );
+  }
 }
 
 int strengthOf(OwnedCharacter ownedCharacter) => ownedCharacter.character.rarity.coins * (1 << (ownedCharacter.stars - 1));
 
-List<Position> teamPositionsFrontFirst(Board board) => [
-  for (var row = board.rows ~/ 2; row < board.rows; row++)
-    for (final column in [2, 1, 3, 0, 4]) Position(row: row, column: column),
-];
+bool isFrontLiner(Character character) => character.role == Role.tank || character.role == Role.guard;
+
+List<OwnedCharacter> strongestFirst(PhaseRun phaseRun) =>
+    [...phaseRun.player.ownedCharacters]..sort((first, second) => strengthOf(second).compareTo(strengthOf(first)));
 
 void placeOnField(PhaseRun phaseRun, List<OwnedCharacter> fielded, List<OwnedCharacter> benched, List<Position> positions) {
   final player = phaseRun.player;
@@ -155,30 +217,57 @@ void placeOnField(PhaseRun phaseRun, List<OwnedCharacter> fielded, List<OwnedCha
   for (final (index, ownedCharacter) in benched.indexed) player.bench[index] = ownedCharacter;
 }
 
-void greedyBot(PhaseRun phaseRun, Random random) {
-  final player = phaseRun.player;
-  for (var offerIndex = 0; offerIndex < player.shopOffers.length; offerIndex++) buyShopOffer(phaseRun, offerIndex);
-  while (player.coins >= phaseRun.rules.shopRules.experiencePurchaseCostInCoins + 6) {
+List<Position> rowsFrontFirst(Board board) => [
+  for (var row = board.rows ~/ 2; row < board.rows; row++)
+    for (final column in [2, 1, 3, 0, 4]) Position(row: row, column: column),
+];
+
+void buyEverything(PhaseRun phaseRun, Random random) {
+  for (var offerIndex = 0; offerIndex < phaseRun.player.shopOffers.length; offerIndex++) buyShopOffer(phaseRun, offerIndex);
+}
+
+void buyExperienceWhileRich(PhaseRun phaseRun, int coinsToKeep) {
+  while (phaseRun.player.coins >= phaseRun.rules.shopRules.experiencePurchaseCostInCoins + coinsToKeep) {
     if (!buyExperience(phaseRun)) break;
   }
-
-  final strongestFirst = [...player.ownedCharacters]..sort((first, second) => strengthOf(second).compareTo(strengthOf(first)));
-  final fielded = strongestFirst.take(player.level).toList();
-  placeOnField(phaseRun, fielded, strongestFirst.skip(player.level).toList(), teamPositionsFrontFirst(phaseRun.rules.board));
 }
 
-void randomBot(PhaseRun phaseRun, Random random) {
+void buyEverythingThenExperience(PhaseRun phaseRun, Random random) {
+  buyEverything(phaseRun, random);
+  buyExperienceWhileRich(phaseRun, 6);
+}
+
+void experienceFirstThenEverything(PhaseRun phaseRun, Random random) {
+  buyExperienceWhileRich(phaseRun, 0);
+  buyEverything(phaseRun, random);
+}
+
+void rerollTwiceThenBuyEverything(PhaseRun phaseRun, Random random) {
+  rerollShop(phaseRun);
+  rerollShop(phaseRun);
+  buyEverythingThenExperience(phaseRun, random);
+}
+
+void buyOnly(PhaseRun phaseRun, bool Function(Character character) wanted) {
   final player = phaseRun.player;
   for (var offerIndex = 0; offerIndex < player.shopOffers.length; offerIndex++) {
-    if (random.nextBool()) buyShopOffer(phaseRun, offerIndex);
+    final character = player.shopOffers[offerIndex];
+    if (character != null && wanted(character)) buyShopOffer(phaseRun, offerIndex);
   }
-
-  final shuffled = [...player.ownedCharacters]..shuffle(random);
-  final positions = [...teamPositionsFrontFirst(phaseRun.rules.board)]..shuffle(random);
-  placeOnField(phaseRun, shuffled.take(player.level).toList(), shuffled.skip(player.level).toList(), positions);
+  buyExperienceWhileRich(phaseRun, 6);
 }
 
-void smartBot(PhaseRun phaseRun, Random random) {
+void buyOnlyCommons(PhaseRun phaseRun, Random random) => buyOnly(phaseRun, (character) => character.rarity == Rarity.common);
+void buyOnlyFrontLiners(PhaseRun phaseRun, Random random) => buyOnly(phaseRun, isFrontLiner);
+void buyOnlyBackLiners(PhaseRun phaseRun, Random random) => buyOnly(phaseRun, (character) => !isFrontLiner(character));
+
+void buyHalfAtRandom(PhaseRun phaseRun, Random random) {
+  for (var offerIndex = 0; offerIndex < phaseRun.player.shopOffers.length; offerIndex++) {
+    if (random.nextBool()) buyShopOffer(phaseRun, offerIndex);
+  }
+}
+
+void smartShopping(PhaseRun phaseRun, Random random) {
   final player = phaseRun.player;
   final shopRules = phaseRun.rules.shopRules;
 
@@ -216,12 +305,38 @@ void smartBot(PhaseRun phaseRun, Random random) {
   while (player.ownedCharacters.length > player.level && player.coins >= shopRules.experiencePurchaseCostInCoins) {
     if (!buyExperience(phaseRun)) break;
   }
+}
 
-  final strongestFirst = [...player.ownedCharacters]..sort((first, second) => strengthOf(second).compareTo(strengthOf(first)));
-  final fielded = strongestFirst.take(player.level).toList();
-  bool isFrontLiner(OwnedCharacter owned) => owned.character.role == Role.tank || owned.character.role == Role.guard;
-  final frontThenBack = [...fielded.where(isFrontLiner), ...fielded.where((owned) => !isFrontLiner(owned))];
+void strongestFrontFirst(PhaseRun phaseRun, Random random) {
+  final ordered = strongestFirst(phaseRun);
+  final fielded = ordered.take(phaseRun.player.level).toList();
+  placeOnField(phaseRun, fielded, ordered.skip(phaseRun.player.level).toList(), rowsFrontFirst(phaseRun.rules.board));
+}
+
+void leaveTwoSlotsEmpty(PhaseRun phaseRun, Random random) {
+  final ordered = strongestFirst(phaseRun);
+  final fieldedCount = max(2, phaseRun.player.level - 2);
+  placeOnField(phaseRun, ordered.take(fieldedCount).toList(), ordered.skip(fieldedCount).toList(), rowsFrontFirst(phaseRun.rules.board));
+}
+
+void backRowOnly(PhaseRun phaseRun, Random random) {
   final board = phaseRun.rules.board;
+  final ordered = strongestFirst(phaseRun);
+  final positions = [
+    for (var row = board.rows - 1; row >= board.rows ~/ 2; row--)
+      for (final column in [2, 1, 3, 0, 4]) Position(row: row, column: column),
+  ];
+  placeOnField(phaseRun, ordered.take(phaseRun.player.level).toList(), ordered.skip(phaseRun.player.level).toList(), positions);
+}
+
+void rolesPlacement(PhaseRun phaseRun, Random random) {
+  final board = phaseRun.rules.board;
+  final ordered = strongestFirst(phaseRun);
+  final fielded = ordered.take(phaseRun.player.level).toList();
+  final frontThenBack = [
+    ...fielded.where((owned) => isFrontLiner(owned.character)),
+    ...fielded.where((owned) => !isFrontLiner(owned.character)),
+  ];
   final frontRow = board.rows ~/ 2;
   final positions = [
     for (final column in [2, 1, 3, 0, 4]) Position(row: frontRow, column: column),
@@ -229,65 +344,21 @@ void smartBot(PhaseRun phaseRun, Random random) {
       for (final column in [2, 1, 3, 0, 4]) Position(row: row, column: column),
     for (final column in [2, 1, 3, 0, 4]) Position(row: frontRow + 1, column: column),
   ];
-  placeOnField(phaseRun, frontThenBack, strongestFirst.skip(player.level).toList(), positions);
+  placeOnField(phaseRun, frontThenBack, ordered.skip(phaseRun.player.level).toList(), positions);
 }
 
-Phase generatedPhase({
-  required String id,
-  required int startBudget,
-  required int budgetGrowth,
-  required int firstReward,
-  required int lastReward,
-}) {
-  final random = Random(id.hashCode);
-  const unlockRound = {Rarity.common: 1, Rarity.uncommon: 2, Rarity.rare: 4, Rarity.epic: 7};
-  const maxEnemies = 6;
-
-  int costOf(Character character, int stars) => character.rarity.coins * (1 << (stars - 1));
-
-  final waves = <EnemyWave>[];
-  for (var round = 1; round <= roundCount; round++) {
-    var budget = startBudget + budgetGrowth * (round - 1);
-    final allowed = allEnemies.where((enemy) => unlockRound[enemy.rarity]! <= round).toList();
-    final picked = <(Character, int)>[];
-
-    while (picked.length < maxEnemies) {
-      final affordable = allowed.where((enemy) => costOf(enemy, 1) <= budget).toList();
-      if (affordable.isEmpty) break;
-      final enemy = affordable[random.nextInt(affordable.length)];
-      picked.add((enemy, 1));
-      budget -= costOf(enemy, 1);
-    }
-
-    var upgradedSomething = true;
-    while (upgradedSomething) {
-      upgradedSomething = false;
-      final upgradable = [
-        for (final (index, (enemy, stars)) in picked.indexed)
-          if (stars < rules.maxStars && costOf(enemy, stars + 1) - costOf(enemy, stars) <= budget) index,
-      ];
-      if (upgradable.isEmpty) break;
-      final index = upgradable[random.nextInt(upgradable.length)];
-      final (enemy, stars) = picked[index];
-      budget -= costOf(enemy, stars + 1) - costOf(enemy, stars);
-      picked[index] = (enemy, stars + 1);
-      upgradedSomething = true;
-    }
-
-    final reward = firstReward + ((lastReward - firstReward) * (round - 1) / (roundCount - 1)).round();
-    waves.add(waveFrom(picked, reward));
-  }
-
-  return Phase(id: id, enemyWaves: waves);
+void randomPlacement(PhaseRun phaseRun, Random random) {
+  final shuffled = [...phaseRun.player.ownedCharacters]..shuffle(random);
+  final positions = [...rowsFrontFirst(phaseRun.rules.board)]..shuffle(random);
+  placeOnField(phaseRun, shuffled.take(phaseRun.player.level).toList(), shuffled.skip(phaseRun.player.level).toList(), positions);
 }
 
 EnemyWave waveFrom(List<(Character, int)> picks, int reward) {
-  bool isFrontLiner(Character character) => character.role == Role.tank || character.role == Role.guard;
   final ordered = [...picks.where((pick) => isFrontLiner(pick.$1)), ...picks.where((pick) => !isFrontLiner(pick.$1))];
   const columns = [2, 1, 3, 0, 4];
   final positions = [
-    for (final column in columns) Position(row: 3, column: column),
-    for (final column in columns) Position(row: 1, column: column),
+    for (final row in [3, 2, 1, 0])
+      for (final column in columns) Position(row: row, column: column),
   ];
   return EnemyWave(
     coinsReward: reward,

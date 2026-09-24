@@ -69,14 +69,14 @@ void main() {
       ]);
 
       expect(
-        roundResults.fold(0, (sum, roundResult) => sum + roundResult.livesTaken),
+        roundResults.where((roundResult) => roundResult.isLost).length,
         lessThanOrEqualTo(phaseRulesWith().startingPlayerLives),
       );
     }
   });
 
   test('the same seed plays the same whole phase', () {
-    List<int> livesTakenPerRound(int seed) => playWholePhaseBuyingEverything(seed).map((roundResult) => roundResult.livesTaken).toList();
-    expect(livesTakenPerRound(5), livesTakenPerRound(5));
+    List<bool> lostRounds(int seed) => playWholePhaseBuyingEverything(seed).map((roundResult) => roundResult.isLost).toList();
+    expect(lostRounds(5), lostRounds(5));
   });
 }

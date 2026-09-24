@@ -5,6 +5,7 @@ import 'package:going_wild/data/character/enemies/enemies.dart';
 import 'package:going_wild/data/character/merge_curves/merge_curves.dart';
 import 'package:going_wild/data/phase/phase_rules.dart' as rules;
 import 'package:going_wild/data/set/sets.dart';
+import 'package:going_wild/domain/models/combat/battle_rules.dart';
 import 'package:going_wild/domain/models/combat/board/placement.dart';
 import 'package:going_wild/domain/models/combat/board/position.dart';
 import 'package:going_wild/domain/models/models.dart';
@@ -22,12 +23,13 @@ PhaseRules phaseRulesWith({
   int startingPlayerLives = rules.startingPlayerLives,
   int benchSize = rules.benchSize,
   ShopRules shopRules = testShopRules,
+  BattleRules battleRules = testRules,
 }) => PhaseRules(
   board: testBoard,
   sets: allSets,
   baseStats: baseStats,
   shopRules: shopRules,
-  battleRules: testRules,
+  battleRules: battleRules,
   mergeCurveFor: mergeCurveFor,
   benchSize: benchSize,
   startingPlayerLives: startingPlayerLives,
