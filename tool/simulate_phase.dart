@@ -50,6 +50,7 @@ const phaseRules = PhaseRules(
     experiencePerPurchase: rules.experiencePerPurchase,
     experiencePurchaseCostInCoins: rules.experiencePurchaseCostInCoins,
     maxShopOddsPercentagePerCharacter: rules.maxShopOddsPercentagePerCharacter,
+    mergedCharacterSellDiscountInCoins: rules.mergedCharacterSellDiscountInCoins,
   ),
 );
 

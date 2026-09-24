@@ -13,6 +13,7 @@ class ShopRules {
     required this.experiencePerPurchase,
     required this.experiencePurchaseCostInCoins,
     required this.maxShopOddsPercentagePerCharacter,
+    required this.mergedCharacterSellDiscountInCoins,
   });
 
   final int maxStars;
@@ -23,6 +24,7 @@ class ShopRules {
   final int experiencePerPurchase;
   final int experiencePurchaseCostInCoins;
   final int maxShopOddsPercentagePerCharacter;
+  final int mergedCharacterSellDiscountInCoins;
   final List<PlayerLevel> playerLevels;
   final List<Character> purchasableCharacters;
 

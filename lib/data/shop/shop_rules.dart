@@ -6,3 +6,4 @@ const int experiencePerRound = 2;
 const int experiencePerPurchase = 4;
 const int experiencePurchaseCostInCoins = 4;
 const int maxShopOddsPercentagePerCharacter = 15;
+const int mergedCharacterSellDiscountInCoins = 1;

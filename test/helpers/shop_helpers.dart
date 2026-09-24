@@ -18,6 +18,7 @@ const testShopRules = ShopRules(
   experiencePerPurchase: experiencePerPurchase,
   experiencePurchaseCostInCoins: experiencePurchaseCostInCoins,
   maxShopOddsPercentagePerCharacter: maxShopOddsPercentagePerCharacter,
+  mergedCharacterSellDiscountInCoins: mergedCharacterSellDiscountInCoins,
 );
 
 Player playerWith({
@@ -53,4 +54,5 @@ ShopRules shopRulesWith({int copiesPerMerge = copiesPerMerge, int maxShopOddsPer
       experiencePerPurchase: experiencePerPurchase,
       experiencePurchaseCostInCoins: experiencePurchaseCostInCoins,
       maxShopOddsPercentagePerCharacter: maxShopOddsPercentagePerCharacter,
+      mergedCharacterSellDiscountInCoins: mergedCharacterSellDiscountInCoins,
     );
