@@ -1,0 +1,7 @@
+{
+  "title": "Escolha a fase",
+  "roundCount(param=roundCount)": {
+    "one": "$roundCount round",
+    "other": "$roundCount rounds"
+  }
+}
