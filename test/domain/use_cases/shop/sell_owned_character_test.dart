@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/data/character/team/team.dart';
 import 'package:going_wild/domain/models/events/phase/phase_event.dart';
+import 'package:going_wild/domain/models/phase/phase_status.dart';
 import 'package:going_wild/domain/models/player/team_slot/team_slot.dart';
 import 'package:going_wild/domain/models/shop/coins_for_selling.dart';
 import 'package:going_wild/domain/use_cases/shop/sell_owned_character.dart';
@@ -47,6 +48,15 @@ void main() {
     expect(sellOwnedCharacter(phaseRun, const BenchSlot(index: 1)), isFalse);
     expect(sellOwnedCharacter(phaseRun, const BenchSlot(index: 99)), isFalse);
     expect(sellOwnedCharacter(phaseRun, FieldSlot(position: at(1, 2))), isFalse);
+    expect(phaseRun.player.coins, 0);
+    expect(phaseRun.events, isEmpty);
+  });
+
+  test('nothing can be sold once the phase is over', () {
+    final phaseRun = phaseRunWith(benchCharacters: [owned(cat)])..status = PhaseStatus.lost;
+
+    expect(sellOwnedCharacter(phaseRun, const BenchSlot(index: 0)), isFalse);
+    expect(phaseRun.player.bench[0]!.character, cat);
     expect(phaseRun.player.coins, 0);
     expect(phaseRun.events, isEmpty);
   });

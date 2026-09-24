@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/data/character/team/team.dart';
 import 'package:going_wild/domain/models/events/phase/phase_event.dart';
+import 'package:going_wild/domain/models/phase/phase_status.dart';
 import 'package:going_wild/domain/models/player/team_slot/team_slot.dart';
 import 'package:going_wild/domain/use_cases/player/move_owned_character.dart';
 
@@ -96,5 +97,14 @@ void main() {
     expect(moved.stars, 2);
     expect(moved.from, firstBenchSlot);
     expect(moved.to, frontCenter);
+  });
+
+  test('nothing can be moved once the phase is over', () {
+    final phaseRun = phaseRunWith(level: 2, benchCharacters: [owned(cat)])..status = PhaseStatus.lost;
+
+    expect(moveOwnedCharacter(phaseRun, from: firstBenchSlot, to: frontCenter), isFalse);
+    expect(phaseRun.player.bench[0]!.character, cat);
+    expect(phaseRun.player.field, isEmpty);
+    expect(phaseRun.events, isEmpty);
   });
 }

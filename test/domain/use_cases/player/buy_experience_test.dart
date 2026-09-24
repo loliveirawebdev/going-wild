@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/domain/models/events/phase/phase_event.dart';
+import 'package:going_wild/domain/models/phase/phase_status.dart';
 import 'package:going_wild/domain/use_cases/player/buy_experience.dart';
 
 import '../../../helpers/phase_helpers.dart';
@@ -65,5 +66,14 @@ void main() {
 
     expect(hasBought, isFalse);
     expect(phaseRun.player.coins, 10);
+  });
+
+  test('no experience can be bought once the phase is over', () {
+    final phaseRun = phaseRunWith(coins: 10, level: 4)..status = PhaseStatus.won;
+
+    expect(buyExperience(phaseRun), isFalse);
+    expect(phaseRun.player.coins, 10);
+    expect(phaseRun.player.experience, 0);
+    expect(phaseRun.events, isEmpty);
   });
 }

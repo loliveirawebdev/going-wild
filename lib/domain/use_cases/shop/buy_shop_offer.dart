@@ -4,6 +4,8 @@ import '../../models/shop/merge_owned_characters.dart';
 import '../../models/shop/owned_character.dart';
 
 bool buyShopOffer(PhaseRun phaseRun, int offerIndex) {
+  if (!phaseRun.isInProgress) return false;
+
   final player = phaseRun.player;
   final offeredCharacter = player.shopOffers[offerIndex];
   final copiesPerMerge = phaseRun.rules.shopRules.copiesPerMerge;

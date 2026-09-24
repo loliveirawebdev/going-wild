@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/data/character/team/team.dart';
 import 'package:going_wild/domain/models/events/phase/phase_event.dart';
 import 'package:going_wild/domain/models/phase/enemy_wave.dart';
+import 'package:going_wild/domain/models/phase/phase_status.dart';
 import 'package:going_wild/domain/use_cases/phase/start_round.dart';
 import 'package:going_wild/domain/use_cases/shop/lock_shop.dart';
 import 'package:going_wild/domain/use_cases/shop/reroll_shop.dart';
@@ -62,5 +63,15 @@ void main() {
     startRound(phaseRun);
 
     expect(phaseRun.player.coins, 6);
+  });
+
+  test('the lock cannot change once the phase is over', () {
+    final phaseRun = phaseRunWith()..status = PhaseStatus.lost;
+
+    expect(lockShop(phaseRun), isFalse);
+    phaseRun.player.isShopLocked = true;
+    expect(unlockShop(phaseRun), isFalse);
+    expect(phaseRun.player.isShopLocked, isTrue);
+    expect(phaseRun.events, isEmpty);
   });
 }

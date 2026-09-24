@@ -5,6 +5,8 @@ import '../../models/player/team_slot/team_slot.dart';
 import '../../models/shop/coins_for_selling.dart';
 
 bool sellOwnedCharacter(PhaseRun phaseRun, TeamSlot slot) {
+  if (!phaseRun.isInProgress) return false;
+
   final player = phaseRun.player;
   if (!isValidTeamSlot(phaseRun, slot)) return false;
 

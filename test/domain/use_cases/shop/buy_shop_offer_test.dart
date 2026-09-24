@@ -3,6 +3,7 @@ import 'package:going_wild/data/character/team/team.dart';
 import 'package:going_wild/domain/models/events/phase/phase_event.dart';
 import 'package:going_wild/domain/models/models.dart';
 import 'package:going_wild/domain/models/phase/phase_run.dart';
+import 'package:going_wild/domain/models/phase/phase_status.dart';
 import 'package:going_wild/domain/models/player/team_slot/team_slot.dart';
 import 'package:going_wild/domain/models/shop/refresh_shop_offers.dart';
 import 'package:going_wild/domain/use_cases/shop/buy_shop_offer.dart';
@@ -146,5 +147,14 @@ void main() {
     expect((phaseRun.player.field[at(6, 2)]!.character, phaseRun.player.field[at(6, 2)]!.stars), (cat, 2));
     expect(phaseRun.player.bench.nonNulls.map((ownedCharacter) => ownedCharacter.character), [dog]);
     expect(phaseRun.events.whereType<CharactersMerged>().single.slot, FieldSlot(position: at(6, 2)));
+  });
+
+  test('nothing can be bought once the phase is over', () {
+    final phaseRun = phaseRunWith(coins: 10, shopOffers: [cat])..status = PhaseStatus.won;
+
+    expect(buyShopOffer(phaseRun, 0), isFalse);
+    expect(phaseRun.player.coins, 10);
+    expect(phaseRun.player.ownedCharacters, isEmpty);
+    expect(phaseRun.events, isEmpty);
   });
 }

@@ -27,6 +27,7 @@ class PhaseRun {
   PhaseStatus status = PhaseStatus.inProgress;
   final List<PhaseEvent> events = [];
 
+  bool get isInProgress => status == PhaseStatus.inProgress;
   void recordEvent(PhaseEvent event) => events.add(event);
   EnemyWave get currentEnemyWave => phase.enemyWaves[currentRoundNumber - 1];
 }

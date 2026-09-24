@@ -9,7 +9,7 @@ import 'start_round.dart';
 
 RoundResult? fightRound(PhaseRun phaseRun) {
   final player = phaseRun.player;
-  if (phaseRun.status != PhaseStatus.inProgress || player.field.length > player.level) return null;
+  if (!phaseRun.isInProgress || player.field.length > player.level) return null;
 
   final teamPlacements = [
     for (final MapEntry(key: position, value: ownedCharacter) in player.field.entries)

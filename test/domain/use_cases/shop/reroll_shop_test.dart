@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/domain/models/events/phase/phase_event.dart';
+import 'package:going_wild/domain/models/phase/phase_status.dart';
 import 'package:going_wild/domain/models/shop/refresh_shop_offers.dart';
 import 'package:going_wild/domain/use_cases/shop/reroll_shop.dart';
 
@@ -32,5 +33,14 @@ void main() {
     expect(phaseRun.player.coins, testShopRules.rerollCostInCoins - 1);
     expect(phaseRun.player.shopOffers, offersBeforeReroll);
     expect(phaseRun.events.whereType<ShopOffersRefreshed>(), hasLength(1));
+  });
+
+  test('no reroll once the phase is over', () {
+    final phaseRun = phaseRunWith(coins: 10, level: 6, shopOffers: [null, null, null, null])..status = PhaseStatus.won;
+
+    expect(rerollShop(phaseRun), isFalse);
+    expect(phaseRun.player.coins, 10);
+    expect(phaseRun.player.shopOffers, [null, null, null, null]);
+    expect(phaseRun.events, isEmpty);
   });
 }

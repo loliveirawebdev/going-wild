@@ -4,6 +4,8 @@ import '../../models/player/team_slot/is_valid_team_slot.dart';
 import '../../models/player/team_slot/team_slot.dart';
 
 bool moveOwnedCharacter(PhaseRun phaseRun, {required TeamSlot from, required TeamSlot to}) {
+  if (!phaseRun.isInProgress) return false;
+
   final player = phaseRun.player;
   if (from == to || !isValidTeamSlot(phaseRun, from) || !isValidTeamSlot(phaseRun, to)) return false;
 
