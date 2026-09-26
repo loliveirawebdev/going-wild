@@ -1,85 +1,77 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:going_wild/data/character/base_stats.dart';
-import 'package:going_wild/data/character/enemies/enemies.dart';
-import 'package:going_wild/data/character/merge_curves/merge_curves.dart';
-import 'package:going_wild/data/character/team/team.dart';
-import 'package:going_wild/data/combat/battle_rules.dart' as rules;
-import 'package:going_wild/data/set/sets.dart';
-import 'package:going_wild/domain/models/combat/battle_result.dart';
-import 'package:going_wild/domain/models/combat/battle_rules.dart';
-import 'package:going_wild/domain/models/combat/board/board.dart';
-import 'package:going_wild/domain/models/combat/board/faction.dart';
-import 'package:going_wild/domain/models/combat/board/placement.dart';
-import 'package:going_wild/domain/models/combat/board/position.dart';
-import 'package:going_wild/domain/models/events/combat/battle_event.dart';
-import 'package:going_wild/domain/models/models.dart';
-import 'package:going_wild/domain/use_cases/combat/run_battle.dart';
+import 'package:going_wild/content/character/enemies/enemies.dart';
+import 'package:going_wild/content/character/team/team.dart';
+import 'package:going_wild/content/engines/combat/basic_combat_engine.dart';
+import 'package:going_wild/domain/models/board/placement.dart';
+import 'package:going_wild/domain/models/board/position.dart';
+import 'package:going_wild/domain/models/character/character.dart';
+import 'package:going_wild/domain/models/character/character_copy.dart';
+import 'package:going_wild/domain/models/character/rarity.dart';
+import 'package:going_wild/domain/models/combat/combat_result.dart';
+import 'package:going_wild/domain/models/combat_history/entries/combat_history_entry.dart';
+import 'package:going_wild/domain/models/combatant/faction.dart';
 
 const seeds = [1, 2, 3];
-const maxSeconds = 60.0;
 const teamDuelPosition = Position(row: 6, column: 2);
 const enemyDuelPosition = Position(row: 1, column: 2);
 
 final castsPerCharacter = <String, int>{};
-final battlesPerCharacter = <String, int>{};
-final battlesWithoutCastPerCharacter = <String, int>{};
+final combatsPerCharacter = <String, int>{};
+final combatsWithoutCastPerCharacter = <String, int>{};
 
 void main() {
   printDuelMatrix();
   printMergeLadderByRarity();
   printRoundRobin('TEAM ROUND ROBIN (1★ duels, win rate against every other team character)', allTeamCharacters);
-  printRoundRobin('ENEMY ROUND ROBIN (1★ duels, win rate against every other enemy)', allEnemies);
+  printRoundRobin('ENEMY ROUND ROBIN (1★ duels, win rate against every other enemy)', allEnemyCharacters);
   printAbilityUsage();
 }
 
-BattleResult duel(Character teamCharacter, int teamStars, Character enemyCharacter, int enemyStars, int seed) => battle(
-  team: [Placement(character: teamCharacter, stars: teamStars, position: teamDuelPosition)],
-  enemies: [Placement(character: enemyCharacter, stars: enemyStars, position: enemyDuelPosition)],
+CombatResult duel(Character teamCharacter, int teamStars, Character enemyCharacter, int enemyStars, int seed) => combat(
   seed: seed,
+  team: [
+    Placement(
+      position: teamDuelPosition,
+      characterCopy: CharacterCopy(stars: teamStars, character: teamCharacter),
+    ),
+  ],
+  enemies: [
+    Placement(
+      position: enemyDuelPosition,
+      characterCopy: CharacterCopy(stars: enemyStars, character: enemyCharacter),
+    ),
+  ],
 );
 
-BattleResult battle({required List<Placement> team, required List<Placement> enemies, required int seed}) {
-  final result = runBattle(
-    team: team,
-    enemies: enemies,
-    board: const Board(rows: rules.boardRows, columns: rules.boardColumns),
-    rules: const BattleRules(
-      tickSeconds: rules.tickSeconds,
-      manaPerHit: rules.manaPerHit,
-      nearbyRadius: rules.nearbyRadius,
-      lowHealthTriggerPercentage: rules.lowHealthTriggerPercentage,
-      maxSeconds: maxSeconds,
-    ),
-    baseStats: baseStats,
-    mergeCurveFor: mergeCurveFor,
-    sets: allSets,
-    randomGenerator: Random(seed),
-  );
-  recordAbilityUsage([...team, ...enemies], result);
+CombatResult combat({required int seed, required List<Placement> team, required List<Placement> enemies}) {
+  final result = basicCombatEngine.simulate(team: team, enemies: enemies, randomGenerator: Random(seed));
+  recordAbilityUsage(result);
   return result;
 }
 
-void recordAbilityUsage(List<Placement> placementsInIdOrder, BattleResult result) {
-  final castsPerUnitId = <int, int>{};
-  for (final cast in result.events.whereType<CharacterAbilityCast>())
-    castsPerUnitId.update(cast.unitId, (count) => count + 1, ifAbsent: () => 1);
+void recordAbilityUsage(CombatResult result) {
+  final castsPerCombatantId = <int, int>{};
 
-  for (var index = 0; index < placementsInIdOrder.length; index++) {
-    final characterId = placementsInIdOrder[index].character.id;
-    final casts = castsPerUnitId[index + 1] ?? 0;
+  for (final abilityCast in result.history.entries.whereType<AbilityCastHistoryEntry>()) {
+    castsPerCombatantId.update(abilityCast.combatantId, (count) => count + 1, ifAbsent: () => 1);
+  }
+
+  for (final combatant in result.combatants) {
+    final characterId = combatant.characterCopy.character.id.value;
+    final casts = castsPerCombatantId[combatant.id] ?? 0;
+
     castsPerCharacter.update(characterId, (total) => total + casts, ifAbsent: () => casts);
-    battlesPerCharacter.update(characterId, (total) => total + 1, ifAbsent: () => 1);
-    if (casts == 0) battlesWithoutCastPerCharacter.update(characterId, (total) => total + 1, ifAbsent: () => 1);
+    combatsPerCharacter.update(characterId, (total) => total + 1, ifAbsent: () => 1);
+    if (casts == 0) combatsWithoutCastPerCharacter.update(characterId, (total) => total + 1, ifAbsent: () => 1);
   }
 }
 
-double teamWinRate(Iterable<BattleResult> results) =>
+double teamWinRate(Iterable<CombatResult> results) =>
     results.where((result) => result.winningFaction == Faction.team).length / results.length;
 
-double averageSeconds(Iterable<BattleResult> results) =>
-    results.map((result) => result.elapsedSeconds).reduce((a, b) => a + b) / results.length;
+double averageSeconds(Iterable<CombatResult> results) => results.fold(0.0, (sum, result) => sum + result.elapsedSeconds) / results.length;
 
 String percentage(double ratio) => '${(ratio * 100).round()}%'.padLeft(5);
 
@@ -90,7 +82,7 @@ String rarityLabel(Rarity rarity) => switch (rarity) {
   Rarity.epic => 'E',
 };
 
-String characterLabel(Character character) => '${character.id} (${rarityLabel(character.rarity)}, ${character.role.name})';
+String characterLabel(Character character) => '${character.id.value} (${rarityLabel(character.rarity)}, ${character.role.name})';
 
 void printHeader(String title) {
   stdout.writeln('');
@@ -101,18 +93,18 @@ void printHeader(String title) {
 
 void printDuelMatrix() {
   printHeader('DUELS 1★ vs 1★: team character (rows) win rate against each enemy (columns), then average and mean duration');
-  final enemyColumns = allEnemies.map((enemy) => enemy.id.substring(0, min(5, enemy.id.length)).padLeft(6)).join();
+  final enemyColumns = allEnemyCharacters.map((enemy) => enemy.id.value.substring(0, min(5, enemy.id.value.length)).padLeft(6)).join();
   stdout.writeln('${''.padRight(32)}$enemyColumns   avg  seconds');
 
   final draws = <String>[];
   for (final teamCharacter in allTeamCharacters) {
     final cells = <String>[];
-    final allResults = <BattleResult>[];
-    for (final enemy in allEnemies) {
+    final allResults = <CombatResult>[];
+    for (final enemy in allEnemyCharacters) {
       final results = seeds.map((seed) => duel(teamCharacter, 1, enemy, 1, seed)).toList();
       allResults.addAll(results);
       cells.add(percentage(teamWinRate(results)).padLeft(6));
-      if (results.any((result) => result.isDraw)) draws.add('${teamCharacter.id} vs ${enemy.id}');
+      if (results.any((result) => result.isDraw)) draws.add('${teamCharacter.id.value} vs ${enemy.id.value}');
     }
     final average = percentage(teamWinRate(allResults)).padLeft(6);
     final seconds = averageSeconds(allResults).toStringAsFixed(1).padLeft(8);
@@ -120,7 +112,7 @@ void printDuelMatrix() {
   }
 
   final columnAverages = <String>[];
-  for (final enemy in allEnemies) {
+  for (final enemy in allEnemyCharacters) {
     final results = [
       for (final teamCharacter in allTeamCharacters)
         for (final seed in seeds) duel(teamCharacter, 1, enemy, 1, seed),
@@ -133,7 +125,7 @@ void printDuelMatrix() {
 
 void printMergeLadderByRarity() {
   printHeader('MERGE LADDER: team win rate grouped by team rarity × stars (rows) against enemy rarity at 1★ (columns)');
-  final enemyRarities = Rarity.values.where((rarity) => allEnemies.any((enemy) => enemy.rarity == rarity)).toList();
+  final enemyRarities = Rarity.values.where((rarity) => allEnemyCharacters.any((enemy) => enemy.rarity == rarity)).toList();
   stdout.writeln('${''.padRight(20)}${enemyRarities.map((rarity) => rarity.name.padLeft(10)).join()}');
 
   for (final teamRarity in Rarity.values) {
@@ -142,7 +134,7 @@ void printMergeLadderByRarity() {
     for (var stars = 1; stars <= 3; stars++) {
       final cells = <String>[];
       for (final enemyRarity in enemyRarities) {
-        final enemies = allEnemies.where((enemy) => enemy.rarity == enemyRarity);
+        final enemies = allEnemyCharacters.where((enemy) => enemy.rarity == enemyRarity);
         final results = [
           for (final teamCharacter in teamCharacters)
             for (final enemy in enemies)
@@ -172,14 +164,17 @@ void printRoundRobin(String title, List<Character> characters) {
 }
 
 void printAbilityUsage() {
-  printHeader('ABILITY USAGE across every battle above: casts per battle and share of battles with zero casts');
-  final characterIds = battlesPerCharacter.keys.toList()..sort();
+  printHeader('ABILITY USAGE across every round above: casts per round and share of rounds with zero casts');
+  final characterIds = combatsPerCharacter.keys.toList()..sort();
+
   for (final characterId in characterIds) {
-    final battles = battlesPerCharacter[characterId]!;
-    final castsPerBattle = castsPerCharacter[characterId]! / battles;
-    final zeroCastShare = (battlesWithoutCastPerCharacter[characterId] ?? 0) / battles;
+    final combats = combatsPerCharacter[characterId]!;
+    final castsPerCombat = castsPerCharacter[characterId]! / combats;
+    final zeroCastShare = (combatsWithoutCastPerCharacter[characterId] ?? 0) / combats;
+
     stdout.writeln(
-      '${characterId.padRight(16)} casts/battle ${castsPerBattle.toStringAsFixed(2).padLeft(6)}   never cast in ${percentage(zeroCastShare)} of $battles battles',
+      '${characterId.padRight(16)} casts/round ${castsPerCombat.toStringAsFixed(2).padLeft(6)}   '
+      'never cast in ${percentage(zeroCastShare)} of $combats rounds',
     );
   }
 }

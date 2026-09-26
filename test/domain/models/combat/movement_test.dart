@@ -1,76 +1,95 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/domain/models/combat/board/faction.dart';
-import 'package:going_wild/domain/models/events/combat/battle_event.dart';
-import 'package:going_wild/domain/models/combat/systems/move_toward_target.dart';
+import 'package:going_wild/domain/models/combat/combatant_actions/move_toward_target.dart';
+import 'package:going_wild/domain/models/combatant/faction.dart';
 
 import '../../../helpers/combat_helpers.dart';
 
 void main() {
   test('steps one cell toward the target, diagonals allowed', () {
-    final me = unit(faction: Faction.team, at: at(7, 0));
-    final foe = unit(faction: Faction.enemy, at: at(0, 4));
-    final battle = battleWith([me, foe]);
-    me.target = foe;
+    final enemy = combatant(at: at(0, 4), faction: Faction.enemy);
+    final walker = combatant(at: at(7, 0), faction: Faction.team).createCopyWith(targetCombatantId: enemy.id);
 
-    moveTowardTarget(battle, me);
+    final movedCombat = moveTowardTarget(combatWith([walker, enemy]), walker.id);
 
-    expect(me.position, at(6, 1));
-    expect(battle.events.whereType<CharacterMoved>().single.to, at(6, 1));
+    expect(findCombatant(movedCombat, walker).position, at(6, 1));
   });
 
   test('moves once per 1 / moveSpeed seconds', () {
-    final me = unit(faction: Faction.team, at: at(7, 2), stats: statsOf(moveSpeed: 2));
-    final foe = unit(faction: Faction.enemy, at: at(0, 2));
-    final battle = battleWith([me, foe]);
-    me.target = foe;
+    final enemy = combatant(at: at(0, 2), faction: Faction.enemy);
+    final walker = combatant(
+      at: at(7, 2),
+      faction: Faction.team,
+      stats: statsOf(moveSpeed: 2),
+    ).createCopyWith(targetCombatantId: enemy.id);
+    var combat = combatWith([walker, enemy]);
 
-    for (var i = 0; i < 10; i++) {
-      moveTowardTarget(
-        battle,
-        me,
-      );
+    for (var tick = 0; tick < testRules.ticksPerSecond; tick++) {
+      combat = moveTowardTarget(combat, walker.id);
     }
 
-    expect(me.position, at(5, 2));
+    expect(findCombatant(combat, walker).position, at(5, 2));
+  });
+
+  test('a whole number of seconds between steps becomes an exact number of ticks', () {
+    final enemy = combatant(at: at(0, 2), faction: Faction.enemy);
+    final walker = combatant(
+      at: at(7, 2),
+      faction: Faction.team,
+      stats: statsOf(moveSpeed: 1),
+    ).createCopyWith(targetCombatantId: enemy.id);
+    var combat = combatWith([walker, enemy]);
+
+    for (var tick = 0; tick <= 2 * testRules.ticksPerSecond; tick++) {
+      combat = moveTowardTarget(combat, walker.id);
+    }
+
+    expect(findCombatant(combat, walker).position, at(4, 2));
   });
 
   test('stops as soon as the target is in range', () {
-    final ranged = unit(faction: Faction.team, at: at(4, 2), stats: statsOf(range: 2));
-    final foe = unit(faction: Faction.enemy, at: at(2, 2));
-    final battle = battleWith([ranged, foe]);
-    ranged.target = foe;
+    final enemy = combatant(at: at(2, 2), faction: Faction.enemy);
+    final rangedWalker = combatant(
+      at: at(4, 2),
+      faction: Faction.team,
+      stats: statsOf(range: 2),
+    ).createCopyWith(targetCombatantId: enemy.id);
+    final combat = combatWith([rangedWalker, enemy]);
 
-    moveTowardTarget(battle, ranged);
+    final movedCombat = moveTowardTarget(combat, rangedWalker.id);
 
-    expect(ranged.position, at(4, 2));
-    expect(battle.events, isEmpty);
+    expect(movedCombat, same(combat));
   });
 
   test('routes around occupied cells', () {
-    final me = unit(faction: Faction.team, at: at(7, 2));
-    final wallA = unit(faction: Faction.team, at: at(6, 1));
-    final wallB = unit(faction: Faction.team, at: at(6, 2));
-    final wallC = unit(faction: Faction.team, at: at(6, 3));
-    final foe = unit(faction: Faction.enemy, at: at(0, 2));
-    final battle = battleWith([me, wallA, wallB, wallC, foe]);
-    me.target = foe;
+    final enemy = combatant(at: at(0, 2), faction: Faction.enemy);
+    final walker = combatant(at: at(7, 2), faction: Faction.team).createCopyWith(targetCombatantId: enemy.id);
+    final walls = [at(6, 1), at(6, 2), at(6, 3)].map((position) => combatant(at: position, faction: Faction.team));
+    final combat = combatWith([walker, ...walls, enemy]);
 
-    final step = findNextStepToward(battle, me, foe);
+    final nextStepPosition = findNextStepToward(combat, walker, enemy);
 
-    expect(step, isNotNull);
-    expect(battle.isPositionFree(step!), isTrue);
-    expect(step.distanceToPosition(me.position), 1);
+    expect(nextStepPosition, isNotNull);
+    expect(combat.battlefield.isPositionFree(nextStepPosition!), isTrue);
+    expect(nextStepPosition.distanceToPosition(walker.position), 1);
   });
 
   test('stays put when there is no path', () {
-    final me = unit(faction: Faction.team, at: at(7, 0));
-    final foe = unit(faction: Faction.enemy, at: at(0, 4));
-    final blockers = [at(6, 0), at(6, 1), at(7, 1)].map((p) => unit(faction: Faction.team, at: p)).toList();
-    final battle = battleWith([me, foe, ...blockers]);
-    me.target = foe;
+    final enemy = combatant(at: at(0, 4), faction: Faction.enemy);
+    final walker = combatant(at: at(7, 0), faction: Faction.team).createCopyWith(targetCombatantId: enemy.id);
+    final blockers = [at(6, 0), at(6, 1), at(7, 1)].map((position) => combatant(at: position, faction: Faction.team));
 
-    moveTowardTarget(battle, me);
+    final movedCombat = moveTowardTarget(combatWith([walker, enemy, ...blockers]), walker.id);
 
-    expect(me.position, at(7, 0));
+    expect(findCombatant(movedCombat, walker).position, at(7, 0));
+  });
+
+  test('dead combatants do not block the path', () {
+    final enemy = combatant(at: at(0, 0), faction: Faction.enemy);
+    final walker = combatant(at: at(7, 0), faction: Faction.team).createCopyWith(targetCombatantId: enemy.id);
+    final deadAlly = combatant(at: at(6, 0), faction: Faction.team).createCopyWith(currentHealth: 0);
+
+    final movedCombat = moveTowardTarget(combatWith([walker, deadAlly, enemy]), walker.id);
+
+    expect(findCombatant(movedCombat, walker).position, at(6, 0));
   });
 }

@@ -1,17 +1,24 @@
-import '../../models/phase/phase_run.dart';
-import '../../models/shop/refresh_shop_offers.dart';
-import 'unlock_shop.dart';
+import '../../models/match_progress/match_progress.dart';
+import '../../models/player/errors/not_enough_coins_error.dart';
+import 'refresh_shop_offers.dart';
 
-bool rerollShop(PhaseRun phaseRun) {
-  if (!phaseRun.isInProgress) return false;
+class RerollShop {
+  const RerollShop();
 
-  final player = phaseRun.player;
-  final rerollCostInCoins = phaseRun.rules.shopRules.rerollCostInCoins;
-  if (player.coins < rerollCostInCoins) return false;
+  MatchProgress call(MatchProgress matchProgress) {
+    matchProgress.requireInProgress();
 
-  player.coins -= rerollCostInCoins;
+    const refreshShopOffers = RefreshShopOffers();
 
-  unlockShop(phaseRun);
-  refreshShopOffers(phaseRun);
-  return true;
+    final player = matchProgress.player;
+    final rerollCostInCoins = matchProgress.phase.engines.economyEngine.rerollCostInCoins;
+    if (!player.canAfford(rerollCostInCoins)) throw NotEnoughCoinsError(coins: player.coins, costInCoins: rerollCostInCoins);
+
+    final paidMatchProgress = matchProgress.createCopyWith(
+      shop: matchProgress.shop.createCopyUnlocked(),
+      player: player.createCopyWithCoinsSpent(rerollCostInCoins),
+    );
+
+    return refreshShopOffers(paidMatchProgress);
+  }
 }

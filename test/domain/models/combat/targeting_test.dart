@@ -1,85 +1,104 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/domain/models/combat/board/faction.dart';
-import 'package:going_wild/domain/models/events/combat/battle_event.dart';
-import 'package:going_wild/domain/models/combat/systems/acquire_target.dart';
-import 'package:going_wild/domain/models/combat/unit/status_effect/status_effect.dart';
+import 'package:going_wild/domain/models/combat/combatant_actions/acquire_target.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/taunt/taunt_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/faction.dart';
 
 import '../../../helpers/combat_helpers.dart';
 
 void main() {
   test('picks the nearest enemy', () {
-    final me = unit(faction: Faction.team, at: at(7, 2));
-    final near = unit(faction: Faction.enemy, at: at(5, 2));
-    final far = unit(faction: Faction.enemy, at: at(0, 2));
-    final battle = battleWith([me, near, far]);
+    final attacker = combatant(at: at(7, 2), faction: Faction.team);
+    final nearEnemy = combatant(at: at(5, 2), faction: Faction.enemy);
+    final farEnemy = combatant(at: at(0, 2), faction: Faction.enemy);
 
-    acquireTarget(battle, me);
+    final targetedCombat = acquireTarget(combatWith([attacker, nearEnemy, farEnemy]), attacker.id);
 
-    expect(me.target, near);
-    expect(battle.events.whereType<CharacterNewTargetAcquired>().single.targetUnitId, near.id);
+    expect(findCombatant(targetedCombat, attacker).targetCombatantId, nearEnemy.id);
   });
 
   test('breaks distance ties by lowest health', () {
-    final me = unit(faction: Faction.team, at: at(7, 2));
-    final healthy = unit(faction: Faction.enemy, at: at(5, 1));
-    final hurt = unit(faction: Faction.enemy, at: at(5, 3))..currentHealth = 10;
-    final battle = battleWith([me, healthy, hurt]);
+    final attacker = combatant(at: at(7, 2), faction: Faction.team);
+    final healthyEnemy = combatant(at: at(5, 1), faction: Faction.enemy);
+    final hurtEnemy = combatant(at: at(5, 3), faction: Faction.enemy).createCopyWith(currentHealth: 10);
 
-    acquireTarget(battle, me);
+    final targetedCombat = acquireTarget(combatWith([attacker, healthyEnemy, hurtEnemy]), attacker.id);
 
-    expect(me.target, hurt);
+    expect(findCombatant(targetedCombat, attacker).targetCombatantId, hurtEnemy.id);
+  });
+
+  test('breaks distance and health ties by lowest id', () {
+    final attacker = combatant(at: at(7, 2), faction: Faction.team);
+    final firstEnemy = combatant(at: at(5, 3), faction: Faction.enemy);
+    final secondEnemy = combatant(at: at(5, 1), faction: Faction.enemy);
+
+    final targetedCombat = acquireTarget(combatWith([attacker, secondEnemy, firstEnemy]), attacker.id);
+
+    expect(findCombatant(targetedCombat, attacker).targetCombatantId, firstEnemy.id);
   });
 
   test('ignores allies', () {
-    final me = unit(faction: Faction.team, at: at(7, 2));
-    final ally = unit(faction: Faction.team, at: at(7, 3));
-    final enemy = unit(faction: Faction.enemy, at: at(0, 0));
-    acquireTarget(battleWith([me, ally, enemy]), me);
+    final attacker = combatant(at: at(7, 2), faction: Faction.team);
+    final ally = combatant(at: at(7, 3), faction: Faction.team);
+    final enemy = combatant(at: at(0, 0), faction: Faction.enemy);
 
-    expect(me.target, enemy);
+    final targetedCombat = acquireTarget(combatWith([attacker, ally, enemy]), attacker.id);
+
+    expect(findCombatant(targetedCombat, attacker).targetCombatantId, enemy.id);
   });
 
   test('keeps the target while it lives even if another gets closer', () {
-    final me = unit(faction: Faction.team, at: at(7, 2));
-    final first = unit(faction: Faction.enemy, at: at(4, 2));
-    final closer = unit(faction: Faction.enemy, at: at(0, 2));
-    final battle = battleWith([me, first, closer]);
-    acquireTarget(battle, me);
-    closer.position = at(6, 2);
+    final attacker = combatant(at: at(7, 2), faction: Faction.team);
+    final firstEnemy = combatant(at: at(4, 2), faction: Faction.enemy);
+    final approachingEnemy = combatant(at: at(0, 2), faction: Faction.enemy);
+    final targetedCombat = acquireTarget(combatWith([attacker, firstEnemy, approachingEnemy]), attacker.id);
+    final approachedCombat = targetedCombat.createCopyWithCombatantMovedTo(approachingEnemy.id, at(6, 2));
 
-    acquireTarget(battle, me);
+    final retargetedCombat = acquireTarget(approachedCombat, attacker.id);
 
-    expect(me.target, first);
+    expect(findCombatant(retargetedCombat, attacker).targetCombatantId, firstEnemy.id);
   });
 
   test('retargets when the target dies', () {
-    final me = unit(faction: Faction.team, at: at(7, 2));
-    final first = unit(faction: Faction.enemy, at: at(4, 2));
-    final other = unit(faction: Faction.enemy, at: at(0, 2));
-    final battle = battleWith([me, first, other]);
-    acquireTarget(battle, me);
-    first.currentHealth = 0;
+    final attacker = combatant(at: at(7, 2), faction: Faction.team);
+    final firstEnemy = combatant(at: at(4, 2), faction: Faction.enemy);
+    final otherEnemy = combatant(at: at(0, 2), faction: Faction.enemy);
+    final targetedCombat = acquireTarget(combatWith([attacker, firstEnemy, otherEnemy]), attacker.id);
+    final combatWithDeadTarget = targetedCombat.createCopyWithCombatant(firstEnemy.createCopyWith(currentHealth: 0));
 
-    acquireTarget(battle, me);
+    final retargetedCombat = acquireTarget(combatWithDeadTarget, attacker.id);
 
-    expect(me.target, other);
+    expect(findCombatant(retargetedCombat, attacker).targetCombatantId, otherEnemy.id);
   });
 
   test('taunt forces the target onto the taunter', () {
-    final me = unit(faction: Faction.team, at: at(7, 2));
-    final near = unit(faction: Faction.enemy, at: at(6, 2));
-    final taunter = unit(faction: Faction.enemy, at: at(0, 0));
-    final battle = battleWith([me, near, taunter]);
-    me.statusEffects.add(TauntStatusEffect(sourceUnit: taunter, remainingSeconds: 2));
+    final taunter = combatant(at: at(0, 0), faction: Faction.enemy);
+    final nearEnemy = combatant(at: at(6, 2), faction: Faction.enemy);
+    final tauntedAttacker = withCombatLastingEffects(combatant(at: at(7, 2), faction: Faction.team), [
+      TauntCombatLastingEffect(remainingTicks: 20, sourceCombatantId: taunter.id),
+    ]);
 
-    acquireTarget(battle, me);
+    final targetedCombat = acquireTarget(combatWith([tauntedAttacker, nearEnemy, taunter]), tauntedAttacker.id);
 
-    expect(me.target, taunter);
+    expect(findCombatant(targetedCombat, tauntedAttacker).targetCombatantId, taunter.id);
+  });
+
+  test('taunt from a dead taunter is ignored', () {
+    final deadTaunter = combatant(at: at(0, 0), faction: Faction.enemy).createCopyWith(currentHealth: 0);
+    final nearEnemy = combatant(at: at(6, 2), faction: Faction.enemy);
+    final tauntedAttacker = withCombatLastingEffects(combatant(at: at(7, 2), faction: Faction.team), [
+      TauntCombatLastingEffect(remainingTicks: 20, sourceCombatantId: deadTaunter.id),
+    ]);
+
+    final targetedCombat = acquireTarget(combatWith([tauntedAttacker, nearEnemy, deadTaunter]), tauntedAttacker.id);
+
+    expect(findCombatant(targetedCombat, tauntedAttacker).targetCombatantId, nearEnemy.id);
   });
 
   test('no enemies left means no target', () {
-    final me = unit(faction: Faction.team, at: at(7, 2));
-    acquireTarget(battleWith([me]), me);
-    expect(me.target, isNull);
+    final attacker = combatant(at: at(7, 2), faction: Faction.team);
+
+    final targetedCombat = acquireTarget(combatWith([attacker]), attacker.id);
+
+    expect(findCombatant(targetedCombat, attacker).targetCombatantId, isNull);
   });
 }

@@ -1,9 +1,12 @@
-import 'enemy_wave.dart';
+import 'phase_engines.dart';
+import 'phase_id.dart';
+import 'phase_wave.dart';
 
 class Phase {
-  const Phase({required this.id, required this.enemyWaves});
+  const Phase({required this.id, required this.waves, required this.engines});
 
-  final String id;
-  final List<EnemyWave> enemyWaves;
-  int get roundCount => enemyWaves.length;
+  final PhaseId id;
+  final PhaseEngines engines;
+  final List<PhaseWave> waves;
+  int get roundCount => waves.length;
 }

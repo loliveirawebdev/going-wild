@@ -1,53 +1,33 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/data/character/team/team.dart';
-import 'package:going_wild/domain/models/player/team_slot/team_slot.dart';
-
-import '../../../helpers/combat_helpers.dart' show at;
-import '../../../helpers/shop_helpers.dart';
+import 'package:going_wild/domain/models/player/errors/not_enough_coins_error.dart';
+import 'package:going_wild/domain/models/player/player.dart';
 
 void main() {
-  test('a new player has an empty bench of the given size and an empty field', () {
-    final player = playerWith(benchSize: 9);
-    expect(player.bench, hasLength(9));
-    expect(player.bench, everyElement(isNull));
-    expect(player.field, isEmpty);
-    expect(player.ownedCharacters, isEmpty);
+  const player = Player(coins: 10, remainingLives: 3);
+
+  test('spending and receiving change only the coins', () {
+    expect(player.createCopyWithCoinsSpent(4).coins, 6);
+    expect(player.createCopyWithCoinsReceived(5).coins, 15);
+    expect(player.createCopyWithCoinsSpent(4).remainingLives, 3);
   });
 
-  test('owned characters are the field ones followed by the bench ones', () {
-    final player = playerWith(benchCharacters: [owned(cat), owned(dog)], fieldCharacters: {at(6, 2): owned(cow)});
-    expect(ownedCharactersOf(player).map((owned) => owned.character), [cow, cat, dog]);
+  test('the player can afford what costs up to the coins it has', () {
+    expect(player.canAfford(10), isTrue);
+    expect(player.canAfford(11), isFalse);
   });
 
-  test('occupied slots list the field first and then the bench in order', () {
-    final player = playerWith(benchCharacters: [owned(cat)], fieldCharacters: {at(6, 2): owned(cow)});
-    player.bench[3] = owned(dog);
-
-    expect(player.occupiedTeamSlots.map((occupied) => occupied.slot), [
-      FieldSlot(position: at(6, 2)),
-      const BenchSlot(index: 0),
-      const BenchSlot(index: 3),
-    ]);
+  test('the player is out of lives only when no life remains', () {
+    expect(player.isOutOfLives, isFalse);
+    expect(const Player(coins: 0, remainingLives: 0).isOutOfLives, isTrue);
   });
 
-  test('the first free bench slot skips occupied ones and is null when the bench is full', () {
-    final player = playerWith(benchSize: 2, benchCharacters: [owned(cat)]);
-    expect(player.firstFreeBenchSlot, const BenchSlot(index: 1));
-
-    player.bench[1] = owned(dog);
-    expect(player.firstFreeBenchSlot, isNull);
+  test('changing the player never changes the original', () {
+    final _ = player.createCopyWithCoinsSpent(10).createCopyWithCoinsReceived(3);
+    expect(player.coins, 10);
+    expect(player.remainingLives, 3);
   });
 
-  test('placing and clearing works on both bench and field', () {
-    final player = playerWith();
-    final fieldSlot = FieldSlot(position: at(6, 2));
-
-    player.placeOwnedCharacterAt(const BenchSlot(index: 4), owned(cat));
-    player.placeOwnedCharacterAt(fieldSlot, owned(dog));
-    expect(player.ownedCharacterAt(const BenchSlot(index: 4))!.character, cat);
-    expect(player.ownedCharacterAt(fieldSlot)!.character, dog);
-
-    player.placeOwnedCharacterAt(fieldSlot, null);
-    expect(player.field, isEmpty);
+  test('spending more coins than the player has fails', () {
+    expect(() => player.createCopyWithCoinsSpent(11), throwsA(isA<NotEnoughCoinsError>()));
   });
 }

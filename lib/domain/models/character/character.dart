@@ -1,20 +1,21 @@
-import '../base/stat_multipliers.dart';
-import 'ability/ability.dart';
+import 'abilities/ability.dart';
+import 'character_id.dart';
 import 'rarity.dart';
 import 'role.dart';
+import 'stats/stat_multipliers.dart';
 
 class Character {
   const Character({
     required this.id,
     required this.role,
     required this.rarity,
-    required this.statMultipliers,
     required this.ability,
+    required this.statMultipliers,
   });
 
-  final String id;
   final Role role;
   final Rarity rarity;
-  final StatMultipliers statMultipliers;
+  final CharacterId id;
   final Ability ability;
+  final StatMultipliers statMultipliers;
 }

@@ -1,12 +1,13 @@
-import '../../models/events/phase/phase_event.dart';
-import '../../models/phase/phase_run.dart';
+import '../../models/match_progress/match_progress.dart';
+import '../../models/shop/errors/shop_already_locked_error.dart';
 
-bool lockShop(PhaseRun phaseRun) {
-  if (!phaseRun.isInProgress) return false;
+class LockShop {
+  const LockShop();
 
-  if (phaseRun.player.isShopLocked) return false;
+  MatchProgress call(MatchProgress matchProgress) {
+    matchProgress.requireInProgress();
+    if (matchProgress.shop.isLocked) throw ShopAlreadyLockedError();
 
-  phaseRun.player.isShopLocked = true;
-  phaseRun.recordEvent(ShopLocked(roundNumber: phaseRun.currentRoundNumber));
-  return true;
+    return matchProgress.createCopyWith(shop: matchProgress.shop.createCopyLocked());
+  }
 }

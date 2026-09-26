@@ -1,0 +1,4 @@
+enum SetEffectSide {
+  ownTeam,
+  opposingTeam,
+}

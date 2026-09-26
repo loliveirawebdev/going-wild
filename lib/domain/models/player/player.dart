@@ -1,51 +1,18 @@
-import '../combat/board/position.dart';
-import '../models.dart';
-import '../shop/owned_character.dart';
-import 'team_slot/team_slot.dart';
-
-typedef OccupiedTeamSlot = ({TeamSlot slot, OwnedCharacter ownedCharacter});
+import 'errors/not_enough_coins_error.dart';
 
 class Player {
-  Player({required this.coins, required int benchSize}) : bench = List.filled(benchSize, null);
+  const Player({required this.coins, required this.remainingLives});
 
-  int coins;
-  int level = 1;
-  int experience = 0;
-  bool isShopLocked = false;
-  List<Character?> shopOffers = [];
-  final List<OwnedCharacter?> bench;
-  final Map<Position, OwnedCharacter> field = {};
+  final int coins;
+  final int remainingLives;
 
-  List<OwnedCharacter> get ownedCharacters => [
-    ...field.values,
-    ...bench.nonNulls,
-  ];
+  bool get isOutOfLives => remainingLives <= 0;
+  bool canAfford(int costInCoins) => coins >= costInCoins;
 
-  List<OccupiedTeamSlot> get occupiedTeamSlots => [
-    for (final MapEntry(key: position, value: ownedCharacter) in field.entries)
-      (slot: FieldSlot(position: position), ownedCharacter: ownedCharacter),
-    for (final (index, ownedCharacter) in bench.indexed)
-      if (ownedCharacter != null) (slot: BenchSlot(index: index), ownedCharacter: ownedCharacter),
-  ];
-
-  BenchSlot? get firstFreeBenchSlot {
-    final freeIndex = bench.indexOf(null);
-    return freeIndex == -1 ? null : BenchSlot(index: freeIndex);
+  Player createCopyWithCoinsSpent(int costInCoins) {
+    if (!canAfford(costInCoins)) throw NotEnoughCoinsError(costInCoins: costInCoins, coins: coins);
+    return Player(coins: coins - costInCoins, remainingLives: remainingLives);
   }
 
-  OwnedCharacter? ownedCharacterAt(TeamSlot slot) => switch (slot) {
-    BenchSlot() => bench[slot.index],
-    FieldSlot() => field[slot.position],
-  };
-
-  void placeOwnedCharacterAt(TeamSlot slot, OwnedCharacter? ownedCharacter) {
-    switch (slot) {
-      case BenchSlot():
-        bench[slot.index] = ownedCharacter;
-
-      case FieldSlot():
-        if (ownedCharacter == null) field.remove(slot.position);
-        if (ownedCharacter != null) field[slot.position] = ownedCharacter;
-    }
-  }
+  Player createCopyWithCoinsReceived(int coinsAmount) => Player(coins: coins + coinsAmount, remainingLives: remainingLives);
 }

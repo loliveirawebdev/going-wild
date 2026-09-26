@@ -1,348 +1,463 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/domain/models/combat/board/faction.dart';
-import 'package:going_wild/domain/models/events/combat/battle_event.dart';
-import 'package:going_wild/domain/models/combat/systems/cast_ability_if_ready.dart';
-import 'package:going_wild/domain/models/combat/unit/status_effect/status_effect.dart';
-import 'package:going_wild/domain/models/combat/unit/status_effect/status_effect_kind.dart';
-import 'package:going_wild/domain/models/combat/unit/unit.dart';
-import 'package:going_wild/domain/models/models.dart';
+import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/character/stats/stat_change_type.dart';
+import 'package:going_wild/domain/models/character/stats/stat_modification.dart';
+import 'package:going_wild/domain/models/combat/combatant_actions/cast_ability_if_ready.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/ambush/ambush_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/ambush/vanished_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage/damage_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage_over_time/damage_over_time_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage_over_time/damage_over_time_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/heal_over_time/heal_over_time_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/heal_over_time/heal_over_time_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/knockback/knockback_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/lifesteal/lifesteal_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/mana_refund_on_kill/mana_refund_on_kill_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/next_hits_stat_modifier/next_hits_stat_modifier_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/next_hits_stat_modifier/next_hits_stat_modifier_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/pull/pull_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/shield/shield_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/shield/shield_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stat_modifier/stat_modifier_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stat_modifier/stat_modifier_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stun/stun_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stun/stun_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/taunt/taunt_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/taunt/taunt_effect.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
+import 'package:going_wild/domain/models/combatant/faction.dart';
 
 import '../../../helpers/combat_helpers.dart';
 
 void main() {
   test('casts when mana is full and resets mana to zero', () {
-    final me = unit(
-      faction: Faction.team,
+    final enemy = combatant(at: at(0, 0), faction: Faction.enemy);
+    final caster = combatant(
       at: at(1, 0),
+      faction: Faction.team,
       stats: statsOf(manaMax: 50, manaStart: 50),
       character: dummy(
-        ability: ability([
-          DamageEffect(
-            value: v(300),
-            target: EffectTarget.focus,
-          ),
-        ]),
+        ability: ability([DamageEffect(value: atEveryStar(300), target: CombatEffectTarget.focus)]),
       ),
-    );
+    ).createCopyWith(targetCombatantId: enemy.id);
 
-    final foe = unit(faction: Faction.enemy, at: at(0, 0));
-    final battle = battleWith([me, foe]);
-    me.target = foe;
+    final castCombat = castAbilityIfReady(combatWith([caster, enemy]), caster.id);
 
-    castAbilityIfReady(battle, me);
-
-    expect(me.currentMana, 0);
-    expect(battle.events.whereType<CharacterAbilityCast>().single.abilityId, 'test');
-    expect(foe.currentHealth, 700);
+    expect(findCombatant(castCombat, caster).currentMana, 0);
+    expect(findCombatant(castCombat, enemy).currentHealth, 700);
   });
 
   test('does not cast below full mana', () {
-    final me = unit(
-      faction: Faction.team,
+    final caster = combatant(
       at: at(1, 0),
+      faction: Faction.team,
       stats: statsOf(manaMax: 50, manaStart: 49),
       character: dummy(
-        ability: ability([
-          DamageEffect(
-            target: EffectTarget.focus,
-            value: v(300),
-          ),
-        ]),
+        ability: ability([DamageEffect(value: atEveryStar(300), target: CombatEffectTarget.focus)]),
       ),
     );
+    final combat = combatWith([caster]);
 
-    final battle = battleWith([me]);
-    castAbilityIfReady(battle, me);
-    expect(battle.events, isEmpty);
+    expect(castAbilityIfReady(combat, caster.id), same(combat));
   });
 
   test('low health trigger fires once, at or below the threshold', () {
-    final me = unit(
-      faction: Faction.team,
+    final caster = combatant(
       at: at(1, 0),
+      faction: Faction.team,
       stats: statsOf(health: 100),
       character: dummy(
-        ability: ability([
-          StatBuffEffect(
-            target: EffectTarget.self,
-            stat: Stat.armor,
-            changeType: StatChangeType.absoluteValue,
-            value: v(50),
-            seconds: v(3),
-          ),
-        ], trigger: AbilityTrigger.lowHealth),
+        ability: ability(
+          [
+            StatModifierEffect(
+              stat: Stat.armor,
+              value: atEveryStar(50),
+              seconds: atEveryStar(3),
+              target: CombatEffectTarget.self,
+              changeType: StatChangeType.absoluteValue,
+            ),
+          ],
+          trigger: AbilityTrigger.lowHealth,
+        ),
       ),
     );
 
-    final battle = battleWith([me]);
+    final combatAboveThreshold = combatWith([caster.createCopyWith(currentHealth: 31)]);
+    expect(castAbilityIfReady(combatAboveThreshold, caster.id), same(combatAboveThreshold));
 
-    me.currentHealth = 31;
-    castAbilityIfReady(battle, me);
-    expect(battle.events.whereType<CharacterAbilityCast>(), isEmpty);
+    final firstCastCombat = castAbilityIfReady(combatWith([caster.createCopyWith(currentHealth: 30)]), caster.id);
+    final secondCastCombat = castAbilityIfReady(firstCastCombat, caster.id);
 
-    me.currentHealth = 30;
-    castAbilityIfReady(battle, me);
-    castAbilityIfReady(battle, me);
-    expect(battle.events.whereType<CharacterAbilityCast>().length, 1);
+    expect(findCombatant(firstCastCombat, caster).lowHealthAbilityUsed, isTrue);
+    expect(findCombatant(firstCastCombat, caster).getCurrentStat(Stat.armor), 50);
+    expect(secondCastCombat, same(firstCastCombat));
   });
 
   test('taunt makes targets attack the caster', () {
-    final me = unit(
-      faction: Faction.team,
+    final caster = combatant(
       at: at(4, 2),
-      character: dummy(
-        ability: ability([
-          TauntEffect(
-            target: EffectTarget.allEnemies,
-            seconds: v(2),
-          ),
-        ]),
-      ),
-      stats: statsOf(manaStart: 50),
-    );
-
-    final a = unit(faction: Faction.enemy, at: at(0, 0));
-    final b = unit(faction: Faction.enemy, at: at(0, 4));
-    final battle = battleWith([me, a, b]);
-
-    castAbilityIfReady(battle, me);
-
-    expect(a.target, me);
-    expect(b.target, me);
-    expect(a.statusEffects.whereType<TauntStatusEffect>().single.sourceUnit, me);
-  });
-
-  test('stun extends to the longer duration instead of stacking', () {
-    final me = unit(
       faction: Faction.team,
-      at: at(1, 0),
       stats: statsOf(manaStart: 50),
       character: dummy(
-        ability: ability([
-          StunEffect(
-            target: EffectTarget.focus,
-            seconds: v(1),
-          ),
-        ]),
+        ability: ability([TauntEffect(seconds: atEveryStar(2), target: CombatEffectTarget.allEnemies)]),
       ),
     );
+    final firstEnemy = combatant(at: at(0, 0), faction: Faction.enemy);
+    final secondEnemy = combatant(at: at(0, 4), faction: Faction.enemy);
 
-    final foe = unit(faction: Faction.enemy, at: at(0, 0));
-    final battle = battleWith([me, foe]);
-    me.target = foe;
-    foe.statusEffects.add(StunStatusEffect(sourceUnit: me, remainingSeconds: 3));
+    final castCombat = castAbilityIfReady(combatWith([caster, firstEnemy, secondEnemy]), caster.id);
 
-    castAbilityIfReady(battle, me);
-
-    expect(foe.statusEffects.whereType<StunStatusEffect>().single.remainingSeconds, 3);
+    expect(findCombatant(castCombat, firstEnemy).targetCombatantId, caster.id);
+    expect(findCombatant(castCombat, secondEnemy).targetCombatantId, caster.id);
+    expect(
+      findCombatant(castCombat, firstEnemy).combatLastingEffects.whereType<TauntCombatLastingEffect>().single.sourceCombatantId,
+      caster.id,
+    );
   });
 
-  test('the same buff renews its duration instead of stacking', () {
-    final me = unit(
+  test('a taunted target ignores a second taunt', () {
+    final caster = combatant(
+      at: at(4, 2),
       faction: Faction.team,
-      at: at(1, 0),
-      stats: statsOf(manaStart: 50, manaMax: 50),
+      stats: statsOf(manaStart: 50),
       character: dummy(
-        ability: ability([
-          StatBuffEffect(
-            target: EffectTarget.self,
-            stat: Stat.damage,
-            changeType: StatChangeType.multiplier,
-            value: v(2),
-            seconds: v(3),
-          ),
-        ]),
+        ability: ability([TauntEffect(seconds: atEveryStar(2), target: CombatEffectTarget.allEnemies)]),
       ),
     );
+    final firstTaunter = combatant(at: at(7, 0), faction: Faction.team);
+    final enemy = withCombatLastingEffects(combatant(at: at(0, 0), faction: Faction.enemy), [
+      TauntCombatLastingEffect(remainingTicks: 10, sourceCombatantId: firstTaunter.id),
+    ]).createCopyWith(targetCombatantId: firstTaunter.id);
 
-    final battle = battleWith([me]);
+    final castCombat = castAbilityIfReady(combatWith([caster, firstTaunter, enemy]), caster.id);
 
-    castAbilityIfReady(battle, me);
-    me.statusEffects.whereType<StatModifierStatusEffect>().single.remainingSeconds = 0.5;
-    me.currentMana = 50;
-    castAbilityIfReady(battle, me);
+    expect(findCombatant(castCombat, enemy).targetCombatantId, firstTaunter.id);
+    expect(findCombatant(castCombat, enemy).combatLastingEffects.single, isA<TauntCombatLastingEffect>());
+  });
 
-    final buffs = me.statusEffects.whereType<StatModifierStatusEffect>().toList();
-    expect(buffs, hasLength(1));
-    expect(buffs.single.remainingSeconds, 3);
-    expect(me.getCurrentStat(Stat.damage), 200);
+  test('a stunned target ignores a new stun', () {
+    final enemy = withCombatLastingEffects(combatant(at: at(0, 0), faction: Faction.enemy), [
+      const StunCombatLastingEffect(remainingTicks: 30, sourceCombatantId: 99),
+    ]);
+    final caster = combatant(
+      at: at(1, 0),
+      faction: Faction.team,
+      stats: statsOf(manaStart: 50),
+      character: dummy(
+        ability: ability([StunEffect(seconds: atEveryStar(1), target: CombatEffectTarget.focus)]),
+      ),
+    ).createCopyWith(targetCombatantId: enemy.id);
+
+    final castCombat = castAbilityIfReady(combatWith([caster, enemy]), caster.id);
+    final stuns = findCombatant(castCombat, enemy).combatLastingEffects.whereType<StunCombatLastingEffect>();
+
+    expect(stuns.single.remainingTicks, 30);
+    expect(stuns.single.sourceCombatantId, 99);
+  });
+
+  test('the same stat modification is ignored instead of stacking or renewing', () {
+    const doubleDamage = StatModification(value: 2, stat: Stat.damage, changeType: StatChangeType.multiplier);
+    final caster = withCombatLastingEffects(
+      combatant(
+        at: at(1, 0),
+        faction: Faction.team,
+        stats: statsOf(manaMax: 50, manaStart: 50),
+        character: dummy(
+          ability: ability([
+            StatModifierEffect(
+              stat: Stat.damage,
+              value: atEveryStar(2),
+              seconds: atEveryStar(3),
+              target: CombatEffectTarget.self,
+              changeType: StatChangeType.multiplier,
+            ),
+          ]),
+        ),
+      ),
+      [const StatModifierCombatLastingEffect(remainingTicks: 5, sourceCombatantId: 99, statModification: doubleDamage)],
+    );
+
+    final castCombat = castAbilityIfReady(combatWith([caster]), caster.id);
+    final statModifiers = findCombatant(castCombat, caster).combatLastingEffects.whereType<StatModifierCombatLastingEffect>();
+
+    expect(statModifiers.single.remainingTicks, 5);
+    expect(findCombatant(castCombat, caster).getCurrentStat(Stat.damage), 200);
+  });
+
+  test('a different stat modification on the same stat stacks', () {
+    const halfDamage = StatModification(value: 0.5, stat: Stat.damage, changeType: StatChangeType.multiplier);
+    final caster = withCombatLastingEffects(
+      combatant(
+        at: at(1, 0),
+        faction: Faction.team,
+        stats: statsOf(manaMax: 50, manaStart: 50),
+        character: dummy(
+          ability: ability([
+            StatModifierEffect(
+              stat: Stat.damage,
+              value: atEveryStar(3),
+              seconds: atEveryStar(3),
+              target: CombatEffectTarget.self,
+              changeType: StatChangeType.multiplier,
+            ),
+          ]),
+        ),
+      ),
+      [const StatModifierCombatLastingEffect(remainingTicks: 10, sourceCombatantId: 99, statModification: halfDamage)],
+    );
+
+    final castCombat = castAbilityIfReady(combatWith([caster]), caster.id);
+
+    expect(findCombatant(castCombat, caster).combatLastingEffects.whereType<StatModifierCombatLastingEffect>(), hasLength(2));
+    expect(findCombatant(castCombat, caster).getCurrentStat(Stat.damage), 150);
+  });
+
+  test('the same next hits modification is ignored instead of stacking', () {
+    const bonusDamage = StatModification(value: 50, stat: Stat.damage, changeType: StatChangeType.absoluteValue);
+    final caster = withCombatLastingEffects(
+      combatant(
+        at: at(1, 0),
+        faction: Faction.team,
+        stats: statsOf(manaStart: 50),
+        character: dummy(
+          ability: ability([
+            NextHitsStatModifierEffect(
+              hits: 3,
+              stat: Stat.damage,
+              value: atEveryStar(50),
+              target: CombatEffectTarget.self,
+              changeType: StatChangeType.absoluteValue,
+            ),
+          ]),
+        ),
+      ),
+      [const NextHitsStatModifierCombatLastingEffect(remainingHits: 1, sourceCombatantId: 99, statModification: bonusDamage)],
+    );
+
+    final castCombat = castAbilityIfReady(combatWith([caster]), caster.id);
+    final nextHitsModifiers = findCombatant(castCombat, caster).combatLastingEffects.whereType<NextHitsStatModifierCombatLastingEffect>();
+
+    expect(nextHitsModifiers.single.remainingHits, 1);
   });
 
   test('knockback pushes away from the caster and stops at the edge', () {
-    final me = unit(
-      faction: Faction.team,
+    final enemy = combatant(at: at(1, 2), faction: Faction.enemy);
+    final caster = combatant(
       at: at(2, 2),
+      faction: Faction.team,
       stats: statsOf(manaStart: 50),
-      character: dummy(ability: ability([const KnockbackEffect(target: EffectTarget.focus, cells: 5)])),
-    );
+      character: dummy(ability: ability([const KnockbackEffect(cells: 5, target: CombatEffectTarget.focus)])),
+    ).createCopyWith(targetCombatantId: enemy.id);
 
-    final foe = unit(faction: Faction.enemy, at: at(1, 2));
-    final battle = battleWith([me, foe]);
-    me.target = foe;
+    final castCombat = castAbilityIfReady(combatWith([caster, enemy]), caster.id);
 
-    castAbilityIfReady(battle, me);
+    expect(findCombatant(castCombat, enemy).position, at(0, 2));
+  });
 
-    expect(foe.position, at(0, 2));
+  test('knockback pushes the farthest targets first so the ones behind never block the ones in front', () {
+    final focus = combatant(faction: Faction.enemy, at: at(3, 2));
+    final enemyBehind = combatant(faction: Faction.enemy, at: at(2, 2));
+    final caster = combatant(
+      at: at(4, 2),
+      faction: Faction.team,
+      stats: statsOf(manaStart: 50),
+      character: dummy(ability: ability([const KnockbackEffect(cells: 1, target: CombatEffectTarget.enemiesAroundFocus)])),
+    ).createCopyWith(targetCombatantId: focus.id);
+
+    final castCombat = castAbilityIfReady(combatWith([caster, focus, enemyBehind]), caster.id);
+
+    expect(findCombatant(castCombat, enemyBehind).position, at(1, 2));
+    expect(findCombatant(castCombat, focus).position, at(2, 2));
   });
 
   test('lifesteal heals the caster by the damage dealt', () {
-    final me = unit(
-      faction: Faction.team,
+    final enemy = combatant(at: at(0, 0), faction: Faction.enemy, stats: statsOf(armor: 100));
+    final caster = combatant(
       at: at(1, 0),
-      stats: statsOf(manaStart: 50, health: 1000),
+      faction: Faction.team,
+      stats: statsOf(health: 1000, manaStart: 50),
       character: dummy(
-        ability: ability([LifestealEffect(target: EffectTarget.focus, value: v(200))]),
+        ability: ability([LifestealEffect(value: atEveryStar(200), target: CombatEffectTarget.focus)]),
       ),
-    );
+    ).createCopyWith(currentHealth: 500, targetCombatantId: enemy.id);
 
-    final foe = unit(faction: Faction.enemy, at: at(0, 0), stats: statsOf(armor: 100));
-    final battle = battleWith([me, foe]);
-    me.target = foe;
-    me.currentHealth = 500;
+    final castCombat = castAbilityIfReady(combatWith([caster, enemy]), caster.id);
 
-    castAbilityIfReady(battle, me);
-
-    expect(foe.currentHealth, 900);
-    expect(me.currentHealth, 600);
+    expect(findCombatant(castCombat, enemy).currentHealth, 900);
+    expect(findCombatant(castCombat, caster).currentHealth, 600);
   });
 
   test('mana refund happens only when the cast kills', () {
-    Unit caster(double foeHealth) {
-      final me = unit(
-        faction: Faction.team,
+    Combatant casterAfterCastAgainst(double enemyHealth) {
+      final enemy = combatant(
+        at: at(0, 0),
+        faction: Faction.enemy,
+        stats: statsOf(health: enemyHealth),
+      );
+      final caster = combatant(
         at: at(1, 0),
-        stats: statsOf(manaStart: 100, manaMax: 100),
+        faction: Faction.team,
+        stats: statsOf(manaMax: 100, manaStart: 100),
         character: dummy(
           ability: ability([
-            DamageEffect(target: EffectTarget.focus, value: v(50)),
+            DamageEffect(value: atEveryStar(50), target: CombatEffectTarget.focus),
             const ManaRefundOnKillEffect(percentage: 50),
           ]),
         ),
-      );
+      ).createCopyWith(targetCombatantId: enemy.id);
 
-      final foe = unit(
-        faction: Faction.enemy,
-        at: at(0, 0),
-        stats: statsOf(health: foeHealth),
-      );
-
-      me.target = foe;
-      castAbilityIfReady(battleWith([me, foe]), me);
-      return me;
+      return findCombatant(castAbilityIfReady(combatWith([caster, enemy]), caster.id), caster);
     }
 
-    expect(caster(40).currentMana, 50);
-    expect(caster(400).currentMana, 0);
+    expect(casterAfterCastAgainst(40).currentMana, 50);
+    expect(casterAfterCastAgainst(400).currentMana, 0);
   });
 
   test('pull brings the farthest enemy next to the caster', () {
-    final me = unit(
-      faction: Faction.team,
+    final caster = combatant(
       at: at(7, 2),
+      faction: Faction.team,
       stats: statsOf(manaStart: 50),
-      character: dummy(ability: ability([const PullEffect(target: EffectTarget.farthestEnemy)])),
+      character: dummy(ability: ability([const PullEffect(target: CombatEffectTarget.farthestEnemy)])),
     );
+    final nearEnemy = combatant(at: at(5, 2), faction: Faction.enemy);
+    final farEnemy = combatant(at: at(0, 0), faction: Faction.enemy);
 
-    final near = unit(faction: Faction.enemy, at: at(5, 2));
-    final far = unit(faction: Faction.enemy, at: at(0, 0));
-    final battle = battleWith([me, near, far]);
+    final castCombat = castAbilityIfReady(combatWith([caster, nearEnemy, farEnemy]), caster.id);
 
-    castAbilityIfReady(battle, me);
-
-    expect(far.position.distanceToPosition(me.position), 1);
-    expect(near.position, at(5, 2));
+    expect(findCombatant(castCombat, farEnemy).position.distanceToPosition(caster.position), 1);
+    expect(findCombatant(castCombat, nearEnemy).position, at(5, 2));
   });
 
-  test('ambush vanishes the caster and drops its target', () {
-    final me = unit(
-      faction: Faction.enemy,
+  test('ambush vanishes the caster', () {
+    final enemy = combatant(at: at(7, 4), faction: Faction.team);
+    final caster = combatant(
       at: at(0, 0),
+      faction: Faction.enemy,
       stats: statsOf(health: 100),
       character: dummy(
         ability: ability([
-          AmbushEffect(target: EffectTarget.lowestHealthEnemy, seconds: v(1)),
+          AmbushEffect(seconds: atEveryStar(1), target: CombatEffectTarget.lowestHealthEnemy),
         ], trigger: AbilityTrigger.lowHealth),
       ),
-    );
+    ).createCopyWith(currentHealth: 10, targetCombatantId: enemy.id);
 
-    final foe = unit(faction: Faction.team, at: at(7, 4));
-    final battle = battleWith([me, foe]);
-    me.target = foe;
-    me.currentHealth = 10;
+    final castCombat = castAbilityIfReady(combatWith([caster, enemy]), caster.id);
+    final vanishedCaster = findCombatant(castCombat, caster);
 
-    castAbilityIfReady(battle, me);
-
-    expect(me.isVanished, isTrue);
-    expect(me.isTargetable, isFalse);
-    expect(me.target, isNull);
+    expect(vanishedCaster.combatLastingEffects.whereType<VanishedCombatLastingEffect>().single.reappearNextToCombatantId, enemy.id);
+    expect(vanishedCaster.isTargetable, isFalse);
+    expect(vanishedCaster.canAct, isFalse);
   });
 
-  test('a shield ability protects the target and announces the shield', () {
-    final casterUnit = unit(
-      faction: Faction.team,
+  test('a shield ability protects the target', () {
+    final caster = combatant(
       at: at(4, 2),
-      stats: statsOf(manaStart: 50),
-      character: dummy(
-        ability: ability([ShieldEffect(target: EffectTarget.self, value: v(200), seconds: v(3))]),
-      ),
-    );
-    final battle = battleWith([casterUnit]);
-
-    castAbilityIfReady(battle, casterUnit);
-
-    expect(casterUnit.currentShield, 200);
-    expect(casterUnit.statusEffects.whereType<ShieldStatusEffect>().single.remainingSeconds, 3);
-    final shieldEvent = battle.events.whereType<CharacterReceivedShield>().single;
-    expect(shieldEvent.amount, 200);
-    expect(shieldEvent.sourceUnitId, casterUnit.id);
-  });
-
-  test('a damage over time ability poisons the focus', () {
-    final casterUnit = unit(
-      faction: Faction.enemy,
-      at: at(1, 0),
-      stats: statsOf(manaStart: 50),
-      character: dummy(
-        ability: ability([DamageOverTimeEffect(target: EffectTarget.focus, damagePerSecond: v(30), seconds: v(4))]),
-      ),
-    );
-    final targetUnit = unit(faction: Faction.team, at: at(2, 0));
-    final battle = battleWith([casterUnit, targetUnit]);
-    casterUnit.target = targetUnit;
-
-    castAbilityIfReady(battle, casterUnit);
-
-    final poison = targetUnit.statusEffects.whereType<DamageOverTimeStatusEffect>().single;
-    expect(poison.damagePerSecond, 30);
-    expect(poison.remainingSeconds, 4);
-    expect(poison.sourceUnit, casterUnit);
-    expect(battle.events.whereType<CharacterStatusEffectStarted>().single.statusEffectKind, StatusEffectKind.damageOverTime);
-  });
-
-  test('a debuff ability lowers the focus stat', () {
-    final casterUnit = unit(
       faction: Faction.team,
+      stats: statsOf(manaStart: 50),
+      character: dummy(
+        ability: ability([ShieldEffect(value: atEveryStar(200), seconds: atEveryStar(3), target: CombatEffectTarget.self)]),
+      ),
+    );
+
+    final shieldedCaster = findCombatant(castAbilityIfReady(combatWith([caster]), caster.id), caster);
+    final shield = shieldedCaster.combatLastingEffects.whereType<ShieldCombatLastingEffect>().single;
+
+    expect(shieldedCaster.currentShield, 200);
+    expect(shield.remainingTicks, 30);
+    expect(shield.sourceCombatantId, caster.id);
+  });
+
+  test('a shielded target ignores a new shield', () {
+    final caster = withCombatLastingEffects(
+      combatant(
+        at: at(4, 2),
+        faction: Faction.team,
+        stats: statsOf(manaStart: 50),
+        character: dummy(
+          ability: ability([ShieldEffect(value: atEveryStar(200), seconds: atEveryStar(3), target: CombatEffectTarget.self)]),
+        ),
+      ),
+      [const ShieldCombatLastingEffect(onExpire: [], remainingTicks: 10, remainingShield: 50, sourceCombatantId: 99)],
+    );
+
+    final shieldedCaster = findCombatant(castAbilityIfReady(combatWith([caster]), caster.id), caster);
+
+    expect(shieldedCaster.currentShield, 50);
+  });
+
+  test('a damage over time ability poisons the focus and poisons stack', () {
+    final target = withCombatLastingEffects(combatant(at: at(2, 0), faction: Faction.team), [
+      const DamageOverTimeCombatLastingEffect(remainingTicks: 10, damagePerSecond: 10, sourceCombatantId: 99),
+    ]);
+    final caster = combatant(
       at: at(1, 0),
+      faction: Faction.enemy,
       stats: statsOf(manaStart: 50),
       character: dummy(
         ability: ability([
-          StatDebuffEffect(
-            target: EffectTarget.focus,
-            stat: Stat.armor,
-            changeType: StatChangeType.multiplier,
-            value: v(0.5),
-            seconds: v(2),
-          ),
+          DamageOverTimeEffect(seconds: atEveryStar(4), target: CombatEffectTarget.focus, damagePerSecond: atEveryStar(30)),
+        ]),
+      ),
+    ).createCopyWith(targetCombatantId: target.id);
+
+    final castCombat = castAbilityIfReady(combatWith([caster, target]), caster.id);
+    final poisons = findCombatant(castCombat, target).combatLastingEffects.whereType<DamageOverTimeCombatLastingEffect>();
+
+    expect(poisons, hasLength(2));
+    expect(poisons.last.damagePerSecond, 30);
+    expect(poisons.last.remainingTicks, 40);
+    expect(poisons.last.sourceCombatantId, caster.id);
+  });
+
+  test('a heal over time ability heals the target and does not stack', () {
+    final alreadyHealingAlly = withCombatLastingEffects(combatant(at: at(6, 1), faction: Faction.team), [
+      const HealOverTimeCombatLastingEffect(healPerSecond: 5, remainingTicks: 10, sourceCombatantId: 99),
+    ]);
+    final caster = combatant(
+      at: at(6, 2),
+      faction: Faction.team,
+      stats: statsOf(manaStart: 50),
+      character: dummy(
+        ability: ability([
+          HealOverTimeEffect(seconds: atEveryStar(2), healPerSecond: atEveryStar(20), target: CombatEffectTarget.nearbyAllies),
         ]),
       ),
     );
-    final targetUnit = unit(faction: Faction.enemy, at: at(0, 0), stats: statsOf(armor: 100));
-    final battle = battleWith([casterUnit, targetUnit]);
-    casterUnit.target = targetUnit;
 
-    castAbilityIfReady(battle, casterUnit);
+    final castCombat = castAbilityIfReady(combatWith([caster, alreadyHealingAlly]), caster.id);
+    final casterHeals = findCombatant(castCombat, caster).combatLastingEffects.whereType<HealOverTimeCombatLastingEffect>();
+    final allyHeals = findCombatant(castCombat, alreadyHealingAlly).combatLastingEffects.whereType<HealOverTimeCombatLastingEffect>();
 
-    expect(targetUnit.getCurrentStat(Stat.armor), 50);
-    expect(targetUnit.statusEffects.whereType<StatModifierStatusEffect>().single.remainingSeconds, 2);
+    expect(casterHeals.single.healPerSecond, 20);
+    expect(casterHeals.single.remainingTicks, 20);
+    expect(allyHeals.single.healPerSecond, 5);
+  });
+
+  test('a debuff ability lowers the focus stat', () {
+    final target = combatant(at: at(0, 0), faction: Faction.enemy, stats: statsOf(armor: 100));
+    final caster = combatant(
+      at: at(1, 0),
+      faction: Faction.team,
+      stats: statsOf(manaStart: 50),
+      character: dummy(
+        ability: ability([
+          StatModifierEffect(
+            stat: Stat.armor,
+            value: atEveryStar(0.5),
+            seconds: atEveryStar(2),
+            target: CombatEffectTarget.focus,
+            changeType: StatChangeType.multiplier,
+          ),
+        ]),
+      ),
+    ).createCopyWith(targetCombatantId: target.id);
+
+    final debuffedTarget = findCombatant(castAbilityIfReady(combatWith([caster, target]), caster.id), target);
+
+    expect(debuffedTarget.getCurrentStat(Stat.armor), 50);
+    expect(debuffedTarget.combatLastingEffects.whereType<StatModifierCombatLastingEffect>().single.remainingTicks, 20);
   });
 }

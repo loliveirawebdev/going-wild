@@ -1,44 +1,38 @@
-import '../../models/events/phase/phase_event.dart';
-import '../../models/phase/phase_run.dart';
-import '../../models/shop/merge_owned_characters.dart';
-import '../../models/shop/owned_character.dart';
+import '../../models/character/character_copy.dart';
+import '../../models/inventory/errors/inventory_is_full_error.dart';
+import '../../models/match_progress/match_progress.dart';
+import '../../models/player/errors/not_enough_coins_error.dart';
+import '../../models/shop/errors/empty_shop_offer_error.dart';
 
-bool buyShopOffer(PhaseRun phaseRun, int offerIndex) {
-  if (!phaseRun.isInProgress) return false;
+class BuyShopOffer {
+  const BuyShopOffer();
 
-  final player = phaseRun.player;
-  final offeredCharacter = player.shopOffers[offerIndex];
-  final copiesPerMerge = phaseRun.rules.shopRules.copiesPerMerge;
-  if (offeredCharacter == null || player.coins < offeredCharacter.rarity.coins) return false;
+  MatchProgress call(MatchProgress matchProgress, {required int offerIndex}) {
+    matchProgress.requireInProgress();
 
-  final oneStarCopySlots = player.occupiedTeamSlots
-      .where((occupied) => occupied.ownedCharacter.character == offeredCharacter && occupied.ownedCharacter.stars == 1)
-      .map((occupied) => occupied.slot)
-      .take(copiesPerMerge - 1)
-      .toList();
+    final offeredCharacter = matchProgress.shop.offerAt(offerIndex);
+    if (offeredCharacter == null) throw EmptyShopOfferError(offerIndex: offerIndex);
 
-  final completesAMerge = oneStarCopySlots.length == copiesPerMerge - 1;
-  final freeBenchSlot = player.firstFreeBenchSlot;
-  if (!completesAMerge && freeBenchSlot == null) return false;
+    final player = matchProgress.player;
+    final engines = matchProgress.phase.engines;
+    final price = engines.economyEngine.priceOf(offeredCharacter);
+    if (!player.canAfford(price)) throw NotEnoughCoinsError(costInCoins: price, coins: player.coins);
 
-  player.coins -= offeredCharacter.rarity.coins;
-  player.shopOffers[offerIndex] = null;
+    final boughtCharacterCopy = CharacterCopy(stars: 1, character: offeredCharacter);
 
-  phaseRun.recordEvent(
-    CharacterBought(
-      roundNumber: phaseRun.currentRoundNumber,
-      character: offeredCharacter,
-      offerIndex: offerIndex,
-      coinsSpent: offeredCharacter.rarity.coins,
-    ),
-  );
+    final rosterAfterPurchase = engines.mergeEngine.mergeWithNewCopy(
+      matchProgress.playerRoster,
+      boughtCharacterCopy,
+      inventoryEngine: engines.inventoryEngine,
+      maxStars: engines.characterEngine.maxStars,
+    );
 
-  if (!completesAMerge) {
-    player.placeOwnedCharacterAt(freeBenchSlot!, OwnedCharacter(character: offeredCharacter, stars: 1));
-    return true;
+    if (rosterAfterPurchase == null) throw InventoryIsFullError();
+
+    return matchProgress.createCopyWith(
+      playerRoster: rosterAfterPurchase,
+      player: player.createCopyWithCoinsSpent(price),
+      shop: matchProgress.shop.createCopyWithoutOfferAt(offerIndex),
+    );
   }
-
-  mergeCopiesIntoFirstSlot(phaseRun, character: offeredCharacter, starsBeforeMerge: 1, copySlots: oneStarCopySlots);
-  mergeOwnedCharacters(phaseRun);
-  return true;
 }

@@ -49,10 +49,11 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
   // Translations
   late final Translations$app$pt app = Translations$app$pt._(_root);
-  late final Translations$game$pt game = Translations$game$pt._(_root);
+  late final Translations$characters$pt characters = Translations$characters$pt._(_root);
   late final Translations$home$pt home = Translations$home$pt._(_root);
   late final Translations$phaseSelection$pt phaseSelection = Translations$phaseSelection$pt._(_root);
   late final Translations$phases$pt phases = Translations$phases$pt._(_root);
+  late final Translations$sets$pt sets = Translations$sets$pt._(_root);
   late final Translations$settings$pt settings = Translations$settings$pt._(_root);
 }
 
@@ -68,16 +69,88 @@ class Translations$app$pt {
   String get title => 'Going Wild';
 }
 
-// Path: game
-class Translations$game$pt {
-  Translations$game$pt._(this._root);
+// Path: characters
+class Translations$characters$pt {
+  Translations$characters$pt._(this._root);
 
   final Translations _root; // ignore: unused_field
 
   // Translations
 
-  /// pt: 'Em breve: a fase $phaseName'
-  String placeholder({required Object phaseName}) => 'Em breve: a fase ${phaseName}';
+  /// pt: 'Touro'
+  String get bull => 'Touro';
+
+  /// pt: 'Gato'
+  String get cat => 'Gato';
+
+  /// pt: 'Galinha'
+  String get chicken => 'Galinha';
+
+  /// pt: 'Vaca'
+  String get cow => 'Vaca';
+
+  /// pt: 'Cachorro'
+  String get dog => 'Cachorro';
+
+  /// pt: 'Pato'
+  String get duck => 'Pato';
+
+  /// pt: 'Bode'
+  String get goat => 'Bode';
+
+  /// pt: 'Porquinho-da-índia'
+  String get guineaPig => 'Porquinho-da-índia';
+
+  /// pt: 'Cavalo'
+  String get horse => 'Cavalo';
+
+  /// pt: 'Abelha-rainha'
+  String get queenBee => 'Abelha-rainha';
+
+  /// pt: 'Coelho'
+  String get rabbit => 'Coelho';
+
+  /// pt: 'Galo'
+  String get rooster => 'Galo';
+
+  /// pt: 'Ovelha'
+  String get sheep => 'Ovelha';
+
+  /// pt: 'Porca'
+  String get sow => 'Porca';
+
+  /// pt: 'Acromântula'
+  String get acromantula => 'Acromântula';
+
+  /// pt: 'Jacaré'
+  String get alligator => 'Jacaré';
+
+  /// pt: 'Morcego'
+  String get bat => 'Morcego';
+
+  /// pt: 'Urso'
+  String get bear => 'Urso';
+
+  /// pt: 'Javali'
+  String get boar => 'Javali';
+
+  /// pt: 'Cérbero'
+  String get cerberus => 'Cérbero';
+
+  /// pt: 'Dragão'
+  String get dragon => 'Dragão';
+
+  /// pt: 'Raposa'
+  String get fox => 'Raposa';
+
+  /// pt: 'Kraken'
+  String get kraken => 'Kraken';
+
+  /// pt: 'Rato'
+  String get rat => 'Rato';
+
+  /// pt: 'Cobra'
+  String get snake => 'Cobra';
 }
 
 // Path: home
@@ -124,6 +197,42 @@ class Translations$phases$pt {
   late final Translations$phases$backyard$pt backyard = Translations$phases$backyard$pt._(_root);
 }
 
+// Path: sets
+class Translations$sets$pt {
+  Translations$sets$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Brutos'
+  String get brutes => 'Brutos';
+
+  /// pt: 'Davi e Golias'
+  String get davidAndGoliath => 'Davi e Golias';
+
+  /// pt: 'Dia e Noite'
+  String get dayAndNight => 'Dia e Noite';
+
+  /// pt: 'Voadores'
+  String get flyers => 'Voadores';
+
+  /// pt: 'Guardiões'
+  String get guardians => 'Guardiões';
+
+  /// pt: 'Pastoreio'
+  String get herding => 'Pastoreio';
+
+  /// pt: 'Pets'
+  String get pets => 'Pets';
+
+  /// pt: 'Produtores'
+  String get producers => 'Produtores';
+
+  /// pt: 'Farejadores'
+  String get trackers => 'Farejadores';
+}
+
 // Path: settings
 class Translations$settings$pt {
   Translations$settings$pt._(this._root);
@@ -160,7 +269,31 @@ extension on Translations {
   dynamic _flatMapFunction(String path) {
     return switch (path) {
       'app.title' => 'Going Wild',
-      'game.placeholder' => ({required Object phaseName}) => 'Em breve: a fase ${phaseName}',
+      'characters.bull' => 'Touro',
+      'characters.cat' => 'Gato',
+      'characters.chicken' => 'Galinha',
+      'characters.cow' => 'Vaca',
+      'characters.dog' => 'Cachorro',
+      'characters.duck' => 'Pato',
+      'characters.goat' => 'Bode',
+      'characters.guineaPig' => 'Porquinho-da-índia',
+      'characters.horse' => 'Cavalo',
+      'characters.queenBee' => 'Abelha-rainha',
+      'characters.rabbit' => 'Coelho',
+      'characters.rooster' => 'Galo',
+      'characters.sheep' => 'Ovelha',
+      'characters.sow' => 'Porca',
+      'characters.acromantula' => 'Acromântula',
+      'characters.alligator' => 'Jacaré',
+      'characters.bat' => 'Morcego',
+      'characters.bear' => 'Urso',
+      'characters.boar' => 'Javali',
+      'characters.cerberus' => 'Cérbero',
+      'characters.dragon' => 'Dragão',
+      'characters.fox' => 'Raposa',
+      'characters.kraken' => 'Kraken',
+      'characters.rat' => 'Rato',
+      'characters.snake' => 'Cobra',
       'home.playButton' => 'Jogar',
       'home.settingsButton' => 'Configurações',
       'phaseSelection.title' => 'Escolha a fase',
@@ -170,6 +303,15 @@ extension on Translations {
         other: '${roundCount} rounds',
       ),
       'phases.backyard.name' => 'Quintal',
+      'sets.brutes' => 'Brutos',
+      'sets.davidAndGoliath' => 'Davi e Golias',
+      'sets.dayAndNight' => 'Dia e Noite',
+      'sets.flyers' => 'Voadores',
+      'sets.guardians' => 'Guardiões',
+      'sets.herding' => 'Pastoreio',
+      'sets.pets' => 'Pets',
+      'sets.producers' => 'Produtores',
+      'sets.trackers' => 'Farejadores',
       'settings.title' => 'Configurações',
       'settings.placeholder' => 'Nada por aqui ainda',
       _ => null,
