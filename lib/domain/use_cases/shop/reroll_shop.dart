@@ -1,24 +1,28 @@
-import '../../models/match_progress/match_progress.dart';
-import '../../models/player/errors/not_enough_coins_error.dart';
-import 'refresh_shop_offers.dart';
+import 'package:going_wild/domain/models/match_progress/errors/rejected_player_action_error.dart';
+import 'package:going_wild/domain/models/match_progress/match_progress.dart';
+import 'package:going_wild/domain/models/player/errors/not_enough_coins_error.dart';
+import 'package:going_wild/domain/use_cases/shop/refresh_shop_offers.dart';
 
-class RerollShop {
-  const RerollShop();
+RejectedPlayerActionError? checkRerollingShop(MatchProgress matchProgress) {
+  if (matchProgress.checkPreparingActions() case final rejection?) return rejection;
 
-  MatchProgress call(MatchProgress matchProgress) {
-    matchProgress.requireInProgress();
+  final player = matchProgress.player;
+  final rerollCostInCoins = _rerollCostInCoins(matchProgress);
+  if (!player.canAfford(rerollCostInCoins)) return NotEnoughCoinsError(coins: player.coins, costInCoins: rerollCostInCoins);
 
-    const refreshShopOffers = RefreshShopOffers();
-
-    final player = matchProgress.player;
-    final rerollCostInCoins = matchProgress.phase.engines.economyEngine.rerollCostInCoins;
-    if (!player.canAfford(rerollCostInCoins)) throw NotEnoughCoinsError(coins: player.coins, costInCoins: rerollCostInCoins);
-
-    final paidMatchProgress = matchProgress.createCopyWith(
-      shop: matchProgress.shop.createCopyUnlocked(),
-      player: player.createCopyWithCoinsSpent(rerollCostInCoins),
-    );
-
-    return refreshShopOffers(paidMatchProgress);
-  }
+  return null;
 }
+
+MatchProgress rerollShop(MatchProgress matchProgress) {
+  if (checkRerollingShop(matchProgress) case final rejection?) throw rejection;
+
+  final paidMatchProgress = matchProgress.createCopyWith(
+    shop: matchProgress.shop.createCopyUnlocked(),
+    player: matchProgress.player.createCopyWithCoinsSpent(_rerollCostInCoins(matchProgress)),
+  );
+
+  return refreshShopOffers(paidMatchProgress);
+}
+
+int _rerollCostInCoins(MatchProgress matchProgress) =>
+    matchProgress.phase.engines.economyEngine.rerollCostInCoins(matchProgress: matchProgress);

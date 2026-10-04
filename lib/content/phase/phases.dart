@@ -1,6 +1,5 @@
+import 'package:going_wild/content/phase/backyard/backyard.dart';
 import 'package:going_wild/domain/models/phase/phase.dart';
-
-import 'backyard/backyard.dart';
 
 export 'backyard/backyard.dart';
 

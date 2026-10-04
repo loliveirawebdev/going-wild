@@ -5,16 +5,19 @@ import 'package:going_wild/domain/models/combat/combatant_actions/advance_combat
 import 'package:going_wild/domain/models/combat/combatant_actions/attack_target.dart';
 import 'package:going_wild/domain/models/combat/combatant_actions/cast_ability_if_ready.dart';
 import 'package:going_wild/domain/models/combat/combatant_actions/move_toward_target.dart';
+import 'package:going_wild/domain/models/combat_history/causes/combat_history_cause.dart';
 import 'package:going_wild/domain/models/combat_history/combat_history.dart';
 import 'package:going_wild/domain/models/combat_history/combat_history_step.dart';
 import 'package:going_wild/domain/models/combat_history/combat_history_step_kind.dart';
 import 'package:going_wild/domain/models/combat_history/entries/combat_history_entry.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage/damage_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage_over_time/damage_over_time_combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/shield/shield_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/shield/shield_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stun/stun_combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stun/stun_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/focus_target.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/self_target.dart';
 import 'package:going_wild/domain/models/combatant/combatant.dart';
 import 'package:going_wild/domain/models/combatant/faction.dart';
 
@@ -38,10 +41,10 @@ List<CombatHistoryEntry> entriesOfStep(Combat combat, CombatHistoryStepKind kind
 void main() {
   group('the history itself', () {
     test('a new history keeps its entries and cannot be changed from outside', () {
-      final history = CombatHistory(entries: const [CombatStartedHistoryEntry(tick: 0)]);
+      final history = CombatHistory(entries: const [CombatStartedHistoryEntry(tick: 0, combatants: [])]);
 
       expect(history.entries.single, isA<CombatStartedHistoryEntry>());
-      expect(() => history.entries.add(const CombatStartedHistoryEntry(tick: 1)), throwsUnsupportedError);
+      expect(() => history.entries.add(const CombatStartedHistoryEntry(tick: 1, combatants: [])), throwsUnsupportedError);
     });
 
     test('adding entries creates a new history and keeps the original untouched', () {
@@ -52,6 +55,38 @@ void main() {
       expect(startedHistory.entries.single, isA<CombatStartedHistoryEntry>());
       expect(endedHistory.entries.map((entry) => entry.runtimeType), [CombatStartedHistoryEntry, CombatEndedHistoryEntry]);
       expect((endedHistory.entries.last as CombatEndedHistoryEntry).winningFaction, Faction.team);
+    });
+
+    test('every step kind creates the cause of its actor', () {
+      const actorCombatantId = 7;
+
+      int actorCombatantIdOf(CombatHistoryCause cause) => switch (cause) {
+        CombatStartHistoryCause() => -1,
+        AbilityHistoryCause() => cause.casterCombatantId,
+        BasicAttackHistoryCause() => cause.attackerCombatantId,
+        MovementTowardTargetHistoryCause() => cause.movingCombatantId,
+        ScheduledEffectsHistoryCause() => cause.sourceCombatantId,
+        TargetAcquisitionHistoryCause() => cause.searchingCombatantId,
+        LastingEffectsTickHistoryCause() => cause.ownerCombatantId,
+      };
+
+      final expectedCauseTypeByKind = {
+        CombatHistoryStepKind.castAbility: AbilityHistoryCause,
+        CombatHistoryStepKind.attackTarget: BasicAttackHistoryCause,
+        CombatHistoryStepKind.acquireTarget: TargetAcquisitionHistoryCause,
+        CombatHistoryStepKind.moveTowardTarget: MovementTowardTargetHistoryCause,
+        CombatHistoryStepKind.applyPendingCombatEffects: ScheduledEffectsHistoryCause,
+        CombatHistoryStepKind.advanceCombatLastingEffects: LastingEffectsTickHistoryCause,
+      };
+
+      expect(expectedCauseTypeByKind.keys, unorderedEquals(CombatHistoryStepKind.values));
+
+      for (final kind in CombatHistoryStepKind.values) {
+        final cause = CombatHistoryStep(kind: kind, actorCombatantId: actorCombatantId).cause;
+
+        expect(cause.runtimeType, expectedCauseTypeByKind[kind], reason: '$kind');
+        expect(actorCombatantIdOf(cause), actorCombatantId, reason: '$kind');
+      }
     });
 
     test('a step that changes nothing returns the same history', () {
@@ -78,6 +113,7 @@ void main() {
       expect(history.entries.first, isA<CombatStartedHistoryEntry>());
       expect(startedEffect.combatantId, shieldedCombatant.id);
       expect(startedEffect.combatLastingEffect, isA<ShieldCombatLastingEffect>());
+      expect(startedEffect.cause, isA<CombatStartHistoryCause>());
     });
 
     test('combatants are matched by id even when the lists come in a different order', () {
@@ -124,6 +160,7 @@ void main() {
       expect(damageTaken.combatantId, enemy.id);
       expect(damageTaken.currentHealth, 900);
       expect(damageTaken.sourceCombatantId, attacker.id);
+      expect((damageTaken.cause as BasicAttackHistoryCause).attackerCombatantId, attacker.id);
       expect(entries.whereType<ManaReceivedHistoryEntry>().single.amount, testRules.manaPerHit);
     });
 
@@ -198,6 +235,23 @@ void main() {
       expect(entries.whereType<LastingEffectEndedHistoryEntry>().single.combatLastingEffect, isA<ShieldCombatLastingEffect>());
     });
 
+    test('a shield that absorbs part of a hit records its new remaining value', () {
+      final shieldedEnemy = withCombatLastingEffects(combatant(at: at(0, 0), faction: Faction.enemy), [
+        const ShieldCombatLastingEffect(onExpire: [], remainingTicks: 50, remainingShield: 150, sourceCombatantId: 99),
+      ]);
+      final attacker = combatant(at: at(1, 0), faction: Faction.team).createCopyWith(targetCombatantId: shieldedEnemy.id);
+      final combat = combatWith([attacker, shieldedEnemy]);
+
+      final entries = entriesOfStep(combat, CombatHistoryStepKind.attackTarget, attacker, (combat) => attackTarget(combat, attacker.id));
+      final shieldChanged = entries.whereType<LastingEffectChangedHistoryEntry>().single;
+
+      expect(shieldChanged.combatantId, shieldedEnemy.id);
+      expect(shieldChanged.cause, isA<BasicAttackHistoryCause>());
+      expect(shieldChanged.combatLastingEffectBefore.absorbableDamage, 150);
+      expect(shieldChanged.combatLastingEffectAfter.absorbableDamage, 50);
+      expect(entries.whereType<LastingEffectEndedHistoryEntry>(), isEmpty);
+    });
+
     test('a lethal hit records the death with the killer', () {
       final enemy = combatant(at: at(0, 0), faction: Faction.enemy, stats: statsOf(health: 50));
       final attacker = combatant(at: at(1, 0), faction: Faction.team).createCopyWith(targetCombatantId: enemy.id);
@@ -208,6 +262,7 @@ void main() {
 
       expect(death.combatantId, enemy.id);
       expect(death.killerCombatantId, attacker.id);
+      expect(death.cause, isA<BasicAttackHistoryCause>());
       expect(entries.whereType<DamageTakenHistoryEntry>().single.amount, 50);
     });
 
@@ -227,6 +282,7 @@ void main() {
       expect(movement.toPosition, at(6, 2));
       expect(movement.fromPosition, at(7, 2));
       expect(movement.sourceCombatantId, walker.id);
+      expect((movement.cause as MovementTowardTargetHistoryCause).movingCombatantId, walker.id);
     });
 
     test('casting records the ability, its damage and the lasting effects it starts', () {
@@ -237,8 +293,8 @@ void main() {
         stats: statsOf(manaStart: 50),
         character: dummy(
           ability: ability([
-            DamageEffect(value: atEveryStar(300), target: CombatEffectTarget.focus),
-            StunEffect(seconds: atEveryStar(1), target: CombatEffectTarget.focus),
+            DamageEffect(value: atEveryStar(300), target: const FocusTarget()),
+            StunEffect(seconds: atEveryStar(1), target: const FocusTarget()),
           ]),
         ),
       ).createCopyWith(targetCombatantId: enemy.id);
@@ -250,10 +306,36 @@ void main() {
 
       expect(entries.first, same(abilityCast));
       expect(abilityCast.combatantId, caster.id);
+      expect(abilityCast.affectedCombatantIds, [enemy.id]);
+      expect(entries.whereType<ManaSpentHistoryEntry>().single.combatantId, caster.id);
+      expect(entries.whereType<ManaSpentHistoryEntry>().single.currentMana, 0);
       expect(entries.whereType<DamageTakenHistoryEntry>().single.amount, 300);
       expect(stunStarted.combatantId, enemy.id);
       expect(stunStarted.combatLastingEffect, isA<StunCombatLastingEffect>());
       expect(stunStarted.combatLastingEffect.sourceCombatantId, caster.id);
+
+      for (final consequence in entries.whereType<CombatConsequenceHistoryEntry>()) {
+        expect((consequence.cause as AbilityHistoryCause).casterCombatantId, caster.id, reason: '$consequence');
+      }
+    });
+
+    test('an ability on the caster itself lists the caster as affected', () {
+      final caster = combatant(
+        at: at(7, 0),
+        faction: Faction.team,
+        stats: statsOf(manaStart: 50),
+        character: dummy(
+          ability: ability([
+            ShieldEffect(value: atEveryStar(100), seconds: atEveryStar(2), target: const SelfTarget()),
+          ]),
+        ),
+      );
+      final combat = combatWith([caster]);
+
+      final entries = entriesOfStep(combat, CombatHistoryStepKind.castAbility, caster, (combat) => castAbilityIfReady(combat, caster.id));
+
+      expect(entries.whereType<AbilityCastHistoryEntry>().single.affectedCombatantIds, [caster.id]);
+      expect(entries.whereType<LastingEffectStartedHistoryEntry>().single.combatLastingEffect, isA<ShieldCombatLastingEffect>());
     });
 
     test('a lasting effect tick records damage from the poisoner and the poison ending', () {
@@ -272,7 +354,27 @@ void main() {
 
       expect(damageTaken.amount, closeTo(3, 0.001));
       expect(damageTaken.sourceCombatantId, 99);
+      expect((damageTaken.cause as LastingEffectsTickHistoryCause).ownerCombatantId, poisonedCombatant.id);
       expect(entries.whereType<LastingEffectEndedHistoryEntry>().single.combatLastingEffect, isA<DamageOverTimeCombatLastingEffect>());
+    });
+
+    test('time passing records each lasting effect with less time left', () {
+      final poisonedCombatant = withCombatLastingEffects(combatant(at: at(7, 4), faction: Faction.team), [
+        const DamageOverTimeCombatLastingEffect(remainingTicks: 10, damagePerSecond: 30, sourceCombatantId: 99),
+      ]);
+      final combat = combatWith([poisonedCombatant]);
+
+      final entries = entriesOfStep(
+        combat,
+        CombatHistoryStepKind.advanceCombatLastingEffects,
+        poisonedCombatant,
+        (combat) => advanceCombatLastingEffectsByOneTick(combat, poisonedCombatant.id),
+      );
+      final poisonChanged = entries.whereType<LastingEffectChangedHistoryEntry>().single;
+
+      expect((poisonChanged.combatLastingEffectBefore as DamageOverTimeCombatLastingEffect).remainingTicks, 10);
+      expect((poisonChanged.combatLastingEffectAfter as DamageOverTimeCombatLastingEffect).remainingTicks, 9);
+      expect(poisonChanged.cause, isA<LastingEffectsTickHistoryCause>());
     });
 
     test('poisons from two sources ticking together record one damage without a single source', () {

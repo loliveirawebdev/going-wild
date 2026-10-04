@@ -2,10 +2,10 @@ import 'package:going_wild/content/character/team/team.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_change_type.dart';
 import 'package:going_wild/domain/models/character/stats/stat_modification.dart';
-import 'package:going_wild/domain/models/set/set_effect.dart';
+import 'package:going_wild/domain/models/set/effects/set_stat_modification.dart';
 import 'package:going_wild/domain/models/set/set_id.dart';
-import 'package:going_wild/domain/models/set/set_target.dart';
 import 'package:going_wild/domain/models/set/set_tier.dart';
+import 'package:going_wild/domain/models/set/targets/all_enemies_set_target.dart';
 import 'package:going_wild/domain/models/set/team_set.dart';
 
 const TeamSet trackers = TeamSet(
@@ -21,7 +21,7 @@ const TeamSet trackers = TeamSet(
       count: 2,
       effects: [
         SetStatModification(
-          target: SetTarget.allEnemies,
+          target: AllEnemiesSetTarget(),
           statModification: StatModification(stat: Stat.armor, changeType: StatChangeType.multiplier, value: 0.8),
         ),
       ],

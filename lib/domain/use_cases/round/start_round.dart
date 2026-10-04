@@ -1,22 +1,19 @@
-import '../../models/match_progress/match_progress.dart';
-import '../shop/refresh_shop_offers.dart';
+import 'package:going_wild/domain/models/match_progress/match_progress.dart';
+import 'package:going_wild/domain/models/match_progress/round_stage.dart';
+import 'package:going_wild/domain/use_cases/shop/refresh_shop_offers.dart';
 
-class StartRound {
-  const StartRound();
+MatchProgress startRound(MatchProgress matchProgress) {
+  final engines = matchProgress.phase.engines;
+  final levelEngine = engines.levelEngine;
+  final roundIncome = engines.economyEngine.roundIncome(matchProgress: matchProgress);
+  final experienceForRound = levelEngine.experienceForRound(matchProgress: matchProgress);
 
-  MatchProgress call(MatchProgress matchProgress) {
-    const refreshShopOffers = RefreshShopOffers();
-    final engines = matchProgress.phase.engines;
-    final levelEngine = engines.levelEngine;
-    final waveReward = matchProgress.currentWave.coinsReward;
-    final roundIncome = engines.economyEngine.roundIncome(player: matchProgress.player, waveReward: waveReward);
+  final rewardedMatchProgress = matchProgress.createCopyWith(
+    roundStage: RoundStage.preparing,
+    player: matchProgress.player.createCopyWithCoinsReceived(roundIncome),
+    playerLevelProgress: levelEngine.gainExperience(matchProgress.playerLevelProgress, experienceForRound),
+  );
 
-    final rewardedMatchProgress = matchProgress.createCopyWith(
-      player: matchProgress.player.createCopyWithCoinsReceived(roundIncome),
-      playerLevelProgress: levelEngine.gainExperience(matchProgress.playerLevelProgress, levelEngine.experiencePerRound),
-    );
-
-    if (rewardedMatchProgress.shop.isLocked) return rewardedMatchProgress;
-    return refreshShopOffers(rewardedMatchProgress);
-  }
+  if (rewardedMatchProgress.shop.isLocked) return rewardedMatchProgress;
+  return refreshShopOffers(rewardedMatchProgress);
 }

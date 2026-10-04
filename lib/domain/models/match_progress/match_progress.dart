@@ -1,14 +1,17 @@
 import 'dart:math';
 
-import '../level/player_level_progress.dart';
-import '../phase/phase.dart';
-import '../phase/phase_status.dart';
-import '../phase/phase_wave.dart';
-import '../player/player.dart';
-import '../roster/roster.dart';
-import '../shop/shop.dart';
-import 'errors/match_is_over_error.dart';
-import 'errors/round_beyond_phase_error.dart';
+import 'package:going_wild/domain/models/level/player_level_progress.dart';
+import 'package:going_wild/domain/models/match_progress/errors/fight_in_progress_error.dart';
+import 'package:going_wild/domain/models/match_progress/errors/match_is_over_error.dart';
+import 'package:going_wild/domain/models/match_progress/errors/rejected_player_action_error.dart';
+import 'package:going_wild/domain/models/match_progress/errors/round_beyond_phase_error.dart';
+import 'package:going_wild/domain/models/match_progress/round_stage.dart';
+import 'package:going_wild/domain/models/phase/phase.dart';
+import 'package:going_wild/domain/models/phase/phase_status.dart';
+import 'package:going_wild/domain/models/phase/phase_wave.dart';
+import 'package:going_wild/domain/models/player/player.dart';
+import 'package:going_wild/domain/models/roster/roster.dart';
+import 'package:going_wild/domain/models/shop/shop.dart';
 
 class MatchProgress {
   const MatchProgress({
@@ -16,6 +19,7 @@ class MatchProgress {
     required this.phase,
     required this.status,
     required this.player,
+    required this.roundStage,
     required this.playerRoster,
     required this.randomGenerator,
     required this.currentRoundNumber,
@@ -26,6 +30,7 @@ class MatchProgress {
   final Phase phase;
   final Player player;
   final PhaseStatus status;
+  final RoundStage roundStage;
   final Roster playerRoster;
   final int currentRoundNumber;
   final Random randomGenerator;
@@ -37,6 +42,13 @@ class MatchProgress {
     if (!isInProgress) {
       throw MatchIsOverError();
     }
+  }
+
+  RejectedPlayerActionError? checkPreparingActions() {
+    if (!isInProgress) return MatchIsOverError();
+    if (roundStage == RoundStage.fighting) return FightInProgressError();
+
+    return null;
   }
 
   PhaseWave get currentWave {
@@ -55,6 +67,7 @@ class MatchProgress {
     Player? player,
     PhaseStatus? status,
     Roster? playerRoster,
+    RoundStage? roundStage,
     int? currentRoundNumber,
     PlayerLevelProgress? playerLevelProgress,
   }) => MatchProgress(
@@ -63,6 +76,7 @@ class MatchProgress {
     status: status ?? this.status,
     player: player ?? this.player,
     randomGenerator: randomGenerator,
+    roundStage: roundStage ?? this.roundStage,
     playerRoster: playerRoster ?? this.playerRoster,
     currentRoundNumber: currentRoundNumber ?? this.currentRoundNumber,
     playerLevelProgress: playerLevelProgress ?? this.playerLevelProgress,

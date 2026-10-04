@@ -1,4 +1,4 @@
-import 'player_level.dart';
+import 'package:going_wild/domain/models/level/player_level.dart';
 
 class PlayerLevelProgress {
   const PlayerLevelProgress({required this.level, required this.experience});

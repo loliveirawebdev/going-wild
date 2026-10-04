@@ -1,0 +1,42 @@
+{
+  "round": "Round $roundNumber of $roundCount",
+  "lives": "Lives: $lives",
+  "coins": "Coins: $coins",
+  "level": "Level $levelNumber · XP $experience",
+  "shop": "Shop",
+  "offerPrice": "$price coins",
+  "emptyOffer": "Sold",
+  "melee": "Melee",
+  "ranged": "Ranged ($range)",
+  "rerollButton": "Reroll offers",
+  "lockButton": "Lock shop",
+  "unlockButton": "Unlock shop",
+  "buyExperienceButton": "Buy XP",
+  "board": "Board",
+  "inventory": "Bench",
+  "sellButton": "Sell selected",
+  "fightButton": "Fight",
+  "backButton": "Back",
+  "speed": "${multiplier}×",
+  "matchWon": "You won the phase!",
+  "matchLost": "You lost the phase",
+  "entries": {
+    "abilityCast": "$name used the ability",
+    "death": "$name fell"
+  },
+  "rejections": {
+    "fightInProgress": "The fight is happening",
+    "matchIsOver": "The match is over",
+    "notEnoughCoins": "Not enough coins",
+    "maxLevelReached": "Max level",
+    "emptyShopOffer": "Offer already sold",
+    "inventoryIsFull": "Bench is full",
+    "shopAlreadyLocked": "The shop is already locked",
+    "shopAlreadyUnlocked": "The shop is already unlocked",
+    "teamIsFull": "Team is full for your level",
+    "positionOutsideTeamHalf": "Outside your side of the board",
+    "noPlacementAtPosition": "Nobody is here",
+    "emptyInventorySlot": "Empty bench slot",
+    "unknown": "Action unavailable"
+  }
+}

@@ -1,10 +1,9 @@
+import 'package:going_wild/content/character/merge_curves_per_role/damage.dart';
+import 'package:going_wild/content/character/merge_curves_per_role/guard.dart';
+import 'package:going_wild/content/character/merge_curves_per_role/support.dart';
+import 'package:going_wild/content/character/merge_curves_per_role/tank.dart';
 import 'package:going_wild/domain/models/character/role.dart';
 import 'package:going_wild/domain/models/character/stars/merge_curve.dart';
-
-import 'damage.dart';
-import 'guard.dart';
-import 'support.dart';
-import 'tank.dart';
 
 export 'damage.dart';
 export 'guard.dart';

@@ -1,5 +1,5 @@
-import 'ability_effect.dart';
-import 'ability_trigger.dart';
+import 'package:going_wild/domain/models/character/abilities/ability_effect.dart';
+import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
 
 class Ability {
   const Ability({required this.trigger, required this.effects});

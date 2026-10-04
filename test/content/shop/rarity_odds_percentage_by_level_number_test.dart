@@ -1,17 +1,13 @@
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/content/character/team/team.dart';
-import 'package:going_wild/content/engines/character/basic_character_engine.dart';
-import 'package:going_wild/content/engines/inventory/basic_inventory_engine.dart';
 import 'package:going_wild/content/engines/shop/basic_shop_engine.dart';
 import 'package:going_wild/content/level/player_levels.dart';
 import 'package:going_wild/content/shop/rarity_odds_percentage_by_level_number.dart';
 import 'package:going_wild/domain/models/character/rarity.dart';
-import 'package:going_wild/domain/models/roster/roster.dart';
+
+import '../../helpers/use_case_helpers.dart';
 
 void main() {
-  final emptyRoster = Roster(placements: const [], inventory: basicCharacterInventoryEngine.emptyInventory());
   final levelNumbers = playerLevels.map((playerLevel) => playerLevel.number).toSet();
   final levelNumbersWithOdds = rarityOddsPercentageByLevelNumber.keys.toSet();
 
@@ -25,12 +21,7 @@ void main() {
 
   test('the shop picks offers at every player level without failing', () {
     for (final levelNumber in levelNumbers) {
-      final offers = basicShopEngine.pickOffers(
-        roster: emptyRoster,
-        levelNumber: levelNumber,
-        randomGenerator: Random(1),
-        maxStars: basicCharacterEngine.maxStars,
-      );
+      final offers = basicShopEngine.pickOffers(matchProgress: matchProgressWith(levelNumber: levelNumber));
       expect(offers, hasLength(basicShopEngine.size), reason: 'level $levelNumber');
     }
   });

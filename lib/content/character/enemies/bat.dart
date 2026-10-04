@@ -1,5 +1,4 @@
 import 'package:going_wild/domain/models/character/abilities/ability.dart';
-import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/character/character_id.dart';
 import 'package:going_wild/domain/models/character/rarity.dart';
@@ -7,8 +6,9 @@ import 'package:going_wild/domain/models/character/role.dart';
 import 'package:going_wild/domain/models/character/stars/star_values.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_multipliers.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
+import 'package:going_wild/domain/models/combatant/ability_triggers/mana_full_trigger.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/lifesteal/lifesteal_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/focus_target.dart';
 
 const Character bat = Character(
   id: CharacterId('bat'),
@@ -16,11 +16,11 @@ const Character bat = Character(
   rarity: Rarity.uncommon,
 
   ability: Ability(
-    trigger: AbilityTrigger.manaFull,
+    trigger: ManaFullTrigger(),
 
     effects: [
       LifestealEffect(
-        target: CombatEffectTarget.focus,
+        target: FocusTarget(),
         value: StarValues(star1: 120, star2: 180, star3: 270),
       ),
     ],

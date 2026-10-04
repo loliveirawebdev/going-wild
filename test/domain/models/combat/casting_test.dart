@@ -1,10 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_change_type.dart';
 import 'package:going_wild/domain/models/character/stats/stat_modification.dart';
 import 'package:going_wild/domain/models/combat/combatant_actions/cast_ability_if_ready.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
+import 'package:going_wild/domain/models/combatant/ability_triggers/low_health_trigger.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/ambush/ambush_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/ambush/vanished_combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage/damage_effect.dart';
@@ -26,6 +25,13 @@ import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stun/s
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stun/stun_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/taunt/taunt_combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/taunt/taunt_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/all_enemies_target.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/enemies_around_focus_target.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/farthest_enemy_target.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/focus_target.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/lowest_health_enemy_target.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/nearby_allies_target.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/self_target.dart';
 import 'package:going_wild/domain/models/combatant/combatant.dart';
 import 'package:going_wild/domain/models/combatant/faction.dart';
 
@@ -39,7 +45,7 @@ void main() {
       faction: Faction.team,
       stats: statsOf(manaMax: 50, manaStart: 50),
       character: dummy(
-        ability: ability([DamageEffect(value: atEveryStar(300), target: CombatEffectTarget.focus)]),
+        ability: ability([DamageEffect(value: atEveryStar(300), target: const FocusTarget())]),
       ),
     ).createCopyWith(targetCombatantId: enemy.id);
 
@@ -55,7 +61,7 @@ void main() {
       faction: Faction.team,
       stats: statsOf(manaMax: 50, manaStart: 49),
       character: dummy(
-        ability: ability([DamageEffect(value: atEveryStar(300), target: CombatEffectTarget.focus)]),
+        ability: ability([DamageEffect(value: atEveryStar(300), target: const FocusTarget())]),
       ),
     );
     final combat = combatWith([caster]);
@@ -75,11 +81,11 @@ void main() {
               stat: Stat.armor,
               value: atEveryStar(50),
               seconds: atEveryStar(3),
-              target: CombatEffectTarget.self,
+              target: const SelfTarget(),
               changeType: StatChangeType.absoluteValue,
             ),
           ],
-          trigger: AbilityTrigger.lowHealth,
+          trigger: const LowHealthTrigger(healthPercentage: 30),
         ),
       ),
     );
@@ -90,9 +96,32 @@ void main() {
     final firstCastCombat = castAbilityIfReady(combatWith([caster.createCopyWith(currentHealth: 30)]), caster.id);
     final secondCastCombat = castAbilityIfReady(firstCastCombat, caster.id);
 
-    expect(findCombatant(firstCastCombat, caster).lowHealthAbilityUsed, isTrue);
+    expect(findCombatant(firstCastCombat, caster).abilityCastCount, 1);
     expect(findCombatant(firstCastCombat, caster).getCurrentStat(Stat.armor), 50);
     expect(secondCastCombat, same(firstCastCombat));
+  });
+
+  test('each low health trigger fires at its own health percentage', () {
+    Combatant casterWithThreshold(double healthPercentage) => combatant(
+      at: at(7, 2),
+      faction: Faction.team,
+      stats: statsOf(health: 100),
+      character: dummy(
+        ability: ability(
+          [StunEffect(target: const SelfTarget(), seconds: atEveryStar(1))],
+          trigger: LowHealthTrigger(healthPercentage: healthPercentage),
+        ),
+      ),
+    ).createCopyWith(currentHealth: 45);
+
+    final cautiousCaster = casterWithThreshold(50);
+    final braveCaster = casterWithThreshold(30);
+
+    final cautiousCombat = combatWith([cautiousCaster]);
+    final braveCombat = combatWith([braveCaster]);
+
+    expect(findCombatant(castAbilityIfReady(cautiousCombat, cautiousCaster.id), cautiousCaster).abilityCastCount, 1);
+    expect(castAbilityIfReady(braveCombat, braveCaster.id), same(braveCombat));
   });
 
   test('taunt makes targets attack the caster', () {
@@ -101,7 +130,7 @@ void main() {
       faction: Faction.team,
       stats: statsOf(manaStart: 50),
       character: dummy(
-        ability: ability([TauntEffect(seconds: atEveryStar(2), target: CombatEffectTarget.allEnemies)]),
+        ability: ability([TauntEffect(seconds: atEveryStar(2), target: const AllEnemiesTarget())]),
       ),
     );
     final firstEnemy = combatant(at: at(0, 0), faction: Faction.enemy);
@@ -123,7 +152,7 @@ void main() {
       faction: Faction.team,
       stats: statsOf(manaStart: 50),
       character: dummy(
-        ability: ability([TauntEffect(seconds: atEveryStar(2), target: CombatEffectTarget.allEnemies)]),
+        ability: ability([TauntEffect(seconds: atEveryStar(2), target: const AllEnemiesTarget())]),
       ),
     );
     final firstTaunter = combatant(at: at(7, 0), faction: Faction.team);
@@ -146,7 +175,7 @@ void main() {
       faction: Faction.team,
       stats: statsOf(manaStart: 50),
       character: dummy(
-        ability: ability([StunEffect(seconds: atEveryStar(1), target: CombatEffectTarget.focus)]),
+        ability: ability([StunEffect(seconds: atEveryStar(1), target: const FocusTarget())]),
       ),
     ).createCopyWith(targetCombatantId: enemy.id);
 
@@ -170,7 +199,7 @@ void main() {
               stat: Stat.damage,
               value: atEveryStar(2),
               seconds: atEveryStar(3),
-              target: CombatEffectTarget.self,
+              target: const SelfTarget(),
               changeType: StatChangeType.multiplier,
             ),
           ]),
@@ -199,7 +228,7 @@ void main() {
               stat: Stat.damage,
               value: atEveryStar(3),
               seconds: atEveryStar(3),
-              target: CombatEffectTarget.self,
+              target: const SelfTarget(),
               changeType: StatChangeType.multiplier,
             ),
           ]),
@@ -227,7 +256,7 @@ void main() {
               hits: 3,
               stat: Stat.damage,
               value: atEveryStar(50),
-              target: CombatEffectTarget.self,
+              target: const SelfTarget(),
               changeType: StatChangeType.absoluteValue,
             ),
           ]),
@@ -248,7 +277,7 @@ void main() {
       at: at(2, 2),
       faction: Faction.team,
       stats: statsOf(manaStart: 50),
-      character: dummy(ability: ability([const KnockbackEffect(cells: 5, target: CombatEffectTarget.focus)])),
+      character: dummy(ability: ability([const KnockbackEffect(cells: 5, target: FocusTarget())])),
     ).createCopyWith(targetCombatantId: enemy.id);
 
     final castCombat = castAbilityIfReady(combatWith([caster, enemy]), caster.id);
@@ -263,7 +292,7 @@ void main() {
       at: at(4, 2),
       faction: Faction.team,
       stats: statsOf(manaStart: 50),
-      character: dummy(ability: ability([const KnockbackEffect(cells: 1, target: CombatEffectTarget.enemiesAroundFocus)])),
+      character: dummy(ability: ability([const KnockbackEffect(cells: 1, target: EnemiesAroundFocusTarget())])),
     ).createCopyWith(targetCombatantId: focus.id);
 
     final castCombat = castAbilityIfReady(combatWith([caster, focus, enemyBehind]), caster.id);
@@ -279,7 +308,7 @@ void main() {
       faction: Faction.team,
       stats: statsOf(health: 1000, manaStart: 50),
       character: dummy(
-        ability: ability([LifestealEffect(value: atEveryStar(200), target: CombatEffectTarget.focus)]),
+        ability: ability([LifestealEffect(value: atEveryStar(200), target: const FocusTarget())]),
       ),
     ).createCopyWith(currentHealth: 500, targetCombatantId: enemy.id);
 
@@ -302,7 +331,7 @@ void main() {
         stats: statsOf(manaMax: 100, manaStart: 100),
         character: dummy(
           ability: ability([
-            DamageEffect(value: atEveryStar(50), target: CombatEffectTarget.focus),
+            DamageEffect(value: atEveryStar(50), target: const FocusTarget()),
             const ManaRefundOnKillEffect(percentage: 50),
           ]),
         ),
@@ -320,7 +349,7 @@ void main() {
       at: at(7, 2),
       faction: Faction.team,
       stats: statsOf(manaStart: 50),
-      character: dummy(ability: ability([const PullEffect(target: CombatEffectTarget.farthestEnemy)])),
+      character: dummy(ability: ability([const PullEffect(target: FarthestEnemyTarget())])),
     );
     final nearEnemy = combatant(at: at(5, 2), faction: Faction.enemy);
     final farEnemy = combatant(at: at(0, 0), faction: Faction.enemy);
@@ -339,8 +368,8 @@ void main() {
       stats: statsOf(health: 100),
       character: dummy(
         ability: ability([
-          AmbushEffect(seconds: atEveryStar(1), target: CombatEffectTarget.lowestHealthEnemy),
-        ], trigger: AbilityTrigger.lowHealth),
+          AmbushEffect(seconds: atEveryStar(1), target: const LowestHealthEnemyTarget()),
+        ], trigger: const LowHealthTrigger(healthPercentage: 30)),
       ),
     ).createCopyWith(currentHealth: 10, targetCombatantId: enemy.id);
 
@@ -358,7 +387,7 @@ void main() {
       faction: Faction.team,
       stats: statsOf(manaStart: 50),
       character: dummy(
-        ability: ability([ShieldEffect(value: atEveryStar(200), seconds: atEveryStar(3), target: CombatEffectTarget.self)]),
+        ability: ability([ShieldEffect(value: atEveryStar(200), seconds: atEveryStar(3), target: const SelfTarget())]),
       ),
     );
 
@@ -377,7 +406,7 @@ void main() {
         faction: Faction.team,
         stats: statsOf(manaStart: 50),
         character: dummy(
-          ability: ability([ShieldEffect(value: atEveryStar(200), seconds: atEveryStar(3), target: CombatEffectTarget.self)]),
+          ability: ability([ShieldEffect(value: atEveryStar(200), seconds: atEveryStar(3), target: const SelfTarget())]),
         ),
       ),
       [const ShieldCombatLastingEffect(onExpire: [], remainingTicks: 10, remainingShield: 50, sourceCombatantId: 99)],
@@ -398,7 +427,7 @@ void main() {
       stats: statsOf(manaStart: 50),
       character: dummy(
         ability: ability([
-          DamageOverTimeEffect(seconds: atEveryStar(4), target: CombatEffectTarget.focus, damagePerSecond: atEveryStar(30)),
+          DamageOverTimeEffect(seconds: atEveryStar(4), target: const FocusTarget(), damagePerSecond: atEveryStar(30)),
         ]),
       ),
     ).createCopyWith(targetCombatantId: target.id);
@@ -422,7 +451,7 @@ void main() {
       stats: statsOf(manaStart: 50),
       character: dummy(
         ability: ability([
-          HealOverTimeEffect(seconds: atEveryStar(2), healPerSecond: atEveryStar(20), target: CombatEffectTarget.nearbyAllies),
+          HealOverTimeEffect(seconds: atEveryStar(2), healPerSecond: atEveryStar(20), target: const NearbyAlliesTarget()),
         ]),
       ),
     );
@@ -448,7 +477,7 @@ void main() {
             stat: Stat.armor,
             value: atEveryStar(0.5),
             seconds: atEveryStar(2),
-            target: CombatEffectTarget.focus,
+            target: const FocusTarget(),
             changeType: StatChangeType.multiplier,
           ),
         ]),

@@ -1,16 +1,19 @@
 import 'dart:math';
 
-import '../../board/board.dart';
-import '../../board/placement.dart';
-import '../combat_result.dart';
+import 'package:going_wild/domain/models/board/board.dart';
+import 'package:going_wild/domain/models/board/placement.dart';
+import 'package:going_wild/domain/models/combat/combat_result.dart';
+import 'package:going_wild/domain/models/combat/combat_rules.dart';
 
 abstract class CombatEngine {
   const CombatEngine();
 
   Board get board;
+  CombatRules get rules;
 
   CombatResult simulate({
     required List<Placement> team,
+    required bool recordsHistory,
     required List<Placement> enemies,
     required Random randomGenerator,
   });

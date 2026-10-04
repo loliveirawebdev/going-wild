@@ -1,9 +1,8 @@
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/combat/combat.dart';
+import 'package:going_wild/domain/models/combat/combatant_actions/deal_damage.dart';
+import 'package:going_wild/domain/models/combatant/capabilities/gain_mana.dart';
 import 'package:meta/meta.dart';
-
-import '../../character/stats/stat.dart';
-import '../../combatant/capabilities/gain_mana.dart';
-import '../combat.dart';
-import 'deal_damage.dart';
 
 @useResult
 Combat attackTarget(Combat combat, int attackerCombatantId) {
@@ -24,6 +23,7 @@ Combat attackTarget(Combat combat, int attackerCombatantId) {
   final damagedCombat = dealDamageToCombatant(
     waitingCombat,
     targetCombatantId: targetCombatantId,
+    sourceCombatantId: attackerCombatantId,
     damageAmount: waitingAttackerCombatant.getCurrentStat(Stat.damage),
   );
 

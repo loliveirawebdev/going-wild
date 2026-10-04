@@ -1,4 +1,4 @@
-import 'position.dart';
+import 'package:going_wild/domain/models/board/position.dart';
 
 class Board {
   const Board({required this.rows, required this.columns});

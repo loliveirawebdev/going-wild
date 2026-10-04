@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../generated/i18n/translations.g.dart';
+import 'package:going_wild/generated/i18n/translations.g.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});

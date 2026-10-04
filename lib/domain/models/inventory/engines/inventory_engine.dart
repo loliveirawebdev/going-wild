@@ -1,4 +1,4 @@
-import '../inventory.dart';
+import 'package:going_wild/domain/models/inventory/inventory.dart';
 
 abstract class InventoryEngine<Entry extends Object> {
   const InventoryEngine();

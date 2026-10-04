@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../generated/i18n/translations.g.dart';
-import '../../../routing/routes.dart';
+import 'package:going_wild/generated/i18n/translations.g.dart';
+import 'package:going_wild/routing/routes.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

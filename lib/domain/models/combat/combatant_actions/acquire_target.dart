@@ -1,7 +1,6 @@
+import 'package:going_wild/domain/models/combat/combat.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
 import 'package:meta/meta.dart';
-
-import '../../combatant/combatant.dart';
-import '../combat.dart';
 
 @useResult
 Combat acquireTarget(Combat combat, int combatantId) {

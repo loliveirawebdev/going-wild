@@ -1,9 +1,8 @@
+import 'package:going_wild/domain/models/board/position.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
+import 'package:going_wild/domain/models/combatant/faction.dart';
 import 'package:meta/meta.dart';
-
-import '../../../board/position.dart';
-import '../../combatant.dart';
-import '../../faction.dart';
-import 'combat_effect.dart';
 
 abstract class CombatEffectContext {
   int get nearbyRadius;
@@ -21,7 +20,11 @@ abstract class CombatEffectContext {
   @useResult
   CombatEffectContext createCopyWithCombatantMovedTo(int combatantId, Position position);
   @useResult
-  CombatEffectContext createCopyWithDamageDealt({required int targetCombatantId, required double damageAmount});
+  CombatEffectContext createCopyWithDamageDealt({
+    required int targetCombatantId,
+    required double damageAmount,
+    required int? sourceCombatantId,
+  });
   @useResult
   CombatEffectContext createCopyWithCombatEffectsScheduled({required int sourceCombatantId, required List<CombatEffect> effects});
 }

@@ -51,6 +51,8 @@ class TranslationsEn with BaseTranslations<AppLocale, Translations> implements T
   @override
   late final _Translations$characters$en characters = _Translations$characters$en._(_root);
   @override
+  late final _Translations$game$en game = _Translations$game$en._(_root);
+  @override
   late final _Translations$home$en home = _Translations$home$en._(_root);
   @override
   late final _Translations$phaseSelection$en phaseSelection = _Translations$phaseSelection$en._(_root);
@@ -130,6 +132,67 @@ class _Translations$characters$en implements Translations$characters$pt {
   String get rat => 'Rat';
   @override
   String get snake => 'Snake';
+  @override
+  String get hawk => 'Hawk';
+  @override
+  String get owl => 'Owl';
+  @override
+  String get skunk => 'Skunk';
+}
+
+// Path: game
+class _Translations$game$en implements Translations$game$pt {
+  _Translations$game$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String round({required Object roundNumber, required Object roundCount}) => 'Round ${roundNumber} of ${roundCount}';
+  @override
+  String lives({required Object lives}) => 'Lives: ${lives}';
+  @override
+  String coins({required Object coins}) => 'Coins: ${coins}';
+  @override
+  String level({required Object levelNumber, required Object experience}) => 'Level ${levelNumber} · XP ${experience}';
+  @override
+  String get shop => 'Shop';
+  @override
+  String offerPrice({required Object price}) => '${price} coins';
+  @override
+  String get emptyOffer => 'Sold';
+  @override
+  String get melee => 'Melee';
+  @override
+  String ranged({required Object range}) => 'Ranged (${range})';
+  @override
+  String get rerollButton => 'Reroll offers';
+  @override
+  String get lockButton => 'Lock shop';
+  @override
+  String get unlockButton => 'Unlock shop';
+  @override
+  String get buyExperienceButton => 'Buy XP';
+  @override
+  String get board => 'Board';
+  @override
+  String get inventory => 'Bench';
+  @override
+  String get sellButton => 'Sell selected';
+  @override
+  String get fightButton => 'Fight';
+  @override
+  String get backButton => 'Back';
+  @override
+  String speed({required Object multiplier}) => '${multiplier}×';
+  @override
+  String get matchWon => 'You won the phase!';
+  @override
+  String get matchLost => 'You lost the phase';
+  @override
+  late final _Translations$game$entries$en entries = _Translations$game$entries$en._(_root);
+  @override
+  late final _Translations$game$rejections$en rejections = _Translations$game$rejections$en._(_root);
 }
 
 // Path: home
@@ -213,6 +276,54 @@ class _Translations$settings$en implements Translations$settings$pt {
   String get placeholder => 'Nothing here yet';
 }
 
+// Path: game.entries
+class _Translations$game$entries$en implements Translations$game$entries$pt {
+  _Translations$game$entries$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String abilityCast({required Object name}) => '${name} used the ability';
+  @override
+  String death({required Object name}) => '${name} fell';
+}
+
+// Path: game.rejections
+class _Translations$game$rejections$en implements Translations$game$rejections$pt {
+  _Translations$game$rejections$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get fightInProgress => 'The fight is happening';
+  @override
+  String get matchIsOver => 'The match is over';
+  @override
+  String get notEnoughCoins => 'Not enough coins';
+  @override
+  String get maxLevelReached => 'Max level';
+  @override
+  String get emptyShopOffer => 'Offer already sold';
+  @override
+  String get inventoryIsFull => 'Bench is full';
+  @override
+  String get shopAlreadyLocked => 'The shop is already locked';
+  @override
+  String get shopAlreadyUnlocked => 'The shop is already unlocked';
+  @override
+  String get teamIsFull => 'Team is full for your level';
+  @override
+  String get positionOutsideTeamHalf => 'Outside your side of the board';
+  @override
+  String get noPlacementAtPosition => 'Nobody is here';
+  @override
+  String get emptyInventorySlot => 'Empty bench slot';
+  @override
+  String get unknown => 'Action unavailable';
+}
+
 // Path: phases.backyard
 class _Translations$phases$backyard$en implements Translations$phases$backyard$pt {
   _Translations$phases$backyard$en._(this._root);
@@ -258,6 +369,45 @@ extension on TranslationsEn {
       'characters.kraken' => 'Kraken',
       'characters.rat' => 'Rat',
       'characters.snake' => 'Snake',
+      'characters.hawk' => 'Hawk',
+      'characters.owl' => 'Owl',
+      'characters.skunk' => 'Skunk',
+      'game.round' => ({required Object roundNumber, required Object roundCount}) => 'Round ${roundNumber} of ${roundCount}',
+      'game.lives' => ({required Object lives}) => 'Lives: ${lives}',
+      'game.coins' => ({required Object coins}) => 'Coins: ${coins}',
+      'game.level' => ({required Object levelNumber, required Object experience}) => 'Level ${levelNumber} · XP ${experience}',
+      'game.shop' => 'Shop',
+      'game.offerPrice' => ({required Object price}) => '${price} coins',
+      'game.emptyOffer' => 'Sold',
+      'game.melee' => 'Melee',
+      'game.ranged' => ({required Object range}) => 'Ranged (${range})',
+      'game.rerollButton' => 'Reroll offers',
+      'game.lockButton' => 'Lock shop',
+      'game.unlockButton' => 'Unlock shop',
+      'game.buyExperienceButton' => 'Buy XP',
+      'game.board' => 'Board',
+      'game.inventory' => 'Bench',
+      'game.sellButton' => 'Sell selected',
+      'game.fightButton' => 'Fight',
+      'game.backButton' => 'Back',
+      'game.speed' => ({required Object multiplier}) => '${multiplier}×',
+      'game.matchWon' => 'You won the phase!',
+      'game.matchLost' => 'You lost the phase',
+      'game.entries.abilityCast' => ({required Object name}) => '${name} used the ability',
+      'game.entries.death' => ({required Object name}) => '${name} fell',
+      'game.rejections.fightInProgress' => 'The fight is happening',
+      'game.rejections.matchIsOver' => 'The match is over',
+      'game.rejections.notEnoughCoins' => 'Not enough coins',
+      'game.rejections.maxLevelReached' => 'Max level',
+      'game.rejections.emptyShopOffer' => 'Offer already sold',
+      'game.rejections.inventoryIsFull' => 'Bench is full',
+      'game.rejections.shopAlreadyLocked' => 'The shop is already locked',
+      'game.rejections.shopAlreadyUnlocked' => 'The shop is already unlocked',
+      'game.rejections.teamIsFull' => 'Team is full for your level',
+      'game.rejections.positionOutsideTeamHalf' => 'Outside your side of the board',
+      'game.rejections.noPlacementAtPosition' => 'Nobody is here',
+      'game.rejections.emptyInventorySlot' => 'Empty bench slot',
+      'game.rejections.unknown' => 'Action unavailable',
       'home.playButton' => 'Play',
       'home.settingsButton' => 'Settings',
       'phaseSelection.title' => 'Choose a phase',

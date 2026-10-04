@@ -4,7 +4,6 @@ import 'package:going_wild/content/character/merge_curves_per_role/merge_curves_
 import 'package:going_wild/content/character/team/team.dart';
 import 'package:going_wild/content/engines/character/basic_character_engine.dart';
 import 'package:going_wild/domain/models/character/abilities/ability.dart';
-import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/character/character_id.dart';
 import 'package:going_wild/domain/models/character/rarity.dart';
@@ -12,6 +11,7 @@ import 'package:going_wild/domain/models/character/role.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_multipliers.dart';
 import 'package:going_wild/domain/models/character/stats/stats.dart';
+import 'package:going_wild/domain/models/combatant/ability_triggers/mana_full_trigger.dart';
 
 Stats statsOf(Character character, int stars) => basicCharacterEngine.statsAtStars(character, stars: stars);
 
@@ -58,7 +58,7 @@ void main() {
       id: CharacterId('cat'),
       rarity: Rarity.common,
       statMultipliers: StatMultipliers({}),
-      ability: Ability(effects: [], trigger: AbilityTrigger.manaFull),
+      ability: Ability(effects: [], trigger: ManaFullTrigger()),
     );
 
     final stats = statsOf(plainCharacter, 1);

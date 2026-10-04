@@ -25,7 +25,7 @@ void main() {
 
       final bought = buyShopOffer(matchProgress, offerIndex: 0);
 
-      expect(bought.player.coins, matchProgress.player.coins - basicEconomyEngine.priceOf(cat));
+      expect(bought.player.coins, matchProgress.player.coins - basicEconomyEngine.priceOfRarity(cat.rarity));
       expect(bought.shop.offers, [null, dog, null, cow]);
       expect(bought.playerRoster.inventory.entryAt(0)!.character, cat);
     });
@@ -80,17 +80,17 @@ void main() {
 
       final rerolled = rerollShop(matchProgress);
 
-      expect(rerolled.player.coins, matchProgress.player.coins - basicEconomyEngine.rerollCostInCoins);
+      expect(rerolled.player.coins, matchProgress.player.coins - basicEconomyEngine.fixedRerollCostInCoins);
       expect(rerolled.shop.offers, everyElement(isNotNull));
     });
 
     test('the reroll cost comes from the economy engine chosen by the phase', () {
       final expensiveEconomyEngine = BasicEconomyEngine(
-        rerollCostInCoins: 7,
+        fixedRerollCostInCoins: 7,
         startingCoins: basicEconomyEngine.startingCoins,
         priceInCoinsByRarity: basicEconomyEngine.priceInCoinsByRarity,
-        experiencePerPurchase: basicEconomyEngine.experiencePerPurchase,
-        experiencePurchaseCostInCoins: basicEconomyEngine.experiencePurchaseCostInCoins,
+        fixedExperiencePerPurchase: basicEconomyEngine.fixedExperiencePerPurchase,
+        fixedExperiencePurchaseCostInCoins: basicEconomyEngine.fixedExperiencePurchaseCostInCoins,
         mergedCharacterSellDiscountInCoins: basicEconomyEngine.mergedCharacterSellDiscountInCoins,
       );
       final expensiveRerollEngines = PhaseEngines(
@@ -122,7 +122,7 @@ void main() {
       final matchProgress = lockShop(poorMatchProgress.createCopyWithPlayerPlacements(threeStarBullOnBoard));
       final offersBeforeTheFight = matchProgress.shop.offers;
 
-      final nextRound = fightRound(matchProgress).matchProgress;
+      final nextRound = fightRound(matchProgress, recordsHistory: false).matchProgress;
 
       expect(nextRound.shop.isLocked, isTrue);
       expect(nextRound.shop.offers, offersBeforeTheFight);
@@ -131,7 +131,7 @@ void main() {
 
     test('characters owned at max stars stop showing up in the shop', () {
       final maxStars = basicCharacterEngine.maxStars;
-      final cheapestCharacters = allTeamCharacters.where((character) => basicEconomyEngine.priceOf(character) == 1);
+      final cheapestCharacters = allTeamCharacters.where((character) => basicEconomyEngine.priceOfRarity(character.rarity) == 1);
       final allCommonsAtMaxStars = [for (final character in cheapestCharacters) characterCopyOf(character, stars: maxStars)];
       final matchProgressWithCommons = withInventory(startWith([oneRat]), allCommonsAtMaxStars, capacity: allCommonsAtMaxStars.length);
       final matchProgress = withCoins(matchProgressWithCommons, 100);

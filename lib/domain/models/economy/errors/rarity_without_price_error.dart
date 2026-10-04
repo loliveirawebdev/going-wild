@@ -1,4 +1,4 @@
-import '../../character/rarity.dart';
+import 'package:going_wild/domain/models/character/rarity.dart';
 
 class RarityWithoutPriceError extends StateError {
   RarityWithoutPriceError({required Rarity rarity}) : super('Rarity ${rarity.name} has no price in the economy');

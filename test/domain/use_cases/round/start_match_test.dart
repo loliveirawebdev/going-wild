@@ -1,5 +1,5 @@
-import 'package:going_wild/content/engines/economy/basic_economy_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:going_wild/content/engines/economy/basic_economy_engine.dart';
 import 'package:going_wild/content/engines/inventory/basic_inventory_engine.dart';
 import 'package:going_wild/content/engines/player/basic_player_engine.dart';
 import 'package:going_wild/content/engines/shop/basic_shop_engine.dart';

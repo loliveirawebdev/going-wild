@@ -1,6 +1,6 @@
-import 'package:going_wild/content/engines/economy/basic_economy_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/content/character/team/team.dart';
+import 'package:going_wild/content/engines/economy/basic_economy_engine.dart';
 import 'package:going_wild/domain/models/board/errors/no_placement_at_position_error.dart';
 import 'package:going_wild/domain/models/board/errors/position_outside_team_half_error.dart';
 import 'package:going_wild/domain/models/board/errors/team_is_full_error.dart';
@@ -82,12 +82,12 @@ void main() {
       expect(soldFromInventory.playerRoster.inventory.entries, isEmpty);
       expect(
         soldFromInventory.player.coins,
-        matchProgress.player.coins + basicEconomyEngine.sellPriceOf(characterCopyOf(cow, stars: 2), copiesInside: 2),
+        matchProgress.player.coins + basicEconomyEngine.sellPriceOf(characterCopyOf(cow, stars: 2), matchProgress: matchProgress),
       );
 
       final soldFromBoard = sellFromBoard(matchProgress, position: at(6, 2));
       expect(soldFromBoard.playerRoster.placements, isEmpty);
-      expect(soldFromBoard.player.coins, matchProgress.player.coins + basicEconomyEngine.priceOf(cat));
+      expect(soldFromBoard.player.coins, matchProgress.player.coins + basicEconomyEngine.priceOfRarity(cat.rarity));
     });
 
     test('selling an empty spot fails', () {

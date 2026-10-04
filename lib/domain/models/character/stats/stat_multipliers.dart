@@ -1,4 +1,4 @@
-import 'stat.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
 
 class StatMultipliers {
   const StatMultipliers(this._values);

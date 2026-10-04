@@ -1,5 +1,5 @@
-import 'errors/missing_stat_error.dart';
-import 'stat.dart';
+import 'package:going_wild/domain/models/character/stats/errors/missing_stat_error.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
 
 class Stats {
   const Stats(this._values);

@@ -1,4 +1,4 @@
-import '../../../generated/i18n/translations.g.dart';
+import 'package:going_wild/generated/i18n/translations.g.dart';
 
 String portugueseCardinalResolver(num n, {String? zero, String? one, String? two, String? few, String? many, String? other}) {
   final isZeroOrOne = n.truncate() == 0 || n.truncate() == 1;

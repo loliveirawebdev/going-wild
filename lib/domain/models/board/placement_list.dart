@@ -1,10 +1,12 @@
-import 'placement.dart';
-import 'position.dart';
+import 'package:going_wild/domain/models/board/placement.dart';
+import 'package:going_wild/domain/models/board/position.dart';
 
 extension PlacementList on List<Placement> {
   Placement? placementAt(Position position) {
     for (final placement in this) {
-      if (placement.position == position) return placement;
+      if (placement.position == position) {
+        return placement;
+      }
     }
 
     return null;

@@ -1,4 +1,4 @@
-import '../../board/position.dart';
+import 'package:going_wild/domain/models/board/position.dart';
 
 class PositionNotFreeError extends StateError {
   PositionNotFreeError({required int combatantId, required Position position})

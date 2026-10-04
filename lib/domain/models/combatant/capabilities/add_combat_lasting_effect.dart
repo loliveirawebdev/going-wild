@@ -1,7 +1,6 @@
+import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
 import 'package:meta/meta.dart';
-
-import '../combatant.dart';
-import '../combat_effects/base/lasting/combat_lasting_effect.dart';
 
 @useResult
 Combatant addCombatLastingEffect(Combatant targetCombatant, CombatLastingEffect combatLastingEffect) {

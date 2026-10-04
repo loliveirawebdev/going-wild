@@ -1,6 +1,6 @@
-import '../../character/character_copy.dart';
-import '../../inventory/engines/inventory_engine.dart';
-import '../../roster/roster.dart';
+import 'package:going_wild/domain/models/character/character_copy.dart';
+import 'package:going_wild/domain/models/inventory/engines/inventory_engine.dart';
+import 'package:going_wild/domain/models/roster/roster.dart';
 
 abstract class MergeEngine {
   const MergeEngine();

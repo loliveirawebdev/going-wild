@@ -1,4 +1,4 @@
-import 'errors/not_enough_coins_error.dart';
+import 'package:going_wild/domain/models/player/errors/not_enough_coins_error.dart';
 
 class Player {
   const Player({required this.coins, required this.remainingLives});

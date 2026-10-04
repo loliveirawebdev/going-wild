@@ -1,12 +1,11 @@
-import 'package:meta/meta.dart';
-
 import 'dart:math';
 
-import '../combatant/combatant.dart';
-import '../board/position.dart';
-import 'battlefield.dart';
-import 'combat_rules.dart';
-import 'pending_combat_effect_application.dart';
+import 'package:going_wild/domain/models/board/position.dart';
+import 'package:going_wild/domain/models/combat/battlefield.dart';
+import 'package:going_wild/domain/models/combat/combat_rules.dart';
+import 'package:going_wild/domain/models/combat/pending_combat_effect_application.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
+import 'package:meta/meta.dart';
 
 class Combat {
   const Combat({

@@ -11,11 +11,19 @@ import 'package:going_wild/domain/models/character/stats/stats.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/shield/shield_combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/set/active_set.dart';
+import 'package:going_wild/domain/models/set/effects/set_starting_shield.dart';
+import 'package:going_wild/domain/models/set/effects/set_stat_modification.dart';
 import 'package:going_wild/domain/models/set/set_effect.dart';
 import 'package:going_wild/domain/models/set/set_effect_side.dart';
 import 'package:going_wild/domain/models/set/set_id.dart';
 import 'package:going_wild/domain/models/set/set_target.dart';
 import 'package:going_wild/domain/models/set/set_tier.dart';
+import 'package:going_wild/domain/models/set/targets/all_enemies_set_target.dart';
+import 'package:going_wild/domain/models/set/targets/entire_team_set_target.dart';
+import 'package:going_wild/domain/models/set/targets/set_members_set_target.dart';
+import 'package:going_wild/domain/models/set/targets/specific_character_set_target.dart';
+import 'package:going_wild/domain/models/set/targets/team_melees_set_target.dart';
+import 'package:going_wild/domain/models/set/targets/team_rangeds_set_target.dart';
 import 'package:going_wild/domain/models/set/team_set.dart';
 
 Stats statsOf(Character character) => basicCharacterEngine.statsAtStars(character, stars: 1);
@@ -35,11 +43,9 @@ SetStatModification statModificationFor(
   SetTarget target,
   Stat stat,
   double value, {
-  Character? character,
   StatChangeType changeType = StatChangeType.multiplier,
 }) => SetStatModification(
   target: target,
-  character: character,
   statModification: StatModification(stat: stat, value: value, changeType: changeType),
 );
 
@@ -68,7 +74,7 @@ void main() {
   });
 
   test('entireTeam reaches everyone of the own team', () {
-    final activeSet = activeWith([statModificationFor(SetTarget.entireTeam, Stat.damage, 2)]);
+    final activeSet = activeWith([statModificationFor(const EntireTeamSetTarget(), Stat.damage, 2)]);
 
     for (final character in allTeamCharacters) {
       expect(
@@ -80,15 +86,19 @@ void main() {
   });
 
   test('setMembers reaches only members', () {
-    final activeSet = activeWith([statModificationFor(SetTarget.setMembers, Stat.health, 2)], members: [meleeCharacter]);
+    final activeSet = activeWith([statModificationFor(const SetMembersSetTarget(), Stat.health, 2)], members: [meleeCharacter]);
 
     expect(resolve(meleeCharacter, [activeSet])[Stat.health], closeTo(statsOf(meleeCharacter)[Stat.health] * 2, 0.001));
     expect(resolve(rangedCharacter, [activeSet])[Stat.health], statsOf(rangedCharacter)[Stat.health]);
   });
 
   test('teamMelees and teamRangeds split by range', () {
-    final meleesSet = activeWith([statModificationFor(SetTarget.teamMelees, Stat.armor, 10, changeType: StatChangeType.absoluteValue)]);
-    final rangedsSet = activeWith([statModificationFor(SetTarget.teamRangeds, Stat.armor, 10, changeType: StatChangeType.absoluteValue)]);
+    final meleesSet = activeWith([
+      statModificationFor(const TeamMeleesSetTarget(), Stat.armor, 10, changeType: StatChangeType.absoluteValue),
+    ]);
+    final rangedsSet = activeWith([
+      statModificationFor(const TeamRangedsSetTarget(), Stat.armor, 10, changeType: StatChangeType.absoluteValue),
+    ]);
 
     expect(resolve(meleeCharacter, [meleesSet])[Stat.armor], statsOf(meleeCharacter)[Stat.armor] + 10);
     expect(resolve(meleeCharacter, [rangedsSet])[Stat.armor], statsOf(meleeCharacter)[Stat.armor]);
@@ -96,15 +106,15 @@ void main() {
     expect(resolve(rangedCharacter, [meleesSet])[Stat.armor], statsOf(rangedCharacter)[Stat.armor]);
   });
 
-  test('specificCharacter reaches only that character', () {
-    final activeSet = activeWith([statModificationFor(SetTarget.specificCharacter, Stat.damage, 3, character: meleeCharacter)]);
+  test('a specific character target reaches only that character', () {
+    final activeSet = activeWith([statModificationFor(SpecificCharacterSetTarget(character: meleeCharacter), Stat.damage, 3)]);
 
     expect(resolve(meleeCharacter, [activeSet])[Stat.damage], closeTo(statsOf(meleeCharacter)[Stat.damage] * 3, 0.001));
     expect(resolve(rangedCharacter, [activeSet])[Stat.damage], statsOf(rangedCharacter)[Stat.damage]);
   });
 
   test('allEnemies never touches the own team and reaches the opposing team', () {
-    final activeSet = activeWith([statModificationFor(SetTarget.allEnemies, Stat.armor, 0.5)]);
+    final activeSet = activeWith([statModificationFor(const AllEnemiesSetTarget(), Stat.armor, 0.5)]);
 
     for (final character in allTeamCharacters) {
       final ownTeamArmor = resolve(character, [activeSet])[Stat.armor];
@@ -116,7 +126,7 @@ void main() {
   });
 
   test('effects aimed at the own team never reach the opposing team', () {
-    final activeSet = activeWith([statModificationFor(SetTarget.entireTeam, Stat.damage, 2)]);
+    final activeSet = activeWith([statModificationFor(const EntireTeamSetTarget(), Stat.damage, 2)]);
 
     for (final character in allTeamCharacters) {
       final opposingTeamDamage = resolve(character, [activeSet], side: SetEffectSide.opposingTeam)[Stat.damage];
@@ -125,8 +135,8 @@ void main() {
   });
 
   test('multipliers apply before absolute values, whatever the order given', () {
-    final timesTwo = statModificationFor(SetTarget.entireTeam, Stat.health, 2);
-    final plusHundred = statModificationFor(SetTarget.entireTeam, Stat.health, 100, changeType: StatChangeType.absoluteValue);
+    final timesTwo = statModificationFor(const EntireTeamSetTarget(), Stat.health, 2);
+    final plusHundred = statModificationFor(const EntireTeamSetTarget(), Stat.health, 100, changeType: StatChangeType.absoluteValue);
     final expectedHealth = statsOf(chicken)[Stat.health] * 2 + 100;
 
     final givenInOrder = resolve(chicken, [
@@ -146,7 +156,7 @@ void main() {
   });
 
   test('starting shields become shields owned by the combatant and follow the same targeting', () {
-    const startingShield = SetStartingShield(value: 150, seconds: 8, target: SetTarget.setMembers);
+    const startingShield = SetStartingShield(value: 150, seconds: 8, target: SetMembersSetTarget());
     final activeSet = activeWith([startingShield], members: [meleeCharacter]);
 
     final meleeShields = startingLastingEffectsOf(meleeCharacter, [activeSet]);
@@ -163,7 +173,7 @@ void main() {
   });
 
   test('stat modifications start no lasting effect', () {
-    final activeSet = activeWith([statModificationFor(SetTarget.entireTeam, Stat.damage, 2)]);
+    final activeSet = activeWith([statModificationFor(const EntireTeamSetTarget(), Stat.damage, 2)]);
     expect(startingLastingEffectsOf(meleeCharacter, [activeSet]), isEmpty);
   });
 

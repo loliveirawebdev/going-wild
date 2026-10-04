@@ -1,5 +1,4 @@
 import 'package:going_wild/domain/models/character/abilities/ability.dart';
-import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/character/character_id.dart';
 import 'package:going_wild/domain/models/character/rarity.dart';
@@ -8,8 +7,9 @@ import 'package:going_wild/domain/models/character/stars/star_values.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_change_type.dart';
 import 'package:going_wild/domain/models/character/stats/stat_multipliers.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
+import 'package:going_wild/domain/models/combatant/ability_triggers/mana_full_trigger.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stat_modifier/stat_modifier_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/nearby_allies_target.dart';
 
 const Character rooster = Character(
   id: CharacterId('rooster'),
@@ -17,11 +17,11 @@ const Character rooster = Character(
   rarity: Rarity.common,
 
   ability: Ability(
-    trigger: AbilityTrigger.manaFull,
+    trigger: ManaFullTrigger(),
 
     effects: [
       StatModifierEffect(
-        target: CombatEffectTarget.nearbyAllies,
+        target: NearbyAlliesTarget(),
         stat: Stat.attackSpeed,
         changeType: StatChangeType.multiplier,
         value: StarValues(star1: 1.25, star2: 1.4, star3: 1.6),

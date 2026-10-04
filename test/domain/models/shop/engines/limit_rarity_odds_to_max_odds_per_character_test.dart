@@ -1,9 +1,8 @@
-import 'package:going_wild/content/engines/economy/basic_economy_engine.dart';
-
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/content/character/team/team.dart';
+import 'package:going_wild/content/engines/economy/basic_economy_engine.dart';
 import 'package:going_wild/domain/models/character/rarity.dart';
 import 'package:going_wild/domain/models/shop/engines/basic_shop_engine.dart';
 

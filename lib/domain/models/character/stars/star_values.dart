@@ -1,4 +1,4 @@
-import '../errors/invalid_stars_error.dart';
+import 'package:going_wild/domain/models/character/errors/invalid_stars_error.dart';
 
 class StarValues {
   const StarValues({required this.star1, required this.star2, required this.star3});

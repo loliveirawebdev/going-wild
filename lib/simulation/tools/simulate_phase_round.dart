@@ -9,6 +9,7 @@ import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/combat/combat_result.dart';
+import 'package:going_wild/domain/models/combat_history/causes/combat_history_cause.dart';
 import 'package:going_wild/domain/models/combat_history/entries/combat_history_entry.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/ambush/vanished_combat_lasting_effect.dart';
@@ -40,7 +41,7 @@ Placement place(Character character, {required int row, required int column, int
 );
 
 void main() {
-  final result = basicCombatEngine.simulate(team: team, enemies: enemies, randomGenerator: Random(seed));
+  final result = basicCombatEngine.simulate(team: team, recordsHistory: true, enemies: enemies, randomGenerator: Random(seed));
 
   String nameOf(int? combatantId) {
     if (combatantId == null) return 'lasting effects';
@@ -51,6 +52,8 @@ void main() {
   }
 
   for (final entry in result.history.entries) {
+    if (entry is LastingEffectChangedHistoryEntry && !changesAbsorbableDamage(entry)) continue;
+
     final seconds = entry.tick / basicCombatEngine.rules.ticksPerSecond;
     stdout.writeln('[${seconds.toStringAsFixed(1).padLeft(5)}s] ${describe(entry, nameOf)}');
   }
@@ -74,17 +77,20 @@ String describe(CombatHistoryEntry entry, String Function(int? combatantId) name
   TargetAcquiredHistoryEntry() => '${nameOf(entry.combatantId)} targets ${nameOf(entry.targetCombatantId)}',
   MovementHistoryEntry() => describeMovement(entry, nameOf),
   AttackLandedHistoryEntry() => '${nameOf(entry.combatantId)} attacks ${nameOf(entry.targetCombatantId)}',
-  AbilityCastHistoryEntry() => '${nameOf(entry.combatantId)} casts its ability',
+  AbilityCastHistoryEntry() => '${nameOf(entry.combatantId)} casts its ability on ${entry.affectedCombatantIds.map(nameOf).join(', ')}',
   DamageTakenHistoryEntry() => describeDamageTaken(entry, nameOf),
   HealReceivedHistoryEntry() =>
-    '${nameOf(entry.combatantId)} heals ${entry.amount.toStringAsFixed(0)} from ${nameOf(entry.sourceCombatantId)}, '
+    '${nameOf(entry.combatantId)} heals ${entry.amount.toStringAsFixed(0)} from ${nameOf(entry.sourceCombatantId)} (${describeCause(entry.cause, nameOf)}), '
         'health ${entry.currentHealth.toStringAsFixed(0)}',
   ManaReceivedHistoryEntry() =>
     '${nameOf(entry.combatantId)} gains ${entry.amount.toStringAsFixed(0)} mana, mana ${entry.currentMana.toStringAsFixed(0)}',
+  ManaSpentHistoryEntry() =>
+    '${nameOf(entry.combatantId)} spends ${entry.amount.toStringAsFixed(0)} mana, mana ${entry.currentMana.toStringAsFixed(0)}',
   DeathHistoryEntry() => '${nameOf(entry.combatantId)} dies, killed by ${nameOf(entry.killerCombatantId)}',
   LastingEffectStartedHistoryEntry() =>
     '${nameOf(entry.combatantId)} gets ${describeLastingEffect(entry.combatLastingEffect)} '
-        'from ${nameOf(entry.combatLastingEffect.sourceCombatantId)}',
+        'from ${describeCause(entry.cause, nameOf)}',
+  LastingEffectChangedHistoryEntry() => '${nameOf(entry.combatantId)} now has ${describeLastingEffect(entry.combatLastingEffectAfter)}',
   LastingEffectEndedHistoryEntry() => '${nameOf(entry.combatantId)} loses ${describeLastingEffect(entry.combatLastingEffect)}',
 };
 
@@ -92,14 +98,27 @@ String describeMovement(MovementHistoryEntry entry, String Function(int? combata
   final route = '${describePosition(entry.fromPosition)} -> ${describePosition(entry.toPosition)}';
   if (entry.sourceCombatantId == entry.combatantId) return '${nameOf(entry.combatantId)} moves $route';
 
-  return '${nameOf(entry.combatantId)} is moved $route by ${nameOf(entry.sourceCombatantId)}';
+  return '${nameOf(entry.combatantId)} is moved $route by ${describeCause(entry.cause, nameOf)}';
 }
+
+bool changesAbsorbableDamage(LastingEffectChangedHistoryEntry entry) =>
+    entry.combatLastingEffectAfter.absorbableDamage != entry.combatLastingEffectBefore.absorbableDamage;
+
+String describeCause(CombatHistoryCause cause, String Function(int? combatantId) nameOf) => switch (cause) {
+  CombatStartHistoryCause() => 'the combat start',
+  AbilityHistoryCause() => 'the ability of ${nameOf(cause.casterCombatantId)}',
+  BasicAttackHistoryCause() => 'the attack of ${nameOf(cause.attackerCombatantId)}',
+  MovementTowardTargetHistoryCause() => 'the movement of ${nameOf(cause.movingCombatantId)}',
+  ScheduledEffectsHistoryCause() => 'the scheduled effects of ${nameOf(cause.sourceCombatantId)}',
+  TargetAcquisitionHistoryCause() => 'the targeting of ${nameOf(cause.searchingCombatantId)}',
+  LastingEffectsTickHistoryCause() => 'the lasting effects on ${nameOf(cause.ownerCombatantId)}',
+};
 
 String describeDamageTaken(DamageTakenHistoryEntry entry, String Function(int? combatantId) nameOf) {
   final absorbed = entry.absorbedByShield > 0 ? ' (${entry.absorbedByShield.toStringAsFixed(0)} absorbed)' : '';
   final damage = entry.amount.toStringAsFixed(0);
 
-  return '${nameOf(entry.combatantId)} takes $damage from ${nameOf(entry.sourceCombatantId)}$absorbed, '
+  return '${nameOf(entry.combatantId)} takes $damage from ${nameOf(entry.sourceCombatantId)} (${describeCause(entry.cause, nameOf)})$absorbed, '
       'health ${entry.currentHealth.toStringAsFixed(0)}';
 }
 

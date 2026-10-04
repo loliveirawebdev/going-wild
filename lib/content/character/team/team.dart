@@ -1,19 +1,18 @@
+import 'package:going_wild/content/character/team/bull.dart';
+import 'package:going_wild/content/character/team/cat.dart';
+import 'package:going_wild/content/character/team/chicken.dart';
+import 'package:going_wild/content/character/team/cow.dart';
+import 'package:going_wild/content/character/team/dog.dart';
+import 'package:going_wild/content/character/team/duck.dart';
+import 'package:going_wild/content/character/team/goat.dart';
+import 'package:going_wild/content/character/team/guinea_pig.dart';
+import 'package:going_wild/content/character/team/horse.dart';
+import 'package:going_wild/content/character/team/queen_bee.dart';
+import 'package:going_wild/content/character/team/rabbit.dart';
+import 'package:going_wild/content/character/team/rooster.dart';
+import 'package:going_wild/content/character/team/sheep.dart';
+import 'package:going_wild/content/character/team/sow.dart';
 import 'package:going_wild/domain/models/character/character.dart';
-
-import 'bull.dart';
-import 'cat.dart';
-import 'chicken.dart';
-import 'cow.dart';
-import 'dog.dart';
-import 'duck.dart';
-import 'goat.dart';
-import 'guinea_pig.dart';
-import 'horse.dart';
-import 'queen_bee.dart';
-import 'rabbit.dart';
-import 'rooster.dart';
-import 'sheep.dart';
-import 'sow.dart';
 
 export 'bull.dart';
 export 'cat.dart';

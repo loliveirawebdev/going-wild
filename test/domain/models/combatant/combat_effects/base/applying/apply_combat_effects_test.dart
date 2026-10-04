@@ -5,8 +5,8 @@ import 'package:going_wild/domain/models/combatant/capabilities/heal.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/applying/combat_effect_application.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_context.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage/damage_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/focus_target.dart';
 import 'package:going_wild/domain/models/combatant/faction.dart';
 
 import '../../../../../../helpers/combat_helpers.dart';
@@ -42,8 +42,8 @@ void main() {
       combat,
       sourceCombatantId: caster.id,
       effects: [
-        DamageEffect(value: atEveryStar(100), target: CombatEffectTarget.focus),
-        DamageEffect(value: atEveryStar(100), target: CombatEffectTarget.focus),
+        DamageEffect(value: atEveryStar(100), target: const FocusTarget()),
+        DamageEffect(value: atEveryStar(100), target: const FocusTarget()),
       ],
     );
 

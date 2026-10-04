@@ -46,7 +46,7 @@ CombatResult duel(Character teamCharacter, int teamStars, Character enemyCharact
 );
 
 CombatResult combat({required int seed, required List<Placement> team, required List<Placement> enemies}) {
-  final result = basicCombatEngine.simulate(team: team, enemies: enemies, randomGenerator: Random(seed));
+  final result = basicCombatEngine.simulate(team: team, recordsHistory: true, enemies: enemies, randomGenerator: Random(seed));
   recordAbilityUsage(result);
   return result;
 }

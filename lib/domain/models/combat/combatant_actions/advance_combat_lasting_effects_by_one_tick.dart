@@ -1,8 +1,7 @@
+import 'package:going_wild/domain/models/combat/combat.dart';
+import 'package:going_wild/domain/models/combat/combat_context.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_context.dart';
 import 'package:meta/meta.dart';
-
-import '../../combatant/combat_effects/base/combat_effect_context.dart';
-import '../combat.dart';
-import '../combat_context.dart';
 
 @useResult
 Combat advanceCombatLastingEffectsByOneTick(Combat combat, int combatantId) {

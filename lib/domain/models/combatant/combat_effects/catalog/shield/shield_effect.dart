@@ -1,10 +1,10 @@
-import '../../../../character/stars/star_values.dart';
-import '../../../capabilities/add_combat_lasting_effect.dart';
-import '../../base/applying/combat_effect_application.dart';
-import '../../base/combat_effect.dart';
-import '../../base/combat_effect_context.dart';
-import '../../base/targeted_combat_effect.dart';
-import 'shield_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/character/stars/star_values.dart';
+import 'package:going_wild/domain/models/combatant/capabilities/add_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/applying/combat_effect_application.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_context.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/targeted_combat_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/shield/shield_combat_lasting_effect.dart';
 
 class ShieldEffect extends TargetedCombatEffect {
   const ShieldEffect({required super.target, required this.value, required this.seconds, this.onExpire = const []});

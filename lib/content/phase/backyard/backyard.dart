@@ -1,17 +1,16 @@
+import 'package:going_wild/content/engines/basic_phase_engines.dart';
+import 'package:going_wild/content/phase/backyard/wave_1.dart';
+import 'package:going_wild/content/phase/backyard/wave_10.dart';
+import 'package:going_wild/content/phase/backyard/wave_2.dart';
+import 'package:going_wild/content/phase/backyard/wave_3.dart';
+import 'package:going_wild/content/phase/backyard/wave_4.dart';
+import 'package:going_wild/content/phase/backyard/wave_5.dart';
+import 'package:going_wild/content/phase/backyard/wave_6.dart';
+import 'package:going_wild/content/phase/backyard/wave_7.dart';
+import 'package:going_wild/content/phase/backyard/wave_8.dart';
+import 'package:going_wild/content/phase/backyard/wave_9.dart';
 import 'package:going_wild/domain/models/phase/phase.dart';
 import 'package:going_wild/domain/models/phase/phase_id.dart';
-
-import '../../engines/basic_phase_engines.dart';
-import 'wave_1.dart';
-import 'wave_10.dart';
-import 'wave_2.dart';
-import 'wave_3.dart';
-import 'wave_4.dart';
-import 'wave_5.dart';
-import 'wave_6.dart';
-import 'wave_7.dart';
-import 'wave_8.dart';
-import 'wave_9.dart';
 
 const Phase backyard = Phase(
   id: PhaseId('backyard'),

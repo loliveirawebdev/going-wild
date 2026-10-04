@@ -1,9 +1,8 @@
+import 'package:going_wild/content/character/enemies/enemies.dart';
 import 'package:going_wild/domain/models/board/placement.dart';
 import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/phase/phase_wave.dart';
-
-import '../../character/enemies/enemies.dart';
 
 const PhaseWave backyardWave5 = PhaseWave(
   coinsReward: 10,

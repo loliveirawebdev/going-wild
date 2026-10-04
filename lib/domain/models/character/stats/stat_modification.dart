@@ -1,5 +1,5 @@
-import 'stat.dart';
-import 'stat_change_type.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/character/stats/stat_change_type.dart';
 
 class StatModification {
   const StatModification({required this.stat, required this.value, required this.changeType});

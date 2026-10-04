@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../routing/routes.dart';
-import '../view_models/entrypoint_view_model.dart';
+import 'package:going_wild/routing/routes.dart';
+import 'package:going_wild/ui/entrypoint/view_models/entrypoint_view_model.dart';
 
 class EntrypointScreen extends StatefulWidget {
   const EntrypointScreen({super.key});

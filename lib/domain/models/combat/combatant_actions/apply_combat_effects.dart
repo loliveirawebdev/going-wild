@@ -1,9 +1,8 @@
+import 'package:going_wild/domain/models/combat/combat.dart';
+import 'package:going_wild/domain/models/combat/combat_context.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/applying/combat_effect_application.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect.dart';
 import 'package:meta/meta.dart';
-
-import '../../combatant/combat_effects/base/applying/combat_effect_application.dart';
-import '../../combatant/combat_effects/base/combat_effect.dart';
-import '../combat.dart';
-import '../combat_context.dart';
 
 @useResult
 Combat applyCombatEffects(Combat combat, {required int sourceCombatantId, required List<CombatEffect> effects}) {

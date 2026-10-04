@@ -6,11 +6,11 @@ import 'package:going_wild/domain/models/combat/combatant_actions/attack_target.
 import 'package:going_wild/domain/models/combat/combatant_actions/deal_damage.dart';
 import 'package:going_wild/domain/models/combatant/capabilities/gain_mana.dart';
 import 'package:going_wild/domain/models/combatant/capabilities/take_damage.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage/damage_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/next_hits_stat_modifier/next_hits_stat_modifier_combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/shield/shield_combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stun/stun_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/nearby_enemies_target.dart';
 import 'package:going_wild/domain/models/combatant/faction.dart';
 
 import '../../../helpers/combat_helpers.dart';
@@ -30,18 +30,28 @@ void main() {
       stats: statsOf(armor: 100, health: 1000, damageTakenPercentage: 0.5),
     );
 
-    final damagedCombat = dealDamageToCombatant(combatWith([target]), damageAmount: 200, targetCombatantId: target.id);
+    final damagedCombat = dealDamageToCombatant(
+      combatWith([target]),
+      damageAmount: 200,
+      sourceCombatantId: null,
+      targetCombatantId: target.id,
+    );
 
     expect(findCombatant(damagedCombat, target).currentHealth, 1000 - 50);
   });
 
   test('shield absorbs before health and schedules its expiration effects when it breaks', () {
-    final onExpireEffects = [DamageEffect(value: atEveryStar(10), target: CombatEffectTarget.nearbyEnemies)];
+    final onExpireEffects = [DamageEffect(value: atEveryStar(10), target: const NearbyEnemiesTarget())];
     final target = withCombatLastingEffects(combatant(at: at(1, 0), faction: Faction.team), [
       ShieldCombatLastingEffect(remainingTicks: 50, remainingShield: 60, sourceCombatantId: 99, onExpire: onExpireEffects),
     ]);
 
-    final damagedCombat = dealDamageToCombatant(combatWith([target]), damageAmount: 100, targetCombatantId: target.id);
+    final damagedCombat = dealDamageToCombatant(
+      combatWith([target]),
+      damageAmount: 100,
+      sourceCombatantId: null,
+      targetCombatantId: target.id,
+    );
     final damagedTarget = findCombatant(damagedCombat, target);
 
     expect(damagedTarget.currentHealth, 1000 - 40);
@@ -56,7 +66,12 @@ void main() {
       const ShieldCombatLastingEffect(onExpire: [], remainingTicks: 50, remainingShield: 60, sourceCombatantId: 99),
     ]);
 
-    final damagedCombat = dealDamageToCombatant(combatWith([target]), damageAmount: 20, targetCombatantId: target.id);
+    final damagedCombat = dealDamageToCombatant(
+      combatWith([target]),
+      damageAmount: 20,
+      sourceCombatantId: null,
+      targetCombatantId: target.id,
+    );
     final damagedTarget = findCombatant(damagedCombat, target);
 
     expect(damagedTarget.currentHealth, 1000);
@@ -69,7 +84,12 @@ void main() {
       const StunCombatLastingEffect(remainingTicks: 30, sourceCombatantId: 99),
     ]);
 
-    final damagedCombat = dealDamageToCombatant(combatWith([target]), damageAmount: 100, targetCombatantId: target.id);
+    final damagedCombat = dealDamageToCombatant(
+      combatWith([target]),
+      damageAmount: 100,
+      sourceCombatantId: null,
+      targetCombatantId: target.id,
+    );
     final damagedTarget = findCombatant(damagedCombat, target);
 
     expect(damagedTarget.currentHealth, 0);

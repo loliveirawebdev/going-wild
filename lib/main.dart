@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
-import 'app.dart';
-import 'config/logging/configure_logging.dart';
-import 'generated/i18n/translations.g.dart';
-import 'routing/router.dart';
-import 'ui/core/localization/configure_plural_resolvers.dart';
+import 'package:going_wild/app.dart';
+import 'package:going_wild/config/logging/configure_logging.dart';
+import 'package:going_wild/generated/i18n/translations.g.dart';
+import 'package:going_wild/routing/router.dart';
+import 'package:going_wild/ui/core/localization/configure_plural_resolvers.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

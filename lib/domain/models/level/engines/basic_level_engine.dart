@@ -1,8 +1,9 @@
-import '../errors/unknown_player_level_error.dart';
-import '../player_level.dart';
-import '../player_level_progress.dart';
-import '../player_level_progress_factory.dart';
-import 'level_engine.dart';
+import 'package:going_wild/domain/models/level/engines/level_engine.dart';
+import 'package:going_wild/domain/models/level/errors/unknown_player_level_error.dart';
+import 'package:going_wild/domain/models/level/player_level.dart';
+import 'package:going_wild/domain/models/level/player_level_progress.dart';
+import 'package:going_wild/domain/models/level/player_level_progress_factory.dart';
+import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 
 class BasicLevelEngine extends LevelEngine {
   const BasicLevelEngine({
@@ -12,8 +13,10 @@ class BasicLevelEngine extends LevelEngine {
 
   final List<PlayerLevel> playerLevels;
 
-  @override
   final int experiencePerRound;
+
+  @override
+  int experienceForRound({required MatchProgress matchProgress}) => experiencePerRound;
 
   @override
   PlayerLevelProgress startingProgress() => PlayerLevelProgressFactory.atStartOf(playerLevels.first);

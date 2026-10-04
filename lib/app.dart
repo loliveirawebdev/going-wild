@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:talker_flutter/talker_flutter.dart';
-
-import 'generated/i18n/translations.g.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key, required this.talker, required this.router});

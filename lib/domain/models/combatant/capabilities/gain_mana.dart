@@ -1,7 +1,6 @@
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
 import 'package:meta/meta.dart';
-
-import '../../character/stats/stat.dart';
-import '../combatant.dart';
 
 @useResult
 Combatant gainMana(Combatant combatant, {required double manaAmount}) {

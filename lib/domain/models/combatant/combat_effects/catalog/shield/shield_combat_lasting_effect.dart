@@ -1,6 +1,6 @@
-import '../../base/combat_effect.dart';
-import '../../base/combat_effect_context.dart';
-import '../../base/lasting/combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_context.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
 
 class ShieldCombatLastingEffect extends CombatLastingEffect {
   const ShieldCombatLastingEffect({

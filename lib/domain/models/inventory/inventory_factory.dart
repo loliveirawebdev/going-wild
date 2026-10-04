@@ -1,4 +1,4 @@
-import 'inventory.dart';
+import 'package:going_wild/domain/models/inventory/inventory.dart';
 
 class InventoryFactory {
   static Inventory<Entry> empty<Entry extends Object>({required int capacity}) {

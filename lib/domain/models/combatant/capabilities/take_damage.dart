@@ -1,9 +1,8 @@
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/combatant/capabilities/lose_health.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
 import 'package:meta/meta.dart';
-
-import '../../character/stats/stat.dart';
-import '../combat_effects/base/lasting/combat_lasting_effect.dart';
-import '../combatant.dart';
-import 'lose_health.dart';
 
 @useResult
 ({Combatant damagedCombatant, List<CombatLastingEffect> brokenCombatLastingEffects}) takeDamage(

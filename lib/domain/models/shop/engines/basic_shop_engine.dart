@@ -1,12 +1,12 @@
 import 'dart:math';
 
-import '../../character/character.dart';
-import '../../character/rarity.dart';
-import '../../roster/roster.dart';
-import '../errors/level_without_shop_odds_error.dart';
-import '../shop.dart';
-import '../shop_factory.dart';
-import 'shop_engine.dart';
+import 'package:going_wild/domain/models/character/character.dart';
+import 'package:going_wild/domain/models/character/rarity.dart';
+import 'package:going_wild/domain/models/match_progress/match_progress.dart';
+import 'package:going_wild/domain/models/shop/engines/shop_engine.dart';
+import 'package:going_wild/domain/models/shop/errors/level_without_shop_odds_error.dart';
+import 'package:going_wild/domain/models/shop/shop.dart';
+import 'package:going_wild/domain/models/shop/shop_factory.dart';
 
 class BasicShopEngine extends ShopEngine {
   const BasicShopEngine({
@@ -25,7 +25,11 @@ class BasicShopEngine extends ShopEngine {
   Shop startingShop() => ShopFactory.empty(size: size);
 
   @override
-  List<Character?> pickOffers({required int maxStars, required Roster roster, required int levelNumber, required Random randomGenerator}) {
+  List<Character?> pickOffers({required MatchProgress matchProgress}) {
+    final roster = matchProgress.playerRoster;
+    final randomGenerator = matchProgress.randomGenerator;
+    final maxStars = matchProgress.phase.engines.characterEngine.maxStars;
+    final levelNumber = matchProgress.playerLevelProgress.level.number;
     final oddsPercentageByRarity = rarityOddsPercentageByLevelNumber[levelNumber];
     if (oddsPercentageByRarity == null) throw LevelWithoutShopOddsError(levelNumber: levelNumber);
 

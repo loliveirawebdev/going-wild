@@ -1,8 +1,8 @@
-import 'abilities/ability.dart';
-import 'character_id.dart';
-import 'rarity.dart';
-import 'role.dart';
-import 'stats/stat_multipliers.dart';
+import 'package:going_wild/domain/models/character/abilities/ability.dart';
+import 'package:going_wild/domain/models/character/character_id.dart';
+import 'package:going_wild/domain/models/character/rarity.dart';
+import 'package:going_wild/domain/models/character/role.dart';
+import 'package:going_wild/domain/models/character/stats/stat_multipliers.dart';
 
 class Character {
   const Character({

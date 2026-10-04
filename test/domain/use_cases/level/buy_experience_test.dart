@@ -1,5 +1,5 @@
-import 'package:going_wild/content/engines/economy/basic_economy_engine.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:going_wild/content/engines/economy/basic_economy_engine.dart';
 import 'package:going_wild/content/level/player_levels.dart';
 import 'package:going_wild/domain/models/level/errors/max_level_reached_error.dart';
 import 'package:going_wild/domain/models/level/player_level_progress.dart';
@@ -14,9 +14,9 @@ void main() {
 
       final leveled = buyExperience(matchProgress);
 
-      expect(leveled.player.coins, matchProgress.player.coins - basicEconomyEngine.experiencePurchaseCostInCoins);
+      expect(leveled.player.coins, matchProgress.player.coins - basicEconomyEngine.fixedExperiencePurchaseCostInCoins);
       expect(leveled.playerLevelProgress.level.number, 3);
-      expect(leveled.playerLevelProgress.experience, basicEconomyEngine.experiencePerPurchase - playerLevels[1].experienceToNextLevel);
+      expect(leveled.playerLevelProgress.experience, basicEconomyEngine.fixedExperiencePerPurchase - playerLevels[1].experienceToNextLevel);
     });
 
     test('without coins it fails', () {

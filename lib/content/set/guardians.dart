@@ -2,10 +2,10 @@ import 'package:going_wild/content/character/team/team.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_change_type.dart';
 import 'package:going_wild/domain/models/character/stats/stat_modification.dart';
-import 'package:going_wild/domain/models/set/set_effect.dart';
+import 'package:going_wild/domain/models/set/effects/set_stat_modification.dart';
 import 'package:going_wild/domain/models/set/set_id.dart';
-import 'package:going_wild/domain/models/set/set_target.dart';
 import 'package:going_wild/domain/models/set/set_tier.dart';
+import 'package:going_wild/domain/models/set/targets/team_melees_set_target.dart';
 import 'package:going_wild/domain/models/set/team_set.dart';
 
 const TeamSet guardians = TeamSet(
@@ -24,7 +24,7 @@ const TeamSet guardians = TeamSet(
       count: 2,
       effects: [
         SetStatModification(
-          target: SetTarget.teamMelees,
+          target: TeamMeleesSetTarget(),
           statModification: StatModification(stat: Stat.damageTakenPercentage, changeType: StatChangeType.multiplier, value: 0.85),
         ),
       ],
@@ -34,7 +34,7 @@ const TeamSet guardians = TeamSet(
       count: 4,
       effects: [
         SetStatModification(
-          target: SetTarget.teamMelees,
+          target: TeamMeleesSetTarget(),
           statModification: StatModification(stat: Stat.damageTakenPercentage, changeType: StatChangeType.multiplier, value: 0.7),
         ),
       ],

@@ -1,12 +1,10 @@
-import 'dart:math';
-
-import '../../character/character.dart';
-import '../../roster/roster.dart';
-import '../shop.dart';
+import 'package:going_wild/domain/models/character/character.dart';
+import 'package:going_wild/domain/models/match_progress/match_progress.dart';
+import 'package:going_wild/domain/models/shop/shop.dart';
 
 abstract class ShopEngine {
   const ShopEngine();
 
   Shop startingShop();
-  List<Character?> pickOffers({required int maxStars, required Roster roster, required int levelNumber, required Random randomGenerator});
+  List<Character?> pickOffers({required MatchProgress matchProgress});
 }

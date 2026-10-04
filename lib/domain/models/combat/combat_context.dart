@@ -1,13 +1,12 @@
+import 'package:going_wild/domain/models/board/position.dart';
+import 'package:going_wild/domain/models/combat/combat.dart';
+import 'package:going_wild/domain/models/combat/combatant_actions/deal_damage.dart';
+import 'package:going_wild/domain/models/combat/pending_combat_effect_application.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_context.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
+import 'package:going_wild/domain/models/combatant/faction.dart';
 import 'package:meta/meta.dart';
-
-import '../board/position.dart';
-import '../combatant/combat_effects/base/combat_effect.dart';
-import '../combatant/combat_effects/base/combat_effect_context.dart';
-import '../combatant/combatant.dart';
-import '../combatant/faction.dart';
-import 'combat.dart';
-import 'combatant_actions/deal_damage.dart';
-import 'pending_combat_effect_application.dart';
 
 class CombatContext implements CombatEffectContext {
   const CombatContext({required this.combat});
@@ -66,9 +65,18 @@ class CombatContext implements CombatEffectContext {
 
   @override
   @useResult
-  CombatContext createCopyWithDamageDealt({required int targetCombatantId, required double damageAmount}) {
+  CombatContext createCopyWithDamageDealt({
+    required int targetCombatantId,
+    required double damageAmount,
+    required int? sourceCombatantId,
+  }) {
     return CombatContext(
-      combat: dealDamageToCombatant(combat, targetCombatantId: targetCombatantId, damageAmount: damageAmount),
+      combat: dealDamageToCombatant(
+        combat,
+        damageAmount: damageAmount,
+        targetCombatantId: targetCombatantId,
+        sourceCombatantId: sourceCombatantId,
+      ),
     );
   }
 

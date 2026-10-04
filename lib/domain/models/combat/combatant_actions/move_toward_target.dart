@@ -1,11 +1,10 @@
 import 'dart:collection';
 
+import 'package:going_wild/domain/models/board/position.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/combat/combat.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
 import 'package:meta/meta.dart';
-
-import '../../board/position.dart';
-import '../../character/stats/stat.dart';
-import '../../combatant/combatant.dart';
-import '../combat.dart';
 
 @useResult
 Combat moveTowardTarget(Combat combat, int combatantId) {

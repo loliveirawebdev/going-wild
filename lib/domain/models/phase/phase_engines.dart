@@ -1,13 +1,14 @@
-import '../character/character_copy.dart';
-import '../character/engines/character_engine.dart';
-import '../combat/engines/combat_engine.dart';
-import '../economy/engines/economy_engine.dart';
-import '../inventory/engines/inventory_engine.dart';
-import '../level/engines/level_engine.dart';
-import '../merge/engines/merge_engine.dart';
-import '../player/engines/player_engine.dart';
-import '../set/engines/set_engine.dart';
-import '../shop/engines/shop_engine.dart';
+import 'package:going_wild/domain/models/character/character_copy.dart';
+import 'package:going_wild/domain/models/character/engines/character_engine.dart';
+import 'package:going_wild/domain/models/combat/engines/combat_engine.dart';
+import 'package:going_wild/domain/models/economy/engines/economy_engine.dart';
+import 'package:going_wild/domain/models/inventory/engines/inventory_engine.dart';
+import 'package:going_wild/domain/models/level/engines/level_engine.dart';
+import 'package:going_wild/domain/models/merge/engines/merge_engine.dart';
+import 'package:going_wild/domain/models/player/engines/player_engine.dart';
+import 'package:going_wild/domain/models/set/engines/set_engine.dart';
+import 'package:going_wild/domain/models/shop/engines/shop_engine.dart';
+import 'package:meta/meta.dart';
 
 class PhaseEngines {
   const PhaseEngines({
@@ -31,4 +32,27 @@ class PhaseEngines {
   final EconomyEngine economyEngine;
   final CharacterEngine characterEngine;
   final InventoryEngine<CharacterCopy> inventoryEngine;
+
+  @useResult
+  PhaseEngines createCopyWith({
+    SetEngine? setEngine,
+    ShopEngine? shopEngine,
+    LevelEngine? levelEngine,
+    MergeEngine? mergeEngine,
+    CombatEngine? combatEngine,
+    PlayerEngine? playerEngine,
+    EconomyEngine? economyEngine,
+    CharacterEngine? characterEngine,
+    InventoryEngine<CharacterCopy>? inventoryEngine,
+  }) => PhaseEngines(
+    setEngine: setEngine ?? this.setEngine,
+    shopEngine: shopEngine ?? this.shopEngine,
+    levelEngine: levelEngine ?? this.levelEngine,
+    mergeEngine: mergeEngine ?? this.mergeEngine,
+    combatEngine: combatEngine ?? this.combatEngine,
+    playerEngine: playerEngine ?? this.playerEngine,
+    economyEngine: economyEngine ?? this.economyEngine,
+    characterEngine: characterEngine ?? this.characterEngine,
+    inventoryEngine: inventoryEngine ?? this.inventoryEngine,
+  );
 }

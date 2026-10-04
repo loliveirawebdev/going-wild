@@ -1,28 +1,29 @@
-import '../../models/inventory/errors/empty_inventory_slot_error.dart';
-import '../../models/match_progress/match_progress.dart';
+import 'package:going_wild/domain/models/inventory/errors/empty_inventory_slot_error.dart';
+import 'package:going_wild/domain/models/match_progress/errors/rejected_player_action_error.dart';
+import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 
-class SellFromInventory {
-  const SellFromInventory();
+RejectedPlayerActionError? checkSellingFromInventory(MatchProgress matchProgress, {required int inventoryIndex}) {
+  if (matchProgress.checkPreparingActions() case final rejection?) return rejection;
+  if (matchProgress.playerRoster.inventory.entryAt(inventoryIndex) == null) return EmptyInventorySlotError(index: inventoryIndex);
 
-  MatchProgress call(MatchProgress matchProgress, {required int inventoryIndex}) {
-    matchProgress.requireInProgress();
-    final roster = matchProgress.playerRoster;
-    final engines = matchProgress.phase.engines;
+  return null;
+}
 
-    final soldCharacter = roster.inventory.entryAt(inventoryIndex);
-    if (soldCharacter == null) throw EmptyInventorySlotError(index: inventoryIndex);
+MatchProgress sellFromInventory(MatchProgress matchProgress, {required int inventoryIndex}) {
+  if (checkSellingFromInventory(matchProgress, inventoryIndex: inventoryIndex) case final rejection?) throw rejection;
+  final roster = matchProgress.playerRoster;
+  final engines = matchProgress.phase.engines;
 
-    final copiesInside = engines.mergeEngine.copiesInside(soldCharacter.stars);
-    final sellPrice = engines.economyEngine.sellPriceOf(soldCharacter, copiesInside: copiesInside);
+  final soldCharacter = roster.inventory.entryAt(inventoryIndex)!;
+  final sellPrice = engines.economyEngine.sellPriceOf(soldCharacter, matchProgress: matchProgress);
 
-    final playerAfterSale = matchProgress.player.createCopyWithCoinsReceived(sellPrice);
-    final inventoryAfterSale = roster.inventory.createCopyWithoutEntryAt(inventoryIndex);
+  final playerAfterSale = matchProgress.player.createCopyWithCoinsReceived(sellPrice);
+  final inventoryAfterSale = roster.inventory.createCopyWithoutEntryAt(inventoryIndex);
 
-    final rosterAfterSale = roster.createCopyWith(inventory: inventoryAfterSale);
+  final rosterAfterSale = roster.createCopyWith(inventory: inventoryAfterSale);
 
-    return matchProgress.createCopyWith(
-      player: playerAfterSale,
-      playerRoster: rosterAfterSale,
-    );
-  }
+  return matchProgress.createCopyWith(
+    player: playerAfterSale,
+    playerRoster: rosterAfterSale,
+  );
 }

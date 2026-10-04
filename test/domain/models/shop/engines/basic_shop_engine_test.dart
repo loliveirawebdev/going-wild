@@ -31,10 +31,11 @@ List<Character?> offersOf({
   BasicShopEngine engine = testShopEngine,
   Set<Character> ownedAtMaxStars = const {},
 }) => engine.pickOffers(
-  levelNumber: levelNumber,
-  randomGenerator: Random(seed),
-  maxStars: basicCharacterEngine.maxStars,
-  roster: rosterOwning(ownedAtMaxStars, stars: basicCharacterEngine.maxStars),
+  matchProgress: matchProgressWith(
+    seed: seed,
+    levelNumber: levelNumber,
+    roster: rosterOwning(ownedAtMaxStars, stars: basicCharacterEngine.maxStars),
+  ),
 );
 
 List<Character?> offersAfterManyPicks({
@@ -44,18 +45,10 @@ List<Character?> offersAfterManyPicks({
   BasicShopEngine engine = testShopEngine,
   Set<Character> ownedAtMaxStars = const {},
 }) {
-  final randomGenerator = Random(1);
   final ownedRoster = roster ?? rosterOwning(ownedAtMaxStars, stars: basicCharacterEngine.maxStars);
+  final matchProgress = matchProgressWith(roster: ownedRoster, levelNumber: levelNumber);
 
-  return [
-    for (var pick = 0; pick < pickCount; pick++)
-      ...engine.pickOffers(
-        roster: ownedRoster,
-        levelNumber: levelNumber,
-        randomGenerator: randomGenerator,
-        maxStars: basicCharacterEngine.maxStars,
-      ),
-  ];
+  return [for (var pick = 0; pick < pickCount; pick++) ...engine.pickOffers(matchProgress: matchProgress)];
 }
 
 Set<Character> allOfRarity(Rarity rarity) => allTeamCharacters.where((character) => character.rarity == rarity).toSet();

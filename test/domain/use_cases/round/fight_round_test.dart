@@ -11,7 +11,7 @@ void main() {
     test('winning a round keeps every life and opens the next round with its reward', () {
       final matchProgress = startWith([oneRat, fiveRats]).createCopyWithPlayerPlacements(threeStarBullOnBoard);
 
-      final fought = fightRound(matchProgress);
+      final fought = fightRound(matchProgress, recordsHistory: false);
 
       expect(fought.combatResult.isLost, isFalse);
       expect(fought.matchProgress.player.remainingLives, basicPlayerEngine.startingLives);
@@ -21,7 +21,7 @@ void main() {
     });
 
     test('a lost round takes the lives of the player engine', () {
-      final fought = fightRound(startWith([fiveRats, oneRat]));
+      final fought = fightRound(startWith([fiveRats, oneRat]), recordsHistory: false);
 
       expect(fought.combatResult.isLost, isTrue);
       expect(fought.matchProgress.player.remainingLives, basicPlayerEngine.startingLives - basicPlayerEngine.livesLostPerLostRound);
@@ -31,21 +31,21 @@ void main() {
     test('losing every life loses the phase and every action fails', () {
       var matchProgress = startWith([fiveRats, fiveRats, fiveRats, oneRat]);
       for (var lostRound = 0; lostRound < basicPlayerEngine.startingLives; lostRound++) {
-        matchProgress = fightRound(matchProgress).matchProgress;
+        matchProgress = fightRound(matchProgress, recordsHistory: false).matchProgress;
       }
 
       expect(matchProgress.status, PhaseStatus.lost);
-      expect(() => fightRound(matchProgress), throwsA(isA<MatchIsOverError>()));
+      expect(() => fightRound(matchProgress, recordsHistory: false), throwsA(isA<MatchIsOverError>()));
       expect(() => rerollShop(matchProgress), throwsA(isA<MatchIsOverError>()));
       expect(() => buyExperience(matchProgress), throwsA(isA<MatchIsOverError>()));
     });
 
     test('clearing the last round wins the phase with no new round', () {
       var matchProgress = startWith([oneRat, oneRat]).createCopyWithPlayerPlacements(threeStarBullOnBoard);
-      matchProgress = fightRound(matchProgress).matchProgress;
+      matchProgress = fightRound(matchProgress, recordsHistory: false).matchProgress;
       final coinsBeforeLastRound = matchProgress.player.coins;
 
-      matchProgress = fightRound(matchProgress).matchProgress;
+      matchProgress = fightRound(matchProgress, recordsHistory: false).matchProgress;
 
       expect(matchProgress.status, PhaseStatus.won);
       expect(matchProgress.currentRoundNumber, 2);
@@ -55,8 +55,8 @@ void main() {
     test('the same seed plays the same round', () {
       MatchProgress start() => startWith([fiveRats], seed: 9).createCopyWithPlayerPlacements(threeStarBullOnBoard);
 
-      final first = fightRound(start());
-      final second = fightRound(start());
+      final first = fightRound(start(), recordsHistory: false);
+      final second = fightRound(start(), recordsHistory: false);
 
       expect(first.combatResult.elapsedSeconds, second.combatResult.elapsedSeconds);
       expect(first.combatResult.winningFaction, second.combatResult.winningFaction);

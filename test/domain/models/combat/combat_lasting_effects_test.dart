@@ -6,7 +6,6 @@ import 'package:going_wild/domain/models/character/stats/stat_modification.dart'
 import 'package:going_wild/domain/models/combat/combat.dart';
 import 'package:going_wild/domain/models/combat/combatant_actions/advance_combat_lasting_effects_by_one_tick.dart';
 import 'package:going_wild/domain/models/combat/combatant_actions/apply_combat_effects.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/ambush/vanished_combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage/damage_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage_over_time/damage_over_time_combat_lasting_effect.dart';
@@ -15,6 +14,8 @@ import 'package:going_wild/domain/models/combatant/combat_effects/catalog/heal_o
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/shield/shield_combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stat_modifier/stat_modifier_combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/taunt/taunt_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/nearby_enemies_target.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/self_target.dart';
 import 'package:going_wild/domain/models/combatant/combatant.dart';
 import 'package:going_wild/domain/models/combatant/faction.dart';
 
@@ -27,7 +28,7 @@ Combat advanceTicks(Combat combat, Combatant combatant, int tickCount) {
 }
 
 void main() {
-  const explosion = [DamageEffect(target: CombatEffectTarget.nearbyEnemies, value: StarValues(star1: 100, star2: 100, star3: 100))];
+  const explosion = [DamageEffect(target: NearbyEnemiesTarget(), value: StarValues(star1: 100, star2: 100, star3: 100))];
 
   test('damage over time hurts on every tick until its duration ends', () {
     final poisonedCombatant = withCombatLastingEffects(combatant(at: at(7, 4), faction: Faction.team), [
@@ -54,7 +55,7 @@ void main() {
         sourceCombatantId: poisonedCombatant.id,
         effects: [
           DamageOverTimeEffect(
-            target: CombatEffectTarget.self,
+            target: const SelfTarget(),
             seconds: atEveryStar(seconds.toDouble()),
             damagePerSecond: atEveryStar(damagePerSecond),
           ),
@@ -88,12 +89,13 @@ void main() {
   });
 
   test('a lethal tick stops the remaining lasting effects of that tick', () {
+    final poisoner = combatant(at: at(0, 4), faction: Faction.enemy);
     final poisonedCombatant = withCombatLastingEffects(combatant(at: at(7, 4), faction: Faction.team).createCopyWith(currentHealth: 1), [
-      const DamageOverTimeCombatLastingEffect(remainingTicks: 50, damagePerSecond: 100, sourceCombatantId: 99),
-      const HealOverTimeCombatLastingEffect(healPerSecond: 100, remainingTicks: 50, sourceCombatantId: 99),
+      DamageOverTimeCombatLastingEffect(remainingTicks: 50, damagePerSecond: 100, sourceCombatantId: poisoner.id),
+      HealOverTimeCombatLastingEffect(healPerSecond: 100, remainingTicks: 50, sourceCombatantId: poisoner.id),
     ]);
 
-    final tickedCombat = advanceTicks(combatWith([poisonedCombatant]), poisonedCombatant, 1);
+    final tickedCombat = advanceTicks(combatWith([poisonedCombatant, poisoner]), poisonedCombatant, 1);
 
     expect(findCombatant(tickedCombat, poisonedCombatant).isAlive, isFalse);
   });

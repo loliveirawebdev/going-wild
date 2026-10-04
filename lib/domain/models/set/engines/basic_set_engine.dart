@@ -1,14 +1,13 @@
-import '../../character/character.dart';
-import '../../character/stats/stat.dart';
-import '../../character/stats/stat_modification.dart';
-import '../../character/stats/stats.dart';
-import '../../combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
-import '../active_set.dart';
-import '../set_effect.dart';
-import '../set_effect_side.dart';
-import '../set_target.dart';
-import '../team_set.dart';
-import 'set_engine.dart';
+import 'package:going_wild/domain/models/character/character.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/character/stats/stat_modification.dart';
+import 'package:going_wild/domain/models/character/stats/stats.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/set/active_set.dart';
+import 'package:going_wild/domain/models/set/engines/set_engine.dart';
+import 'package:going_wild/domain/models/set/set_effect_side.dart';
+import 'package:going_wild/domain/models/set/set_effect_targeting.dart';
+import 'package:going_wild/domain/models/set/team_set.dart';
 
 class BasicSetEngine extends SetEngine {
   const BasicSetEngine({required this.sets});
@@ -32,7 +31,9 @@ class BasicSetEngine extends SetEngine {
   @override
   Stats statsWithSetEffects(Character character, Stats stats, {required SetEffectSide side, required List<ActiveSet> activeSets}) {
     final statModifications = [
-      for (final effect in _reachingEffects(character, stats, activeSets, side)) ?effect.statModification,
+      for (final activeSet in activeSets)
+        for (final effect in activeSet.tier.effects)
+          ?effect.statModificationFor(_targetingOf(activeSet, side: side, stats: stats, character: character)),
     ];
 
     var statsWithEffects = stats;
@@ -56,26 +57,21 @@ class BasicSetEngine extends SetEngine {
     required List<ActiveSet> activeSets,
     required int Function(double seconds) convertSecondsToTicks,
   }) => [
-    for (final effect in _reachingEffects(character, stats, activeSets, side))
-      ?effect.startingLastingEffect(ownerCombatantId: ownerCombatantId, convertSecondsToTicks: convertSecondsToTicks),
-  ];
-
-  List<SetEffect> _reachingEffects(Character character, Stats stats, List<ActiveSet> activeSets, SetEffectSide side) => [
     for (final activeSet in activeSets)
       for (final effect in activeSet.tier.effects)
-        if (_reaches(effect, activeSet.set, character, stats, side)) effect,
+        ?effect.startingLastingEffectFor(
+          _targetingOf(activeSet, side: side, stats: stats, character: character),
+          ownerCombatantId: ownerCombatantId,
+          convertSecondsToTicks: convertSecondsToTicks,
+        ),
   ];
+
+  @override
+  int bonusCoinsPerRound(List<ActiveSet> activeSets) => [
+    for (final activeSet in activeSets)
+      for (final effect in activeSet.tier.effects) effect.bonusCoinsPerRound,
+  ].fold(0, (sum, coins) => sum + coins);
 }
 
-bool _reaches(SetEffect effect, TeamSet set, Character character, Stats stats, SetEffectSide side) {
-  final isOwnTeam = side == SetEffectSide.ownTeam;
-
-  return switch (effect.target) {
-    SetTarget.entireTeam => isOwnTeam,
-    SetTarget.setMembers => isOwnTeam && set.members.contains(character),
-    SetTarget.teamMelees => isOwnTeam && stats[Stat.range] == 1,
-    SetTarget.teamRangeds => isOwnTeam && stats[Stat.range] > 1,
-    SetTarget.specificCharacter => isOwnTeam && effect.character == character,
-    SetTarget.allEnemies => side == SetEffectSide.opposingTeam,
-  };
-}
+SetEffectTargeting _targetingOf(ActiveSet activeSet, {required SetEffectSide side, required Stats stats, required Character character}) =>
+    SetEffectTargeting(set: activeSet.set, side: side, stats: stats, character: character);

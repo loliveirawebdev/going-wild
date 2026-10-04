@@ -4,14 +4,12 @@ class CombatRules {
     required this.maxSeconds,
     required this.ticksPerSecond,
     required this.nearbyRadius,
-    required this.lowHealthTriggerPercentage,
   });
 
   final int manaPerHit;
   final int nearbyRadius;
   final double maxSeconds;
   final int ticksPerSecond;
-  final int lowHealthTriggerPercentage;
 
   double get tickSeconds => 1 / ticksPerSecond;
 

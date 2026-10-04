@@ -1,45 +1,58 @@
-import '../../character/character.dart';
-import '../../character/character_copy.dart';
-import '../../character/rarity.dart';
-import '../../player/player.dart';
-import '../errors/rarity_without_price_error.dart';
-import 'economy_engine.dart';
+import 'package:going_wild/domain/models/character/character.dart';
+import 'package:going_wild/domain/models/character/character_copy.dart';
+import 'package:going_wild/domain/models/character/rarity.dart';
+import 'package:going_wild/domain/models/economy/engines/economy_engine.dart';
+import 'package:going_wild/domain/models/economy/errors/rarity_without_price_error.dart';
+import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 
 class BasicEconomyEngine extends EconomyEngine {
   const BasicEconomyEngine({
     required this.startingCoins,
-    required this.rerollCostInCoins,
+    required this.fixedRerollCostInCoins,
     required this.priceInCoinsByRarity,
-    required this.experiencePerPurchase,
-    required this.experiencePurchaseCostInCoins,
+    required this.fixedExperiencePerPurchase,
+    required this.fixedExperiencePurchaseCostInCoins,
     required this.mergedCharacterSellDiscountInCoins,
   });
 
   @override
   final int startingCoins;
 
-  @override
-  final int rerollCostInCoins;
-
-  @override
-  final int experiencePerPurchase;
-
-  @override
-  final int experiencePurchaseCostInCoins;
-
+  final int fixedRerollCostInCoins;
+  final int fixedExperiencePerPurchase;
+  final int fixedExperiencePurchaseCostInCoins;
   final int mergedCharacterSellDiscountInCoins;
   final Map<Rarity, int> priceInCoinsByRarity;
 
   @override
-  int priceOf(Character character) => priceInCoinsByRarity[character.rarity] ?? (throw RarityWithoutPriceError(rarity: character.rarity));
+  int rerollCostInCoins({required MatchProgress matchProgress}) => fixedRerollCostInCoins;
 
   @override
-  int roundIncome({required Player player, required int waveReward}) => waveReward;
+  int experiencePerPurchase({required MatchProgress matchProgress}) => fixedExperiencePerPurchase;
 
   @override
-  int sellPriceOf(CharacterCopy characterCopy, {required int copiesInside}) {
+  int experiencePurchaseCostInCoins({required MatchProgress matchProgress}) => fixedExperiencePurchaseCostInCoins;
+
+  @override
+  int priceOf(Character character, {required MatchProgress matchProgress}) => priceOfRarity(character.rarity);
+
+  int priceOfRarity(Rarity rarity) => priceInCoinsByRarity[rarity] ?? (throw RarityWithoutPriceError(rarity: rarity));
+
+  @override
+  int roundIncome({required MatchProgress matchProgress}) {
+    final engines = matchProgress.phase.engines;
+    final waveReward = matchProgress.currentWave.coinsReward;
+    final boardCharacters = matchProgress.playerRoster.placements.map((placement) => placement.characterCopy.character).toList();
+    final activeSets = engines.setEngine.activeSets(boardCharacters);
+
+    return waveReward + engines.setEngine.bonusCoinsPerRound(activeSets);
+  }
+
+  @override
+  int sellPriceOf(CharacterCopy characterCopy, {required MatchProgress matchProgress}) {
     final character = characterCopy.character;
-    final coinsPaidForAllCopies = priceOf(character) * copiesInside;
+    final copiesInside = matchProgress.phase.engines.mergeEngine.copiesInside(characterCopy.stars);
+    final coinsPaidForAllCopies = priceOfRarity(character.rarity) * copiesInside;
 
     final isCommon = character.rarity == Rarity.common;
     final isMergedCharacter = characterCopy.stars > 1;

@@ -1,29 +1,27 @@
 import 'dart:math';
 
+import 'package:going_wild/domain/models/board/board.dart';
+import 'package:going_wild/domain/models/board/placement.dart';
+import 'package:going_wild/domain/models/character/engines/character_engine.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/combat/battlefield.dart';
+import 'package:going_wild/domain/models/combat/combat.dart';
+import 'package:going_wild/domain/models/combat/combat_in_progress.dart';
+import 'package:going_wild/domain/models/combat/combat_result.dart';
+import 'package:going_wild/domain/models/combat/combat_rules.dart';
+import 'package:going_wild/domain/models/combat/combatant_actions/acquire_target.dart';
+import 'package:going_wild/domain/models/combat/combatant_actions/advance_combat_lasting_effects_by_one_tick.dart';
+import 'package:going_wild/domain/models/combat/combatant_actions/attack_target.dart';
+import 'package:going_wild/domain/models/combat/combatant_actions/cast_ability_if_ready.dart';
+import 'package:going_wild/domain/models/combat/combatant_actions/move_toward_target.dart';
+import 'package:going_wild/domain/models/combat/engines/combat_engine.dart';
+import 'package:going_wild/domain/models/combat_history/combat_history_step.dart';
+import 'package:going_wild/domain/models/combat_history/combat_history_step_kind.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
+import 'package:going_wild/domain/models/combatant/faction.dart';
+import 'package:going_wild/domain/models/set/engines/set_engine.dart';
+import 'package:going_wild/domain/models/set/set_effect_side.dart';
 import 'package:meta/meta.dart';
-
-import '../../board/board.dart';
-import '../../board/placement.dart';
-import '../../character/engines/character_engine.dart';
-import '../../character/stats/stat.dart';
-import '../../combat_history/combat_history.dart';
-import '../../combat_history/combat_history_step.dart';
-import '../../combat_history/combat_history_step_kind.dart';
-import '../../combatant/combatant.dart';
-import '../../combatant/faction.dart';
-import '../../set/engines/set_engine.dart';
-import '../../set/set_effect_side.dart';
-import '../battlefield.dart';
-import '../combat.dart';
-import '../combat_result.dart';
-import '../combat_rules.dart';
-import '../combatant_actions/acquire_target.dart';
-import '../combatant_actions/advance_combat_lasting_effects_by_one_tick.dart';
-import '../combatant_actions/apply_combat_effects.dart';
-import '../combatant_actions/attack_target.dart';
-import '../combatant_actions/cast_ability_if_ready.dart';
-import '../combatant_actions/move_toward_target.dart';
-import 'combat_engine.dart';
 
 class BasicCombatEngine extends CombatEngine {
   const BasicCombatEngine({
@@ -36,16 +34,23 @@ class BasicCombatEngine extends CombatEngine {
   @override
   final Board board;
 
+  @override
   final CombatRules rules;
+
   final SetEngine setEngine;
   final CharacterEngine characterEngine;
 
   @override
-  CombatResult simulate({required List<Placement> team, required Random randomGenerator, required List<Placement> enemies}) {
+  CombatResult simulate({
+    required List<Placement> team,
+    required bool recordsHistory,
+    required Random randomGenerator,
+    required List<Placement> enemies,
+  }) {
     final combatants = _buildCombatants(team: team, enemies: enemies);
     final combatantIds = combatants.map((combatant) => combatant.id).toList();
 
-    var combat = Combat(
+    final startingCombat = Combat(
       rules: rules,
       elapsedTicks: 0,
       randomGenerator: randomGenerator,
@@ -53,22 +58,16 @@ class BasicCombatEngine extends CombatEngine {
       battlefield: Battlefield(board: board, combatants: combatants),
     );
 
-    var history = CombatHistory(entries: const []).createCopyWithCombatStarted(combatants: combatants, tick: combat.elapsedTicks);
+    var combatInProgress = CombatInProgress.started(startingCombat, recordsHistory: recordsHistory);
 
-    while (_isCombatOngoing(combat)) {
-      final advancedTick = _advanceOneTick((combat: combat, history: history), combatantIds);
-      combat = advancedTick.combat;
-      history = advancedTick.history;
+    while (_isCombatOngoing(combatInProgress.combat)) {
+      combatInProgress = _afterTick(
+        combatInProgress,
+        combatantIds,
+      );
     }
 
-    final winningFaction = _winningFactionOf(combat);
-
-    return CombatResult(
-      winningFaction: winningFaction,
-      elapsedSeconds: combat.elapsedSeconds,
-      combatants: combat.battlefield.combatants,
-      history: history.createCopyWithCombatEnded(tick: combat.elapsedTicks, winningFaction: winningFaction),
-    );
+    return combatInProgress.createCombatResult(winningFaction: _winningFactionOf(combatInProgress.combat));
   }
 
   List<Combatant> _buildCombatants({required List<Placement> team, required List<Placement> enemies}) {
@@ -97,7 +96,7 @@ class BasicCombatEngine extends CombatEngine {
         ticksUntilNextStep: 0,
         targetCombatantId: null,
         ticksUntilNextAttack: 0,
-        lowHealthAbilityUsed: false,
+        abilityCastCount: 0,
         position: placement.position,
         characterCopy: characterCopy,
         currentHealth: stats[Stat.health],
@@ -130,79 +129,50 @@ Faction? _winningFactionOf(Combat combat) {
   return hasTeamAlive ? Faction.team : Faction.enemy;
 }
 
-typedef _CombatWithHistory = ({Combat combat, CombatHistory history});
+@useResult
+CombatInProgress _afterTick(CombatInProgress combatInProgress, List<int> combatantIds) {
+  final afterLastingEffects = combatantIds.fold(combatInProgress, _afterLastingEffectsOf).createCopyAfterPendingEffects();
+  final afterTurns = combatantIds.fold(afterLastingEffects, _afterTurnOf);
+
+  return afterTurns.createCopyWithNextTick();
+}
 
 @useResult
-_CombatWithHistory _runStep(_CombatWithHistory current, CombatHistoryStep step, Combat Function(Combat combat) action) {
-  final combatAfterStep = action(current.combat);
+CombatInProgress _afterLastingEffectsOf(CombatInProgress combatInProgress, int combatantId) {
+  if (!combatInProgress.combatantWithId(combatantId).isAlive) return combatInProgress;
 
-  final historyAfterStep = current.history.createCopyWithStepCompared(
-    step: step,
-    tick: current.combat.elapsedTicks,
-    combatantsAfter: combatAfterStep.battlefield.combatants,
-    combatantsBefore: current.combat.battlefield.combatants,
+  return combatInProgress.createCopyAfterStep(
+    action: (combat) => advanceCombatLastingEffectsByOneTick(combat, combatantId),
+    step: CombatHistoryStep(actorCombatantId: combatantId, kind: CombatHistoryStepKind.advanceCombatLastingEffects),
   );
-
-  return (combat: combatAfterStep, history: historyAfterStep);
 }
 
 @useResult
-_CombatWithHistory _advanceOneTick(_CombatWithHistory current, List<int> combatantIds) {
-  var ticked = current;
-
-  for (final combatantId in combatantIds) {
-    final isCombatantAlive = ticked.combat.battlefield.combatantWithId(combatantId).isAlive;
-    if (!isCombatantAlive) continue;
-
-    final step = CombatHistoryStep(actorCombatantId: combatantId, kind: CombatHistoryStepKind.advanceCombatLastingEffects);
-    ticked = _runStep(ticked, step, (combat) => advanceCombatLastingEffectsByOneTick(combat, combatantId));
-  }
-
-  ticked = _applyPendingCombatEffectApplications(ticked);
-
-  for (final combatantId in combatantIds) {
-    ticked = _playCombatantTurn(ticked, combatantId);
-  }
-
-  final tickedCombat = ticked.combat;
-  return (combat: tickedCombat.createCopyWith(elapsedTicks: tickedCombat.elapsedTicks + 1), history: ticked.history);
-}
-
-@useResult
-_CombatWithHistory _playCombatantTurn(_CombatWithHistory current, int combatantId) {
-  if (!current.combat.battlefield.combatantWithId(combatantId).canAct) return current;
+CombatInProgress _afterTurnOf(CombatInProgress combatInProgress, int combatantId) {
+  if (!combatInProgress.combatantWithId(combatantId).canAct) return combatInProgress;
 
   CombatHistoryStep stepOf(CombatHistoryStepKind kind) => CombatHistoryStep(kind: kind, actorCombatantId: combatantId);
 
-  var turn = _runStep(current, stepOf(CombatHistoryStepKind.acquireTarget), (combat) => acquireTarget(combat, combatantId));
-  turn = _runStep(turn, stepOf(CombatHistoryStepKind.castAbility), (combat) => castAbilityIfReady(combat, combatantId));
-  turn = _applyPendingCombatEffectApplications(turn);
-  if (!turn.combat.battlefield.combatantWithId(combatantId).canAct) return turn;
+  final afterCast = combatInProgress
+      .createCopyAfterStep(
+        step: stepOf(CombatHistoryStepKind.acquireTarget),
+        action: (combat) => acquireTarget(combat, combatantId),
+      )
+      .createCopyAfterStep(
+        step: stepOf(CombatHistoryStepKind.castAbility),
+        action: (combat) => castAbilityIfReady(combat, combatantId),
+      )
+      .createCopyAfterPendingEffects();
 
-  turn = _runStep(turn, stepOf(CombatHistoryStepKind.attackTarget), (combat) => attackTarget(combat, combatantId));
-  return _runStep(turn, stepOf(CombatHistoryStepKind.moveTowardTarget), (combat) => moveTowardTarget(combat, combatantId));
-}
+  if (!afterCast.combatantWithId(combatantId).canAct) return afterCast;
 
-@useResult
-_CombatWithHistory _applyPendingCombatEffectApplications(_CombatWithHistory current) {
-  var applied = current;
-
-  while (applied.combat.pendingCombatEffectApplications.isNotEmpty) {
-    final pendingApplications = applied.combat.pendingCombatEffectApplications;
-    final nextPendingApplication = pendingApplications.first;
-    final combatWithoutNextPending = applied.combat.createCopyWith(pendingCombatEffectApplications: pendingApplications.skip(1).toList());
-    applied = (combat: combatWithoutNextPending, history: applied.history);
-    if (nextPendingApplication.effects.isEmpty) continue;
-
-    final sourceCombatantId = nextPendingApplication.sourceCombatantId;
-    final step = CombatHistoryStep(actorCombatantId: sourceCombatantId, kind: CombatHistoryStepKind.applyPendingCombatEffects);
-
-    applied = _runStep(
-      applied,
-      step,
-      (combat) => applyCombatEffects(combat, sourceCombatantId: sourceCombatantId, effects: nextPendingApplication.effects),
-    );
-  }
-
-  return applied;
+  return afterCast
+      .createCopyAfterStep(
+        step: stepOf(CombatHistoryStepKind.attackTarget),
+        action: (combat) => attackTarget(combat, combatantId),
+      )
+      .createCopyAfterStep(
+        step: stepOf(CombatHistoryStepKind.moveTowardTarget),
+        action: (combat) => moveTowardTarget(combat, combatantId),
+      );
 }

@@ -1,5 +1,5 @@
-import '../character/character.dart';
-import 'errors/shop_offer_index_out_of_range_error.dart';
+import 'package:going_wild/domain/models/character/character.dart';
+import 'package:going_wild/domain/models/shop/errors/shop_offer_index_out_of_range_error.dart';
 
 class Shop {
   const Shop({required this.offers, required this.isLocked});

@@ -7,7 +7,6 @@ import 'package:going_wild/content/engines/character/basic_character_engine.dart
 import 'package:going_wild/content/engines/set/basic_set_engine.dart';
 import 'package:going_wild/domain/models/board/placement.dart';
 import 'package:going_wild/domain/models/character/abilities/ability.dart';
-import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/character/character_id.dart';
@@ -21,12 +20,14 @@ import 'package:going_wild/domain/models/combat/combat_rules.dart';
 import 'package:going_wild/domain/models/combat/combatant_actions/cast_ability_if_ready.dart';
 import 'package:going_wild/domain/models/combat/engines/basic_combat_engine.dart';
 import 'package:going_wild/domain/models/combat_history/entries/combat_history_entry.dart';
+import 'package:going_wild/domain/models/combatant/ability_triggers/mana_full_trigger.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage/damage_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/shield/shield_combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/shield/shield_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/taunt/taunt_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/nearby_enemies_target.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/self_target.dart';
 import 'package:going_wild/domain/models/combatant/combatant.dart';
 import 'package:going_wild/domain/models/combatant/faction.dart';
 
@@ -37,6 +38,7 @@ CombatResult run({
   required List<Placement> enemies,
   int seed = 7,
   double maxSeconds = 60,
+  bool recordsHistory = true,
 }) => BasicCombatEngine(
   board: testBoard,
   setEngine: basicSetEngine,
@@ -46,9 +48,8 @@ CombatResult run({
     manaPerHit: testRules.manaPerHit,
     nearbyRadius: testRules.nearbyRadius,
     ticksPerSecond: testRules.ticksPerSecond,
-    lowHealthTriggerPercentage: testRules.lowHealthTriggerPercentage,
   ),
-).simulate(team: team, enemies: enemies, randomGenerator: Random(seed));
+).simulate(team: team, enemies: enemies, recordsHistory: recordsHistory, randomGenerator: Random(seed));
 
 Placement place(Character character, int row, int column, {int stars = 1}) => Placement(
   position: at(row, column),
@@ -64,11 +65,11 @@ Character shieldBomberWith(List<CombatEffect> onExpire) => Character(
   rarity: Rarity.common,
   statMultipliers: const StatMultipliers({Stat.health: 10, Stat.damage: 0.01, Stat.manaStart: 50, Stat.manaMax: 50}),
   ability: Ability(
-    trigger: AbilityTrigger.manaFull,
+    trigger: const ManaFullTrigger(),
     effects: [
       ShieldEffect(
         onExpire: onExpire,
-        target: CombatEffectTarget.self,
+        target: const SelfTarget(),
         value: const StarValues(star1: 100, star2: 100, star3: 100),
         seconds: const StarValues(star1: 0.5, star2: 0.5, star3: 0.5),
       ),
@@ -175,7 +176,7 @@ void main() {
   });
 
   test('a shield on expire effect goes off inside the round', () {
-    final bomb = [const DamageEffect(target: CombatEffectTarget.nearbyEnemies, value: StarValues(star1: 1000, star2: 1000, star3: 1000))];
+    final bomb = [const DamageEffect(target: NearbyEnemiesTarget(), value: StarValues(star1: 1000, star2: 1000, star3: 1000))];
 
     final bombResult = run(enemies: [place(rat, 5, 2)], team: [place(shieldBomberWith(bomb), 6, 2)]);
     final quietResult = run(enemies: [place(rat, 5, 2)], team: [place(shieldBomberWith(const []), 6, 2)]);
@@ -255,7 +256,7 @@ void main() {
   });
 
   test('a shield on expire effect kills in the same tick the shield ends, credited to the shield owner', () {
-    final bomb = [DamageEffect(value: atEveryStar(1000), target: CombatEffectTarget.nearbyEnemies)];
+    final bomb = [DamageEffect(value: atEveryStar(1000), target: const NearbyEnemiesTarget())];
     final result = run(enemies: [place(rat, 5, 2)], team: [place(shieldBomberWith(bomb), 6, 2)]);
 
     final shieldEnded = result.history.entries.whereType<LastingEffectEndedHistoryEntry>().firstWhere(
@@ -265,5 +266,26 @@ void main() {
 
     expect(ratDeath.tick, shieldEnded.tick);
     expect(ratDeath.killerCombatantId, shieldEnded.combatantId);
+  });
+
+  test('a combat without history plays exactly like a recorded one and leaves the history empty', () {
+    final team = [place(bull, 5, 2, stars: 2), place(cat, 6, 1), place(chicken, 7, 3), place(queenBee, 7, 0)];
+    final enemies = [place(boar, 2, 2), place(bat, 0, 1), place(snake, 2, 3), place(dragon, 0, 3)];
+
+    for (final seed in [1, 2, 3]) {
+      final recordedResult = run(team: team, seed: seed, enemies: enemies);
+      final unrecordedResult = run(team: team, seed: seed, enemies: enemies, recordsHistory: false);
+
+      expect(unrecordedResult.history.entries, isEmpty, reason: 'seed $seed');
+      expect(unrecordedResult.elapsedSeconds, recordedResult.elapsedSeconds, reason: 'seed $seed');
+      expect(unrecordedResult.winningFaction, recordedResult.winningFaction, reason: 'seed $seed');
+
+      for (final (index, combatant) in unrecordedResult.combatants.indexed) {
+        final recordedCombatant = recordedResult.combatants[index];
+
+        expect(combatant.position, recordedCombatant.position, reason: 'seed $seed $combatant');
+        expect(combatant.currentHealth, recordedCombatant.currentHealth, reason: 'seed $seed $combatant');
+      }
+    }
   });
 }

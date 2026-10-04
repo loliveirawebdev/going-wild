@@ -1,10 +1,10 @@
-import '../character.dart';
-import '../role.dart';
-import '../stars/merge_curve.dart';
-import '../stars/star_values.dart';
-import '../stats/stat.dart';
-import '../stats/stats.dart';
-import 'character_engine.dart';
+import 'package:going_wild/domain/models/character/character.dart';
+import 'package:going_wild/domain/models/character/engines/character_engine.dart';
+import 'package:going_wild/domain/models/character/role.dart';
+import 'package:going_wild/domain/models/character/stars/merge_curve.dart';
+import 'package:going_wild/domain/models/character/stars/star_values.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/character/stats/stats.dart';
 
 class BasicCharacterEngine extends CharacterEngine {
   const BasicCharacterEngine({required this.baseStats, required this.mergeCurveForRole});

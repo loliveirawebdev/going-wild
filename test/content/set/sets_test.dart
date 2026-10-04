@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/content/set/sets.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_change_type.dart';
-import 'package:going_wild/domain/models/set/set_effect.dart';
-import 'package:going_wild/domain/models/set/set_target.dart';
+import 'package:going_wild/domain/models/set/effects/set_starting_shield.dart';
+import 'package:going_wild/domain/models/set/effects/set_stat_modification.dart';
 import 'package:going_wild/domain/models/set/set_tier.dart';
 
 Iterable<(SetTier, SetTier)> consecutiveTiersOf(List<SetTier> tiers) sync* {
@@ -14,7 +14,7 @@ Iterable<(SetTier, SetTier)> consecutiveTiersOf(List<SetTier> tiers) sync* {
 
 bool weakens(SetStatModification setStatModification) {
   final statModification = setStatModification.statModification;
-  final isOnEnemies = setStatModification.target == SetTarget.allEnemies;
+  final isOnEnemies = setStatModification.target.reachesEnemies;
   final isDamageTaken = statModification.stat == Stat.damageTakenPercentage;
 
   return isOnEnemies != isDamageTaken;

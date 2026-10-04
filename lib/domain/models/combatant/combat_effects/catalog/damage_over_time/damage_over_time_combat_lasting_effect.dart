@@ -1,5 +1,5 @@
-import '../../base/combat_effect_context.dart';
-import '../../base/lasting/combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_context.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
 
 class DamageOverTimeCombatLastingEffect extends CombatLastingEffect {
   const DamageOverTimeCombatLastingEffect({
@@ -30,6 +30,7 @@ class DamageOverTimeCombatLastingEffect extends CombatLastingEffect {
   CombatEffectContext applyTickConsequences(CombatEffectContext context, int ownerCombatantId) {
     return context.createCopyWithDamageDealt(
       targetCombatantId: ownerCombatantId,
+      sourceCombatantId: sourceCombatantId,
       damageAmount: damagePerSecond * context.tickSeconds,
     );
   }

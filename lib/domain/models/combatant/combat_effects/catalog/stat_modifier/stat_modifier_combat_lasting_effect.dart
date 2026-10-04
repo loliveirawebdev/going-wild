@@ -1,5 +1,5 @@
-import '../../../../character/stats/stat_modification.dart';
-import '../../base/lasting/combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/character/stats/stat_modification.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
 
 class StatModifierCombatLastingEffect extends CombatLastingEffect {
   const StatModifierCombatLastingEffect({required this.remainingTicks, required this.statModification, required super.sourceCombatantId});

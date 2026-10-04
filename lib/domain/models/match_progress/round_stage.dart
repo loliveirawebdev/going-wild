@@ -1,0 +1,4 @@
+enum RoundStage {
+  preparing,
+  fighting,
+}

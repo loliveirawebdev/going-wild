@@ -1,5 +1,4 @@
 import 'package:going_wild/domain/models/character/abilities/ability.dart';
-import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/character/character_id.dart';
 import 'package:going_wild/domain/models/character/rarity.dart';
@@ -7,9 +6,10 @@ import 'package:going_wild/domain/models/character/role.dart';
 import 'package:going_wild/domain/models/character/stars/star_values.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_multipliers.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
+import 'package:going_wild/domain/models/combatant/ability_triggers/mana_full_trigger.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage/damage_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/mana_refund_on_kill/mana_refund_on_kill_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/lowest_health_enemy_target.dart';
 
 const Character cat = Character(
   id: CharacterId('cat'),
@@ -17,11 +17,11 @@ const Character cat = Character(
   rarity: Rarity.uncommon,
 
   ability: Ability(
-    trigger: AbilityTrigger.manaFull,
+    trigger: ManaFullTrigger(),
 
     effects: [
       DamageEffect(
-        target: CombatEffectTarget.lowestHealthEnemy,
+        target: LowestHealthEnemyTarget(),
         value: StarValues(star1: 200, star2: 300, star3: 450),
       ),
 

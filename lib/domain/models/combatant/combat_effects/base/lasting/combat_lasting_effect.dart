@@ -1,7 +1,6 @@
+import 'package:going_wild/domain/models/character/stats/stat_modification.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_context.dart';
 import 'package:meta/meta.dart';
-
-import '../../../../character/stats/stat_modification.dart';
-import '../combat_effect_context.dart';
 
 abstract class CombatLastingEffect {
   const CombatLastingEffect({required this.sourceCombatantId});
@@ -26,6 +25,22 @@ abstract class CombatLastingEffect {
   CombatEffectContext applyTickConsequences(CombatEffectContext context, int ownerCombatantId) => context;
   @useResult
   CombatEffectContext applyExpirationConsequences(CombatEffectContext context, int ownerCombatantId) => context;
+
+  @useResult
+  CombatEffectContext reactToOwnerDamaged(
+    CombatEffectContext context, {
+    required double healthLost,
+    required int ownerCombatantId,
+    required int? sourceCombatantId,
+  }) => context;
+
+  @useResult
+  CombatEffectContext reactToOwnerDeath(CombatEffectContext context, {required int ownerCombatantId, required int? killerCombatantId}) =>
+      context;
+
+  @useResult
+  CombatEffectContext reactToOwnerKill(CombatEffectContext context, {required int ownerCombatantId, required int killedCombatantId}) =>
+      context;
 
   @useResult
   ({double absorbedDamage, CombatLastingEffect? remainingCombatLastingEffect}) absorbDamage(double incomingDamage) {

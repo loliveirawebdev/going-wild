@@ -1,5 +1,5 @@
-import 'errors/inventory_index_out_of_range_error.dart';
-import 'errors/inventory_is_full_error.dart';
+import 'package:going_wild/domain/models/inventory/errors/inventory_index_out_of_range_error.dart';
+import 'package:going_wild/domain/models/inventory/errors/inventory_is_full_error.dart';
 
 class Inventory<Entry extends Object> {
   const Inventory({required this._slots});

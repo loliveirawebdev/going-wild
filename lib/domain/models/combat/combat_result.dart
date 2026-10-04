@@ -1,6 +1,6 @@
-import '../combatant/combatant.dart';
-import '../combatant/faction.dart';
-import '../combat_history/combat_history.dart';
+import 'package:going_wild/domain/models/combat_history/combat_history.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
+import 'package:going_wild/domain/models/combatant/faction.dart';
 
 class CombatResult {
   const CombatResult({

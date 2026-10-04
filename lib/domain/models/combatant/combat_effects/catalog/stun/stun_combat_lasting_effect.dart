@@ -1,4 +1,4 @@
-import '../../base/lasting/combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
 
 class StunCombatLastingEffect extends CombatLastingEffect {
   const StunCombatLastingEffect({required this.remainingTicks, required super.sourceCombatantId});

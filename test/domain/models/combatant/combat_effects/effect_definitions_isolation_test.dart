@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 const combatModulePath = 'lib/domain/models/combat/';
 const combatantModulePath = 'lib/domain/models/combatant/';
 const effectsPath = 'lib/domain/models/combatant/combat_effects';
+const abilityTriggersPath = 'lib/domain/models/combatant/ability_triggers';
 
 Iterable<File> dartFilesIn(String directoryPath) =>
     Directory(directoryPath).listSync(recursive: true).whereType<File>().where((file) => file.path.endsWith('.dart'));
@@ -12,6 +13,8 @@ Iterable<File> dartFilesIn(String directoryPath) =>
 bool isEffectDefinition(String path) =>
     path.startsWith(effectsPath) &&
     (path.endsWith('_target.dart') || path.endsWith('_effect.dart') && !path.endsWith('lasting_effect.dart'));
+
+bool isAbilityTriggerDefinition(String path) => path.startsWith(abilityTriggersPath) && path.endsWith('_trigger.dart');
 
 bool isCombatOrCombatant(String path) => path.startsWith(combatModulePath) || path.startsWith(combatantModulePath);
 
@@ -44,13 +47,16 @@ void main() {
     }
   });
 
-  test('the character content imports nothing from the combat or the combatant but effect definitions', () {
+  test('the character content imports nothing from the combat or the combatant but effect and trigger definitions', () {
     final characterContentFiles = dartFilesIn('lib/content/character');
     expect(characterContentFiles, isNotEmpty);
 
     for (final file in characterContentFiles) {
       final combatImports = importedPathsOf(file).where(isCombatOrCombatant);
-      expect(combatImports.where((importedPath) => !isEffectDefinition(importedPath)), isEmpty, reason: file.path);
+      final forbiddenImports = combatImports.where(
+        (importedPath) => !isEffectDefinition(importedPath) && !isAbilityTriggerDefinition(importedPath),
+      );
+      expect(forbiddenImports, isEmpty, reason: file.path);
     }
   });
 }

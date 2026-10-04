@@ -1,12 +1,12 @@
-import '../../../../character/stars/star_values.dart';
-import '../../../../character/stats/stat.dart';
-import '../../../../character/stats/stat_change_type.dart';
-import '../../../../character/stats/stat_modification.dart';
-import '../../../capabilities/add_combat_lasting_effect.dart';
-import '../../base/applying/combat_effect_application.dart';
-import '../../base/combat_effect_context.dart';
-import '../../base/targeted_combat_effect.dart';
-import 'next_hits_stat_modifier_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/character/stars/star_values.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/character/stats/stat_change_type.dart';
+import 'package:going_wild/domain/models/character/stats/stat_modification.dart';
+import 'package:going_wild/domain/models/combatant/capabilities/add_combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/applying/combat_effect_application.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_context.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/targeted_combat_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/catalog/next_hits_stat_modifier/next_hits_stat_modifier_combat_lasting_effect.dart';
 
 class NextHitsStatModifierEffect extends TargetedCombatEffect {
   const NextHitsStatModifierEffect({

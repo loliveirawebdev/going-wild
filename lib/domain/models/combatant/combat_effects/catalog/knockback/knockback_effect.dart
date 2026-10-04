@@ -1,8 +1,7 @@
+import 'package:going_wild/domain/models/combatant/combat_effects/base/applying/combat_effect_application.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_context.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/targeted_combat_effect.dart';
 import 'package:meta/meta.dart';
-
-import '../../base/applying/combat_effect_application.dart';
-import '../../base/combat_effect_context.dart';
-import '../../base/targeted_combat_effect.dart';
 
 class KnockbackEffect extends TargetedCombatEffect {
   const KnockbackEffect({required super.target, required this.cells});

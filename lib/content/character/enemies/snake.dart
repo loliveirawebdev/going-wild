@@ -1,5 +1,4 @@
 import 'package:going_wild/domain/models/character/abilities/ability.dart';
-import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/character/character_id.dart';
 import 'package:going_wild/domain/models/character/rarity.dart';
@@ -7,8 +6,9 @@ import 'package:going_wild/domain/models/character/role.dart';
 import 'package:going_wild/domain/models/character/stars/star_values.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_multipliers.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
+import 'package:going_wild/domain/models/combatant/ability_triggers/mana_full_trigger.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage_over_time/damage_over_time_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/focus_target.dart';
 
 const Character snake = Character(
   id: CharacterId('snake'),
@@ -16,11 +16,11 @@ const Character snake = Character(
   rarity: Rarity.uncommon,
 
   ability: Ability(
-    trigger: AbilityTrigger.manaFull,
+    trigger: ManaFullTrigger(),
 
     effects: [
       DamageOverTimeEffect(
-        target: CombatEffectTarget.focus,
+        target: FocusTarget(),
         damagePerSecond: StarValues(star1: 30, star2: 45, star3: 70),
         seconds: StarValues(star1: 4, star2: 4, star3: 4),
       ),

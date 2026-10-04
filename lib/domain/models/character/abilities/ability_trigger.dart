@@ -1,4 +1,3 @@
-enum AbilityTrigger {
-  manaFull,
-  lowHealth,
+abstract class AbilityTrigger {
+  const AbilityTrigger();
 }

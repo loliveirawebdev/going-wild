@@ -1,5 +1,5 @@
-import '../stats/stat.dart';
-import 'star_values.dart';
+import 'package:going_wild/domain/models/character/stars/star_values.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
 
 class MergeCurve {
   const MergeCurve(this._multipliers);

@@ -16,6 +16,7 @@ import 'package:going_wild/domain/models/character/stats/stat_multipliers.dart';
 import 'package:going_wild/domain/models/character/stats/stats.dart';
 import 'package:going_wild/domain/models/combat/battlefield.dart';
 import 'package:going_wild/domain/models/combat/combat.dart';
+import 'package:going_wild/domain/models/combatant/ability_triggers/mana_full_trigger.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combatant.dart';
@@ -24,7 +25,7 @@ import 'package:going_wild/domain/models/combatant/faction.dart';
 final testRules = basicCombatEngine.rules;
 
 const testBoard = board;
-const noAbility = Ability(effects: [], trigger: AbilityTrigger.manaFull);
+const noAbility = Ability(effects: [], trigger: ManaFullTrigger());
 
 Character dummy({Role role = Role.damage, Ability ability = noAbility, CharacterId id = const CharacterId('cat')}) => Character(
   id: id,
@@ -75,7 +76,7 @@ Combatant combatant({
     ticksUntilNextStep: 0,
     targetCombatantId: null,
     ticksUntilNextAttack: 0,
-    lowHealthAbilityUsed: false,
+    abilityCastCount: 0,
     combatLastingEffects: const [],
     currentHealth: combatantStats[Stat.health],
     currentMana: combatantStats[Stat.manaStart],
@@ -97,7 +98,7 @@ Position at(int row, int column) => Position(row: row, column: column);
 
 StarValues atEveryStar(double value) => StarValues(star1: value, star2: value, star3: value);
 
-Ability ability(List<CombatEffect> effects, {AbilityTrigger trigger = AbilityTrigger.manaFull}) {
+Ability ability(List<CombatEffect> effects, {AbilityTrigger trigger = const ManaFullTrigger()}) {
   return Ability(
     trigger: trigger,
     effects: effects,

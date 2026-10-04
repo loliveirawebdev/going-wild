@@ -1,13 +1,15 @@
-import '../../models/match_progress/match_progress.dart';
-import '../../models/shop/errors/shop_already_unlocked_error.dart';
+import 'package:going_wild/domain/models/match_progress/errors/rejected_player_action_error.dart';
+import 'package:going_wild/domain/models/match_progress/match_progress.dart';
+import 'package:going_wild/domain/models/shop/errors/shop_already_unlocked_error.dart';
 
-class UnlockShop {
-  const UnlockShop();
+RejectedPlayerActionError? checkUnlockingShop(MatchProgress matchProgress) {
+  if (matchProgress.checkPreparingActions() case final rejection?) return rejection;
+  if (!matchProgress.shop.isLocked) return ShopAlreadyUnlockedError();
 
-  MatchProgress call(MatchProgress matchProgress) {
-    matchProgress.requireInProgress();
-    if (!matchProgress.shop.isLocked) throw ShopAlreadyUnlockedError();
+  return null;
+}
 
-    return matchProgress.createCopyWith(shop: matchProgress.shop.createCopyUnlocked());
-  }
+MatchProgress unlockShop(MatchProgress matchProgress) {
+  if (checkUnlockingShop(matchProgress) case final rejection?) throw rejection;
+  return matchProgress.createCopyWith(shop: matchProgress.shop.createCopyUnlocked());
 }

@@ -1,6 +1,6 @@
-import 'phase_engines.dart';
-import 'phase_id.dart';
-import 'phase_wave.dart';
+import 'package:going_wild/domain/models/phase/phase_engines.dart';
+import 'package:going_wild/domain/models/phase/phase_id.dart';
+import 'package:going_wild/domain/models/phase/phase_wave.dart';
 
 class Phase {
   const Phase({required this.id, required this.waves, required this.engines});

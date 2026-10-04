@@ -1,5 +1,4 @@
 import 'package:going_wild/domain/models/character/abilities/ability.dart';
-import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/character/character_id.dart';
 import 'package:going_wild/domain/models/character/rarity.dart';
@@ -8,9 +7,11 @@ import 'package:going_wild/domain/models/character/stars/star_values.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_change_type.dart';
 import 'package:going_wild/domain/models/character/stats/stat_multipliers.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
+import 'package:going_wild/domain/models/combatant/ability_triggers/mana_full_trigger.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stat_modifier/stat_modifier_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/taunt/taunt_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/all_enemies_target.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/self_target.dart';
 
 const Character dog = Character(
   id: CharacterId('dog'),
@@ -18,16 +19,16 @@ const Character dog = Character(
   rarity: Rarity.uncommon,
 
   ability: Ability(
-    trigger: AbilityTrigger.manaFull,
+    trigger: ManaFullTrigger(),
 
     effects: [
       TauntEffect(
-        target: CombatEffectTarget.allEnemies,
+        target: AllEnemiesTarget(),
         seconds: StarValues(star1: 2, star2: 2, star3: 2),
       ),
 
       StatModifierEffect(
-        target: CombatEffectTarget.self,
+        target: SelfTarget(),
         stat: Stat.armor,
         changeType: StatChangeType.absoluteValue,
         value: StarValues(star1: 30, star2: 50, star3: 80),

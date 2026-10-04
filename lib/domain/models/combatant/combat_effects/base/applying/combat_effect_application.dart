@@ -1,9 +1,8 @@
+import 'package:going_wild/domain/models/combatant/combat_effects/base/applying/combat_effect_targeting.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_context.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
 import 'package:meta/meta.dart';
-
-import '../combat_effect_context.dart';
-import '../../../combatant.dart';
-import '../combat_effect_target.dart';
-import 'resolve_combat_effect_targets.dart';
 
 class CombatEffectApplication {
   const CombatEffectApplication({
@@ -25,6 +24,10 @@ class CombatEffectApplication {
 
   int get stars => sourceCombatant.characterCopy.stars;
   Combatant get sourceCombatant => context.combatantWithId(sourceCombatantId);
-  List<Combatant> targetsOf(CombatEffectTarget effectTarget) => resolveCombatEffectTargets(context, sourceCombatant, effectTarget);
+  List<Combatant> targetsOf(CombatEffectTarget effectTarget) {
+    final targeting = CombatEffectTargeting(context: context, sourceCombatant: sourceCombatant);
+    return effectTarget.resolve(targeting);
+  }
+
   bool get hasKilledAnyCombatant => aliveCombatantIdsBeforeApplication.any((combatantId) => !context.combatantWithId(combatantId).isAlive);
 }

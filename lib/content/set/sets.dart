@@ -1,14 +1,13 @@
+import 'package:going_wild/content/set/brutes.dart';
+import 'package:going_wild/content/set/david_and_goliath.dart';
+import 'package:going_wild/content/set/day_and_night.dart';
+import 'package:going_wild/content/set/flyers.dart';
+import 'package:going_wild/content/set/guardians.dart';
+import 'package:going_wild/content/set/herding.dart';
+import 'package:going_wild/content/set/pets.dart';
+import 'package:going_wild/content/set/producers.dart';
+import 'package:going_wild/content/set/trackers.dart';
 import 'package:going_wild/domain/models/set/team_set.dart';
-
-import 'brutes.dart';
-import 'david_and_goliath.dart';
-import 'day_and_night.dart';
-import 'flyers.dart';
-import 'guardians.dart';
-import 'herding.dart';
-import 'pets.dart';
-import 'producers.dart';
-import 'trackers.dart';
 
 export 'brutes.dart';
 export 'david_and_goliath.dart';

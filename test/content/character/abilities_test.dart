@@ -6,7 +6,6 @@ import 'package:going_wild/domain/models/character/stars/star_values.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_change_type.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/targeted_combat_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/ambush/ambush_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage/damage_effect.dart';
@@ -23,17 +22,6 @@ import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stun/s
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/taunt/taunt_effect.dart';
 
 const allCharacters = [...allTeamCharacters, ...allEnemyCharacters];
-
-const enemyTargets = {
-  CombatEffectTarget.focus,
-  CombatEffectTarget.allEnemies,
-  CombatEffectTarget.farthestEnemy,
-  CombatEffectTarget.nearbyEnemies,
-  CombatEffectTarget.lowestHealthEnemy,
-  CombatEffectTarget.enemiesAroundFocus,
-};
-
-const areaTargets = {CombatEffectTarget.allEnemies, CombatEffectTarget.nearbyEnemies, CombatEffectTarget.enemiesAroundFocus};
 
 List<CombatEffect> combatEffectsOf(Character character) => character.ability.effects.whereType<CombatEffect>().toList();
 
@@ -63,7 +51,7 @@ List<StarValues> starValuesOf(CombatEffect effect) => switch (effect) {
 
 bool isMovingEffect(CombatEffect effect) => effect is KnockbackEffect || effect is PullEffect;
 
-bool isAreaEffect(CombatEffect effect) => effect is TargetedCombatEffect && areaTargets.contains(effect.target);
+bool isAreaEffect(CombatEffect effect) => effect is TargetedCombatEffect && effect.target.reachesSeveralEnemies;
 
 void main() {
   test('every ability has at least one combat effect', () {
@@ -98,7 +86,7 @@ void main() {
   test('stat modifiers weaken enemies and strengthen allies', () {
     for (final character in allCharacters) {
       for (final effect in flatten(combatEffectsOf(character)).whereType<StatModifierEffect>()) {
-        final isOnEnemies = enemyTargets.contains(effect.target);
+        final isOnEnemies = effect.target.reachesEnemies;
         final isMultiplier = effect.changeType == StatChangeType.multiplier;
         final neutralValue = isMultiplier ? 1 : 0;
         final expectedValue = isOnEnemies ? lessThan(neutralValue) : greaterThan(neutralValue);

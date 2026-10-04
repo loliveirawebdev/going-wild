@@ -1,4 +1,4 @@
-import 'character.dart';
+import 'package:going_wild/domain/models/character/character.dart';
 
 class CharacterCopy {
   const CharacterCopy({required this.stars, required this.character});

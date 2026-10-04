@@ -1,6 +1,5 @@
+import 'package:going_wild/domain/models/combatant/combatant.dart';
 import 'package:meta/meta.dart';
-
-import '../combatant.dart';
 
 @useResult
 Combatant loseHealth(Combatant combatant, {required double healthAmount}) {

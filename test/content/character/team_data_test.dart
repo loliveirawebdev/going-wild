@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/content/character/team/team.dart';
 import 'package:going_wild/content/set/sets.dart';
-import 'package:going_wild/domain/models/set/set_target.dart';
+import 'package:going_wild/domain/models/set/targets/specific_character_set_target.dart';
 
 void main() {
   test('character ids are unique', () {
@@ -21,10 +21,10 @@ void main() {
     }
   });
 
-  test('specificCharacter effects point to a member of the set', () {
+  test('effects on a specific character point to a member of the set', () {
     for (final set in allSets) {
       for (final effect in set.tiers.expand((tier) => tier.effects)) {
-        if (effect.target == SetTarget.specificCharacter) expect(set.members, contains(effect.character), reason: set.id.value);
+        if (effect.target case SpecificCharacterSetTarget(:final character)) expect(set.members, contains(character), reason: set.id.value);
       }
     }
   });

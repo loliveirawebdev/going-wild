@@ -1,11 +1,10 @@
+import 'package:going_wild/domain/models/board/placement.dart';
+import 'package:going_wild/domain/models/board/placement_list.dart';
+import 'package:going_wild/domain/models/character/character_copy.dart';
+import 'package:going_wild/domain/models/inventory/inventory.dart';
+import 'package:going_wild/domain/models/roster/roster_entry.dart';
+import 'package:going_wild/domain/models/roster/roster_slot.dart';
 import 'package:meta/meta.dart';
-
-import '../board/placement.dart';
-import '../board/placement_list.dart';
-import '../character/character_copy.dart';
-import '../inventory/inventory.dart';
-import 'roster_entry.dart';
-import 'roster_slot.dart';
 
 class Roster {
   const Roster({required this.inventory, required this.placements});

@@ -1,14 +1,12 @@
-import 'package:meta/meta.dart';
-
 import 'dart:math';
 
-import 'errors/combatant_not_found_error.dart';
-import 'errors/position_not_free_error.dart';
-
-import '../board/board.dart';
-import '../board/position.dart';
-import '../combatant/combatant.dart';
-import '../combatant/faction.dart';
+import 'package:going_wild/domain/models/board/board.dart';
+import 'package:going_wild/domain/models/board/position.dart';
+import 'package:going_wild/domain/models/combat/errors/combatant_not_found_error.dart';
+import 'package:going_wild/domain/models/combat/errors/position_not_free_error.dart';
+import 'package:going_wild/domain/models/combatant/combatant.dart';
+import 'package:going_wild/domain/models/combatant/faction.dart';
+import 'package:meta/meta.dart';
 
 class Battlefield {
   const Battlefield({required this.board, required this.combatants});
@@ -16,9 +14,11 @@ class Battlefield {
   final Board board;
 
   Combatant combatantWithId(int combatantId) {
-    final combatant = combatants.where((combatant) => combatant.id == combatantId).firstOrNull;
-    if (combatant == null) throw CombatantNotFoundError(combatantId: combatantId);
-    return combatant;
+    for (final combatant in combatants) {
+      if (combatant.id == combatantId) return combatant;
+    }
+
+    throw CombatantNotFoundError(combatantId: combatantId);
   }
 
   @useResult
@@ -55,8 +55,11 @@ class Battlefield {
   }
 
   Combatant? _aliveCombatantAtPosition(Position position) {
-    final filteredCombatants = combatants.where((combatant) => combatant.isAlive && combatant.position == position);
-    return filteredCombatants.firstOrNull;
+    for (final combatant in combatants) {
+      if (combatant.isAlive && combatant.position == position) return combatant;
+    }
+
+    return null;
   }
 
   Position? pickRandomFreePositionClosestTo(Position origin, Random randomGenerator) {

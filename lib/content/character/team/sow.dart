@@ -1,5 +1,4 @@
 import 'package:going_wild/domain/models/character/abilities/ability.dart';
-import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/character/character_id.dart';
 import 'package:going_wild/domain/models/character/rarity.dart';
@@ -8,9 +7,10 @@ import 'package:going_wild/domain/models/character/stars/star_values.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_change_type.dart';
 import 'package:going_wild/domain/models/character/stats/stat_multipliers.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
+import 'package:going_wild/domain/models/combatant/ability_triggers/mana_full_trigger.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage/damage_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/stat_modifier/stat_modifier_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/nearby_enemies_target.dart';
 
 const Character sow = Character(
   id: CharacterId('sow'),
@@ -18,11 +18,11 @@ const Character sow = Character(
   rarity: Rarity.uncommon,
 
   ability: Ability(
-    trigger: AbilityTrigger.manaFull,
+    trigger: ManaFullTrigger(),
 
     effects: [
       StatModifierEffect(
-        target: CombatEffectTarget.nearbyEnemies,
+        target: NearbyEnemiesTarget(),
         stat: Stat.attackSpeed,
         changeType: StatChangeType.multiplier,
         value: StarValues(star1: 0.6, star2: 0.6, star3: 0.6),
@@ -30,7 +30,7 @@ const Character sow = Character(
       ),
 
       DamageEffect(
-        target: CombatEffectTarget.nearbyEnemies,
+        target: NearbyEnemiesTarget(),
         value: StarValues(star1: 80, star2: 120, star3: 180),
       ),
     ],

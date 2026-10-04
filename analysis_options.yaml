@@ -23,6 +23,7 @@ formatter:
 linter:
   rules:
     always_declare_return_types: true
+    always_use_package_imports: true
     curly_braces_in_flow_control_structures: false
     avoid_dynamic_calls: true
     avoid_print: true

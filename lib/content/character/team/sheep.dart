@@ -1,5 +1,4 @@
 import 'package:going_wild/domain/models/character/abilities/ability.dart';
-import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/character/character_id.dart';
 import 'package:going_wild/domain/models/character/rarity.dart';
@@ -7,8 +6,9 @@ import 'package:going_wild/domain/models/character/role.dart';
 import 'package:going_wild/domain/models/character/stars/star_values.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_multipliers.dart';
-import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_target.dart';
+import 'package:going_wild/domain/models/combatant/ability_triggers/mana_full_trigger.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/shield/shield_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/targets/lowest_health_ally_target.dart';
 
 const Character sheep = Character(
   id: CharacterId('sheep'),
@@ -16,11 +16,11 @@ const Character sheep = Character(
   rarity: Rarity.uncommon,
 
   ability: Ability(
-    trigger: AbilityTrigger.manaFull,
+    trigger: ManaFullTrigger(),
 
     effects: [
       ShieldEffect(
-        target: CombatEffectTarget.lowestHealthAlly,
+        target: LowestHealthAllyTarget(),
         value: StarValues(star1: 200, star2: 300, star3: 450),
         seconds: StarValues(star1: 4, star2: 4, star3: 4),
       ),

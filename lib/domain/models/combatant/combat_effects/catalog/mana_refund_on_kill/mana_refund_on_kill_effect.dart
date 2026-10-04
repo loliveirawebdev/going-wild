@@ -1,8 +1,8 @@
-import '../../../../character/stats/stat.dart';
-import '../../../capabilities/gain_mana.dart';
-import '../../base/applying/combat_effect_application.dart';
-import '../../base/combat_effect.dart';
-import '../../base/combat_effect_context.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/combatant/capabilities/gain_mana.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/applying/combat_effect_application.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/combat_effect_context.dart';
 
 class ManaRefundOnKillEffect extends CombatEffect {
   const ManaRefundOnKillEffect({required this.percentage});

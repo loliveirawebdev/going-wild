@@ -1,16 +1,16 @@
-import '../../character/character.dart';
-import '../../character/character_copy.dart';
-import '../../player/player.dart';
+import 'package:going_wild/domain/models/character/character.dart';
+import 'package:going_wild/domain/models/character/character_copy.dart';
+import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 
 abstract class EconomyEngine {
   const EconomyEngine();
 
   int get startingCoins;
-  int get rerollCostInCoins;
-  int get experiencePerPurchase;
-  int get experiencePurchaseCostInCoins;
 
-  int priceOf(Character character);
-  int roundIncome({required Player player, required int waveReward});
-  int sellPriceOf(CharacterCopy characterCopy, {required int copiesInside});
+  int roundIncome({required MatchProgress matchProgress});
+  int rerollCostInCoins({required MatchProgress matchProgress});
+  int experiencePerPurchase({required MatchProgress matchProgress});
+  int experiencePurchaseCostInCoins({required MatchProgress matchProgress});
+  int priceOf(Character character, {required MatchProgress matchProgress});
+  int sellPriceOf(CharacterCopy characterCopy, {required MatchProgress matchProgress});
 }

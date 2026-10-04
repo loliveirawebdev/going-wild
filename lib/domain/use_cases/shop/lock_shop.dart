@@ -1,13 +1,16 @@
-import '../../models/match_progress/match_progress.dart';
-import '../../models/shop/errors/shop_already_locked_error.dart';
+import 'package:going_wild/domain/models/match_progress/errors/rejected_player_action_error.dart';
+import 'package:going_wild/domain/models/match_progress/match_progress.dart';
+import 'package:going_wild/domain/models/shop/errors/shop_already_locked_error.dart';
 
-class LockShop {
-  const LockShop();
+RejectedPlayerActionError? checkLockingShop(MatchProgress matchProgress) {
+  if (matchProgress.checkPreparingActions() case final rejection?) return rejection;
+  if (matchProgress.shop.isLocked) return ShopAlreadyLockedError();
 
-  MatchProgress call(MatchProgress matchProgress) {
-    matchProgress.requireInProgress();
-    if (matchProgress.shop.isLocked) throw ShopAlreadyLockedError();
+  return null;
+}
 
-    return matchProgress.createCopyWith(shop: matchProgress.shop.createCopyLocked());
-  }
+MatchProgress lockShop(MatchProgress matchProgress) {
+  if (checkLockingShop(matchProgress) case final rejection?) throw rejection;
+
+  return matchProgress.createCopyWith(shop: matchProgress.shop.createCopyLocked());
 }

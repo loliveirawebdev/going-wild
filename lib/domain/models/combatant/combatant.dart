@@ -1,12 +1,11 @@
+import 'package:going_wild/domain/models/board/position.dart';
+import 'package:going_wild/domain/models/character/character_copy.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/character/stats/stat_modification.dart';
+import 'package:going_wild/domain/models/character/stats/stats.dart';
+import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
+import 'package:going_wild/domain/models/combatant/faction.dart';
 import 'package:meta/meta.dart';
-
-import '../board/position.dart';
-import '../character/character_copy.dart';
-import '../character/stats/stat.dart';
-import '../character/stats/stat_modification.dart';
-import '../character/stats/stats.dart';
-import 'combat_effects/base/lasting/combat_lasting_effect.dart';
-import 'faction.dart';
 
 class Combatant {
   const Combatant({
@@ -19,7 +18,7 @@ class Combatant {
     required this.currentHealth,
     required this.targetCombatantId,
     required this.ticksUntilNextStep,
-    required this.lowHealthAbilityUsed,
+    required this.abilityCastCount,
     required this.ticksUntilNextAttack,
     required this.combatLastingEffects,
   });
@@ -33,7 +32,7 @@ class Combatant {
   final double currentHealth;
   final int? targetCombatantId;
   final int ticksUntilNextStep;
-  final bool lowHealthAbilityUsed;
+  final int abilityCastCount;
   final int ticksUntilNextAttack;
   final List<CombatLastingEffect> combatLastingEffects;
 
@@ -43,6 +42,8 @@ class Combatant {
   double get currentShield => combatLastingEffects.fold(0, (sum, combatLastingEffect) => sum + combatLastingEffect.absorbableDamage);
 
   double getCurrentStat(Stat stat) {
+    if (combatLastingEffects.isEmpty) return stats[stat];
+
     final relatedStatModifications = combatLastingEffects
         .map((combatLastingEffect) => combatLastingEffect.statModification)
         .nonNulls
@@ -58,7 +59,7 @@ class Combatant {
     double? currentHealth,
     int? targetCombatantId,
     int? ticksUntilNextStep,
-    bool? lowHealthAbilityUsed,
+    int? abilityCastCount,
     int? ticksUntilNextAttack,
     List<CombatLastingEffect>? combatLastingEffects,
   }) => Combatant(
@@ -71,7 +72,7 @@ class Combatant {
     currentHealth: currentHealth ?? this.currentHealth,
     targetCombatantId: targetCombatantId ?? this.targetCombatantId,
     ticksUntilNextStep: ticksUntilNextStep ?? this.ticksUntilNextStep,
-    lowHealthAbilityUsed: lowHealthAbilityUsed ?? this.lowHealthAbilityUsed,
+    abilityCastCount: abilityCastCount ?? this.abilityCastCount,
     ticksUntilNextAttack: ticksUntilNextAttack ?? this.ticksUntilNextAttack,
     combatLastingEffects: combatLastingEffects ?? this.combatLastingEffects,
   );
