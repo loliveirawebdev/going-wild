@@ -1,8 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/design/app_shadows.dart';
+import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_slot.dart';
 
 const _liftedScale = 1.08;
@@ -15,9 +18,7 @@ class DraggableBenchSlot extends StatelessWidget {
     required this.slideOffset,
     required this.characterCopy,
     required this.onCopyDropped,
-    required this.onDragStarted,
-    required this.onDragUpdated,
-    required this.onDragEnded,
+    required this.onBoardCopyDropped,
     super.key,
     this.onPressed,
   });
@@ -26,11 +27,9 @@ class DraggableBenchSlot extends StatelessWidget {
   final double nameOpacity;
   final Offset slideOffset;
   final VoidCallback? onPressed;
-  final VoidCallback onDragEnded;
   final CharacterCopy? characterCopy;
   final ValueChanged<int> onCopyDropped;
-  final ValueChanged<RosterSlot> onDragStarted;
-  final ValueChanged<Offset> onDragUpdated;
+  final ValueChanged<Position> onBoardCopyDropped;
 
   InventorySlot get _inventorySlot => InventorySlot(index: slotIndex);
 
@@ -41,12 +40,12 @@ class DraggableBenchSlot extends StatelessWidget {
     return DragTarget<RosterSlot>(
       onWillAcceptWithDetails: (details) => switch (details.data) {
         InventorySlot(:final index) => index != slotIndex,
-        BoardSlot() => false,
+        BoardSlot() => true,
       },
 
       onAcceptWithDetails: (details) => switch (details.data) {
         InventorySlot(:final index) => onCopyDropped(index),
-        BoardSlot() => null,
+        BoardSlot(:final position) => onBoardCopyDropped(position),
       },
 
       builder: (context, candidates, rejections) {
@@ -65,12 +64,14 @@ class DraggableBenchSlot extends StatelessWidget {
           );
         }
 
+        final rosterDragViewModel = context.read<RosterDragViewModel>();
+
         return Draggable<RosterSlot>(
           data: _inventorySlot,
-          onDragEnd: (details) => onDragEnded(),
           dragAnchorStrategy: pointerDragAnchorStrategy,
-          onDragStarted: () => onDragStarted(_inventorySlot),
-          onDragUpdate: (details) => onDragUpdated(details.globalPosition),
+          onDragEnd: (details) => rosterDragViewModel.stopDragging(),
+          onDragStarted: () => rosterDragViewModel.startDragging(_inventorySlot),
+          onDragUpdate: (details) => rosterDragViewModel.moveDragTo(details.globalPosition),
           feedback: _LiftedBenchUnit(characterCopy: characterCopy, slotNumber: slotIndex + 1),
           childWhenDragging: BenchSlot(nameOpacity: nameOpacity, slotNumber: slotIndex + 1, characterCopy: null),
           child: Transform.translate(offset: slideOffset, child: slot),

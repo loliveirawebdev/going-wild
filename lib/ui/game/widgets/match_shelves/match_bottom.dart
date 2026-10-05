@@ -4,6 +4,8 @@ import 'package:going_wild/domain/models/match_progress/round_stage.dart';
 import 'package:going_wild/ui/core/design/app_spacing.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
+import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag.dart';
+import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_shelf.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/match_info_shelf.dart';
 
@@ -18,23 +20,25 @@ class MatchBottom extends StatefulWidget {
 
 class _MatchBottomState extends State<MatchBottom> {
   var _isBenchExpanded = false;
-  var _isDraggedCopyOverBench = true;
-
+  bool? _isDraggedCopyOverBench;
   final _benchAreaKey = GlobalKey();
 
-  void _followDraggedCopy(Offset globalPosition) {
+  void _followDrag(RosterDrag? drag) {
+    final globalPosition = drag?.globalPosition;
+    if (drag == null) _isDraggedCopyOverBench = null;
+    if (globalPosition == null) return;
+
     final benchArea = _benchAreaKey.currentContext?.findRenderObject() as RenderBox?;
     if (benchArea == null) return;
 
     final benchRect = benchArea.localToGlobal(Offset.zero) & benchArea.size;
+    final wasOverBench = _isDraggedCopyOverBench;
     final isOverBench = benchRect.contains(globalPosition);
-    if (isOverBench == _isDraggedCopyOverBench) return;
-
     _isDraggedCopyOverBench = isOverBench;
+
+    if (wasOverBench == null || wasOverBench == isOverBench) return;
     _changeBenchExpansion(isOverBench);
   }
-
-  void _endDraggingCopy() => _isDraggedCopyOverBench = true;
 
   void _changeBenchExpansion(bool isExpanded) {
     if (isExpanded == _isBenchExpanded) return;
@@ -48,9 +52,14 @@ class _MatchBottomState extends State<MatchBottom> {
   Widget build(BuildContext context) {
     final safeAreaBottom = MediaQuery.paddingOf(context).bottom;
 
-    return BlocListener<PreparationBloc, PreparationState>(
-      listenWhen: _hasFightStarted,
-      listener: (context, state) => _changeBenchExpansion(false),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<PreparationBloc, PreparationState>(
+          listenWhen: _hasFightStarted,
+          listener: (context, state) => _changeBenchExpansion(false),
+        ),
+        BlocListener<RosterDragViewModel, RosterDrag?>(listener: (context, drag) => _followDrag(drag)),
+      ],
       child: Stack(
         children: [
           Positioned.fill(
@@ -72,8 +81,6 @@ class _MatchBottomState extends State<MatchBottom> {
                   BenchShelf(
                     key: _benchAreaKey,
                     isExpanded: _isBenchExpanded,
-                    onCopyDragEnded: _endDraggingCopy,
-                    onCopyDragUpdated: _followDraggedCopy,
                     onExpandedChanged: _changeBenchExpansion,
                   ),
                   const MatchInfoShelf(),

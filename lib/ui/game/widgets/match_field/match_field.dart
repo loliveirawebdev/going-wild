@@ -13,8 +13,10 @@ import 'package:going_wild/ui/core/localization/rejection_message.dart';
 import 'package:going_wild/ui/game/view_models/preparation/events/copy_moved_between_roster_slots.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
+import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
+import 'package:going_wild/ui/game/widgets/match_field/draggable_field_unit.dart';
 import 'package:going_wild/ui/game/widgets/match_field/field_cell_target.dart';
 import 'package:going_wild/ui/game/widgets/match_field/field_rejection_toast.dart';
 import 'package:going_wild/ui/game/widgets/match_field/field_unit_token.dart';
@@ -64,13 +66,14 @@ class _MatchFieldState extends State<MatchField> {
         final matchProgress = preparationState.matchProgress;
         final board = matchProgress.phase.engines.combatEngine.board;
 
-        return BlocBuilder<RosterDragViewModel, RosterSlot?>(
-          builder: (context, draggedSlot) => Stack(
+        return BlocBuilder<RosterDragViewModel, RosterDrag?>(
+          buildWhen: (previous, current) => previous?.draggedSlot != current?.draggedSlot,
+          builder: (context, drag) => Stack(
             clipBehavior: Clip.none,
             children: [
-              ..._buildCellTargets(matchProgress, draggedSlot),
-              ..._buildUnitTokens(board, matchProgress.playerRoster.placements, side: FieldUnitSide.team),
-              if (matchProgress.isInProgress) ..._buildUnitTokens(board, matchProgress.currentWave.enemies, side: FieldUnitSide.enemy),
+              ..._buildCellTargets(matchProgress, drag?.draggedSlot),
+              ..._buildTeamUnits(board, matchProgress.playerRoster.placements, isDragActive: drag != null),
+              if (matchProgress.isInProgress) ..._buildEnemyUnits(board, matchProgress.currentWave.enemies),
               ?_buildRejectionToast(matchProgress),
             ],
           ),
@@ -101,23 +104,35 @@ class _MatchFieldState extends State<MatchField> {
     ];
   }
 
-  Iterable<Widget> _buildUnitTokens(Board board, List<Placement> placements, {required FieldUnitSide side}) {
-    return [
-      for (final placement in placements)
-        Positioned.fromRect(
-          rect: BoardSceneLayout.cellRectOf(board, placement.position, scale: widget.scale),
-          child: IgnorePointer(
-            child: Center(
-              child: FieldUnitToken(
-                side: side,
-                characterCopy: placement.characterCopy,
-                diameter: BoardSceneLayout.cellSize.height * widget.scale * _tokenSizeFraction,
-              ),
-            ),
+  double get _tokenDiameter => BoardSceneLayout.cellSize.height * widget.scale * _tokenSizeFraction;
+
+  Iterable<Widget> _buildTeamUnits(Board board, List<Placement> placements, {required bool isDragActive}) => [
+    for (final placement in placements)
+      Positioned.fromRect(
+        key: ValueKey(placement.position),
+        rect: BoardSceneLayout.cellRectOf(board, placement.position, scale: widget.scale),
+        child: Center(
+          child: DraggableFieldUnit(
+            diameter: _tokenDiameter,
+            position: placement.position,
+            isAnotherDragActive: isDragActive,
+            characterCopy: placement.characterCopy,
           ),
         ),
-    ];
-  }
+      ),
+  ];
+
+  Iterable<Widget> _buildEnemyUnits(Board board, List<Placement> placements) => [
+    for (final placement in placements)
+      Positioned.fromRect(
+        rect: BoardSceneLayout.cellRectOf(board, placement.position, scale: widget.scale),
+        child: IgnorePointer(
+          child: Center(
+            child: FieldUnitToken(side: FieldUnitSide.enemy, diameter: _tokenDiameter, characterCopy: placement.characterCopy),
+          ),
+        ),
+      ),
+  ];
 
   Widget? _buildRejectionToast(MatchProgress matchProgress) {
     final rejection = _rejection;

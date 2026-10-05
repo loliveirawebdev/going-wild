@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
-import 'package:going_wild/domain/models/roster/roster_slot.dart';
+import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_layout.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_shop_tile.dart';
 import 'package:going_wild/ui/game/widgets/bench/draggable_bench_slot.dart';
@@ -14,17 +14,13 @@ class AnimatedBench extends StatefulWidget {
     required this.benchCopies,
     required this.onCopyMoved,
     required this.onSlotPressed,
-    required this.onCopyDragEnded,
-    required this.onCopyDragStarted,
-    required this.onCopyDragUpdated,
+    required this.onBoardCopyDropped,
     super.key,
   });
 
   final bool isExpanded;
-  final VoidCallback onCopyDragEnded;
   final List<CharacterCopy?> benchCopies;
-  final ValueChanged<Offset> onCopyDragUpdated;
-  final ValueChanged<RosterSlot> onCopyDragStarted;
+  final void Function(Position fromPosition, int toIndex) onBoardCopyDropped;
   final bool Function(int fromIndex, int toIndex) onCopyMoved;
   final void Function(int slotIndex, CharacterCopy characterCopy) onSlotPressed;
 
@@ -154,9 +150,7 @@ class _AnimatedBenchState extends State<AnimatedBench> with TickerProviderStateM
       characterCopy: characterCopy,
       nameOpacity: layout.nameOpacity,
       slideOffset: _slideOffsetOf(slotIndex, layout),
-      onDragEnded: widget.onCopyDragEnded,
-      onDragStarted: widget.onCopyDragStarted,
-      onDragUpdated: widget.onCopyDragUpdated,
+      onBoardCopyDropped: (fromPosition) => widget.onBoardCopyDropped(fromPosition, slotIndex),
       onCopyDropped: (fromIndex) => _moveCopy(fromIndex, slotIndex),
       onPressed: widget.isExpanded && characterCopy != null ? () => widget.onSlotPressed(slotIndex, characterCopy) : null,
     );
