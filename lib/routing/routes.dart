@@ -5,6 +5,9 @@ abstract final class Routes {
 
   static const home = '/home';
   static const settings = '/settings';
+  static const terms = '/settings/terms';
+  static const credits = '/settings/credits';
+  static const privacy = '/settings/privacy';
 
   static const phaseSelection = '/phase-selection';
 

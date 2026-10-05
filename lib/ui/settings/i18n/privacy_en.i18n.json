@@ -1,0 +1,30 @@
+{
+  "title": "Privacy",
+  "intro": "Going Wild was made to be played with no account and no collection of personal data.",
+  "updated": "Updated on October 5, 2026",
+  "whatWeStore": {
+    "title": "What we keep",
+    "paragraphs": [
+      "Your progress (phases won) and your settings are saved only on your device.",
+      "We don't ask for your name, email, location or contacts."
+    ]
+  },
+  "whatWeShare": {
+    "title": "What we share",
+    "paragraphs": [
+      "Nothing. We don't sell or send your data to third parties."
+    ]
+  },
+  "deletingYourData": {
+    "title": "Deleting your data",
+    "paragraphs": [
+      "Use \"Reset progress\" in the settings or uninstall the game."
+    ]
+  },
+  "contact": {
+    "title": "Contact",
+    "paragraphs": [
+      "Questions about privacy: reach us through the email on the game's store page."
+    ]
+  }
+}

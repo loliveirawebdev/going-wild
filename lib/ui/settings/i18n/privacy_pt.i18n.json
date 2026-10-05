@@ -1,0 +1,30 @@
+{
+  "title": "Privacidade",
+  "intro": "O Going Wild foi feito para ser jogado sem conta e sem coleta de dados pessoais.",
+  "updated": "Atualizado em 5 de outubro de 2026",
+  "whatWeStore": {
+    "title": "O que guardamos",
+    "paragraphs": [
+      "Seu progresso (fases vencidas) e suas configurações ficam salvos só no seu aparelho.",
+      "Não pedimos nome, e-mail, localização nem contatos."
+    ]
+  },
+  "whatWeShare": {
+    "title": "O que compartilhamos",
+    "paragraphs": [
+      "Nada. Não vendemos nem enviamos seus dados para terceiros."
+    ]
+  },
+  "deletingYourData": {
+    "title": "Apagar seus dados",
+    "paragraphs": [
+      "Use \"Reiniciar progresso\" nas configurações ou desinstale o jogo."
+    ]
+  },
+  "contact": {
+    "title": "Contato",
+    "paragraphs": [
+      "Dúvidas sobre privacidade: contato pelo e-mail da página do jogo na loja."
+    ]
+  }
+}

@@ -1,4 +1,24 @@
 {
   "title": "Configurações",
-  "placeholder": "Nada por aqui ainda"
+  "backButton": "Voltar",
+  "closeButton": "Fechar",
+  "soundSection": "Som",
+  "music": "Música",
+  "soundEffects": "Efeitos sonoros",
+  "muted": "Mudo",
+  "vibration": "Vibração",
+  "matchSection": "Partida",
+  "combatSpeed": "Velocidade do combate",
+  "combatSpeedHint": "Começa cada luta nessa velocidade",
+  "progressSection": "Progresso",
+  "resetProgress": "Reiniciar progresso",
+  "resetProgressHint": "Volta as configurações ao padrão. Não dá para desfazer.",
+  "resetButton": "Reiniciar",
+  "cancelButton": "Cancelar",
+  "resetDialogTitle": "Reiniciar progresso?",
+  "resetDialogBody": "Todas as configurações voltam ao padrão. Isso não dá para desfazer.",
+  "aboutSection": "Sobre",
+  "credits": "Créditos",
+  "privacy": "Política de privacidade",
+  "terms": "Termos de uso"
 }

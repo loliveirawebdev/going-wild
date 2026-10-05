@@ -50,13 +50,16 @@ class Translations with BaseTranslations<AppLocale, Translations> {
   // Translations
   late final Translations$app$pt app = Translations$app$pt._(_root);
   late final Translations$characters$pt characters = Translations$characters$pt._(_root);
+  late final Translations$credits$pt credits = Translations$credits$pt._(_root);
   late final Translations$entrypoint$pt entrypoint = Translations$entrypoint$pt._(_root);
   late final Translations$game$pt game = Translations$game$pt._(_root);
   late final Translations$home$pt home = Translations$home$pt._(_root);
   late final Translations$phaseSelection$pt phaseSelection = Translations$phaseSelection$pt._(_root);
   late final Translations$phases$pt phases = Translations$phases$pt._(_root);
+  late final Translations$privacy$pt privacy = Translations$privacy$pt._(_root);
   late final Translations$sets$pt sets = Translations$sets$pt._(_root);
   late final Translations$settings$pt settings = Translations$settings$pt._(_root);
+  late final Translations$terms$pt terms = Translations$terms$pt._(_root);
 }
 
 // Path: app
@@ -162,6 +165,23 @@ class Translations$characters$pt {
 
   /// pt: 'Gambá'
   String get skunk => 'Gambá';
+}
+
+// Path: credits
+class Translations$credits$pt {
+  Translations$credits$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Créditos'
+  String get title => 'Créditos';
+
+  List<String> get paragraphs => [
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  ];
 }
 
 // Path: entrypoint
@@ -316,6 +336,29 @@ class Translations$phases$pt {
   late final Translations$phases$backyard$pt backyard = Translations$phases$backyard$pt._(_root);
 }
 
+// Path: privacy
+class Translations$privacy$pt {
+  Translations$privacy$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Privacidade'
+  String get title => 'Privacidade';
+
+  /// pt: 'O Going Wild foi feito para ser jogado sem conta e sem coleta de dados pessoais.'
+  String get intro => 'O Going Wild foi feito para ser jogado sem conta e sem coleta de dados pessoais.';
+
+  /// pt: 'Atualizado em 5 de outubro de 2026'
+  String get updated => 'Atualizado em 5 de outubro de 2026';
+
+  late final Translations$privacy$whatWeStore$pt whatWeStore = Translations$privacy$whatWeStore$pt._(_root);
+  late final Translations$privacy$whatWeShare$pt whatWeShare = Translations$privacy$whatWeShare$pt._(_root);
+  late final Translations$privacy$deletingYourData$pt deletingYourData = Translations$privacy$deletingYourData$pt._(_root);
+  late final Translations$privacy$contact$pt contact = Translations$privacy$contact$pt._(_root);
+}
+
 // Path: sets
 class Translations$sets$pt {
   Translations$sets$pt._(this._root);
@@ -363,8 +406,91 @@ class Translations$settings$pt {
   /// pt: 'Configurações'
   String get title => 'Configurações';
 
-  /// pt: 'Nada por aqui ainda'
-  String get placeholder => 'Nada por aqui ainda';
+  /// pt: 'Voltar'
+  String get backButton => 'Voltar';
+
+  /// pt: 'Fechar'
+  String get closeButton => 'Fechar';
+
+  /// pt: 'Som'
+  String get soundSection => 'Som';
+
+  /// pt: 'Música'
+  String get music => 'Música';
+
+  /// pt: 'Efeitos sonoros'
+  String get soundEffects => 'Efeitos sonoros';
+
+  /// pt: 'Mudo'
+  String get muted => 'Mudo';
+
+  /// pt: 'Vibração'
+  String get vibration => 'Vibração';
+
+  /// pt: 'Partida'
+  String get matchSection => 'Partida';
+
+  /// pt: 'Velocidade do combate'
+  String get combatSpeed => 'Velocidade do combate';
+
+  /// pt: 'Começa cada luta nessa velocidade'
+  String get combatSpeedHint => 'Começa cada luta nessa velocidade';
+
+  /// pt: 'Progresso'
+  String get progressSection => 'Progresso';
+
+  /// pt: 'Reiniciar progresso'
+  String get resetProgress => 'Reiniciar progresso';
+
+  /// pt: 'Volta as configurações ao padrão. Não dá para desfazer.'
+  String get resetProgressHint => 'Volta as configurações ao padrão. Não dá para desfazer.';
+
+  /// pt: 'Reiniciar'
+  String get resetButton => 'Reiniciar';
+
+  /// pt: 'Cancelar'
+  String get cancelButton => 'Cancelar';
+
+  /// pt: 'Reiniciar progresso?'
+  String get resetDialogTitle => 'Reiniciar progresso?';
+
+  /// pt: 'Todas as configurações voltam ao padrão. Isso não dá para desfazer.'
+  String get resetDialogBody => 'Todas as configurações voltam ao padrão. Isso não dá para desfazer.';
+
+  /// pt: 'Sobre'
+  String get aboutSection => 'Sobre';
+
+  /// pt: 'Créditos'
+  String get credits => 'Créditos';
+
+  /// pt: 'Política de privacidade'
+  String get privacy => 'Política de privacidade';
+
+  /// pt: 'Termos de uso'
+  String get terms => 'Termos de uso';
+}
+
+// Path: terms
+class Translations$terms$pt {
+  Translations$terms$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Termos de uso'
+  String get title => 'Termos de uso';
+
+  /// pt: 'Ao jogar o Going Wild, você concorda com estes termos.'
+  String get intro => 'Ao jogar o Going Wild, você concorda com estes termos.';
+
+  /// pt: 'Atualizado em 5 de outubro de 2026'
+  String get updated => 'Atualizado em 5 de outubro de 2026';
+
+  late final Translations$terms$gameUse$pt gameUse = Translations$terms$gameUse$pt._(_root);
+  late final Translations$terms$content$pt content = Translations$terms$content$pt._(_root);
+  late final Translations$terms$noWarranty$pt noWarranty = Translations$terms$noWarranty$pt._(_root);
+  late final Translations$terms$changes$pt changes = Translations$terms$changes$pt._(_root);
 }
 
 // Path: game.entries
@@ -445,6 +571,135 @@ class Translations$phases$backyard$pt {
   String get name => 'Quintal';
 }
 
+// Path: privacy.whatWeStore
+class Translations$privacy$whatWeStore$pt {
+  Translations$privacy$whatWeStore$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'O que guardamos'
+  String get title => 'O que guardamos';
+
+  List<String> get paragraphs => [
+    'Seu progresso (fases vencidas) e suas configurações ficam salvos só no seu aparelho.',
+    'Não pedimos nome, e-mail, localização nem contatos.',
+  ];
+}
+
+// Path: privacy.whatWeShare
+class Translations$privacy$whatWeShare$pt {
+  Translations$privacy$whatWeShare$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'O que compartilhamos'
+  String get title => 'O que compartilhamos';
+
+  List<String> get paragraphs => [
+    'Nada. Não vendemos nem enviamos seus dados para terceiros.',
+  ];
+}
+
+// Path: privacy.deletingYourData
+class Translations$privacy$deletingYourData$pt {
+  Translations$privacy$deletingYourData$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Apagar seus dados'
+  String get title => 'Apagar seus dados';
+
+  List<String> get paragraphs => [
+    'Use "Reiniciar progresso" nas configurações ou desinstale o jogo.',
+  ];
+}
+
+// Path: privacy.contact
+class Translations$privacy$contact$pt {
+  Translations$privacy$contact$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Contato'
+  String get title => 'Contato';
+
+  List<String> get paragraphs => [
+    'Dúvidas sobre privacidade: contato pelo e-mail da página do jogo na loja.',
+  ];
+}
+
+// Path: terms.gameUse
+class Translations$terms$gameUse$pt {
+  Translations$terms$gameUse$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Uso do jogo'
+  String get title => 'Uso do jogo';
+
+  List<String> get paragraphs => [
+    'O jogo é para uso pessoal e não comercial. Não é permitido copiar, modificar ou redistribuir o jogo ou a arte dele.',
+  ];
+}
+
+// Path: terms.content
+class Translations$terms$content$pt {
+  Translations$terms$content$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Conteúdo'
+  String get title => 'Conteúdo';
+
+  List<String> get paragraphs => [
+    'Personagens, cenários, ícones e textos pertencem à Oliveira Games.',
+  ];
+}
+
+// Path: terms.noWarranty
+class Translations$terms$noWarranty$pt {
+  Translations$terms$noWarranty$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Sem garantias'
+  String get title => 'Sem garantias';
+
+  List<String> get paragraphs => [
+    'O jogo é oferecido como está. Podemos mudar ou encerrar recursos a qualquer momento.',
+  ];
+}
+
+// Path: terms.changes
+class Translations$terms$changes$pt {
+  Translations$terms$changes$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Mudanças nestes termos'
+  String get title => 'Mudanças nestes termos';
+
+  List<String> get paragraphs => [
+    'Quando os termos mudarem, a data no topo desta página será atualizada.',
+  ];
+}
+
 /// The flat map containing all translations for locale <pt>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -482,6 +737,9 @@ extension on Translations {
       'characters.hawk' => 'Gavião',
       'characters.owl' => 'Coruja',
       'characters.skunk' => 'Gambá',
+      'credits.title' => 'Créditos',
+      'credits.paragraphs.0' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      'credits.paragraphs.1' => 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       'entrypoint.loading' => 'Preparando a fazenda…',
       'entrypoint.tipLabel' => 'Dica:',
       'entrypoint.tips.0' => 'Dois bichos iguais com as mesmas estrelas viram um só, com uma estrela a mais.',
@@ -539,6 +797,18 @@ extension on Translations {
       'phaseSelection.backButton' => 'Voltar',
       'phaseSelection.playButton' => 'Jogar',
       'phases.backyard.name' => 'Quintal',
+      'privacy.title' => 'Privacidade',
+      'privacy.intro' => 'O Going Wild foi feito para ser jogado sem conta e sem coleta de dados pessoais.',
+      'privacy.updated' => 'Atualizado em 5 de outubro de 2026',
+      'privacy.whatWeStore.title' => 'O que guardamos',
+      'privacy.whatWeStore.paragraphs.0' => 'Seu progresso (fases vencidas) e suas configurações ficam salvos só no seu aparelho.',
+      'privacy.whatWeStore.paragraphs.1' => 'Não pedimos nome, e-mail, localização nem contatos.',
+      'privacy.whatWeShare.title' => 'O que compartilhamos',
+      'privacy.whatWeShare.paragraphs.0' => 'Nada. Não vendemos nem enviamos seus dados para terceiros.',
+      'privacy.deletingYourData.title' => 'Apagar seus dados',
+      'privacy.deletingYourData.paragraphs.0' => 'Use "Reiniciar progresso" nas configurações ou desinstale o jogo.',
+      'privacy.contact.title' => 'Contato',
+      'privacy.contact.paragraphs.0' => 'Dúvidas sobre privacidade: contato pelo e-mail da página do jogo na loja.',
       'sets.brutes' => 'Brutos',
       'sets.davidAndGoliath' => 'Davi e Golias',
       'sets.dayAndNight' => 'Dia e Noite',
@@ -549,7 +819,39 @@ extension on Translations {
       'sets.producers' => 'Produtores',
       'sets.trackers' => 'Farejadores',
       'settings.title' => 'Configurações',
-      'settings.placeholder' => 'Nada por aqui ainda',
+      'settings.backButton' => 'Voltar',
+      'settings.closeButton' => 'Fechar',
+      'settings.soundSection' => 'Som',
+      'settings.music' => 'Música',
+      'settings.soundEffects' => 'Efeitos sonoros',
+      'settings.muted' => 'Mudo',
+      'settings.vibration' => 'Vibração',
+      'settings.matchSection' => 'Partida',
+      'settings.combatSpeed' => 'Velocidade do combate',
+      'settings.combatSpeedHint' => 'Começa cada luta nessa velocidade',
+      'settings.progressSection' => 'Progresso',
+      'settings.resetProgress' => 'Reiniciar progresso',
+      'settings.resetProgressHint' => 'Volta as configurações ao padrão. Não dá para desfazer.',
+      'settings.resetButton' => 'Reiniciar',
+      'settings.cancelButton' => 'Cancelar',
+      'settings.resetDialogTitle' => 'Reiniciar progresso?',
+      'settings.resetDialogBody' => 'Todas as configurações voltam ao padrão. Isso não dá para desfazer.',
+      'settings.aboutSection' => 'Sobre',
+      'settings.credits' => 'Créditos',
+      'settings.privacy' => 'Política de privacidade',
+      'settings.terms' => 'Termos de uso',
+      'terms.title' => 'Termos de uso',
+      'terms.intro' => 'Ao jogar o Going Wild, você concorda com estes termos.',
+      'terms.updated' => 'Atualizado em 5 de outubro de 2026',
+      'terms.gameUse.title' => 'Uso do jogo',
+      'terms.gameUse.paragraphs.0' =>
+        'O jogo é para uso pessoal e não comercial. Não é permitido copiar, modificar ou redistribuir o jogo ou a arte dele.',
+      'terms.content.title' => 'Conteúdo',
+      'terms.content.paragraphs.0' => 'Personagens, cenários, ícones e textos pertencem à Oliveira Games.',
+      'terms.noWarranty.title' => 'Sem garantias',
+      'terms.noWarranty.paragraphs.0' => 'O jogo é oferecido como está. Podemos mudar ou encerrar recursos a qualquer momento.',
+      'terms.changes.title' => 'Mudanças nestes termos',
+      'terms.changes.paragraphs.0' => 'Quando os termos mudarem, a data no topo desta página será atualizada.',
       _ => null,
     };
   }

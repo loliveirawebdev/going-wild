@@ -87,6 +87,7 @@ class _PressableState extends State<Pressable> with SingleTickerProviderStateMix
 
     final pressable = Semantics(
       button: true,
+      container: true,
       label: widget.semanticLabel,
       enabled: widget.isEnabled,
       child: Listener(

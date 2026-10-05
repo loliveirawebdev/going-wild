@@ -76,7 +76,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(SettingsScreen), findsOneWidget);
 
-    await tester.tap(find.byType(BackButton));
+    await tester.tap(find.bySemanticsLabel(t.settings.backButton));
     await tester.pumpAndSettle();
     expect(find.byType(HomeScreen), findsOneWidget);
   });

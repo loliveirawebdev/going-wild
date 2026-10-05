@@ -1,4 +1,24 @@
 {
   "title": "Settings",
-  "placeholder": "Nothing here yet"
+  "backButton": "Back",
+  "closeButton": "Close",
+  "soundSection": "Sound",
+  "music": "Music",
+  "soundEffects": "Sound effects",
+  "muted": "Muted",
+  "vibration": "Vibration",
+  "matchSection": "Match",
+  "combatSpeed": "Combat speed",
+  "combatSpeedHint": "Every fight starts at this speed",
+  "progressSection": "Progress",
+  "resetProgress": "Reset progress",
+  "resetProgressHint": "Puts every setting back to its default. This can't be undone.",
+  "resetButton": "Reset",
+  "cancelButton": "Cancel",
+  "resetDialogTitle": "Reset progress?",
+  "resetDialogBody": "Every setting goes back to its default. This can't be undone.",
+  "aboutSection": "About",
+  "credits": "Credits",
+  "privacy": "Privacy policy",
+  "terms": "Terms of use"
 }

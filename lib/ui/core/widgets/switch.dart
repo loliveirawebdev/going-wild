@@ -20,10 +20,11 @@ const _labelStyle = TextStyle(
 );
 
 class Switch extends StatelessWidget {
-  const Switch({required this.label, required this.isOn, required this.onChanged, super.key});
+  const Switch({required this.label, required this.isOn, required this.onChanged, super.key, this.showsLabel = true});
 
   final bool isOn;
   final String label;
+  final bool showsLabel;
   final ValueChanged<bool> onChanged;
 
   @override
@@ -31,6 +32,7 @@ class Switch extends StatelessWidget {
     final edgeColor = isOn ? AppColors.grass600 : AppColors.surface400;
 
     return Semantics(
+      container: true,
       toggled: isOn,
       label: label,
       child: GestureDetector(
@@ -67,7 +69,7 @@ class Switch extends StatelessWidget {
                 ),
               ),
             ),
-            Flexible(child: Text(label, style: _labelStyle)),
+            if (showsLabel) Flexible(child: Text(label, style: _labelStyle)),
           ],
         ),
       ),

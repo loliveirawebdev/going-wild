@@ -1,0 +1,29 @@
+{
+  "title": "Terms of use",
+  "intro": "By playing Going Wild, you agree to these terms.",
+  "updated": "Updated on October 5, 2026",
+  "gameUse": {
+    "title": "Using the game",
+    "paragraphs": [
+      "The game is for personal, non-commercial use. Copying, modifying or redistributing the game or its art is not allowed."
+    ]
+  },
+  "content": {
+    "title": "Content",
+    "paragraphs": [
+      "Characters, scenes, icons and texts belong to Oliveira Games."
+    ]
+  },
+  "noWarranty": {
+    "title": "No warranty",
+    "paragraphs": [
+      "The game is provided as is. We may change or end features at any time."
+    ]
+  },
+  "changes": {
+    "title": "Changes to these terms",
+    "paragraphs": [
+      "When the terms change, the date at the top of this page will be updated."
+    ]
+  }
+}
