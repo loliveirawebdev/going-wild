@@ -10,8 +10,8 @@ import 'package:going_wild/domain/models/combatant/ability_triggers/mana_full_tr
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage/damage_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/targets/enemies_around_focus_target.dart';
 
-const Character acromantula = Character(
-  id: CharacterId('acromantula'),
+const Character giantSpider = Character(
+  id: CharacterId('giantSpider'),
   role: Role.guard,
   rarity: Rarity.epic,
 

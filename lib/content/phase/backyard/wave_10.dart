@@ -29,7 +29,7 @@ const PhaseWave backyardWave10 = PhaseWave(
     ),
     Placement(
       position: Position(row: 0, column: 3),
-      characterCopy: CharacterCopy(character: acromantula, stars: 2),
+      characterCopy: CharacterCopy(character: giantSpider, stars: 2),
     ),
   ],
 );

@@ -111,7 +111,7 @@ class _Translations$characters$en implements Translations$characters$pt {
   @override
   String get sow => 'Sow';
   @override
-  String get acromantula => 'Acromantula';
+  String get giantSpider => 'Giant spider';
   @override
   String get alligator => 'Alligator';
   @override
@@ -358,7 +358,7 @@ extension on TranslationsEn {
       'characters.rooster' => 'Rooster',
       'characters.sheep' => 'Sheep',
       'characters.sow' => 'Sow',
-      'characters.acromantula' => 'Acromantula',
+      'characters.giantSpider' => 'Giant spider',
       'characters.alligator' => 'Alligator',
       'characters.bat' => 'Bat',
       'characters.bear' => 'Bear',

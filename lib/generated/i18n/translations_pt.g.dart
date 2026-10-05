@@ -120,8 +120,8 @@ class Translations$characters$pt {
   /// pt: 'Porca'
   String get sow => 'Porca';
 
-  /// pt: 'Acromântula'
-  String get acromantula => 'Acromântula';
+  /// pt: 'Aranha-gigante'
+  String get giantSpider => 'Aranha-gigante';
 
   /// pt: 'Jacaré'
   String get alligator => 'Jacaré';
@@ -431,7 +431,7 @@ extension on Translations {
       'characters.rooster' => 'Galo',
       'characters.sheep' => 'Ovelha',
       'characters.sow' => 'Porca',
-      'characters.acromantula' => 'Acromântula',
+      'characters.giantSpider' => 'Aranha-gigante',
       'characters.alligator' => 'Jacaré',
       'characters.bat' => 'Morcego',
       'characters.bear' => 'Urso',
