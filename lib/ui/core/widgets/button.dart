@@ -1,14 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:going_wild/ui/core/design/app_color_filters.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/design/app_shadows.dart';
 import 'package:going_wild/ui/core/design/app_spacing.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
 import 'package:going_wild/ui/core/widgets/pressable_surface.dart';
-
-const _sixtyPercentAlphaRow = <double>[0, 0, 0, 0.6, 0];
-const _luminanceRow = <double>[0.2126, 0.7152, 0.0722, 0, 0];
-const _grayscaleAtSixtyPercent = ColorFilter.matrix([..._luminanceRow, ..._luminanceRow, ..._luminanceRow, ..._sixtyPercentAlphaRow]);
 
 enum ButtonVariant {
   reward(background: AppColors.sun400, foreground: AppColors.ink, shadows: AppShadows.pressSun),
@@ -27,7 +24,8 @@ enum ButtonVariant {
 enum ButtonSize {
   small(fontSize: 15, lineHeight: 18, padding: EdgeInsets.symmetric(vertical: 6, horizontal: AppSpacing.space3)),
   large(fontSize: 22, lineHeight: 26, padding: EdgeInsets.symmetric(vertical: 14, horizontal: AppSpacing.space6)),
-  medium(fontSize: 18, lineHeight: 22, padding: EdgeInsets.symmetric(vertical: 10, horizontal: AppSpacing.space4));
+  medium(fontSize: 18, lineHeight: 22, padding: EdgeInsets.symmetric(vertical: 10, horizontal: AppSpacing.space4)),
+  extraLarge(fontSize: 24, lineHeight: 28, padding: EdgeInsets.symmetric(vertical: 14, horizontal: AppSpacing.space6));
 
   final double fontSize;
   final double lineHeight;
@@ -88,7 +86,7 @@ class Button extends StatelessWidget {
             if (icon != null)
               SizedBox.square(
                 dimension: size.fontSize,
-                child: isEnabled ? icon : ColorFiltered(colorFilter: _grayscaleAtSixtyPercent, child: icon),
+                child: isEnabled ? icon : ColorFiltered(colorFilter: AppColorFilters.disabledIcon, child: icon),
               ),
             Text(label),
           ],

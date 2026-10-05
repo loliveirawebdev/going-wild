@@ -20,7 +20,7 @@ void main() {
     Bloc.observer = TalkerBlocObserver(talker: talker, settings: blocLoggerSettings);
 
     final viewModel = DefaultEntrypointViewModel();
-    await viewModel.load();
+    await viewModel.load([]);
     await viewModel.close();
     Bloc.observer = previousObserver;
 
@@ -28,8 +28,8 @@ void main() {
     printOnFailure(allLogs);
 
     expect(allLogs, contains('DefaultEntrypointViewModel created'));
-    expect(allLogs, contains('EntrypointState.loading'));
-    expect(allLogs, contains('EntrypointState.loaded'));
+    expect(allLogs, contains('EntrypointState(loading 0%)'));
+    expect(allLogs, contains('EntrypointState(loaded)'));
     expect(allLogs, contains('DefaultEntrypointViewModel closed'));
   });
 }

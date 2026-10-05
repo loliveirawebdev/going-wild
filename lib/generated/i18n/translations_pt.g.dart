@@ -50,6 +50,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
   // Translations
   late final Translations$app$pt app = Translations$app$pt._(_root);
   late final Translations$characters$pt characters = Translations$characters$pt._(_root);
+  late final Translations$entrypoint$pt entrypoint = Translations$entrypoint$pt._(_root);
   late final Translations$game$pt game = Translations$game$pt._(_root);
   late final Translations$home$pt home = Translations$home$pt._(_root);
   late final Translations$phaseSelection$pt phaseSelection = Translations$phaseSelection$pt._(_root);
@@ -161,6 +162,30 @@ class Translations$characters$pt {
 
   /// pt: 'Gambá'
   String get skunk => 'Gambá';
+}
+
+// Path: entrypoint
+class Translations$entrypoint$pt {
+  Translations$entrypoint$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Preparando a fazenda…'
+  String get loading => 'Preparando a fazenda…';
+
+  /// pt: 'Dica:'
+  String get tipLabel => 'Dica:';
+
+  List<String> get tips => [
+    'Dois bichos iguais com as mesmas estrelas viram um só, com uma estrela a mais.',
+    'Trave a loja para guardar as ofertas para a próxima rodada.',
+    'Bichos do mesmo set no campo ganham bônus juntos.',
+    'O seu nível define quantos bichos cabem no campo.',
+    'A linha do meio é dos dois lados: use as casas que a onda deixou livres.',
+    'Perder uma rodada custa uma vida, e o empate também conta como derrota.',
+  ];
 }
 
 // Path: game
@@ -448,6 +473,14 @@ extension on Translations {
       'characters.hawk' => 'Gavião',
       'characters.owl' => 'Coruja',
       'characters.skunk' => 'Gambá',
+      'entrypoint.loading' => 'Preparando a fazenda…',
+      'entrypoint.tipLabel' => 'Dica:',
+      'entrypoint.tips.0' => 'Dois bichos iguais com as mesmas estrelas viram um só, com uma estrela a mais.',
+      'entrypoint.tips.1' => 'Trave a loja para guardar as ofertas para a próxima rodada.',
+      'entrypoint.tips.2' => 'Bichos do mesmo set no campo ganham bônus juntos.',
+      'entrypoint.tips.3' => 'O seu nível define quantos bichos cabem no campo.',
+      'entrypoint.tips.4' => 'A linha do meio é dos dois lados: use as casas que a onda deixou livres.',
+      'entrypoint.tips.5' => 'Perder uma rodada custa uma vida, e o empate também conta como derrota.',
       'game.round' => ({required Object roundNumber, required Object roundCount}) => 'Round ${roundNumber} de ${roundCount}',
       'game.lives' => ({required Object lives}) => 'Vidas: ${lives}',
       'game.coins' => ({required Object coins}) => 'Moedas: ${coins}',

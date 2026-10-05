@@ -1,0 +1,25 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:going_wild/ui/core/design/game_icon.dart';
+import 'package:going_wild/ui/core/design/interface_glyph.dart';
+import 'package:going_wild/ui/core/design/painted_scene.dart';
+import 'package:going_wild/ui/entrypoint/view_models/entrypoint_view_model.dart';
+
+const _simulatedLoadingDurationInDebug = Duration(milliseconds: 2500);
+
+List<LoadingStep> splashLoadingStepsOf(BuildContext context) {
+  final loadingSteps = <LoadingStep>[
+    () => precacheImage(AssetImage(PaintedScene.splash.assetPath), context),
+    for (final icon in GameIcon.values) () => SvgAssetLoader(icon.assetPath).loadBytes(null),
+    for (final glyph in InterfaceGlyph.values) () => SvgAssetLoader(glyph.assetPath).loadBytes(null),
+  ];
+
+  if (!kDebugMode) return loadingSteps;
+
+  final minimumStepDuration = _simulatedLoadingDurationInDebug ~/ loadingSteps.length;
+
+  return [
+    for (final loadingStep in loadingSteps) () => Future.wait([loadingStep(), Future<void>.delayed(minimumStepDuration)]),
+  ];
+}

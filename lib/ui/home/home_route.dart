@@ -4,5 +4,5 @@ import 'package:going_wild/ui/home/widgets/home_screen.dart';
 
 final homeRoute = GoRoute(
   path: Routes.home,
-  builder: (context, state) => const HomeScreen(),
+  pageBuilder: (context, state) => const NoTransitionPage(child: HomeScreen()),
 );

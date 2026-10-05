@@ -1,0 +1,12 @@
+{
+  "loading": "Getting the farm ready…",
+  "tipLabel": "Tip:",
+  "tips": [
+    "Two matching animals with the same stars merge into one with an extra star.",
+    "Lock the shop to keep its offers for the next round.",
+    "Animals from the same set on the board earn bonuses together.",
+    "Your level decides how many animals fit on the board.",
+    "The middle row belongs to both sides: use the cells the wave left free.",
+    "Losing a round costs a life, and a draw counts as a loss too."
+  ]
+}

@@ -51,6 +51,8 @@ class TranslationsEn with BaseTranslations<AppLocale, Translations> implements T
   @override
   late final _Translations$characters$en characters = _Translations$characters$en._(_root);
   @override
+  late final _Translations$entrypoint$en entrypoint = _Translations$entrypoint$en._(_root);
+  @override
   late final _Translations$game$en game = _Translations$game$en._(_root);
   @override
   late final _Translations$home$en home = _Translations$home$en._(_root);
@@ -138,6 +140,28 @@ class _Translations$characters$en implements Translations$characters$pt {
   String get owl => 'Owl';
   @override
   String get skunk => 'Skunk';
+}
+
+// Path: entrypoint
+class _Translations$entrypoint$en implements Translations$entrypoint$pt {
+  _Translations$entrypoint$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get loading => 'Getting the farm ready…';
+  @override
+  String get tipLabel => 'Tip:';
+  @override
+  List<String> get tips => [
+    'Two matching animals with the same stars merge into one with an extra star.',
+    'Lock the shop to keep its offers for the next round.',
+    'Animals from the same set on the board earn bonuses together.',
+    'Your level decides how many animals fit on the board.',
+    'The middle row belongs to both sides: use the cells the wave left free.',
+    'Losing a round costs a life, and a draw counts as a loss too.',
+  ];
 }
 
 // Path: game
@@ -374,6 +398,14 @@ extension on TranslationsEn {
       'characters.hawk' => 'Hawk',
       'characters.owl' => 'Owl',
       'characters.skunk' => 'Skunk',
+      'entrypoint.loading' => 'Getting the farm ready…',
+      'entrypoint.tipLabel' => 'Tip:',
+      'entrypoint.tips.0' => 'Two matching animals with the same stars merge into one with an extra star.',
+      'entrypoint.tips.1' => 'Lock the shop to keep its offers for the next round.',
+      'entrypoint.tips.2' => 'Animals from the same set on the board earn bonuses together.',
+      'entrypoint.tips.3' => 'Your level decides how many animals fit on the board.',
+      'entrypoint.tips.4' => 'The middle row belongs to both sides: use the cells the wave left free.',
+      'entrypoint.tips.5' => 'Losing a round costs a life, and a draw counts as a loss too.',
       'game.round' => ({required Object roundNumber, required Object roundCount}) => 'Round ${roundNumber} of ${roundCount}',
       'game.lives' => ({required Object lives}) => 'Lives: ${lives}',
       'game.coins' => ({required Object coins}) => 'Coins: ${coins}',

@@ -24,6 +24,12 @@ Future<void> openTheApp(WidgetTester tester) async {
       ),
     ),
   );
+
+  for (var attempt = 0; attempt < 400 && find.byType(HomeScreen).evaluate().isEmpty; attempt++) {
+    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 10)));
+    await tester.pump(const Duration(milliseconds: 16));
+  }
+
   await tester.pumpAndSettle();
 }
 
@@ -62,7 +68,7 @@ void main() {
   testWidgets('home opens the settings and back returns to home', (tester) async {
     await openTheApp(tester);
 
-    await tester.tap(find.text(t.home.settingsButton));
+    await tester.tap(find.bySemanticsLabel(t.home.settingsButton));
     await tester.pumpAndSettle();
     expect(find.byType(SettingsScreen), findsOneWidget);
 
