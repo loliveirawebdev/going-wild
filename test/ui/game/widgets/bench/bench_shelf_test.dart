@@ -106,4 +106,17 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('with the bench open, tapping an animal opens its sheet', (tester) async {
+    await showMatchBottom(tester, benchCopies: [const CharacterCopy(stars: 2, character: cat)]);
+
+    await tester.tap(find.byType(BenchSlot).first);
+    await finishResizing(tester);
+    await tester.tap(find.text('Gato'));
+    await finishResizing(tester);
+
+    expect(find.text('SEU TIME'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

@@ -1,0 +1,36 @@
+{
+  "damage": "$value de dano",
+  "damageOverTime": "$value de dano por segundo por ${seconds}s",
+  "healOverTime": "$value de cura por segundo por ${seconds}s",
+  "lifesteal": "$value de dano que vira vida",
+  "shield": "$value de escudo por ${seconds}s",
+  "stun": "atordoamento de ${seconds}s",
+  "taunt": "provocação de ${seconds}s",
+  "knockback(param=cells)": {
+    "one": "empurrão de $cells casa",
+    "other": "empurrão de $cells casas"
+  },
+  "pull": "puxão pra perto",
+  "ambush": "some por ${seconds}s e reaparece atrás dele",
+  "manaRefundOnKill": "Se derrubar alguém, recupera $percentage% da mana",
+  "timedChange": "$change por ${seconds}s",
+  "nextHitsChange(param=hits)": {
+    "one": "$change no próximo ataque",
+    "other": "$change nos próximos $hits ataques"
+  },
+  "onShieldExpire": "Quando o escudo acaba — $effects",
+  "joiner": ", ",
+  "targeted": "$target: $effects",
+  "targets": {
+    "self": "Ele mesmo",
+    "focus": "Alvo atual",
+    "lowestHealthEnemy": "Inimigo com menos vida",
+    "farthestEnemy": "Inimigo mais distante",
+    "allEnemies": "Todos os inimigos",
+    "nearbyEnemies": "Inimigos por perto",
+    "enemiesAroundFocus": "Alvo e inimigos em volta",
+    "lowestHealthAlly": "Aliado com menos vida",
+    "nearbyAllies": "Aliados por perto"
+  },
+  "lastJoiner": " e "
+}

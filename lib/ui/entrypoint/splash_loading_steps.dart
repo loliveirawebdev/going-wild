@@ -3,9 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:going_wild/content/set/sets.dart';
+import 'package:going_wild/domain/models/character/role.dart';
 import 'package:going_wild/ui/core/design/game_icon.dart';
 import 'package:going_wild/ui/core/design/interface_glyph.dart';
 import 'package:going_wild/ui/core/design/painted_scene.dart';
+import 'package:going_wild/ui/core/design/role_icon.dart';
 import 'package:going_wild/ui/core/design/set_icon.dart';
 import 'package:going_wild/ui/entrypoint/view_models/entrypoint_view_model.dart';
 import 'package:going_wild/ui/settings/view_models/settings_view_model.dart';
@@ -19,6 +21,7 @@ List<LoadingStep> splashLoadingStepsOf(BuildContext context) {
     for (final icon in GameIcon.values) () => SvgAssetLoader(icon.assetPath).loadBytes(null),
     for (final glyph in InterfaceGlyph.values) () => SvgAssetLoader(glyph.assetPath).loadBytes(null),
     for (final set in allSets) () => SvgAssetLoader(setIconAssetPathOf(set.id)).loadBytes(null),
+    for (final role in Role.values) () => SvgAssetLoader(roleIconAssetPathOf(role)).loadBytes(null),
   ];
 
   if (!kDebugMode) return loadingSteps;

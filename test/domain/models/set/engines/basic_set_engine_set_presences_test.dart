@@ -34,4 +34,12 @@ void main() {
     final presentSets = setPresencesOf([fourMemberSet.members.first]).map((setPresence) => setPresence.set);
     expect(presentSets, everyElement(predicate<TeamSet>((set) => set.members.contains(fourMemberSet.members.first))));
   });
+
+  test('an animal belongs to every set that lists it as a member', () {
+    final member = fourMemberSet.members.first;
+    final setsOfMember = basicSetEngine.setsOf(member);
+
+    expect(setsOfMember, contains(fourMemberSet));
+    expect(setsOfMember, everyElement(predicate<TeamSet>((set) => set.members.contains(member))));
+  });
 }

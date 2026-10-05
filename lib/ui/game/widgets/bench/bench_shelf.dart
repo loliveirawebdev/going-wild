@@ -2,11 +2,20 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/inventory/inventory.dart';
+import 'package:going_wild/domain/models/match_progress/match_progress.dart';
+import 'package:going_wild/domain/models/roster/roster_slot.dart';
+import 'package:going_wild/domain/use_cases/lineup/sell_copy_from_roster_slot.dart';
+import 'package:going_wild/generated/i18n/translations.g.dart';
+import 'package:going_wild/ui/core/localization/rejection_message.dart';
+import 'package:going_wild/ui/game/view_models/preparation/events/copy_sold_from_roster_slot.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
 import 'package:going_wild/ui/game/widgets/bench/animated_bench.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_handle.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/match_shelf.dart';
+import 'package:going_wild/ui/game/widgets/unit_sheet/unit_sale.dart';
+import 'package:going_wild/ui/game/widgets/unit_sheet/unit_sheet.dart';
+import 'package:going_wild/ui/game/widgets/unit_sheet/unit_side.dart';
 
 class BenchShelf extends StatelessWidget {
   final bool isExpanded;
@@ -19,7 +28,8 @@ class BenchShelf extends StatelessWidget {
     return BlocBuilder<PreparationBloc, PreparationState>(
       builder: (context, state) {
         if (state is! ReadyPreparationState) return const SizedBox.shrink();
-        final benchCopies = _benchCopiesOf(state.matchProgress.playerRoster.inventory);
+        final matchProgress = state.matchProgress;
+        final benchCopies = _benchCopiesOf(matchProgress.playerRoster.inventory);
 
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -32,12 +42,35 @@ class BenchShelf extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               onTap: isExpanded ? null : () => onExpandedChanged(true),
               child: MatchShelf(
-                child: AnimatedBench(isExpanded: isExpanded, benchCopies: benchCopies),
+                child: AnimatedBench(
+                  isExpanded: isExpanded,
+                  benchCopies: benchCopies,
+                  onSlotPressed: (slotIndex, characterCopy) => _openUnitSheet(context, matchProgress, slotIndex, characterCopy),
+                ),
               ),
             ),
           ],
         );
       },
+    );
+  }
+
+  void _openUnitSheet(BuildContext context, MatchProgress matchProgress, int slotIndex, CharacterCopy characterCopy) {
+    final inventorySlot = InventorySlot(index: slotIndex);
+    final preparationBloc = context.read<PreparationBloc>();
+    final engines = matchProgress.phase.engines;
+    final rejection = checkSellingCopyFromRosterSlot(matchProgress, from: inventorySlot);
+
+    presentUnitSheet(
+      context,
+      engines: engines,
+      side: UnitSide.team,
+      characterCopy: characterCopy,
+      sale: UnitSale(
+        valueInCoins: engines.economyEngine.sellPriceOf(characterCopy, matchProgress: matchProgress),
+        disabledReason: rejection == null ? null : rejectionMessageOf(context.t, rejection),
+        onSell: rejection == null ? () => preparationBloc.add(CopySoldFromRosterSlot(from: inventorySlot)) : null,
+      ),
     );
   }
 

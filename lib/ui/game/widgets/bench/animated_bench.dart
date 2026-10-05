@@ -9,7 +9,8 @@ const _expansionDuration = Duration(milliseconds: 420);
 class AnimatedBench extends StatefulWidget {
   final bool isExpanded;
   final List<CharacterCopy?> benchCopies;
-  const AnimatedBench({required this.isExpanded, required this.benchCopies, super.key});
+  final void Function(int slotIndex, CharacterCopy characterCopy) onSlotPressed;
+  const AnimatedBench({required this.isExpanded, required this.benchCopies, required this.onSlotPressed, super.key});
 
   @override
   State<AnimatedBench> createState() => _AnimatedBenchState();
@@ -68,6 +69,7 @@ class _AnimatedBenchState extends State<AnimatedBench> with SingleTickerProvider
                       slotNumber: slotIndex + 1,
                       characterCopy: characterCopy,
                       nameOpacity: layout.nameOpacity,
+                      onPressed: widget.isExpanded && characterCopy != null ? () => widget.onSlotPressed(slotIndex, characterCopy) : null,
                     ),
                   ),
                 Positioned.fromRect(

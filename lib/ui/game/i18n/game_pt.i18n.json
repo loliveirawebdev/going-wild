@@ -58,6 +58,32 @@
     "expandButton": "Abrir banco",
     "collapseButton": "Fechar banco"
   },
+  "unitSheet": {
+    "teamTag": "Seu time",
+    "enemyTag": "Inimigo",
+    "closeButton": "Fechar",
+    "abilityTitle": "Habilidade",
+    "manaCostLabel": "Custa $cost de mana",
+    "lowHealthTrigger": "Com menos de $percentage% de vida",
+    "sellButton": "Vender",
+    "sellLabel": "Vender por $value moedas",
+    "melee": "Corpo a corpo",
+    "ranged": "Distância $range",
+    "attackSpeedValue": "$value/s",
+    "roles": {
+      "tank": "Tanque",
+      "guard": "Guarda",
+      "damage": "Dano",
+      "support": "Suporte"
+    },
+    "stats": {
+      "health": "Vida",
+      "mana": "Mana",
+      "damage": "Dano",
+      "armor": "Armadura",
+      "attackSpeed": "Vel. de ataque"
+    }
+  },
   "rejections": {
     "fightInProgress": "A luta está acontecendo",
     "matchIsOver": "A partida acabou",

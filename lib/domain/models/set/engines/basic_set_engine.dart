@@ -12,8 +12,13 @@ import 'package:going_wild/domain/models/set/team_set.dart';
 
 class BasicSetEngine extends SetEngine {
   const BasicSetEngine({required this.sets});
-
   final List<TeamSet> sets;
+
+  @override
+  List<TeamSet> setsOf(Character character) => [
+    for (final set in sets)
+      if (set.members.contains(character)) set,
+  ];
 
   @override
   List<SetPresence> setPresences(List<Character> activeCharacters) {

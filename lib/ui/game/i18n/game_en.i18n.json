@@ -58,6 +58,32 @@
     "expandButton": "Open bench",
     "collapseButton": "Close bench"
   },
+  "unitSheet": {
+    "teamTag": "Your team",
+    "enemyTag": "Enemy",
+    "closeButton": "Close",
+    "abilityTitle": "Ability",
+    "manaCostLabel": "Costs $cost mana",
+    "lowHealthTrigger": "Below $percentage% health",
+    "sellButton": "Sell",
+    "sellLabel": "Sell for $value coins",
+    "melee": "Melee",
+    "ranged": "Range $range",
+    "attackSpeedValue": "$value/s",
+    "roles": {
+      "tank": "Tank",
+      "guard": "Guard",
+      "damage": "Damage",
+      "support": "Support"
+    },
+    "stats": {
+      "health": "Health",
+      "mana": "Mana",
+      "damage": "Damage",
+      "armor": "Armor",
+      "attackSpeed": "Attack speed"
+    }
+  },
   "rejections": {
     "fightInProgress": "The fight is happening",
     "matchIsOver": "The match is over",

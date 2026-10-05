@@ -1,0 +1,4 @@
+enum UnitSide {
+  team,
+  enemy,
+}

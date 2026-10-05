@@ -48,6 +48,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
   Translations $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => Translations(meta: meta ?? this.$meta);
 
   // Translations
+  late final Translations$abilityEffects$pt abilityEffects = Translations$abilityEffects$pt._(_root);
   late final Translations$app$pt app = Translations$app$pt._(_root);
   late final Translations$characters$pt characters = Translations$characters$pt._(_root);
   late final Translations$credits$pt credits = Translations$credits$pt._(_root);
@@ -64,6 +65,76 @@ class Translations with BaseTranslations<AppLocale, Translations> {
   late final Translations$terms$pt terms = Translations$terms$pt._(_root);
 }
 
+// Path: abilityEffects
+class Translations$abilityEffects$pt {
+  Translations$abilityEffects$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: '$value de dano'
+  String damage({required Object value}) => '${value} de dano';
+
+  /// pt: '$value de dano por segundo por ${seconds}s'
+  String damageOverTime({required Object value, required Object seconds}) => '${value} de dano por segundo por ${seconds}s';
+
+  /// pt: '$value de cura por segundo por ${seconds}s'
+  String healOverTime({required Object value, required Object seconds}) => '${value} de cura por segundo por ${seconds}s';
+
+  /// pt: '$value de dano que vira vida'
+  String lifesteal({required Object value}) => '${value} de dano que vira vida';
+
+  /// pt: '$value de escudo por ${seconds}s'
+  String shield({required Object value, required Object seconds}) => '${value} de escudo por ${seconds}s';
+
+  /// pt: 'atordoamento de ${seconds}s'
+  String stun({required Object seconds}) => 'atordoamento de ${seconds}s';
+
+  /// pt: 'provocação de ${seconds}s'
+  String taunt({required Object seconds}) => 'provocação de ${seconds}s';
+
+  /// pt: '(one) {empurrão de $cells casa} (other) {empurrão de $cells casas}'
+  String knockback({required num cells}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+    cells,
+    one: 'empurrão de ${cells} casa',
+    other: 'empurrão de ${cells} casas',
+  );
+
+  /// pt: 'puxão pra perto'
+  String get pull => 'puxão pra perto';
+
+  /// pt: 'some por ${seconds}s e reaparece atrás dele'
+  String ambush({required Object seconds}) => 'some por ${seconds}s e reaparece atrás dele';
+
+  /// pt: 'Se derrubar alguém, recupera $percentage% da mana'
+  String manaRefundOnKill({required Object percentage}) => 'Se derrubar alguém, recupera ${percentage}% da mana';
+
+  /// pt: '$change por ${seconds}s'
+  String timedChange({required Object change, required Object seconds}) => '${change} por ${seconds}s';
+
+  /// pt: '(one) {$change no próximo ataque} (other) {$change nos próximos $hits ataques}'
+  String nextHitsChange({required num hits, required Object change}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+    hits,
+    one: '${change} no próximo ataque',
+    other: '${change} nos próximos ${hits} ataques',
+  );
+
+  /// pt: 'Quando o escudo acaba — $effects'
+  String onShieldExpire({required Object effects}) => 'Quando o escudo acaba — ${effects}';
+
+  /// pt: ', '
+  String get joiner => ', ';
+
+  /// pt: '$target: $effects'
+  String targeted({required Object target, required Object effects}) => '${target}: ${effects}';
+
+  late final Translations$abilityEffects$targets$pt targets = Translations$abilityEffects$targets$pt._(_root);
+
+  /// pt: ' e '
+  String get lastJoiner => ' e ';
+}
+
 // Path: app
 class Translations$app$pt {
   Translations$app$pt._(this._root);
@@ -74,6 +145,9 @@ class Translations$app$pt {
 
   /// pt: 'Going Wild'
   String get title => 'Going Wild';
+
+  /// pt: ','
+  String get decimalSeparator => ',';
 }
 
 // Path: characters
@@ -223,6 +297,7 @@ class Translations$game$pt {
   late final Translations$game$setDialog$pt setDialog = Translations$game$setDialog$pt._(_root);
   late final Translations$game$infoShelf$pt infoShelf = Translations$game$infoShelf$pt._(_root);
   late final Translations$game$bench$pt bench = Translations$game$bench$pt._(_root);
+  late final Translations$game$unitSheet$pt unitSheet = Translations$game$unitSheet$pt._(_root);
   late final Translations$game$rejections$pt rejections = Translations$game$rejections$pt._(_root);
 }
 
@@ -510,6 +585,42 @@ class Translations$terms$pt {
   late final Translations$terms$changes$pt changes = Translations$terms$changes$pt._(_root);
 }
 
+// Path: abilityEffects.targets
+class Translations$abilityEffects$targets$pt {
+  Translations$abilityEffects$targets$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Ele mesmo'
+  String get self => 'Ele mesmo';
+
+  /// pt: 'Alvo atual'
+  String get focus => 'Alvo atual';
+
+  /// pt: 'Inimigo com menos vida'
+  String get lowestHealthEnemy => 'Inimigo com menos vida';
+
+  /// pt: 'Inimigo mais distante'
+  String get farthestEnemy => 'Inimigo mais distante';
+
+  /// pt: 'Todos os inimigos'
+  String get allEnemies => 'Todos os inimigos';
+
+  /// pt: 'Inimigos por perto'
+  String get nearbyEnemies => 'Inimigos por perto';
+
+  /// pt: 'Alvo e inimigos em volta'
+  String get enemiesAroundFocus => 'Alvo e inimigos em volta';
+
+  /// pt: 'Aliado com menos vida'
+  String get lowestHealthAlly => 'Aliado com menos vida';
+
+  /// pt: 'Aliados por perto'
+  String get nearbyAllies => 'Aliados por perto';
+}
+
 // Path: game.topBar
 class Translations$game$topBar$pt {
   Translations$game$topBar$pt._(this._root);
@@ -691,6 +802,51 @@ class Translations$game$bench$pt {
 
   /// pt: 'Fechar banco'
   String get collapseButton => 'Fechar banco';
+}
+
+// Path: game.unitSheet
+class Translations$game$unitSheet$pt {
+  Translations$game$unitSheet$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Seu time'
+  String get teamTag => 'Seu time';
+
+  /// pt: 'Inimigo'
+  String get enemyTag => 'Inimigo';
+
+  /// pt: 'Fechar'
+  String get closeButton => 'Fechar';
+
+  /// pt: 'Habilidade'
+  String get abilityTitle => 'Habilidade';
+
+  /// pt: 'Custa $cost de mana'
+  String manaCostLabel({required Object cost}) => 'Custa ${cost} de mana';
+
+  /// pt: 'Com menos de $percentage% de vida'
+  String lowHealthTrigger({required Object percentage}) => 'Com menos de ${percentage}% de vida';
+
+  /// pt: 'Vender'
+  String get sellButton => 'Vender';
+
+  /// pt: 'Vender por $value moedas'
+  String sellLabel({required Object value}) => 'Vender por ${value} moedas';
+
+  /// pt: 'Corpo a corpo'
+  String get melee => 'Corpo a corpo';
+
+  /// pt: 'Distância $range'
+  String ranged({required Object range}) => 'Distância ${range}';
+
+  /// pt: '$value/s'
+  String attackSpeedValue({required Object value}) => '${value}/s';
+
+  late final Translations$game$unitSheet$roles$pt roles = Translations$game$unitSheet$roles$pt._(_root);
+  late final Translations$game$unitSheet$stats$pt stats = Translations$game$unitSheet$stats$pt._(_root);
 }
 
 // Path: game.rejections
@@ -948,6 +1104,51 @@ class Translations$terms$changes$pt {
   ];
 }
 
+// Path: game.unitSheet.roles
+class Translations$game$unitSheet$roles$pt {
+  Translations$game$unitSheet$roles$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Tanque'
+  String get tank => 'Tanque';
+
+  /// pt: 'Guarda'
+  String get guard => 'Guarda';
+
+  /// pt: 'Dano'
+  String get damage => 'Dano';
+
+  /// pt: 'Suporte'
+  String get support => 'Suporte';
+}
+
+// Path: game.unitSheet.stats
+class Translations$game$unitSheet$stats$pt {
+  Translations$game$unitSheet$stats$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Vida'
+  String get health => 'Vida';
+
+  /// pt: 'Mana'
+  String get mana => 'Mana';
+
+  /// pt: 'Dano'
+  String get damage => 'Dano';
+
+  /// pt: 'Armadura'
+  String get armor => 'Armadura';
+
+  /// pt: 'Vel. de ataque'
+  String get attackSpeed => 'Vel. de ataque';
+}
+
 /// The flat map containing all translations for locale <pt>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -956,7 +1157,46 @@ class Translations$terms$changes$pt {
 extension on Translations {
   dynamic _flatMapFunction(String path) {
     return switch (path) {
+      'abilityEffects.damage' => ({required Object value}) => '${value} de dano',
+      'abilityEffects.damageOverTime' => ({
+        required Object value,
+        required Object seconds,
+      }) => '${value} de dano por segundo por ${seconds}s',
+      'abilityEffects.healOverTime' => ({required Object value, required Object seconds}) => '${value} de cura por segundo por ${seconds}s',
+      'abilityEffects.lifesteal' => ({required Object value}) => '${value} de dano que vira vida',
+      'abilityEffects.shield' => ({required Object value, required Object seconds}) => '${value} de escudo por ${seconds}s',
+      'abilityEffects.stun' => ({required Object seconds}) => 'atordoamento de ${seconds}s',
+      'abilityEffects.taunt' => ({required Object seconds}) => 'provocação de ${seconds}s',
+      'abilityEffects.knockback' => ({required num cells}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+        cells,
+        one: 'empurrão de ${cells} casa',
+        other: 'empurrão de ${cells} casas',
+      ),
+      'abilityEffects.pull' => 'puxão pra perto',
+      'abilityEffects.ambush' => ({required Object seconds}) => 'some por ${seconds}s e reaparece atrás dele',
+      'abilityEffects.manaRefundOnKill' => ({required Object percentage}) => 'Se derrubar alguém, recupera ${percentage}% da mana',
+      'abilityEffects.timedChange' => ({required Object change, required Object seconds}) => '${change} por ${seconds}s',
+      'abilityEffects.nextHitsChange' =>
+        ({required num hits, required Object change}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+          hits,
+          one: '${change} no próximo ataque',
+          other: '${change} nos próximos ${hits} ataques',
+        ),
+      'abilityEffects.onShieldExpire' => ({required Object effects}) => 'Quando o escudo acaba — ${effects}',
+      'abilityEffects.joiner' => ', ',
+      'abilityEffects.targeted' => ({required Object target, required Object effects}) => '${target}: ${effects}',
+      'abilityEffects.targets.self' => 'Ele mesmo',
+      'abilityEffects.targets.focus' => 'Alvo atual',
+      'abilityEffects.targets.lowestHealthEnemy' => 'Inimigo com menos vida',
+      'abilityEffects.targets.farthestEnemy' => 'Inimigo mais distante',
+      'abilityEffects.targets.allEnemies' => 'Todos os inimigos',
+      'abilityEffects.targets.nearbyEnemies' => 'Inimigos por perto',
+      'abilityEffects.targets.enemiesAroundFocus' => 'Alvo e inimigos em volta',
+      'abilityEffects.targets.lowestHealthAlly' => 'Aliado com menos vida',
+      'abilityEffects.targets.nearbyAllies' => 'Aliados por perto',
+      'abilityEffects.lastJoiner' => ' e ',
       'app.title' => 'Going Wild',
+      'app.decimalSeparator' => ',',
       'characters.bull' => 'Touro',
       'characters.cat' => 'Gato',
       'characters.chicken' => 'Galinha',
@@ -1067,6 +1307,26 @@ extension on Translations {
       'game.bench.shopButton' => 'Abrir loja',
       'game.bench.expandButton' => 'Abrir banco',
       'game.bench.collapseButton' => 'Fechar banco',
+      'game.unitSheet.teamTag' => 'Seu time',
+      'game.unitSheet.enemyTag' => 'Inimigo',
+      'game.unitSheet.closeButton' => 'Fechar',
+      'game.unitSheet.abilityTitle' => 'Habilidade',
+      'game.unitSheet.manaCostLabel' => ({required Object cost}) => 'Custa ${cost} de mana',
+      'game.unitSheet.lowHealthTrigger' => ({required Object percentage}) => 'Com menos de ${percentage}% de vida',
+      'game.unitSheet.sellButton' => 'Vender',
+      'game.unitSheet.sellLabel' => ({required Object value}) => 'Vender por ${value} moedas',
+      'game.unitSheet.melee' => 'Corpo a corpo',
+      'game.unitSheet.ranged' => ({required Object range}) => 'Distância ${range}',
+      'game.unitSheet.attackSpeedValue' => ({required Object value}) => '${value}/s',
+      'game.unitSheet.roles.tank' => 'Tanque',
+      'game.unitSheet.roles.guard' => 'Guarda',
+      'game.unitSheet.roles.damage' => 'Dano',
+      'game.unitSheet.roles.support' => 'Suporte',
+      'game.unitSheet.stats.health' => 'Vida',
+      'game.unitSheet.stats.mana' => 'Mana',
+      'game.unitSheet.stats.damage' => 'Dano',
+      'game.unitSheet.stats.armor' => 'Armadura',
+      'game.unitSheet.stats.attackSpeed' => 'Vel. de ataque',
       'game.rejections.fightInProgress' => 'A luta está acontecendo',
       'game.rejections.matchIsOver' => 'A partida acabou',
       'game.rejections.notEnoughCoins' => 'Moedas insuficientes',

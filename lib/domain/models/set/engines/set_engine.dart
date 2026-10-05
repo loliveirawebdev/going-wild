@@ -4,11 +4,13 @@ import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/c
 import 'package:going_wild/domain/models/set/active_set.dart';
 import 'package:going_wild/domain/models/set/set_effect_side.dart';
 import 'package:going_wild/domain/models/set/set_presence.dart';
+import 'package:going_wild/domain/models/set/team_set.dart';
 
 abstract class SetEngine {
   const SetEngine();
 
   List<ActiveSet> activeSets(List<Character> activeCharacters);
+  List<TeamSet> setsOf(Character character);
   List<SetPresence> setPresences(List<Character> activeCharacters);
   Stats statsWithSetEffects(Character character, Stats stats, {required SetEffectSide side, required List<ActiveSet> activeSets});
 

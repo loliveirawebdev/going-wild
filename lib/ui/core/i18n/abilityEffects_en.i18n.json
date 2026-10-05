@@ -1,0 +1,36 @@
+{
+  "damage": "$value damage",
+  "damageOverTime": "$value damage per second for ${seconds}s",
+  "healOverTime": "$value healing per second for ${seconds}s",
+  "lifesteal": "$value damage turned into health",
+  "shield": "$value shield for ${seconds}s",
+  "stun": "${seconds}s stun",
+  "taunt": "${seconds}s taunt",
+  "knockback(param=cells)": {
+    "one": "knocked back $cells cell",
+    "other": "knocked back $cells cells"
+  },
+  "pull": "pulled closer",
+  "ambush": "vanishes for ${seconds}s and reappears behind it",
+  "manaRefundOnKill": "On a takedown, refunds $percentage% of the mana",
+  "timedChange": "$change for ${seconds}s",
+  "nextHitsChange(param=hits)": {
+    "one": "$change on the next attack",
+    "other": "$change on the next $hits attacks"
+  },
+  "onShieldExpire": "When the shield ends — $effects",
+  "joiner": ", ",
+  "targeted": "$target: $effects",
+  "targets": {
+    "self": "Itself",
+    "focus": "Current target",
+    "lowestHealthEnemy": "Weakest enemy",
+    "farthestEnemy": "Farthest enemy",
+    "allEnemies": "All enemies",
+    "nearbyEnemies": "Nearby enemies",
+    "enemiesAroundFocus": "Target and enemies around it",
+    "lowestHealthAlly": "Weakest ally",
+    "nearbyAllies": "Nearby allies"
+  },
+  "lastJoiner": " and "
+}

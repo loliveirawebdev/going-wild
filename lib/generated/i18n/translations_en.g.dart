@@ -47,6 +47,8 @@ class TranslationsEn with BaseTranslations<AppLocale, Translations> implements T
 
   // Translations
   @override
+  late final _Translations$abilityEffects$en abilityEffects = _Translations$abilityEffects$en._(_root);
+  @override
   late final _Translations$app$en app = _Translations$app$en._(_root);
   @override
   late final _Translations$characters$en characters = _Translations$characters$en._(_root);
@@ -76,6 +78,59 @@ class TranslationsEn with BaseTranslations<AppLocale, Translations> implements T
   late final _Translations$terms$en terms = _Translations$terms$en._(_root);
 }
 
+// Path: abilityEffects
+class _Translations$abilityEffects$en implements Translations$abilityEffects$pt {
+  _Translations$abilityEffects$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String damage({required Object value}) => '${value} damage';
+  @override
+  String damageOverTime({required Object value, required Object seconds}) => '${value} damage per second for ${seconds}s';
+  @override
+  String healOverTime({required Object value, required Object seconds}) => '${value} healing per second for ${seconds}s';
+  @override
+  String lifesteal({required Object value}) => '${value} damage turned into health';
+  @override
+  String shield({required Object value, required Object seconds}) => '${value} shield for ${seconds}s';
+  @override
+  String stun({required Object seconds}) => '${seconds}s stun';
+  @override
+  String taunt({required Object seconds}) => '${seconds}s taunt';
+  @override
+  String knockback({required num cells}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+    cells,
+    one: 'knocked back ${cells} cell',
+    other: 'knocked back ${cells} cells',
+  );
+  @override
+  String get pull => 'pulled closer';
+  @override
+  String ambush({required Object seconds}) => 'vanishes for ${seconds}s and reappears behind it';
+  @override
+  String manaRefundOnKill({required Object percentage}) => 'On a takedown, refunds ${percentage}% of the mana';
+  @override
+  String timedChange({required Object change, required Object seconds}) => '${change} for ${seconds}s';
+  @override
+  String nextHitsChange({required num hits, required Object change}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+    hits,
+    one: '${change} on the next attack',
+    other: '${change} on the next ${hits} attacks',
+  );
+  @override
+  String onShieldExpire({required Object effects}) => 'When the shield ends — ${effects}';
+  @override
+  String get joiner => ', ';
+  @override
+  String targeted({required Object target, required Object effects}) => '${target}: ${effects}';
+  @override
+  late final _Translations$abilityEffects$targets$en targets = _Translations$abilityEffects$targets$en._(_root);
+  @override
+  String get lastJoiner => ' and ';
+}
+
 // Path: app
 class _Translations$app$en implements Translations$app$pt {
   _Translations$app$en._(this._root);
@@ -85,6 +140,8 @@ class _Translations$app$en implements Translations$app$pt {
   // Translations
   @override
   String get title => 'Going Wild';
+  @override
+  String get decimalSeparator => '.';
 }
 
 // Path: characters
@@ -209,6 +266,8 @@ class _Translations$game$en implements Translations$game$pt {
   late final _Translations$game$infoShelf$en infoShelf = _Translations$game$infoShelf$en._(_root);
   @override
   late final _Translations$game$bench$en bench = _Translations$game$bench$en._(_root);
+  @override
+  late final _Translations$game$unitSheet$en unitSheet = _Translations$game$unitSheet$en._(_root);
   @override
   late final _Translations$game$rejections$en rejections = _Translations$game$rejections$en._(_root);
 }
@@ -445,6 +504,33 @@ class _Translations$terms$en implements Translations$terms$pt {
   late final _Translations$terms$changes$en changes = _Translations$terms$changes$en._(_root);
 }
 
+// Path: abilityEffects.targets
+class _Translations$abilityEffects$targets$en implements Translations$abilityEffects$targets$pt {
+  _Translations$abilityEffects$targets$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get self => 'Itself';
+  @override
+  String get focus => 'Current target';
+  @override
+  String get lowestHealthEnemy => 'Weakest enemy';
+  @override
+  String get farthestEnemy => 'Farthest enemy';
+  @override
+  String get allEnemies => 'All enemies';
+  @override
+  String get nearbyEnemies => 'Nearby enemies';
+  @override
+  String get enemiesAroundFocus => 'Target and enemies around it';
+  @override
+  String get lowestHealthAlly => 'Weakest ally';
+  @override
+  String get nearbyAllies => 'Nearby allies';
+}
+
 // Path: game.topBar
 class _Translations$game$topBar$en implements Translations$game$topBar$pt {
   _Translations$game$topBar$en._(this._root);
@@ -588,6 +674,41 @@ class _Translations$game$bench$en implements Translations$game$bench$pt {
   String get expandButton => 'Open bench';
   @override
   String get collapseButton => 'Close bench';
+}
+
+// Path: game.unitSheet
+class _Translations$game$unitSheet$en implements Translations$game$unitSheet$pt {
+  _Translations$game$unitSheet$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get teamTag => 'Your team';
+  @override
+  String get enemyTag => 'Enemy';
+  @override
+  String get closeButton => 'Close';
+  @override
+  String get abilityTitle => 'Ability';
+  @override
+  String manaCostLabel({required Object cost}) => 'Costs ${cost} mana';
+  @override
+  String lowHealthTrigger({required Object percentage}) => 'Below ${percentage}% health';
+  @override
+  String get sellButton => 'Sell';
+  @override
+  String sellLabel({required Object value}) => 'Sell for ${value} coins';
+  @override
+  String get melee => 'Melee';
+  @override
+  String ranged({required Object range}) => 'Range ${range}';
+  @override
+  String attackSpeedValue({required Object value}) => '${value}/s';
+  @override
+  late final _Translations$game$unitSheet$roles$en roles = _Translations$game$unitSheet$roles$en._(_root);
+  @override
+  late final _Translations$game$unitSheet$stats$en stats = _Translations$game$unitSheet$stats$en._(_root);
 }
 
 // Path: game.rejections
@@ -807,6 +928,42 @@ class _Translations$terms$changes$en implements Translations$terms$changes$pt {
   ];
 }
 
+// Path: game.unitSheet.roles
+class _Translations$game$unitSheet$roles$en implements Translations$game$unitSheet$roles$pt {
+  _Translations$game$unitSheet$roles$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get tank => 'Tank';
+  @override
+  String get guard => 'Guard';
+  @override
+  String get damage => 'Damage';
+  @override
+  String get support => 'Support';
+}
+
+// Path: game.unitSheet.stats
+class _Translations$game$unitSheet$stats$en implements Translations$game$unitSheet$stats$pt {
+  _Translations$game$unitSheet$stats$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get health => 'Health';
+  @override
+  String get mana => 'Mana';
+  @override
+  String get damage => 'Damage';
+  @override
+  String get armor => 'Armor';
+  @override
+  String get attackSpeed => 'Attack speed';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -815,7 +972,43 @@ class _Translations$terms$changes$en implements Translations$terms$changes$pt {
 extension on TranslationsEn {
   dynamic _flatMapFunction(String path) {
     return switch (path) {
+      'abilityEffects.damage' => ({required Object value}) => '${value} damage',
+      'abilityEffects.damageOverTime' => ({required Object value, required Object seconds}) => '${value} damage per second for ${seconds}s',
+      'abilityEffects.healOverTime' => ({required Object value, required Object seconds}) => '${value} healing per second for ${seconds}s',
+      'abilityEffects.lifesteal' => ({required Object value}) => '${value} damage turned into health',
+      'abilityEffects.shield' => ({required Object value, required Object seconds}) => '${value} shield for ${seconds}s',
+      'abilityEffects.stun' => ({required Object seconds}) => '${seconds}s stun',
+      'abilityEffects.taunt' => ({required Object seconds}) => '${seconds}s taunt',
+      'abilityEffects.knockback' => ({required num cells}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+        cells,
+        one: 'knocked back ${cells} cell',
+        other: 'knocked back ${cells} cells',
+      ),
+      'abilityEffects.pull' => 'pulled closer',
+      'abilityEffects.ambush' => ({required Object seconds}) => 'vanishes for ${seconds}s and reappears behind it',
+      'abilityEffects.manaRefundOnKill' => ({required Object percentage}) => 'On a takedown, refunds ${percentage}% of the mana',
+      'abilityEffects.timedChange' => ({required Object change, required Object seconds}) => '${change} for ${seconds}s',
+      'abilityEffects.nextHitsChange' =>
+        ({required num hits, required Object change}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+          hits,
+          one: '${change} on the next attack',
+          other: '${change} on the next ${hits} attacks',
+        ),
+      'abilityEffects.onShieldExpire' => ({required Object effects}) => 'When the shield ends — ${effects}',
+      'abilityEffects.joiner' => ', ',
+      'abilityEffects.targeted' => ({required Object target, required Object effects}) => '${target}: ${effects}',
+      'abilityEffects.targets.self' => 'Itself',
+      'abilityEffects.targets.focus' => 'Current target',
+      'abilityEffects.targets.lowestHealthEnemy' => 'Weakest enemy',
+      'abilityEffects.targets.farthestEnemy' => 'Farthest enemy',
+      'abilityEffects.targets.allEnemies' => 'All enemies',
+      'abilityEffects.targets.nearbyEnemies' => 'Nearby enemies',
+      'abilityEffects.targets.enemiesAroundFocus' => 'Target and enemies around it',
+      'abilityEffects.targets.lowestHealthAlly' => 'Weakest ally',
+      'abilityEffects.targets.nearbyAllies' => 'Nearby allies',
+      'abilityEffects.lastJoiner' => ' and ',
       'app.title' => 'Going Wild',
+      'app.decimalSeparator' => '.',
       'characters.bull' => 'Bull',
       'characters.cat' => 'Cat',
       'characters.chicken' => 'Chicken',
@@ -926,6 +1119,26 @@ extension on TranslationsEn {
       'game.bench.shopButton' => 'Open shop',
       'game.bench.expandButton' => 'Open bench',
       'game.bench.collapseButton' => 'Close bench',
+      'game.unitSheet.teamTag' => 'Your team',
+      'game.unitSheet.enemyTag' => 'Enemy',
+      'game.unitSheet.closeButton' => 'Close',
+      'game.unitSheet.abilityTitle' => 'Ability',
+      'game.unitSheet.manaCostLabel' => ({required Object cost}) => 'Costs ${cost} mana',
+      'game.unitSheet.lowHealthTrigger' => ({required Object percentage}) => 'Below ${percentage}% health',
+      'game.unitSheet.sellButton' => 'Sell',
+      'game.unitSheet.sellLabel' => ({required Object value}) => 'Sell for ${value} coins',
+      'game.unitSheet.melee' => 'Melee',
+      'game.unitSheet.ranged' => ({required Object range}) => 'Range ${range}',
+      'game.unitSheet.attackSpeedValue' => ({required Object value}) => '${value}/s',
+      'game.unitSheet.roles.tank' => 'Tank',
+      'game.unitSheet.roles.guard' => 'Guard',
+      'game.unitSheet.roles.damage' => 'Damage',
+      'game.unitSheet.roles.support' => 'Support',
+      'game.unitSheet.stats.health' => 'Health',
+      'game.unitSheet.stats.mana' => 'Mana',
+      'game.unitSheet.stats.damage' => 'Damage',
+      'game.unitSheet.stats.armor' => 'Armor',
+      'game.unitSheet.stats.attackSpeed' => 'Attack speed',
       'game.rejections.fightInProgress' => 'The fight is happening',
       'game.rejections.matchIsOver' => 'The match is over',
       'game.rejections.notEnoughCoins' => 'Not enough coins',

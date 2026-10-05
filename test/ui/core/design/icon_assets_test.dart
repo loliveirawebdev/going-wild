@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/content/character/team/team.dart';
 import 'package:going_wild/content/set/sets.dart';
+import 'package:going_wild/domain/models/character/role.dart';
 import 'package:going_wild/ui/core/design/character_portrait.dart';
 import 'package:going_wild/ui/core/design/game_icon.dart';
 import 'package:going_wild/ui/core/design/interface_glyph.dart';
+import 'package:going_wild/ui/core/design/role_icon.dart';
 import 'package:going_wild/ui/core/design/set_icon.dart';
 
 void main() {
@@ -27,6 +29,13 @@ void main() {
   test('every team animal has its portrait', () {
     for (final character in allTeamCharacters) {
       final assetPath = characterPortraitAssetPathOf(character);
+      expect(File(assetPath).existsSync(), isTrue, reason: assetPath);
+    }
+  });
+
+  test('every role has its svg icon', () {
+    for (final role in Role.values) {
+      final assetPath = roleIconAssetPathOf(role);
       expect(File(assetPath).existsSync(), isTrue, reason: assetPath);
     }
   });

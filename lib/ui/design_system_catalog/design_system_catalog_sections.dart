@@ -16,6 +16,7 @@ import 'package:going_wild/ui/design_system_catalog/sections/settings_controls/s
 import 'package:going_wild/ui/design_system_catalog/sections/stars/stars_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/stat_counter/stat_counter_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/tokens/tokens_section.dart';
+import 'package:going_wild/ui/design_system_catalog/sections/unit_sheet/unit_sheet_section.dart';
 
 final designSystemCatalogSections = [
   DesignSystemCatalogSection(title: 'Tokens', builder: (context) => const TokensSection()),
@@ -35,4 +36,5 @@ final designSystemCatalogSections = [
   DesignSystemCatalogSection(title: 'StatCounter', builder: (context) => const StatCounterSection()),
   DesignSystemCatalogSection(title: 'Stars', builder: (context) => const StarsSection()),
   DesignSystemCatalogSection(title: 'BenchSlot', builder: (context) => const BenchSlotSection()),
+  DesignSystemCatalogSection(title: 'UnitSheet', builder: (context) => const UnitSheetSection()),
 ];
