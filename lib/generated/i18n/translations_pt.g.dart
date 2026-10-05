@@ -295,6 +295,15 @@ class Translations$phaseSelection$pt {
     one: '${roundCount} round',
     other: '${roundCount} rounds',
   );
+
+  /// pt: 'Fase $number'
+  String phaseNumber({required Object number}) => 'Fase ${number}';
+
+  /// pt: 'Voltar'
+  String get backButton => 'Voltar';
+
+  /// pt: 'Jogar'
+  String get playButton => 'Jogar';
 }
 
 // Path: phases
@@ -526,6 +535,9 @@ extension on Translations {
         one: '${roundCount} round',
         other: '${roundCount} rounds',
       ),
+      'phaseSelection.phaseNumber' => ({required Object number}) => 'Fase ${number}',
+      'phaseSelection.backButton' => 'Voltar',
+      'phaseSelection.playButton' => 'Jogar',
       'phases.backyard.name' => 'Quintal',
       'sets.brutes' => 'Brutos',
       'sets.davidAndGoliath' => 'Davi e Golias',

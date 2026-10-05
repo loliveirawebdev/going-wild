@@ -11,7 +11,8 @@ import 'package:going_wild/ui/core/widgets/pressable_surface.dart';
 
 enum RoundIconButtonSize {
   small(diameter: 36, glyphSize: 18, gameIconSize: 24),
-  medium(diameter: 48, glyphSize: 24, gameIconSize: 30);
+  medium(diameter: 48, glyphSize: 24, gameIconSize: 30),
+  extraSmall(diameter: 30, glyphSize: 14, gameIconSize: 18);
 
   final double diameter;
   final double glyphSize;

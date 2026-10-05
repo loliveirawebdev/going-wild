@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:going_wild/ui/core/design/app_spacing.dart';
+import 'package:going_wild/ui/splash/widgets/splash_bottom_slot.dart';
 
 const _topBarContentHeight = 52.0;
 
@@ -24,10 +25,7 @@ class SplashLayout extends StatelessWidget {
           child: topTrailing,
         ),
         const Spacer(),
-        Padding(
-          padding: EdgeInsets.fromLTRB(AppSpacing.space6, 0, AppSpacing.space6, safeAreaPadding.bottom + AppSpacing.space6),
-          child: Center(child: bottom),
-        ),
+        SplashBottomSlot(child: bottom),
       ],
     );
   }

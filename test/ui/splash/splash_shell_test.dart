@@ -9,13 +9,16 @@ import 'package:going_wild/ui/entrypoint/view_models/entrypoint_view_model.dart'
 import 'package:going_wild/ui/entrypoint/widgets/entrypoint_screen.dart';
 import 'package:going_wild/ui/entrypoint/widgets/loading_panel.dart';
 import 'package:going_wild/ui/home/home_route.dart';
+import 'package:going_wild/ui/phase_selection/phase_selection_route.dart';
 import 'package:going_wild/ui/splash/widgets/splash_scene.dart';
 
 GoRouter splashRouter() => GoRouter(
   initialLocation: Routes.entrypoint,
   routes: [
     ShellRoute(
-      builder: (context, state, child) => Scaffold(body: SplashScene(child: child)),
+      builder: (context, state, child) => Scaffold(
+        body: SplashScene(isBlurred: state.uri.path == Routes.phaseSelection, child: child),
+      ),
       routes: [
         GoRoute(
           path: Routes.entrypoint,
@@ -27,10 +30,11 @@ GoRouter splashRouter() => GoRouter(
           ),
         ),
         homeRoute,
+        phaseSelectionRoute,
       ],
     ),
-    GoRoute(path: Routes.phaseSelection, builder: (context, state) => const Text('phase selection')),
     GoRoute(path: Routes.settings, builder: (context, state) => const Text('settings')),
+    GoRoute(path: Routes.game, builder: (context, state) => Text('game ${state.pathParameters['phaseId']}')),
   ],
 );
 
@@ -51,15 +55,15 @@ void main() {
     expect(tester.element(find.byType(SplashScene)), same(sceneBeforeLoading));
   });
 
-  testWidgets('the play button opens the phase selection and the gear opens the settings', (tester) async {
+  testWidgets('the play button opens the phase selection, back returns home and the gear opens the settings', (tester) async {
     await pumpSplash(tester);
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Jogar'));
     await tester.pumpAndSettle();
-    expect(find.text('phase selection'), findsOneWidget);
+    expect(find.text('Escolha a fase'), findsOneWidget);
 
-    tester.state<NavigatorState>(find.byType(Navigator).first).pop();
+    await tester.tap(find.bySemanticsLabel('Voltar'));
     await tester.pumpAndSettle();
 
     await tester.tap(find.bySemanticsLabel('Configurações'));
@@ -82,5 +86,24 @@ void main() {
     final filledSize = tester.getSize(find.byType(AnimatedContainer));
     expect(filledSize.height, greaterThan(0));
     expect(filledSize.width, greaterThan(100));
+  });
+
+  testWidgets('the phase selection blurs the same scene and its play button opens the selected phase', (tester) async {
+    await pumpSplash(tester);
+    await tester.pumpAndSettle();
+    final sceneAtHome = tester.element(find.byType(SplashScene));
+    expect(tester.widget<SplashScene>(find.byType(SplashScene)).isBlurred, isFalse);
+
+    await tester.tap(find.text('Jogar'));
+    await tester.pumpAndSettle();
+
+    expect(tester.element(find.byType(SplashScene)), same(sceneAtHome));
+    expect(tester.widget<SplashScene>(find.byType(SplashScene)).isBlurred, isTrue);
+    expect(find.text('Fase 1'), findsOneWidget);
+    expect(find.text('Quintal'), findsOneWidget);
+
+    await tester.tap(find.text('Jogar'));
+    await tester.pumpAndSettle();
+    expect(find.text('game backyard'), findsOneWidget);
   });
 }

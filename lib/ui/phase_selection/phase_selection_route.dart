@@ -4,5 +4,5 @@ import 'package:going_wild/ui/phase_selection/widgets/phase_selection_screen.dar
 
 final phaseSelectionRoute = GoRoute(
   path: Routes.phaseSelection,
-  builder: (context, state) => const PhaseSelectionScreen(),
+  pageBuilder: (context, state) => const NoTransitionPage(child: PhaseSelectionScreen()),
 );

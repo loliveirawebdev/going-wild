@@ -8,6 +8,7 @@ import 'package:going_wild/ui/core/localization/configure_plural_resolvers.dart'
 import 'package:going_wild/ui/core/localization/phase_name.dart';
 import 'package:going_wild/ui/game/widgets/game_screen.dart';
 import 'package:going_wild/ui/home/widgets/home_screen.dart';
+import 'package:going_wild/ui/phase_selection/widgets/phase_page_dots.dart';
 import 'package:going_wild/ui/phase_selection/widgets/phase_selection_screen.dart';
 import 'package:going_wild/ui/settings/widgets/settings_screen.dart';
 import 'package:talker_flutter/talker_flutter.dart';
@@ -39,16 +40,15 @@ void main() {
     expect(find.byType(HomeScreen), findsOneWidget);
   });
 
-  testWidgets('home opens the phase selection, which lists every phase', (tester) async {
+  testWidgets('home opens the phase selection, centered on the first phase with a dot per phase', (tester) async {
     await openTheApp(tester);
 
     await tester.tap(find.text(t.home.playButton));
     await tester.pumpAndSettle();
 
     expect(find.byType(PhaseSelectionScreen), findsOneWidget);
-    for (final phase in allPhases) {
-      expect(find.text(phaseNameOf(t, phase)), findsOneWidget);
-    }
+    expect(find.text(phaseNameOf(t, allPhases.first)), findsOneWidget);
+    expect(tester.widget<PhasePageDots>(find.byType(PhasePageDots)).count, allPhases.length);
   });
 
   testWidgets('choosing a phase opens its game, preparing the first round', (tester) async {
@@ -57,7 +57,7 @@ void main() {
 
     await tester.tap(find.text(t.home.playButton));
     await tester.pumpAndSettle();
-    await tester.tap(find.text(phaseNameOf(t, phase)));
+    await tester.tap(find.text(t.phaseSelection.playButton));
     await tester.pumpAndSettle();
 
     expect(find.byType(GameScreen), findsOneWidget);

@@ -4,7 +4,6 @@ import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/design/app_spacing.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
-import 'package:going_wild/ui/core/widgets/pressable.dart';
 
 const _cardWidth = 250.0;
 const _coverHeight = 196.0;
@@ -32,80 +31,38 @@ const _numberStyle = TextStyle(
   fontWeight: FontWeight.w400,
 );
 
-const _detailLabelStyle = TextStyle(
-  fontSize: 12,
-  letterSpacing: 0.5,
-  color: AppColors.inkMuted,
-  fontFamily: AppFonts.sans,
-  fontWeight: FontWeight.w800,
-);
-
-const _detailValueStyle = TextStyle(
-  fontSize: 14,
-  height: 19 / 14,
-  color: AppColors.ink,
-  fontFamily: AppFonts.sans,
-  fontWeight: FontWeight.w800,
-);
-
-class PhaseCardDetail {
-  final String label;
-  final String value;
-  const PhaseCardDetail({required this.label, required this.value});
-}
-
 class PhaseCard extends StatelessWidget {
-  const PhaseCard({
-    required this.name,
-    required this.details,
-    required this.numberLabel,
-    required this.coverAssetPath,
-    super.key,
-    this.onPressed,
-  });
+  const PhaseCard({required this.name, required this.numberLabel, required this.coverAssetPath, super.key});
 
   final String name;
   final String numberLabel;
   final String coverAssetPath;
-  final VoidCallback? onPressed;
-  final List<PhaseCardDetail> details;
 
   @override
   Widget build(BuildContext context) {
-    return Pressable(
-      onPressed: onPressed,
-      semanticLabel: name,
-      builder: (context, pressedAmount, child) => Padding(
-        padding: const EdgeInsets.only(bottom: _bottomEdgeHeight),
-        child: Container(
-          width: _cardWidth,
-          transform: Matrix4.translationValues(0, _bottomEdgeHeight * pressedAmount, 0),
-          decoration: BoxDecoration(
-            color: AppColors.surface100,
-            borderRadius: AppRadius.large,
-            border: Border.all(color: _frameColor, width: _frameWidth),
-            boxShadow: [
-              const BoxShadow(color: _frameEdgeColor, spreadRadius: _ringWidth),
-              BoxShadow(
-                color: _frameEdgeColor,
-                spreadRadius: _ringWidth,
-                offset: Offset(0, _bottomEdgeHeight * (1 - pressedAmount)),
-              ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: _bottomEdgeHeight),
+      child: Container(
+        width: _cardWidth,
+        decoration: BoxDecoration(
+          color: AppColors.surface100,
+          borderRadius: AppRadius.large,
+          border: Border.all(color: _frameColor, width: _frameWidth),
+          boxShadow: const [
+            BoxShadow(color: _frameEdgeColor, spreadRadius: _ringWidth),
+            BoxShadow(color: _frameEdgeColor, spreadRadius: _ringWidth, offset: Offset(0, _bottomEdgeHeight)),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: _innerRadius,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _Cover(numberLabel: numberLabel, coverAssetPath: coverAssetPath),
+              _NameBar(name: name),
             ],
           ),
-          child: child,
-        ),
-      ),
-      child: ClipRRect(
-        borderRadius: _innerRadius,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _Cover(numberLabel: numberLabel, coverAssetPath: coverAssetPath),
-            _NameBar(name: name),
-            _Details(details: details),
-          ],
         ),
       ),
     );
@@ -113,9 +70,10 @@ class PhaseCard extends StatelessWidget {
 }
 
 class _Cover extends StatelessWidget {
+  const _Cover({required this.numberLabel, required this.coverAssetPath});
+
   final String numberLabel;
   final String coverAssetPath;
-  const _Cover({required this.numberLabel, required this.coverAssetPath});
 
   @override
   Widget build(BuildContext context) {
@@ -156,8 +114,9 @@ class _Cover extends StatelessWidget {
 }
 
 class _NameBar extends StatelessWidget {
-  final String name;
   const _NameBar({required this.name});
+
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -165,47 +124,11 @@ class _NameBar extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(AppSpacing.space3, 6, AppSpacing.space3, 7),
       decoration: const BoxDecoration(
         color: _frameColor,
-        border: Border.symmetric(
-          horizontal: BorderSide(
-            color: _frameEdgeColor,
-            width: AppBorderWidth.thin,
-          ),
+        border: Border(
+          top: BorderSide(color: _frameEdgeColor, width: AppBorderWidth.thin),
         ),
       ),
-      child: Text(
-        name,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: _nameStyle,
-      ),
-    );
-  }
-}
-
-class _Details extends StatelessWidget {
-  final List<PhaseCardDetail> details;
-  const _Details({required this.details});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(AppSpacing.space3, 10, AppSpacing.space3, AppSpacing.space3),
-      child: Column(
-        spacing: 6,
-        children: [
-          for (final detail in details)
-            Row(
-              spacing: AppSpacing.space2,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(detail.label.toUpperCase(), style: _detailLabelStyle),
-                Flexible(
-                  child: Text(detail.value, maxLines: 1, overflow: TextOverflow.ellipsis, style: _detailValueStyle),
-                ),
-              ],
-            ),
-        ],
-      ),
+      child: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: _nameStyle),
     );
   }
 }

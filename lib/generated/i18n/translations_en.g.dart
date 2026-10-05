@@ -247,6 +247,12 @@ class _Translations$phaseSelection$en implements Translations$phaseSelection$pt 
     one: '${roundCount} round',
     other: '${roundCount} rounds',
   );
+  @override
+  String phaseNumber({required Object number}) => 'Phase ${number}';
+  @override
+  String get backButton => 'Back';
+  @override
+  String get playButton => 'Play';
 }
 
 // Path: phases
@@ -451,6 +457,9 @@ extension on TranslationsEn {
         one: '${roundCount} round',
         other: '${roundCount} rounds',
       ),
+      'phaseSelection.phaseNumber' => ({required Object number}) => 'Phase ${number}',
+      'phaseSelection.backButton' => 'Back',
+      'phaseSelection.playButton' => 'Play',
       'phases.backyard.name' => 'Backyard',
       'sets.brutes' => 'Brutes',
       'sets.davidAndGoliath' => 'David and Goliath',

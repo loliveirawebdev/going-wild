@@ -3,5 +3,8 @@
   "roundCount(param=roundCount)": {
     "one": "$roundCount round",
     "other": "$roundCount rounds"
-  }
+  },
+  "phaseNumber": "Phase $number",
+  "backButton": "Back",
+  "playButton": "Play"
 }
