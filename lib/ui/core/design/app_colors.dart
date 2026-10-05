@@ -1,0 +1,44 @@
+import 'package:flutter/widgets.dart';
+
+abstract final class AppColors {
+  static const Color surface100 = Color(0xFFFFF9EE);
+  static const Color surface200 = Color(0xFFFDF0D5);
+  static const Color surface300 = Color(0xFFF2DFB5);
+  static const Color surface400 = Color(0xFFE2C48E);
+  static const Color ink = Color(0xFF3A2414);
+  static const Color inkMuted = Color(0xFF6E5543);
+  static const Color outline = Color(0xFF7A5236);
+  static const Color onPrimary = Color(0xFFFFFFFF);
+  static const Color wood500 = Color(0xFFA0612F);
+  static const Color wood700 = Color(0xFF6B3E1F);
+  static const Color grass400 = Color(0xFF7AD14F);
+  static const Color grass600 = Color(0xFF3F8A24);
+  static const Color barn400 = Color(0xFFE5533D);
+  static const Color barn600 = Color(0xFFC9412B);
+  static const Color barn800 = Color(0xFF8A2A1A);
+  static const Color sun400 = Color(0xFFFFD257);
+  static const Color sun600 = Color(0xFFC98A14);
+  static const Color sky300 = Color(0xFF8FCFEA);
+  static const Color danger = Color(0xFFB23A26);
+  static const Color focus = Color(0xFF2F73B8);
+  static const Color disabled = Color(0xFFDCD8D2);
+  static const Color disabledShadow = Color(0xFFBDB7AF);
+  static const Color onDisabled = Color(0xFF7D766E);
+  static const Color rarityCommon = Color(0xFF75664F);
+  static const Color rarityUncommon = Color(0xFF2E7D24);
+  static const Color rarityRare = Color(0xFF2F73B8);
+  static const Color rarityEpic = Color(0xFF8A4FC0);
+  static const Color healthHigh = Color(0xFF7AD14F);
+  static const Color healthMedium = Color(0xFFFFE27A);
+  static const Color healthLow = Color(0xFFC9412B);
+  static const Color mana = Color(0xFF5AA9F0);
+  static const Color shieldBar = Color(0xFFFFFFFF);
+  static const Color fieldTeam = Color(0xFFE4F3D2);
+  static const Color fieldTeamAlternate = Color(0xFFD6EBBF);
+  static const Color fieldEnemy = Color(0xFFF8E2D8);
+  static const Color fieldEnemyAlternate = Color(0xFFF1D1C3);
+  static const Color fieldSelected = Color(0xFFFFE9A8);
+  static const Color sideTeam = Color(0xFF7AD14F);
+  static const Color sideEnemy = Color(0xFFE5533D);
+  static const Color sceneGrass = Color(0xFF57734F);
+}

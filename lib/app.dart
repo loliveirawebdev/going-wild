@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
+import 'package:going_wild/ui/core/design/app_theme.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 class MainApp extends StatelessWidget {
@@ -17,10 +18,11 @@ class MainApp extends StatelessWidget {
       value: talker,
       child: MaterialApp.router(
         routerConfig: router,
-        locale: TranslationProvider.of(context).flutterLocale,
-        supportedLocales: AppLocaleUtils.supportedLocales,
-        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        theme: AppTheme.day(),
         onGenerateTitle: (context) => context.t.app.title,
+        supportedLocales: AppLocaleUtils.supportedLocales,
+        locale: TranslationProvider.of(context).flutterLocale,
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
       ),
     );
   }
