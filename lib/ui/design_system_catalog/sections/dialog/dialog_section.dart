@@ -22,6 +22,7 @@ class DialogSection extends StatelessWidget {
               variant: ButtonVariant.secondary,
               onPressed: () => presentDialog<void>(
                 context,
+                barrierLabel: 'Fechar',
                 dialog: Dialog(
                   closeLabel: 'Fechar',
                   title: 'Reiniciar progresso?',

@@ -3,7 +3,7 @@ import 'package:going_wild/domain/models/board/board.dart';
 import 'package:going_wild/domain/models/board/board_side.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/painted_scene.dart';
-import 'package:going_wild/ui/game/board_scene/board_scene_layout.dart';
+import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 
 const _grassFadeStart = 1 - 0.22;
 

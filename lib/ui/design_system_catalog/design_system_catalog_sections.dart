@@ -2,6 +2,7 @@ import 'package:going_wild/ui/design_system_catalog/design_system_catalog_sectio
 import 'package:going_wild/ui/design_system_catalog/sections/button/button_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/dialog/dialog_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/icons/icons_section.dart';
+import 'package:going_wild/ui/design_system_catalog/sections/lives_counter/lives_counter_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/phase_card/phase_card_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/progress_bar/progress_bar_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/round_icon_button/round_icon_button_section.dart';
@@ -21,4 +22,5 @@ final designSystemCatalogSections = [
   DesignSystemCatalogSection(title: 'Switch', builder: (context) => const SwitchSection()),
   DesignSystemCatalogSection(title: 'SpeedSelector', builder: (context) => const SpeedSelectorSection()),
   DesignSystemCatalogSection(title: 'Dialog', builder: (context) => const DialogSection()),
+  DesignSystemCatalogSection(title: 'LivesCounter', builder: (context) => const LivesCounterSection()),
 ];

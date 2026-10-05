@@ -21,12 +21,12 @@ const _titleStyle = TextStyle(
   fontWeight: FontWeight.w400,
 );
 
-Future<T?> presentDialog<T>(BuildContext context, {required Dialog dialog}) {
+Future<T?> presentDialog<T>(BuildContext context, {required Widget dialog, required String barrierLabel}) {
   return showGeneralDialog<T>(
     context: context,
     barrierDismissible: true,
     barrierColor: _scrimColor,
-    barrierLabel: dialog.closeLabel,
+    barrierLabel: barrierLabel,
     transitionDuration: _openingDuration,
     pageBuilder: (context, animation, secondaryAnimation) => dialog,
     transitionBuilder: (context, animation, secondaryAnimation, dialog) => FadeTransition(

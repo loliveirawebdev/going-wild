@@ -194,6 +194,10 @@ class _Translations$game$en implements Translations$game$pt {
 
   // Translations
   @override
+  late final _Translations$game$topBar$en topBar = _Translations$game$topBar$en._(_root);
+  @override
+  late final _Translations$game$exitDialog$en exitDialog = _Translations$game$exitDialog$en._(_root);
+  @override
   late final _Translations$game$rejections$en rejections = _Translations$game$rejections$en._(_root);
 }
 
@@ -368,6 +372,44 @@ class _Translations$terms$en implements Translations$terms$pt {
   late final _Translations$terms$noWarranty$en noWarranty = _Translations$terms$noWarranty$en._(_root);
   @override
   late final _Translations$terms$changes$en changes = _Translations$terms$changes$en._(_root);
+}
+
+// Path: game.topBar
+class _Translations$game$topBar$en implements Translations$game$topBar$pt {
+  _Translations$game$topBar$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String lives({required Object lives, required Object maxLives}) => '${lives} of ${maxLives} lives';
+  @override
+  String get round => 'Round';
+  @override
+  String get preparing => 'Preparing';
+  @override
+  String get fighting => 'Combat';
+  @override
+  String get exitButton => 'Leave match';
+}
+
+// Path: game.exitDialog
+class _Translations$game$exitDialog$en implements Translations$game$exitDialog$pt {
+  _Translations$game$exitDialog$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Leave the match?';
+  @override
+  String get body => 'Your progress in this phase will be lost.';
+  @override
+  String get closeButton => 'Close';
+  @override
+  String get continueButton => 'Keep playing';
+  @override
+  String get exitButton => 'Leave';
 }
 
 // Path: game.rejections
@@ -587,6 +629,16 @@ extension on TranslationsEn {
       'entrypoint.tips.3' => 'Your level decides how many animals fit on the board.',
       'entrypoint.tips.4' => 'The middle row belongs to both sides: use the cells the wave left free.',
       'entrypoint.tips.5' => 'Losing a round costs a life, and a draw counts as a loss too.',
+      'game.topBar.lives' => ({required Object lives, required Object maxLives}) => '${lives} of ${maxLives} lives',
+      'game.topBar.round' => 'Round',
+      'game.topBar.preparing' => 'Preparing',
+      'game.topBar.fighting' => 'Combat',
+      'game.topBar.exitButton' => 'Leave match',
+      'game.exitDialog.title' => 'Leave the match?',
+      'game.exitDialog.body' => 'Your progress in this phase will be lost.',
+      'game.exitDialog.closeButton' => 'Close',
+      'game.exitDialog.continueButton' => 'Keep playing',
+      'game.exitDialog.exitButton' => 'Leave',
       'game.rejections.fightInProgress' => 'The fight is happening',
       'game.rejections.matchIsOver' => 'The match is over',
       'game.rejections.notEnoughCoins' => 'Not enough coins',

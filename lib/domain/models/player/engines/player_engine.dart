@@ -4,6 +4,7 @@ import 'package:going_wild/domain/models/player/player.dart';
 
 abstract class PlayerEngine {
   const PlayerEngine();
+  int get startingLives;
 
   Player startingPlayer({required int startingCoins});
   Player playerAfterLostRound({required MatchProgress matchProgress, required CombatResult combatResult});

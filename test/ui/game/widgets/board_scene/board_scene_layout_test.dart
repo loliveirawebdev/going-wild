@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/content/phase/phases.dart';
-import 'package:going_wild/ui/game/board_scene/board_scene.dart';
-import 'package:going_wild/ui/game/board_scene/board_scene_layout.dart';
+import 'package:going_wild/ui/game/widgets/board_scene/board_scene.dart';
+import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 
 void main() {
   final board = backyard.engines.combatEngine.board;

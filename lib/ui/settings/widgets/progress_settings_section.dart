@@ -16,6 +16,7 @@ class ProgressSettingsSection extends StatelessWidget {
 
     return presentDialog<void>(
       context,
+      barrierLabel: translations.closeButton,
       dialog: Dialog(
         closeLabel: translations.closeButton,
         title: translations.resetDialogTitle,

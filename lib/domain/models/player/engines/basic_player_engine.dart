@@ -8,6 +8,7 @@ import 'package:going_wild/domain/models/player/player_factory.dart';
 class BasicPlayerEngine extends PlayerEngine {
   const BasicPlayerEngine({required this.startingLives, required this.livesLostPerLostRound});
 
+  @override
   final int startingLives;
   final int livesLostPerLostRound;
 

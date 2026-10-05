@@ -1,4 +1,18 @@
 {
+  "topBar": {
+    "lives": "$lives de $maxLives vidas",
+    "round": "Rodada",
+    "preparing": "Preparação",
+    "fighting": "Combate",
+    "exitButton": "Sair da partida"
+  },
+  "exitDialog": {
+    "title": "Sair da partida?",
+    "body": "O progresso desta fase vai ser perdido.",
+    "closeButton": "Fechar",
+    "continueButton": "Continuar",
+    "exitButton": "Sair"
+  },
   "rejections": {
     "fightInProgress": "A luta está acontecendo",
     "matchIsOver": "A partida acabou",

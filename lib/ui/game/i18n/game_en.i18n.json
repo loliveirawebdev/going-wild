@@ -1,4 +1,18 @@
 {
+  "topBar": {
+    "lives": "$lives of $maxLives lives",
+    "round": "Round",
+    "preparing": "Preparing",
+    "fighting": "Combat",
+    "exitButton": "Leave match"
+  },
+  "exitDialog": {
+    "title": "Leave the match?",
+    "body": "Your progress in this phase will be lost.",
+    "closeButton": "Close",
+    "continueButton": "Keep playing",
+    "exitButton": "Leave"
+  },
   "rejections": {
     "fightInProgress": "The fight is happening",
     "matchIsOver": "The match is over",

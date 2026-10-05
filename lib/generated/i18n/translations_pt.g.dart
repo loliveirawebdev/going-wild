@@ -215,6 +215,8 @@ class Translations$game$pt {
   final Translations _root; // ignore: unused_field
 
   // Translations
+  late final Translations$game$topBar$pt topBar = Translations$game$topBar$pt._(_root);
+  late final Translations$game$exitDialog$pt exitDialog = Translations$game$exitDialog$pt._(_root);
   late final Translations$game$rejections$pt rejections = Translations$game$rejections$pt._(_root);
 }
 
@@ -426,6 +428,54 @@ class Translations$terms$pt {
   late final Translations$terms$content$pt content = Translations$terms$content$pt._(_root);
   late final Translations$terms$noWarranty$pt noWarranty = Translations$terms$noWarranty$pt._(_root);
   late final Translations$terms$changes$pt changes = Translations$terms$changes$pt._(_root);
+}
+
+// Path: game.topBar
+class Translations$game$topBar$pt {
+  Translations$game$topBar$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: '$lives de $maxLives vidas'
+  String lives({required Object lives, required Object maxLives}) => '${lives} de ${maxLives} vidas';
+
+  /// pt: 'Rodada'
+  String get round => 'Rodada';
+
+  /// pt: 'Preparação'
+  String get preparing => 'Preparação';
+
+  /// pt: 'Combate'
+  String get fighting => 'Combate';
+
+  /// pt: 'Sair da partida'
+  String get exitButton => 'Sair da partida';
+}
+
+// Path: game.exitDialog
+class Translations$game$exitDialog$pt {
+  Translations$game$exitDialog$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Sair da partida?'
+  String get title => 'Sair da partida?';
+
+  /// pt: 'O progresso desta fase vai ser perdido.'
+  String get body => 'O progresso desta fase vai ser perdido.';
+
+  /// pt: 'Fechar'
+  String get closeButton => 'Fechar';
+
+  /// pt: 'Continuar'
+  String get continueButton => 'Continuar';
+
+  /// pt: 'Sair'
+  String get exitButton => 'Sair';
 }
 
 // Path: game.rejections
@@ -668,6 +718,16 @@ extension on Translations {
       'entrypoint.tips.3' => 'O seu nível define quantos bichos cabem no campo.',
       'entrypoint.tips.4' => 'A linha do meio é dos dois lados: use as casas que a onda deixou livres.',
       'entrypoint.tips.5' => 'Perder uma rodada custa uma vida, e o empate também conta como derrota.',
+      'game.topBar.lives' => ({required Object lives, required Object maxLives}) => '${lives} de ${maxLives} vidas',
+      'game.topBar.round' => 'Rodada',
+      'game.topBar.preparing' => 'Preparação',
+      'game.topBar.fighting' => 'Combate',
+      'game.topBar.exitButton' => 'Sair da partida',
+      'game.exitDialog.title' => 'Sair da partida?',
+      'game.exitDialog.body' => 'O progresso desta fase vai ser perdido.',
+      'game.exitDialog.closeButton' => 'Fechar',
+      'game.exitDialog.continueButton' => 'Continuar',
+      'game.exitDialog.exitButton' => 'Sair',
       'game.rejections.fightInProgress' => 'A luta está acontecendo',
       'game.rejections.matchIsOver' => 'A partida acabou',
       'game.rejections.notEnoughCoins' => 'Moedas insuficientes',

@@ -14,6 +14,7 @@ Future<void> openDialog(WidgetTester tester, {VoidCallback? onConfirmed}) async 
               label: 'Abrir',
               onPressed: () => presentDialog<void>(
                 context,
+                barrierLabel: 'Fechar',
                 dialog: Dialog(
                   closeLabel: 'Fechar',
                   title: 'Reiniciar progresso?',
