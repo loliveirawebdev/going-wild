@@ -1,4 +1,5 @@
 enum PaintedScene {
+  board('board.jpg'),
   splash('splash.jpg');
 
   final String fileName;

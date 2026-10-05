@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:going_wild/app.dart';
 import 'package:going_wild/config/logging/configure_logging.dart';
 import 'package:going_wild/data/repositories/settings_repository.dart';
@@ -10,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   configurePluralResolvers();
   await LocaleSettings.useDeviceLocale();

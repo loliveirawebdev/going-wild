@@ -4,6 +4,7 @@
             android:taskAffinity=""
             android:exported="true"
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:hardwareAccelerated="true"

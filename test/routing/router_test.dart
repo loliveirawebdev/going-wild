@@ -55,9 +55,8 @@ void main() {
     expect(tester.widget<PhasePageDots>(find.byType(PhasePageDots)).count, allPhases.length);
   });
 
-  testWidgets('choosing a phase opens its game, preparing the first round', (tester) async {
+  testWidgets('choosing a phase opens its game', (tester) async {
     await openTheApp(tester);
-    final phase = allPhases.first;
 
     await tester.tap(find.text(t.home.playButton));
     await tester.pumpAndSettle();
@@ -65,8 +64,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(GameScreen), findsOneWidget);
-    expect(find.text(t.game.shop), findsOneWidget);
-    expect(find.text(t.game.round(roundNumber: 1, roundCount: phase.roundCount)), findsOneWidget);
   });
 
   testWidgets('home opens the settings and back returns to home', (tester) async {

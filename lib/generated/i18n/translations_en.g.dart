@@ -194,50 +194,6 @@ class _Translations$game$en implements Translations$game$pt {
 
   // Translations
   @override
-  String round({required Object roundNumber, required Object roundCount}) => 'Round ${roundNumber} of ${roundCount}';
-  @override
-  String lives({required Object lives}) => 'Lives: ${lives}';
-  @override
-  String coins({required Object coins}) => 'Coins: ${coins}';
-  @override
-  String level({required Object levelNumber, required Object experience}) => 'Level ${levelNumber} · XP ${experience}';
-  @override
-  String get shop => 'Shop';
-  @override
-  String offerPrice({required Object price}) => '${price} coins';
-  @override
-  String get emptyOffer => 'Sold';
-  @override
-  String get melee => 'Melee';
-  @override
-  String ranged({required Object range}) => 'Ranged (${range})';
-  @override
-  String get rerollButton => 'Reroll offers';
-  @override
-  String get lockButton => 'Lock shop';
-  @override
-  String get unlockButton => 'Unlock shop';
-  @override
-  String get buyExperienceButton => 'Buy XP';
-  @override
-  String get board => 'Board';
-  @override
-  String get inventory => 'Bench';
-  @override
-  String get sellButton => 'Sell selected';
-  @override
-  String get fightButton => 'Fight';
-  @override
-  String get backButton => 'Back';
-  @override
-  String speed({required Object multiplier}) => '${multiplier}×';
-  @override
-  String get matchWon => 'You won the phase!';
-  @override
-  String get matchLost => 'You lost the phase';
-  @override
-  late final _Translations$game$entries$en entries = _Translations$game$entries$en._(_root);
-  @override
   late final _Translations$game$rejections$en rejections = _Translations$game$rejections$en._(_root);
 }
 
@@ -412,19 +368,6 @@ class _Translations$terms$en implements Translations$terms$pt {
   late final _Translations$terms$noWarranty$en noWarranty = _Translations$terms$noWarranty$en._(_root);
   @override
   late final _Translations$terms$changes$en changes = _Translations$terms$changes$en._(_root);
-}
-
-// Path: game.entries
-class _Translations$game$entries$en implements Translations$game$entries$pt {
-  _Translations$game$entries$en._(this._root);
-
-  final TranslationsEn _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String abilityCast({required Object name}) => '${name} used the ability';
-  @override
-  String death({required Object name}) => '${name} fell';
 }
 
 // Path: game.rejections
@@ -644,29 +587,6 @@ extension on TranslationsEn {
       'entrypoint.tips.3' => 'Your level decides how many animals fit on the board.',
       'entrypoint.tips.4' => 'The middle row belongs to both sides: use the cells the wave left free.',
       'entrypoint.tips.5' => 'Losing a round costs a life, and a draw counts as a loss too.',
-      'game.round' => ({required Object roundNumber, required Object roundCount}) => 'Round ${roundNumber} of ${roundCount}',
-      'game.lives' => ({required Object lives}) => 'Lives: ${lives}',
-      'game.coins' => ({required Object coins}) => 'Coins: ${coins}',
-      'game.level' => ({required Object levelNumber, required Object experience}) => 'Level ${levelNumber} · XP ${experience}',
-      'game.shop' => 'Shop',
-      'game.offerPrice' => ({required Object price}) => '${price} coins',
-      'game.emptyOffer' => 'Sold',
-      'game.melee' => 'Melee',
-      'game.ranged' => ({required Object range}) => 'Ranged (${range})',
-      'game.rerollButton' => 'Reroll offers',
-      'game.lockButton' => 'Lock shop',
-      'game.unlockButton' => 'Unlock shop',
-      'game.buyExperienceButton' => 'Buy XP',
-      'game.board' => 'Board',
-      'game.inventory' => 'Bench',
-      'game.sellButton' => 'Sell selected',
-      'game.fightButton' => 'Fight',
-      'game.backButton' => 'Back',
-      'game.speed' => ({required Object multiplier}) => '${multiplier}×',
-      'game.matchWon' => 'You won the phase!',
-      'game.matchLost' => 'You lost the phase',
-      'game.entries.abilityCast' => ({required Object name}) => '${name} used the ability',
-      'game.entries.death' => ({required Object name}) => '${name} fell',
       'game.rejections.fightInProgress' => 'The fight is happening',
       'game.rejections.matchIsOver' => 'The match is over',
       'game.rejections.notEnoughCoins' => 'Not enough coins',

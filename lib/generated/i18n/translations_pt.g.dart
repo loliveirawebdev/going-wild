@@ -215,71 +215,6 @@ class Translations$game$pt {
   final Translations _root; // ignore: unused_field
 
   // Translations
-
-  /// pt: 'Round $roundNumber de $roundCount'
-  String round({required Object roundNumber, required Object roundCount}) => 'Round ${roundNumber} de ${roundCount}';
-
-  /// pt: 'Vidas: $lives'
-  String lives({required Object lives}) => 'Vidas: ${lives}';
-
-  /// pt: 'Moedas: $coins'
-  String coins({required Object coins}) => 'Moedas: ${coins}';
-
-  /// pt: 'Nível $levelNumber · XP $experience'
-  String level({required Object levelNumber, required Object experience}) => 'Nível ${levelNumber} · XP ${experience}';
-
-  /// pt: 'Loja'
-  String get shop => 'Loja';
-
-  /// pt: '$price moedas'
-  String offerPrice({required Object price}) => '${price} moedas';
-
-  /// pt: 'Vendido'
-  String get emptyOffer => 'Vendido';
-
-  /// pt: 'Corpo a corpo'
-  String get melee => 'Corpo a corpo';
-
-  /// pt: 'À distância ($range)'
-  String ranged({required Object range}) => 'À distância (${range})';
-
-  /// pt: 'Trocar ofertas'
-  String get rerollButton => 'Trocar ofertas';
-
-  /// pt: 'Travar loja'
-  String get lockButton => 'Travar loja';
-
-  /// pt: 'Destravar loja'
-  String get unlockButton => 'Destravar loja';
-
-  /// pt: 'Comprar XP'
-  String get buyExperienceButton => 'Comprar XP';
-
-  /// pt: 'Campo'
-  String get board => 'Campo';
-
-  /// pt: 'Banco'
-  String get inventory => 'Banco';
-
-  /// pt: 'Vender selecionado'
-  String get sellButton => 'Vender selecionado';
-
-  /// pt: 'Lutar'
-  String get fightButton => 'Lutar';
-
-  /// pt: 'Voltar'
-  String get backButton => 'Voltar';
-
-  /// pt: '${multiplier}×'
-  String speed({required Object multiplier}) => '${multiplier}×';
-
-  /// pt: 'Você venceu a fase!'
-  String get matchWon => 'Você venceu a fase!';
-
-  /// pt: 'Você perdeu a fase'
-  String get matchLost => 'Você perdeu a fase';
-
-  late final Translations$game$entries$pt entries = Translations$game$entries$pt._(_root);
   late final Translations$game$rejections$pt rejections = Translations$game$rejections$pt._(_root);
 }
 
@@ -491,21 +426,6 @@ class Translations$terms$pt {
   late final Translations$terms$content$pt content = Translations$terms$content$pt._(_root);
   late final Translations$terms$noWarranty$pt noWarranty = Translations$terms$noWarranty$pt._(_root);
   late final Translations$terms$changes$pt changes = Translations$terms$changes$pt._(_root);
-}
-
-// Path: game.entries
-class Translations$game$entries$pt {
-  Translations$game$entries$pt._(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// pt: '$name usou a habilidade'
-  String abilityCast({required Object name}) => '${name} usou a habilidade';
-
-  /// pt: '$name caiu'
-  String death({required Object name}) => '${name} caiu';
 }
 
 // Path: game.rejections
@@ -748,29 +668,6 @@ extension on Translations {
       'entrypoint.tips.3' => 'O seu nível define quantos bichos cabem no campo.',
       'entrypoint.tips.4' => 'A linha do meio é dos dois lados: use as casas que a onda deixou livres.',
       'entrypoint.tips.5' => 'Perder uma rodada custa uma vida, e o empate também conta como derrota.',
-      'game.round' => ({required Object roundNumber, required Object roundCount}) => 'Round ${roundNumber} de ${roundCount}',
-      'game.lives' => ({required Object lives}) => 'Vidas: ${lives}',
-      'game.coins' => ({required Object coins}) => 'Moedas: ${coins}',
-      'game.level' => ({required Object levelNumber, required Object experience}) => 'Nível ${levelNumber} · XP ${experience}',
-      'game.shop' => 'Loja',
-      'game.offerPrice' => ({required Object price}) => '${price} moedas',
-      'game.emptyOffer' => 'Vendido',
-      'game.melee' => 'Corpo a corpo',
-      'game.ranged' => ({required Object range}) => 'À distância (${range})',
-      'game.rerollButton' => 'Trocar ofertas',
-      'game.lockButton' => 'Travar loja',
-      'game.unlockButton' => 'Destravar loja',
-      'game.buyExperienceButton' => 'Comprar XP',
-      'game.board' => 'Campo',
-      'game.inventory' => 'Banco',
-      'game.sellButton' => 'Vender selecionado',
-      'game.fightButton' => 'Lutar',
-      'game.backButton' => 'Voltar',
-      'game.speed' => ({required Object multiplier}) => '${multiplier}×',
-      'game.matchWon' => 'Você venceu a fase!',
-      'game.matchLost' => 'Você perdeu a fase',
-      'game.entries.abilityCast' => ({required Object name}) => '${name} usou a habilidade',
-      'game.entries.death' => ({required Object name}) => '${name} caiu',
       'game.rejections.fightInProgress' => 'A luta está acontecendo',
       'game.rejections.matchIsOver' => 'A partida acabou',
       'game.rejections.notEnoughCoins' => 'Moedas insuficientes',
