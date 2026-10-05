@@ -636,12 +636,6 @@ class Translations$game$topBar$pt {
   /// pt: 'Rodada'
   String get round => 'Rodada';
 
-  /// pt: 'Preparação'
-  String get preparing => 'Preparação';
-
-  /// pt: 'Combate'
-  String get fighting => 'Combate';
-
   /// pt: 'Sair da partida'
   String get exitButton => 'Sair da partida';
 }
@@ -1275,8 +1269,6 @@ extension on Translations {
       'entrypoint.tips.5' => 'Perder uma rodada custa uma vida, e o empate também conta como derrota.',
       'game.topBar.lives' => ({required Object lives, required Object maxLives}) => '${lives} de ${maxLives} vidas',
       'game.topBar.round' => 'Rodada',
-      'game.topBar.preparing' => 'Preparação',
-      'game.topBar.fighting' => 'Combate',
       'game.topBar.exitButton' => 'Sair da partida',
       'game.exitDialog.title' => 'Sair da partida?',
       'game.exitDialog.body' => 'O progresso desta fase vai ser perdido.',

@@ -33,7 +33,9 @@ flutter:
   assets:
     - assets/icons/
     - assets/glyphs/
-    - assets/portraits/
+    - assets/avatars/
+    - assets/headshots/
+    - assets/brand/
     - assets/roles/
     - assets/sets/
     - assets/scenes/

@@ -2,17 +2,17 @@ import 'package:flutter/widgets.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 
-const _borderWidth = 2.5;
-
 enum FieldCellHighlight {
-  none(color: AppColors.grass400, fillOpacity: 0),
-  available(color: AppColors.grass400, fillOpacity: 0.28),
-  hoveredAvailable(color: AppColors.grass400, fillOpacity: 0.55),
-  hoveredForbidden(color: AppColors.barn400, fillOpacity: 0.5);
+  none(color: AppColors.grass400, borderColor: AppColors.grass400, fillOpacity: 0, borderWidth: 0),
+  available(color: AppColors.grass400, borderColor: AppColors.grass400, fillOpacity: 0.28, borderWidth: 2.5),
+  hoveredAvailable(color: AppColors.sun400, borderColor: AppColors.sun600, fillOpacity: 0.65, borderWidth: 4),
+  hoveredForbidden(color: AppColors.barn400, borderColor: AppColors.barn600, fillOpacity: 0.5, borderWidth: 4);
 
   final Color color;
+  final Color borderColor;
+  final double borderWidth;
   final double fillOpacity;
-  const FieldCellHighlight({required this.color, required this.fillOpacity});
+  const FieldCellHighlight({required this.color, required this.borderColor, required this.borderWidth, required this.fillOpacity});
 }
 
 class FieldCellHighlightPainter extends CustomPainter {
@@ -28,9 +28,9 @@ class FieldCellHighlightPainter extends CustomPainter {
     canvas.drawPath(
       hexagon,
       Paint()
-        ..color = highlight.color
         ..style = PaintingStyle.stroke
-        ..strokeWidth = _borderWidth,
+        ..color = highlight.borderColor
+        ..strokeWidth = highlight.borderWidth,
     );
   }
 

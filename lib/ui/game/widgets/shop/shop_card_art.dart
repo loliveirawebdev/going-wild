@@ -5,7 +5,7 @@ import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
-import 'package:going_wild/ui/core/design/character_portrait.dart';
+import 'package:going_wild/ui/core/design/character_art.dart';
 import 'package:going_wild/ui/core/design/game_icon.dart';
 import 'package:going_wild/ui/core/design/rarity_color.dart';
 import 'package:going_wild/ui/core/localization/set_name.dart';
@@ -54,7 +54,7 @@ class ShopCardArt extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.asset(characterPortraitAssetPathOf(character), fit: BoxFit.cover, alignment: Alignment.centerRight),
+                Image.asset(characterAvatarAssetPathOf(character), fit: BoxFit.cover, alignment: Alignment.centerRight),
                 DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(

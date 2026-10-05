@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:going_wild/content/set/sets.dart';
 import 'package:going_wild/domain/models/character/role.dart';
+import 'package:going_wild/ui/core/design/brand_logo.dart';
 import 'package:going_wild/ui/core/design/game_icon.dart';
 import 'package:going_wild/ui/core/design/interface_glyph.dart';
 import 'package:going_wild/ui/core/design/painted_scene.dart';
@@ -18,6 +19,7 @@ List<LoadingStep> splashLoadingStepsOf(BuildContext context) {
   final loadingSteps = <LoadingStep>[
     () => context.read<SettingsViewModel>().load(),
     () => precacheImage(AssetImage(PaintedScene.splash.assetPath), context),
+    () => precacheImage(const AssetImage(BrandLogo.assetPath), context),
     for (final icon in GameIcon.values) () => SvgAssetLoader(icon.assetPath).loadBytes(null),
     for (final glyph in InterfaceGlyph.values) () => SvgAssetLoader(glyph.assetPath).loadBytes(null),
     for (final set in allSets) () => SvgAssetLoader(setIconAssetPathOf(set.id)).loadBytes(null),

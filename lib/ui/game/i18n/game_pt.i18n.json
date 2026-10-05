@@ -2,8 +2,6 @@
   "topBar": {
     "lives": "$lives de $maxLives vidas",
     "round": "Rodada",
-    "preparing": "Preparação",
-    "fighting": "Combate",
     "exitButton": "Sair da partida"
   },
   "exitDialog": {

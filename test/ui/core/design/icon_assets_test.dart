@@ -5,7 +5,7 @@ import 'package:going_wild/content/character/enemies/enemies.dart';
 import 'package:going_wild/content/character/team/team.dart';
 import 'package:going_wild/content/set/sets.dart';
 import 'package:going_wild/domain/models/character/role.dart';
-import 'package:going_wild/ui/core/design/character_portrait.dart';
+import 'package:going_wild/ui/core/design/character_art.dart';
 import 'package:going_wild/ui/core/design/game_icon.dart';
 import 'package:going_wild/ui/core/design/interface_glyph.dart';
 import 'package:going_wild/ui/core/design/role_icon.dart';
@@ -27,10 +27,11 @@ void main() {
     }
   });
 
-  test('every animal and predator has its portrait', () {
+  test('every animal and predator has its avatar and headshot', () {
     for (final character in [...allTeamCharacters, ...allEnemyCharacters]) {
-      final assetPath = characterPortraitAssetPathOf(character);
-      expect(File(assetPath).existsSync(), isTrue, reason: assetPath);
+      for (final assetPath in [characterAvatarAssetPathOf(character), characterHeadshotAssetPathOf(character)]) {
+        expect(File(assetPath).existsSync(), isTrue, reason: assetPath);
+      }
     }
   });
 

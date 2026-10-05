@@ -6,7 +6,7 @@ import 'package:going_wild/ui/core/design/app_color_filters.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
-import 'package:going_wild/ui/core/design/character_portrait.dart';
+import 'package:going_wild/ui/core/design/character_art.dart';
 import 'package:going_wild/ui/core/design/interface_glyph.dart';
 import 'package:going_wild/ui/core/design/rarity_color.dart';
 import 'package:going_wild/ui/core/localization/character_name.dart';
@@ -16,7 +16,6 @@ const _rarityFrameWidth = 3.0;
 const _checkSize = 20.0;
 const _nameHeight = 14.0;
 const _checkOverhang = 7.0;
-const _portraitAlignment = Alignment(0.44, 0);
 const _portraitInnerRadius = BorderRadius.all(Radius.circular(14 - _rarityFrameWidth));
 
 const _nameStyle = TextStyle(
@@ -44,7 +43,7 @@ class SetMemberTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final translations = context.t.game.setDialog;
     final name = characterNameOf(context.t, character);
-    final portrait = Image.asset(characterPortraitAssetPathOf(character), fit: BoxFit.cover, alignment: _portraitAlignment);
+    final portrait = Image.asset(characterHeadshotAssetPathOf(character), fit: BoxFit.cover);
 
     return Semantics(
       container: true,

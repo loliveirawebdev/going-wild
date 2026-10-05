@@ -545,10 +545,6 @@ class _Translations$game$topBar$en implements Translations$game$topBar$pt {
   @override
   String get round => 'Round';
   @override
-  String get preparing => 'Preparing';
-  @override
-  String get fighting => 'Combat';
-  @override
   String get exitButton => 'Leave match';
 }
 
@@ -1079,8 +1075,6 @@ extension on TranslationsEn {
       'entrypoint.tips.5' => 'Losing a round costs a life, and a draw counts as a loss too.',
       'game.topBar.lives' => ({required Object lives, required Object maxLives}) => '${lives} of ${maxLives} lives',
       'game.topBar.round' => 'Round',
-      'game.topBar.preparing' => 'Preparing',
-      'game.topBar.fighting' => 'Combat',
       'game.topBar.exitButton' => 'Leave match',
       'game.exitDialog.title' => 'Leave the match?',
       'game.exitDialog.body' => 'Your progress in this phase will be lost.',

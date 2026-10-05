@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:going_wild/content/phase/backyard/backyard.dart';
 import 'package:going_wild/data/repositories/match_repository.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
-import 'package:going_wild/domain/models/match_progress/round_stage.dart';
 import 'package:going_wild/domain/models/player/player.dart';
 import 'package:going_wild/domain/use_cases/round/start_match.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
@@ -51,7 +50,7 @@ Future<MatchRepository> openMatchTopBar(WidgetTester tester) async {
 MatchProgress currentMatchProgressOf(MatchRepository matchRepository) => matchRepository.currentMatchProgress!;
 
 void main() {
-  testWidgets('shows the lives, the round and the preparing stage of the match', (tester) async {
+  testWidgets('shows the lives and the round of the match', (tester) async {
     await openMatchTopBar(tester);
 
     final livesCounter = tester.widget<LivesCounter>(find.byType(LivesCounter));
@@ -59,25 +58,22 @@ void main() {
     expect(livesCounter.maxLives, 3);
     expect(find.text('RODADA'), findsOneWidget);
     expect(find.text('1/${backyard.roundCount}'), findsOneWidget);
-    expect(find.text('PREPARAÇÃO'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('follows the match when a life is lost and the fight starts', (tester) async {
+  testWidgets('follows the match when a life is lost', (tester) async {
     final matchRepository = await openMatchTopBar(tester);
     final matchProgress = currentMatchProgressOf(matchRepository);
 
     matchRepository.replaceMatchProgress(
       matchProgress.createCopyWith(
-        roundStage: RoundStage.fighting,
         player: Player(coins: matchProgress.player.coins, remainingLives: 1),
       ),
     );
     await tester.pumpAndSettle();
 
     expect(tester.widget<LivesCounter>(find.byType(LivesCounter)).lives, 1);
-    expect(find.text('COMBATE'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
   });

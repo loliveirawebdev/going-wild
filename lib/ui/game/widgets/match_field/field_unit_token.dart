@@ -1,10 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
-import 'package:going_wild/ui/core/design/character_portrait.dart';
+import 'package:going_wild/ui/core/design/character_art.dart';
 
 const _ringWidth = 3.0;
-const _portraitAlignment = Alignment(0.56, 0);
 
 enum FieldUnitSide {
   team(ringColor: AppColors.grass600),
@@ -32,9 +31,8 @@ class FieldUnitToken extends StatelessWidget {
       ),
       child: ClipOval(
         child: Image.asset(
-          characterPortraitAssetPathOf(characterCopy.character),
+          characterHeadshotAssetPathOf(characterCopy.character),
           fit: BoxFit.cover,
-          alignment: _portraitAlignment,
         ),
       ),
     );

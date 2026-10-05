@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/splash/widgets/edge_veil.dart';
 import 'package:going_wild/ui/splash/widgets/scene_backdrop.dart';
+import 'package:going_wild/ui/splash/widgets/splash_logo.dart';
 
 class SplashScene extends StatelessWidget {
   const SplashScene({required this.child, super.key, this.isBlurred = false});
@@ -21,6 +22,7 @@ class SplashScene extends StatelessWidget {
           children: [
             SceneBackdrop(isBlurred: isBlurred),
             const EdgeVeil(),
+            SplashLogo(isVisible: !isBlurred),
             child,
           ],
         ),

@@ -167,4 +167,56 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('with the bench open, picking an animal on the field closes the bench and still moves it', (tester) async {
+    const from = Position(row: 6, column: 1);
+    const to = Position(row: 5, column: 2);
+    final matchRepository = await showGameScreen(
+      tester,
+      placements: [const Placement(position: from, characterCopy: fieldDog)],
+    );
+
+    await tester.tap(find.bySemanticsLabel('Banco 1: Gato, 1 estrela'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Gato'), findsOneWidget);
+
+    await dragBetween(tester, from: cellCenterOf(from), to: cellCenterOf(to));
+
+    expect(find.text('Gato'), findsNothing);
+    expect(matchRepository.currentMatchProgress!.playerRoster.placements.single.position, to);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('a quick tap on an animal of the field opens its sheet with the sale', (tester) async {
+    const position = Position(row: 6, column: 1);
+    await showGameScreen(
+      tester,
+      placements: [const Placement(position: position, characterCopy: fieldDog)],
+    );
+
+    await tester.tapAt(cellCenterOf(position));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('SEU TIME'), findsOneWidget);
+    expect(find.text('Vender'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('a quick tap on a predator opens its sheet without the sale', (tester) async {
+    final matchRepository = await showGameScreen(tester);
+    final enemyPosition = matchRepository.currentMatchProgress!.currentWave.enemies.first.position;
+
+    await tester.tapAt(cellCenterOf(enemyPosition));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('INIMIGO'), findsOneWidget);
+    expect(find.text('Vender'), findsNothing);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

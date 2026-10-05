@@ -4,12 +4,11 @@ import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
-import 'package:going_wild/ui/core/design/character_portrait.dart';
+import 'package:going_wild/ui/core/design/character_art.dart';
 import 'package:going_wild/ui/core/localization/character_name.dart';
 import 'package:going_wild/ui/core/widgets/stars.dart';
 
 const _starSize = 10.0;
-const _portraitAlignment = Alignment(0.56, 0);
 
 const _nameStyle = TextStyle(
   fontSize: 8.5,
@@ -31,7 +30,7 @@ class BenchUnit extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.asset(characterPortraitAssetPathOf(character), fit: BoxFit.cover, alignment: _portraitAlignment),
+        Image.asset(characterHeadshotAssetPathOf(character), fit: BoxFit.cover),
         if (nameOpacity > 0)
           Positioned(
             top: 0,

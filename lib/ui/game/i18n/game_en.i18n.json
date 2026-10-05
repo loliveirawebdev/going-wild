@@ -2,8 +2,6 @@
   "topBar": {
     "lives": "$lives of $maxLives lives",
     "round": "Round",
-    "preparing": "Preparing",
-    "fighting": "Combat",
     "exitButton": "Leave match"
   },
   "exitDialog": {

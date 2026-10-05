@@ -6,7 +6,7 @@ import 'package:going_wild/ui/core/design/app_border_width.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
-import 'package:going_wild/ui/core/design/character_portrait.dart';
+import 'package:going_wild/ui/core/design/character_art.dart';
 import 'package:going_wild/ui/core/design/interface_glyph.dart';
 import 'package:going_wild/ui/core/design/rarity_color.dart';
 import 'package:going_wild/ui/core/localization/set_name.dart';
@@ -14,7 +14,7 @@ import 'package:going_wild/ui/core/widgets/round_icon_button.dart';
 import 'package:going_wild/ui/core/widgets/set_icon_image.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/unit_side.dart';
 
-const _artHeight = 150.0;
+const _artAspectRatio = 4 / 3;
 const _edgeInset = 8.0;
 const _setIconSize = 15.0;
 
@@ -45,13 +45,13 @@ class UnitSheetArt extends StatelessWidget {
   Widget build(BuildContext context) {
     final rarityColor = rarityColorOf(character.rarity);
 
-    return SizedBox(
-      height: _artHeight,
+    return AspectRatio(
+      aspectRatio: _artAspectRatio,
       child: Stack(
         fit: StackFit.expand,
         children: [
           const ColoredBox(color: AppColors.surface300),
-          Image.asset(characterPortraitAssetPathOf(character), fit: BoxFit.cover, alignment: Alignment.centerRight),
+          Image.asset(characterAvatarAssetPathOf(character), fit: BoxFit.cover, alignment: Alignment.centerRight),
           DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(

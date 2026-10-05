@@ -40,6 +40,11 @@ class _MatchBottomState extends State<MatchBottom> {
     _changeBenchExpansion(isOverBench);
   }
 
+  void _closeBenchOnTapOutside() {
+    final isMatchInFront = ModalRoute.of(context)?.isCurrent ?? true;
+    if (isMatchInFront) _changeBenchExpansion(false);
+  }
+
   void _changeBenchExpansion(bool isExpanded) {
     if (isExpanded == _isBenchExpanded) return;
     setState(() => _isBenchExpanded = isExpanded);
@@ -60,35 +65,27 @@ class _MatchBottomState extends State<MatchBottom> {
         ),
         BlocListener<RosterDragViewModel, RosterDrag?>(listener: (context, drag) => _followDrag(drag)),
       ],
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: _isBenchExpanded
-                ? GestureDetector(behavior: HitTestBehavior.opaque, onTap: () => _changeBenchExpansion(false))
-                : const SizedBox.shrink(),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(AppSpacing.space3, 0, AppSpacing.space3, safeAreaBottom + AppSpacing.space3),
-              child: Column(
-                spacing: _shelfSpacing,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  BenchShelf(
-                    key: _benchAreaKey,
-                    isExpanded: _isBenchExpanded,
-                    onExpandedChanged: _changeBenchExpansion,
-                  ),
-                  const MatchInfoShelf(),
-                ],
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(AppSpacing.space3, 0, AppSpacing.space3, safeAreaBottom + AppSpacing.space3),
+          child: Column(
+            spacing: _shelfSpacing,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TapRegion(
+                onTapOutside: (event) => _closeBenchOnTapOutside(),
+                child: BenchShelf(
+                  key: _benchAreaKey,
+                  isExpanded: _isBenchExpanded,
+                  onExpandedChanged: _changeBenchExpansion,
+                ),
               ),
-            ),
+              const MatchInfoShelf(),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

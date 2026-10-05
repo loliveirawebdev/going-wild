@@ -12,7 +12,6 @@ import 'package:going_wild/ui/game/view_models/preparation/states/preparation_st
 import 'package:going_wild/ui/game/widgets/match_top_bar/exit_match_dialog.dart';
 import 'package:going_wild/ui/game/widgets/match_top_bar/lives_counter.dart';
 import 'package:going_wild/ui/game/widgets/match_top_bar/round_pill.dart';
-import 'package:going_wild/ui/game/widgets/match_top_bar/round_stage_pill.dart';
 import 'package:going_wild/ui/game/widgets/match_top_bar/top_bar_pill.dart';
 
 const _heartSize = 18.0;
@@ -31,7 +30,8 @@ class MatchTopBar extends StatelessWidget {
         builder: (context, state) => Row(
           spacing: _itemSpacing,
           children: [
-            if (state is ReadyPreparationState) ..._buildMatchPills(context, state.matchProgress) else const Spacer(),
+            if (state is ReadyPreparationState) ..._buildMatchPills(context, state.matchProgress),
+            const Spacer(),
             RoundIconButton(
               glyph: InterfaceGlyph.exit,
               size: RoundIconButtonSize.small,
@@ -65,12 +65,6 @@ class MatchTopBar extends StatelessWidget {
         label: translations.round,
         roundCount: matchProgress.phase.roundCount,
         roundNumber: matchProgress.currentRoundNumber,
-      ),
-      Expanded(
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: RoundStagePill(roundStage: matchProgress.roundStage),
-        ),
       ),
     ];
   }

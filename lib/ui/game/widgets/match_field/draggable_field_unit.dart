@@ -12,11 +12,13 @@ const _liftedScale = 1.2;
 class DraggableFieldUnit extends StatelessWidget {
   final double diameter;
   final Position position;
+  final VoidCallback onPressed;
   final bool isAnotherDragActive;
   final CharacterCopy characterCopy;
   const DraggableFieldUnit({
     required this.diameter,
     required this.position,
+    required this.onPressed,
     required this.characterCopy,
     required this.isAnotherDragActive,
     super.key,
@@ -47,7 +49,7 @@ class DraggableFieldUnit extends StatelessWidget {
             ),
           ),
         ),
-        child: token,
+        child: GestureDetector(onTap: onPressed, child: token),
       ),
     );
   }
