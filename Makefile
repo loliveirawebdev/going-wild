@@ -1,7 +1,7 @@
 IOS_SIMULATOR ?= $(shell xcrun simctl list devices booted | grep -m1 iPhone | grep -oE '[0-9A-F-]{36}' || xcrun simctl list devices available | grep -m1 iPhone | grep -oE '[0-9A-F-]{36}')
 ANDROID_EMULATOR ?= $(shell flutter emulators 2>/dev/null | grep '• android' | head -1 | awk '{print $$1}')
 
-.PHONY: ios android sync-slang
+.PHONY: ios android design-system-catalog sync-slang
 
 ios: sync-slang
 	@test -n "$(IOS_SIMULATOR)" || (echo "No iPhone simulator found. Install one in Xcode > Settings > Components." && exit 1)
@@ -15,6 +15,12 @@ android: sync-slang
 	adb wait-for-device
 	until [ "$$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ]; do sleep 1; done
 	flutter run -d emulator
+
+design-system-catalog:
+	@test -n "$(IOS_SIMULATOR)" || (echo "No iPhone simulator found. Install one in Xcode > Settings > Components." && exit 1)
+	xcrun simctl bootstatus "$(IOS_SIMULATOR)" -b
+	open -a Simulator
+	flutter run -d "$(IOS_SIMULATOR)" -t lib/main_design_system_catalog.dart
 
 sync-slang:
 	dart run slang

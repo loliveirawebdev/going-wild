@@ -2,6 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     { "name": "going_wild (debug)", "request": "launch", "type": "dart", "program": "lib/main.dart" },
-    { "name": "going_wild (profile)", "request": "launch", "type": "dart", "program": "lib/main.dart", "flutterMode": "profile" }
+    { "name": "going_wild (profile)", "request": "launch", "type": "dart", "program": "lib/main.dart", "flutterMode": "profile" },
+    { "name": "going_wild (design system catalog)", "request": "launch", "type": "dart", "program": "lib/main_design_system_catalog.dart" }
   ]
 }

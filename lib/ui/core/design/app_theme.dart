@@ -11,6 +11,11 @@ abstract final class AppTheme {
     highlightColor: Colors.transparent,
     splashFactory: NoSplash.splashFactory,
     scaffoldBackgroundColor: AppColors.surface100,
+    appBarTheme: const AppBarTheme(
+      scrolledUnderElevation: 0,
+      backgroundColor: AppColors.surface100,
+      surfaceTintColor: Colors.transparent,
+    ),
 
     textTheme: const TextTheme(
       bodyLarge: AppTextStyles.body,

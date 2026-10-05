@@ -11,6 +11,7 @@ void main() {
     expect(theme.colorScheme.primary, AppColors.grass400);
     expect(theme.colorScheme.onPrimary, AppColors.ink);
     expect(theme.colorScheme.error, AppColors.danger);
+    expect(theme.appBarTheme.scrolledUnderElevation, 0);
   });
 
   test('titles and game numbers use Lilita One and the rest uses Nunito no thinner than 600', () {
