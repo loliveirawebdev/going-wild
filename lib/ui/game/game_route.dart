@@ -11,6 +11,7 @@ import 'package:going_wild/ui/game/view_models/match_flow/events/match_started.d
 import 'package:going_wild/ui/game/view_models/match_flow/match_flow_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/events/preparation_started.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
+import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/combat_playback_bridge.dart';
 import 'package:going_wild/ui/game/widgets/game_screen.dart';
 
@@ -35,6 +36,7 @@ final gameRoute = GoRoute(
                 MatchFlowBloc(randomGenerator: Random(), matchRepository: context.read<MatchRepository>())..add(MatchStarted(phase: phase)),
           ),
           BlocProvider(create: (context) => CombatPlaybackBloc(clock: const PeriodicCombatPlaybackClock())),
+          BlocProvider(create: (context) => RosterDragViewModel()),
         ],
         child: CombatPlaybackBridge(child: GameScreen(phase: phase)),
       ),

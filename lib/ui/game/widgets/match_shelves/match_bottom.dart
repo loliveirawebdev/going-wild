@@ -18,6 +18,23 @@ class MatchBottom extends StatefulWidget {
 
 class _MatchBottomState extends State<MatchBottom> {
   var _isBenchExpanded = false;
+  var _isDraggedCopyOverBench = true;
+
+  final _benchAreaKey = GlobalKey();
+
+  void _followDraggedCopy(Offset globalPosition) {
+    final benchArea = _benchAreaKey.currentContext?.findRenderObject() as RenderBox?;
+    if (benchArea == null) return;
+
+    final benchRect = benchArea.localToGlobal(Offset.zero) & benchArea.size;
+    final isOverBench = benchRect.contains(globalPosition);
+    if (isOverBench == _isDraggedCopyOverBench) return;
+
+    _isDraggedCopyOverBench = isOverBench;
+    _changeBenchExpansion(isOverBench);
+  }
+
+  void _endDraggingCopy() => _isDraggedCopyOverBench = true;
 
   void _changeBenchExpansion(bool isExpanded) {
     if (isExpanded == _isBenchExpanded) return;
@@ -53,7 +70,10 @@ class _MatchBottomState extends State<MatchBottom> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   BenchShelf(
+                    key: _benchAreaKey,
                     isExpanded: _isBenchExpanded,
+                    onCopyDragEnded: _endDraggingCopy,
+                    onCopyDragUpdated: _followDraggedCopy,
                     onExpandedChanged: _changeBenchExpansion,
                   ),
                   const MatchInfoShelf(),

@@ -31,8 +31,7 @@ class MatchTopBar extends StatelessWidget {
         builder: (context, state) => Row(
           spacing: _itemSpacing,
           children: [
-            if (state is ReadyPreparationState) ..._buildMatchPills(context, state.matchProgress),
-            const Spacer(),
+            if (state is ReadyPreparationState) ..._buildMatchPills(context, state.matchProgress) else const Spacer(),
             RoundIconButton(
               glyph: InterfaceGlyph.exit,
               size: RoundIconButtonSize.small,
@@ -67,7 +66,12 @@ class MatchTopBar extends StatelessWidget {
         roundCount: matchProgress.phase.roundCount,
         roundNumber: matchProgress.currentRoundNumber,
       ),
-      RoundStagePill(roundStage: matchProgress.roundStage),
+      Expanded(
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: RoundStagePill(roundStage: matchProgress.roundStage),
+        ),
+      ),
     ];
   }
 }

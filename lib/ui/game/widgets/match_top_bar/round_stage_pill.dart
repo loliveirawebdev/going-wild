@@ -25,13 +25,13 @@ class RoundStagePill extends StatelessWidget {
       RoundStage.preparing => TopBarPill(
         fillColor: AppColors.sky300,
         edgeColor: AppColors.surface400,
-        child: Text(translations.preparing.toUpperCase(), maxLines: 1, style: _stageStyle),
+        child: Text(translations.preparing.toUpperCase(), maxLines: 1, overflow: TextOverflow.ellipsis, style: _stageStyle),
       ),
 
       RoundStage.fighting => TopBarPill(
         edgeColor: AppColors.grass600,
         fillColor: AppColors.grass400,
-        child: Text(translations.fighting.toUpperCase(), maxLines: 1, style: _stageStyle),
+        child: Text(translations.fighting.toUpperCase(), maxLines: 1, overflow: TextOverflow.ellipsis, style: _stageStyle),
       ),
     };
   }

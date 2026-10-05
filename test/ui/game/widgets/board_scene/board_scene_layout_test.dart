@@ -40,10 +40,10 @@ void main() {
 
   testWidgets('the scene takes the whole width and keeps the painting proportions even on a shorter screen', (tester) async {
     await tester.pumpWidget(
-      MaterialApp(
+      const MaterialApp(
         home: Scaffold(
           body: Stack(
-            children: [Positioned(top: 0, left: 0, right: 0, child: BoardScene(board: board))],
+            children: [Positioned(top: 0, left: 0, right: 0, child: BoardScene())],
           ),
         ),
       ),

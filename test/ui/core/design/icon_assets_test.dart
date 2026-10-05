@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:going_wild/content/character/enemies/enemies.dart';
 import 'package:going_wild/content/character/team/team.dart';
 import 'package:going_wild/content/set/sets.dart';
 import 'package:going_wild/domain/models/character/role.dart';
@@ -26,8 +27,8 @@ void main() {
     }
   });
 
-  test('every team animal has its portrait', () {
-    for (final character in allTeamCharacters) {
+  test('every animal and predator has its portrait', () {
+    for (final character in [...allTeamCharacters, ...allEnemyCharacters]) {
       final assetPath = characterPortraitAssetPathOf(character);
       expect(File(assetPath).existsSync(), isTrue, reason: assetPath);
     }

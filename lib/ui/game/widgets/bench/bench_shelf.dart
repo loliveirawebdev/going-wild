@@ -12,6 +12,7 @@ import 'package:going_wild/ui/game/view_models/preparation/events/copy_moved_bet
 import 'package:going_wild/ui/game/view_models/preparation/events/copy_sold_from_roster_slot.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
+import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/bench/animated_bench.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_handle.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/match_shelf.dart';
@@ -20,9 +21,18 @@ import 'package:going_wild/ui/game/widgets/unit_sheet/unit_sheet.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/unit_side.dart';
 
 class BenchShelf extends StatelessWidget {
+  const BenchShelf({
+    required this.isExpanded,
+    required this.onCopyDragEnded,
+    required this.onExpandedChanged,
+    required this.onCopyDragUpdated,
+    super.key,
+  });
+
   final bool isExpanded;
+  final VoidCallback onCopyDragEnded;
   final ValueChanged<bool> onExpandedChanged;
-  const BenchShelf({required this.isExpanded, required this.onExpandedChanged, super.key});
+  final ValueChanged<Offset> onCopyDragUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +56,12 @@ class BenchShelf extends StatelessWidget {
                 child: AnimatedBench(
                   isExpanded: isExpanded,
                   benchCopies: benchCopies,
+                  onCopyDragUpdated: onCopyDragUpdated,
+                  onCopyDragStarted: context.read<RosterDragViewModel>().startDragging,
+                  onCopyDragEnded: () {
+                    context.read<RosterDragViewModel>().stopDragging();
+                    onCopyDragEnded();
+                  },
                   onCopyMoved: (fromIndex, toIndex) => _moveCopy(context, matchProgress, fromIndex, toIndex),
                   onSlotPressed: (slotIndex, characterCopy) => _openUnitSheet(context, matchProgress, slotIndex, characterCopy),
                 ),

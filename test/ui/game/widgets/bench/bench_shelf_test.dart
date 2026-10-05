@@ -13,6 +13,7 @@ import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/localization/configure_plural_resolvers.dart';
 import 'package:going_wild/ui/game/view_models/preparation/events/preparation_started.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
+import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_shop_tile.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_slot.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/match_bottom.dart';
@@ -48,8 +49,11 @@ Future<MatchRepository> showMatchBottom(WidgetTester tester, {List<CharacterCopy
   await tester.pumpWidget(
     TranslationProvider(
       child: MaterialApp(
-        home: BlocProvider(
-          create: (context) => PreparationBloc(matchRepository: matchRepository)..add(const PreparationStarted()),
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => RosterDragViewModel()),
+            BlocProvider(create: (context) => PreparationBloc(matchRepository: matchRepository)..add(const PreparationStarted())),
+          ],
           child: const Scaffold(body: MatchBottom()),
         ),
       ),
@@ -164,13 +168,15 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('with the bench closed, dragging does not move anything', (tester) async {
+  testWidgets('with the bench closed, dragging still moves the animal', (tester) async {
     const cat2 = CharacterCopy(stars: 2, character: cat);
     final matchRepository = await showMatchBottom(tester, benchCopies: [cat2]);
 
     await dragBenchCopy(tester, fromLabel: 'Banco 1: Gato, 2 estrelas', toLabel: 'Banco 3: vazio');
 
-    expect(matchRepository.currentMatchProgress!.playerRoster.inventory.entryAt(0), cat2);
+    final inventory = matchRepository.currentMatchProgress!.playerRoster.inventory;
+    expect(inventory.entryAt(0), isNull);
+    expect(inventory.entryAt(2), cat2);
 
     await tester.pumpWidget(const SizedBox());
   });
