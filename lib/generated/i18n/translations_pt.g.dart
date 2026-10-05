@@ -221,6 +221,7 @@ class Translations$game$pt {
   late final Translations$game$exitDialog$pt exitDialog = Translations$game$exitDialog$pt._(_root);
   late final Translations$game$setChips$pt setChips = Translations$game$setChips$pt._(_root);
   late final Translations$game$setDialog$pt setDialog = Translations$game$setDialog$pt._(_root);
+  late final Translations$game$infoShelf$pt infoShelf = Translations$game$infoShelf$pt._(_root);
   late final Translations$game$rejections$pt rejections = Translations$game$rejections$pt._(_root);
 }
 
@@ -619,6 +620,47 @@ class Translations$game$setDialog$pt {
   String memberMissing({required Object name}) => '${name}, fora do campo';
 }
 
+// Path: game.infoShelf
+class Translations$game$infoShelf$pt {
+  Translations$game$infoShelf$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'XP $experience/$experienceToNextLevel'
+  String experience({required Object experience, required Object experienceToNextLevel}) => 'XP ${experience}/${experienceToNextLevel}';
+
+  /// pt: 'Nível máx.'
+  String get maxLevel => 'Nível máx.';
+
+  /// pt: 'Nível $level, XP $experience de $experienceToNextLevel'
+  String levelLabel({required Object level, required Object experience, required Object experienceToNextLevel}) =>
+      'Nível ${level}, XP ${experience} de ${experienceToNextLevel}';
+
+  /// pt: 'Nível $level, máximo'
+  String maxLevelLabel({required Object level}) => 'Nível ${level}, máximo';
+
+  /// pt: '+XP'
+  String get buyExperienceButton => '+XP';
+
+  /// pt: 'Comprar XP por $cost moedas'
+  String buyExperienceLabel({required Object cost}) => 'Comprar XP por ${cost} moedas';
+
+  /// pt: '(one) {$coins moeda} (other) {$coins moedas}'
+  String coinsLabel({required num coins}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+    coins,
+    one: '${coins} moeda',
+    other: '${coins} moedas',
+  );
+
+  /// pt: 'no campo'
+  String get teamOnField => 'no campo';
+
+  /// pt: '$count de $limit bichos no campo'
+  String teamOnFieldLabel({required Object count, required Object limit}) => '${count} de ${limit} bichos no campo';
+}
+
 // Path: game.rejections
 class Translations$game$rejections$pt {
   Translations$game$rejections$pt._(this._root);
@@ -959,6 +1001,26 @@ extension on Translations {
         ),
       'game.setDialog.memberOnField' => ({required Object name}) => '${name}, em campo',
       'game.setDialog.memberMissing' => ({required Object name}) => '${name}, fora do campo',
+      'game.infoShelf.experience' => ({
+        required Object experience,
+        required Object experienceToNextLevel,
+      }) => 'XP ${experience}/${experienceToNextLevel}',
+      'game.infoShelf.maxLevel' => 'Nível máx.',
+      'game.infoShelf.levelLabel' => ({
+        required Object level,
+        required Object experience,
+        required Object experienceToNextLevel,
+      }) => 'Nível ${level}, XP ${experience} de ${experienceToNextLevel}',
+      'game.infoShelf.maxLevelLabel' => ({required Object level}) => 'Nível ${level}, máximo',
+      'game.infoShelf.buyExperienceButton' => '+XP',
+      'game.infoShelf.buyExperienceLabel' => ({required Object cost}) => 'Comprar XP por ${cost} moedas',
+      'game.infoShelf.coinsLabel' => ({required num coins}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+        coins,
+        one: '${coins} moeda',
+        other: '${coins} moedas',
+      ),
+      'game.infoShelf.teamOnField' => 'no campo',
+      'game.infoShelf.teamOnFieldLabel' => ({required Object count, required Object limit}) => '${count} de ${limit} bichos no campo',
       'game.rejections.fightInProgress' => 'A luta está acontecendo',
       'game.rejections.matchIsOver' => 'A partida acabou',
       'game.rejections.notEnoughCoins' => 'Moedas insuficientes',

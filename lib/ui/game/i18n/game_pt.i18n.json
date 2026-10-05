@@ -33,6 +33,20 @@
     "memberOnField": "$name, em campo",
     "memberMissing": "$name, fora do campo"
   },
+  "infoShelf": {
+    "experience": "XP $experience/$experienceToNextLevel",
+    "maxLevel": "Nível máx.",
+    "levelLabel": "Nível $level, XP $experience de $experienceToNextLevel",
+    "maxLevelLabel": "Nível $level, máximo",
+    "buyExperienceButton": "+XP",
+    "buyExperienceLabel": "Comprar XP por $cost moedas",
+    "coinsLabel(param=coins)": {
+      "one": "$coins moeda",
+      "other": "$coins moedas"
+    },
+    "teamOnField": "no campo",
+    "teamOnFieldLabel": "$count de $limit bichos no campo"
+  },
   "rejections": {
     "fightInProgress": "A luta está acontecendo",
     "matchIsOver": "A partida acabou",

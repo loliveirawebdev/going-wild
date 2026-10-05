@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:going_wild/domain/models/phase/phase.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene.dart';
+import 'package:going_wild/ui/game/widgets/match_shelves/match_bottom.dart';
 import 'package:going_wild/ui/game/widgets/match_top_bar/match_top_bar.dart';
 import 'package:going_wild/ui/game/widgets/set_chips/preview_board_characters.dart';
 import 'package:going_wild/ui/game/widgets/set_chips/set_chip_row.dart';
@@ -35,6 +36,7 @@ class GameScreen extends StatelessWidget {
                 ],
               ),
             ),
+            const Positioned(left: 0, right: 0, bottom: 0, child: MatchBottom()),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:going_wild/ui/design_system_catalog/design_system_catalog_sectio
 import 'package:going_wild/ui/design_system_catalog/sections/button/button_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/dialog/dialog_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/icons/icons_section.dart';
+import 'package:going_wild/ui/design_system_catalog/sections/level_meter/level_meter_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/lives_counter/lives_counter_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/phase_card/phase_card_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/progress_bar/progress_bar_section.dart';
@@ -11,6 +12,7 @@ import 'package:going_wild/ui/design_system_catalog/sections/set_dialog/set_dial
 import 'package:going_wild/ui/design_system_catalog/sections/settings_controls/slider_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/settings_controls/speed_selector_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/settings_controls/switch_section.dart';
+import 'package:going_wild/ui/design_system_catalog/sections/stat_counter/stat_counter_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/tokens/tokens_section.dart';
 
 final designSystemCatalogSections = [
@@ -27,4 +29,6 @@ final designSystemCatalogSections = [
   DesignSystemCatalogSection(title: 'LivesCounter', builder: (context) => const LivesCounterSection()),
   DesignSystemCatalogSection(title: 'SetChip', builder: (context) => const SetChipSection()),
   DesignSystemCatalogSection(title: 'SetDialog', builder: (context) => const SetDialogSection()),
+  DesignSystemCatalogSection(title: 'LevelMeter', builder: (context) => const LevelMeterSection()),
+  DesignSystemCatalogSection(title: 'StatCounter', builder: (context) => const StatCounterSection()),
 ];

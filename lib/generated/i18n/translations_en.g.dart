@@ -206,6 +206,8 @@ class _Translations$game$en implements Translations$game$pt {
   @override
   late final _Translations$game$setDialog$en setDialog = _Translations$game$setDialog$en._(_root);
   @override
+  late final _Translations$game$infoShelf$en infoShelf = _Translations$game$infoShelf$en._(_root);
+  @override
   late final _Translations$game$rejections$en rejections = _Translations$game$rejections$en._(_root);
 }
 
@@ -529,6 +531,38 @@ class _Translations$game$setDialog$en implements Translations$game$setDialog$pt 
   String memberMissing({required Object name}) => '${name}, not on the field';
 }
 
+// Path: game.infoShelf
+class _Translations$game$infoShelf$en implements Translations$game$infoShelf$pt {
+  _Translations$game$infoShelf$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String experience({required Object experience, required Object experienceToNextLevel}) => 'XP ${experience}/${experienceToNextLevel}';
+  @override
+  String get maxLevel => 'Max level';
+  @override
+  String levelLabel({required Object level, required Object experience, required Object experienceToNextLevel}) =>
+      'Level ${level}, XP ${experience} of ${experienceToNextLevel}';
+  @override
+  String maxLevelLabel({required Object level}) => 'Level ${level}, max';
+  @override
+  String get buyExperienceButton => '+XP';
+  @override
+  String buyExperienceLabel({required Object cost}) => 'Buy XP for ${cost} coins';
+  @override
+  String coinsLabel({required num coins}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+    coins,
+    one: '${coins} coin',
+    other: '${coins} coins',
+  );
+  @override
+  String get teamOnField => 'on field';
+  @override
+  String teamOnFieldLabel({required Object count, required Object limit}) => '${count} of ${limit} animals on the field';
+}
+
 // Path: game.rejections
 class _Translations$game$rejections$en implements Translations$game$rejections$pt {
   _Translations$game$rejections$en._(this._root);
@@ -831,6 +865,26 @@ extension on TranslationsEn {
         ),
       'game.setDialog.memberOnField' => ({required Object name}) => '${name}, on the field',
       'game.setDialog.memberMissing' => ({required Object name}) => '${name}, not on the field',
+      'game.infoShelf.experience' => ({
+        required Object experience,
+        required Object experienceToNextLevel,
+      }) => 'XP ${experience}/${experienceToNextLevel}',
+      'game.infoShelf.maxLevel' => 'Max level',
+      'game.infoShelf.levelLabel' => ({
+        required Object level,
+        required Object experience,
+        required Object experienceToNextLevel,
+      }) => 'Level ${level}, XP ${experience} of ${experienceToNextLevel}',
+      'game.infoShelf.maxLevelLabel' => ({required Object level}) => 'Level ${level}, max',
+      'game.infoShelf.buyExperienceButton' => '+XP',
+      'game.infoShelf.buyExperienceLabel' => ({required Object cost}) => 'Buy XP for ${cost} coins',
+      'game.infoShelf.coinsLabel' => ({required num coins}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+        coins,
+        one: '${coins} coin',
+        other: '${coins} coins',
+      ),
+      'game.infoShelf.teamOnField' => 'on field',
+      'game.infoShelf.teamOnFieldLabel' => ({required Object count, required Object limit}) => '${count} of ${limit} animals on the field',
       'game.rejections.fightInProgress' => 'The fight is happening',
       'game.rejections.matchIsOver' => 'The match is over',
       'game.rejections.notEnoughCoins' => 'Not enough coins',
