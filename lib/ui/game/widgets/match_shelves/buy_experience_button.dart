@@ -57,7 +57,7 @@ class BuyExperienceButton extends StatelessWidget {
               spacing: 1,
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (isEnabled) coin else const ColorFiltered(colorFilter: AppColorFilters.disabledIcon, child: coin),
+                if (isEnabled) coin else ColorFiltered(colorFilter: AppColorFilters.disabledIcon, child: coin),
                 Text('$costInCoins'),
               ],
             ),

@@ -5,6 +5,7 @@ import 'package:going_wild/ui/core/design/app_shadows.dart';
 import 'package:going_wild/ui/core/design/game_icon.dart';
 import 'package:going_wild/ui/core/widgets/game_icon_image.dart';
 import 'package:going_wild/ui/core/widgets/pressable_surface.dart';
+import 'package:going_wild/ui/game/widgets/shop/shop_sheet.dart';
 
 const _iconSize = 30.0;
 
@@ -16,10 +17,10 @@ class BenchShopTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PressableSurface(
-      onPressed: () {},
       width: size.width,
       edgeColor: AppColors.sun600,
       fillColor: AppColors.sun400,
+      onPressed: () => presentShopSheet(context),
       height: size.height - AppShadows.pressOffset,
       semanticLabel: context.t.game.bench.shopButton,
       borderRadius: BorderRadius.all(Radius.circular(radius)),

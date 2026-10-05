@@ -84,6 +84,17 @@
       "attackSpeed": "Attack speed"
     }
   },
+  "shop": {
+    "title": "Shop",
+    "closeButton": "Close shop",
+    "lockButton": "Lock shop",
+    "unlockButton": "Unlock shop",
+    "rerollButton": "New offers",
+    "rerollLabel": "New offers for $cost coins",
+    "soldStamp": "Sold",
+    "offerLabel": "$name for $price coins",
+    "soldOfferLabel": "Sold offer"
+  },
   "rejections": {
     "fightInProgress": "The fight is happening",
     "matchIsOver": "The match is over",

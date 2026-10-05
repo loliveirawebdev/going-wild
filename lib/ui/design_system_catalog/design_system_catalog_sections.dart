@@ -11,6 +11,7 @@ import 'package:going_wild/ui/design_system_catalog/sections/round_icon_button/r
 import 'package:going_wild/ui/design_system_catalog/sections/set_chip/set_chip_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/set_dialog/set_dialog_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/settings_controls/slider_section.dart';
+import 'package:going_wild/ui/design_system_catalog/sections/shop_card/shop_card_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/settings_controls/speed_selector_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/settings_controls/switch_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/stars/stars_section.dart';
@@ -37,4 +38,5 @@ final designSystemCatalogSections = [
   DesignSystemCatalogSection(title: 'Stars', builder: (context) => const StarsSection()),
   DesignSystemCatalogSection(title: 'BenchSlot', builder: (context) => const BenchSlotSection()),
   DesignSystemCatalogSection(title: 'UnitSheet', builder: (context) => const UnitSheetSection()),
+  DesignSystemCatalogSection(title: 'ShopCard', builder: (context) => const ShopCardSection()),
 ];

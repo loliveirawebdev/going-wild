@@ -65,7 +65,7 @@ class UnitSellButton extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text('+${sale.valueInCoins}', style: _valueStyle.copyWith(color: foreground)),
-                if (isEnabled) coin else const ColorFiltered(colorFilter: AppColorFilters.disabledIcon, child: coin),
+                if (isEnabled) coin else ColorFiltered(colorFilter: AppColorFilters.disabledIcon, child: coin),
               ],
             ),
           ),

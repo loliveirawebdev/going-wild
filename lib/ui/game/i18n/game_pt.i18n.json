@@ -84,6 +84,17 @@
       "attackSpeed": "Vel. de ataque"
     }
   },
+  "shop": {
+    "title": "Loja",
+    "closeButton": "Fechar loja",
+    "lockButton": "Travar loja",
+    "unlockButton": "Destravar loja",
+    "rerollButton": "Trocar ofertas",
+    "rerollLabel": "Trocar ofertas por $cost moedas",
+    "soldStamp": "Vendido",
+    "offerLabel": "$name por $price moedas",
+    "soldOfferLabel": "Oferta vendida"
+  },
   "rejections": {
     "fightInProgress": "A luta está acontecendo",
     "matchIsOver": "A partida acabou",

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/domain/models/match_progress/round_stage.dart';
@@ -6,7 +5,6 @@ import 'package:going_wild/ui/core/design/app_spacing.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_shelf.dart';
-import 'package:going_wild/ui/game/widgets/bench/preview_bench_copies.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/match_info_shelf.dart';
 
 const _shelfSpacing = AppSpacing.space1;
@@ -57,7 +55,6 @@ class _MatchBottomState extends State<MatchBottom> {
                   BenchShelf(
                     isExpanded: _isBenchExpanded,
                     onExpandedChanged: _changeBenchExpansion,
-                    previewBenchCopies: kDebugMode ? previewBenchCopies : null,
                   ),
                   const MatchInfoShelf(),
                 ],

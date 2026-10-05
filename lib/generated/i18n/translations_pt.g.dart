@@ -298,6 +298,7 @@ class Translations$game$pt {
   late final Translations$game$infoShelf$pt infoShelf = Translations$game$infoShelf$pt._(_root);
   late final Translations$game$bench$pt bench = Translations$game$bench$pt._(_root);
   late final Translations$game$unitSheet$pt unitSheet = Translations$game$unitSheet$pt._(_root);
+  late final Translations$game$shop$pt shop = Translations$game$shop$pt._(_root);
   late final Translations$game$rejections$pt rejections = Translations$game$rejections$pt._(_root);
 }
 
@@ -849,6 +850,42 @@ class Translations$game$unitSheet$pt {
   late final Translations$game$unitSheet$stats$pt stats = Translations$game$unitSheet$stats$pt._(_root);
 }
 
+// Path: game.shop
+class Translations$game$shop$pt {
+  Translations$game$shop$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Loja'
+  String get title => 'Loja';
+
+  /// pt: 'Fechar loja'
+  String get closeButton => 'Fechar loja';
+
+  /// pt: 'Travar loja'
+  String get lockButton => 'Travar loja';
+
+  /// pt: 'Destravar loja'
+  String get unlockButton => 'Destravar loja';
+
+  /// pt: 'Trocar ofertas'
+  String get rerollButton => 'Trocar ofertas';
+
+  /// pt: 'Trocar ofertas por $cost moedas'
+  String rerollLabel({required Object cost}) => 'Trocar ofertas por ${cost} moedas';
+
+  /// pt: 'Vendido'
+  String get soldStamp => 'Vendido';
+
+  /// pt: '$name por $price moedas'
+  String offerLabel({required Object name, required Object price}) => '${name} por ${price} moedas';
+
+  /// pt: 'Oferta vendida'
+  String get soldOfferLabel => 'Oferta vendida';
+}
+
 // Path: game.rejections
 class Translations$game$rejections$pt {
   Translations$game$rejections$pt._(this._root);
@@ -1327,6 +1364,15 @@ extension on Translations {
       'game.unitSheet.stats.damage' => 'Dano',
       'game.unitSheet.stats.armor' => 'Armadura',
       'game.unitSheet.stats.attackSpeed' => 'Vel. de ataque',
+      'game.shop.title' => 'Loja',
+      'game.shop.closeButton' => 'Fechar loja',
+      'game.shop.lockButton' => 'Travar loja',
+      'game.shop.unlockButton' => 'Destravar loja',
+      'game.shop.rerollButton' => 'Trocar ofertas',
+      'game.shop.rerollLabel' => ({required Object cost}) => 'Trocar ofertas por ${cost} moedas',
+      'game.shop.soldStamp' => 'Vendido',
+      'game.shop.offerLabel' => ({required Object name, required Object price}) => '${name} por ${price} moedas',
+      'game.shop.soldOfferLabel' => 'Oferta vendida',
       'game.rejections.fightInProgress' => 'A luta está acontecendo',
       'game.rejections.matchIsOver' => 'A partida acabou',
       'game.rejections.notEnoughCoins' => 'Moedas insuficientes',

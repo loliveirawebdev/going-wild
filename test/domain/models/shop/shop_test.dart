@@ -41,4 +41,14 @@ void main() {
     expect(() => shop.offerAt(4), throwsA(isA<ShopOfferIndexOutOfRangeError>()));
     expect(() => shop.createCopyWithoutOfferAt(-1), throwsA(isA<ShopOfferIndexOutOfRangeError>()));
   });
+
+  test('taking an offer remembers who was sold there until new offers arrive', () {
+    final shopAfterSale = shop.createCopyWithoutOfferAt(0);
+    expect(shopAfterSale.offerAt(0), isNull);
+    expect(shopAfterSale.soldOfferAt(0), cat);
+    expect(shopAfterSale.soldOfferAt(1), isNull);
+    expect(shopAfterSale.createCopyLocked().soldOfferAt(0), cat);
+
+    expect(shopAfterSale.createCopyWithOffers([duck, goat]).soldOfferAt(0), isNull);
+  });
 }

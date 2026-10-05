@@ -39,6 +39,7 @@ class Button extends StatelessWidget {
     required this.onPressed,
     super.key,
     this.icon,
+    this.trailing,
     this.disabledReason,
     this.fillsWidth = false,
     this.size = ButtonSize.medium,
@@ -49,6 +50,7 @@ class Button extends StatelessWidget {
   final Widget? icon;
   final bool fillsWidth;
   final ButtonSize size;
+  final Widget? trailing;
   final ButtonVariant variant;
   final String? disabledReason;
   final VoidCallback? onPressed;
@@ -88,7 +90,8 @@ class Button extends StatelessWidget {
                 dimension: size.fontSize,
                 child: isEnabled ? icon : ColorFiltered(colorFilter: AppColorFilters.disabledIcon, child: icon),
               ),
-            Text(label),
+            Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis)),
+            ?trailing,
           ],
         ),
       ),

@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/set/set_presence.dart';
 import 'package:going_wild/ui/core/design/app_spacing.dart';
@@ -23,9 +22,7 @@ int _compareByHighlight(SetPresence first, SetPresence second) {
 }
 
 class SetChipRow extends StatelessWidget {
-  const SetChipRow({super.key, this.previewBoardCharacters});
-
-  final List<Character>? previewBoardCharacters;
+  const SetChipRow({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +59,7 @@ class SetChipRow extends StatelessWidget {
   }
 
   List<SetPresence> _sortedSetPresencesOf(MatchProgress matchProgress) {
-    final placements = matchProgress.playerRoster.placements;
-    final previewBoardCharacters = this.previewBoardCharacters;
-    final boardCharacters = placements.isEmpty && previewBoardCharacters != null
-        ? previewBoardCharacters
-        : [for (final placement in placements) placement.characterCopy.character];
+    final boardCharacters = [for (final placement in matchProgress.playerRoster.placements) placement.characterCopy.character];
     return matchProgress.phase.engines.setEngine.setPresences(boardCharacters)..sort(_compareByHighlight);
   }
 }

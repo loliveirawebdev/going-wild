@@ -20,8 +20,7 @@ import 'package:going_wild/ui/game/widgets/unit_sheet/unit_side.dart';
 class BenchShelf extends StatelessWidget {
   final bool isExpanded;
   final ValueChanged<bool> onExpandedChanged;
-  final List<CharacterCopy?>? previewBenchCopies;
-  const BenchShelf({required this.isExpanded, required this.onExpandedChanged, super.key, this.previewBenchCopies});
+  const BenchShelf({required this.isExpanded, required this.onExpandedChanged, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,12 +73,7 @@ class BenchShelf extends StatelessWidget {
     );
   }
 
-  List<CharacterCopy?> _benchCopiesOf(Inventory<CharacterCopy> inventory) {
-    final previewBenchCopies = this.previewBenchCopies;
-    final benchCopies = [for (var slotIndex = 0; slotIndex < inventory.capacity; slotIndex++) inventory.entryAt(slotIndex)];
-    final isBenchEmpty = benchCopies.every((characterCopy) => characterCopy == null);
-
-    if (!isBenchEmpty || previewBenchCopies == null) return benchCopies;
-    return [for (var slotIndex = 0; slotIndex < inventory.capacity; slotIndex++) previewBenchCopies.elementAtOrNull(slotIndex)];
-  }
+  List<CharacterCopy?> _benchCopiesOf(Inventory<CharacterCopy> inventory) => [
+    for (var slotIndex = 0; slotIndex < inventory.capacity; slotIndex++) inventory.entryAt(slotIndex),
+  ];
 }

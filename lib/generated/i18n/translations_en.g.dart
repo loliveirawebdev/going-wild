@@ -269,6 +269,8 @@ class _Translations$game$en implements Translations$game$pt {
   @override
   late final _Translations$game$unitSheet$en unitSheet = _Translations$game$unitSheet$en._(_root);
   @override
+  late final _Translations$game$shop$en shop = _Translations$game$shop$en._(_root);
+  @override
   late final _Translations$game$rejections$en rejections = _Translations$game$rejections$en._(_root);
 }
 
@@ -711,6 +713,33 @@ class _Translations$game$unitSheet$en implements Translations$game$unitSheet$pt 
   late final _Translations$game$unitSheet$stats$en stats = _Translations$game$unitSheet$stats$en._(_root);
 }
 
+// Path: game.shop
+class _Translations$game$shop$en implements Translations$game$shop$pt {
+  _Translations$game$shop$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get title => 'Shop';
+  @override
+  String get closeButton => 'Close shop';
+  @override
+  String get lockButton => 'Lock shop';
+  @override
+  String get unlockButton => 'Unlock shop';
+  @override
+  String get rerollButton => 'New offers';
+  @override
+  String rerollLabel({required Object cost}) => 'New offers for ${cost} coins';
+  @override
+  String get soldStamp => 'Sold';
+  @override
+  String offerLabel({required Object name, required Object price}) => '${name} for ${price} coins';
+  @override
+  String get soldOfferLabel => 'Sold offer';
+}
+
 // Path: game.rejections
 class _Translations$game$rejections$en implements Translations$game$rejections$pt {
   _Translations$game$rejections$en._(this._root);
@@ -1139,6 +1168,15 @@ extension on TranslationsEn {
       'game.unitSheet.stats.damage' => 'Damage',
       'game.unitSheet.stats.armor' => 'Armor',
       'game.unitSheet.stats.attackSpeed' => 'Attack speed',
+      'game.shop.title' => 'Shop',
+      'game.shop.closeButton' => 'Close shop',
+      'game.shop.lockButton' => 'Lock shop',
+      'game.shop.unlockButton' => 'Unlock shop',
+      'game.shop.rerollButton' => 'New offers',
+      'game.shop.rerollLabel' => ({required Object cost}) => 'New offers for ${cost} coins',
+      'game.shop.soldStamp' => 'Sold',
+      'game.shop.offerLabel' => ({required Object name, required Object price}) => '${name} for ${price} coins',
+      'game.shop.soldOfferLabel' => 'Sold offer',
       'game.rejections.fightInProgress' => 'The fight is happening',
       'game.rejections.matchIsOver' => 'The match is over',
       'game.rejections.notEnoughCoins' => 'Not enough coins',
