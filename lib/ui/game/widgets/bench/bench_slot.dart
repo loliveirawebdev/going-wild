@@ -8,13 +8,24 @@ import 'package:going_wild/ui/core/localization/character_name.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_unit.dart';
 
 const _innerRadius = BorderRadius.all(Radius.circular(8 - AppBorderWidth.thin));
+const _dropTargetDuration = Duration(milliseconds: 120);
+final _dropTargetFill = Color.lerp(AppColors.surface300, AppColors.grass400, 0.35)!;
 
 class BenchSlot extends StatelessWidget {
+  const BenchSlot({
+    required this.slotNumber,
+    required this.nameOpacity,
+    required this.characterCopy,
+    super.key,
+    this.onPressed,
+    this.isDropTarget = false,
+  });
+
   final int slotNumber;
+  final bool isDropTarget;
   final double nameOpacity;
   final VoidCallback? onPressed;
   final CharacterCopy? characterCopy;
-  const BenchSlot({required this.slotNumber, required this.nameOpacity, required this.characterCopy, super.key, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +38,12 @@ class BenchSlot extends StatelessWidget {
       child: GestureDetector(
         onTap: onPressed,
         child: ExcludeSemantics(
-          child: Container(
+          child: AnimatedContainer(
+            duration: _dropTargetDuration,
             decoration: BoxDecoration(
-              color: AppColors.surface300,
               borderRadius: AppRadius.small,
-              border: Border.all(color: AppColors.surface400, width: AppBorderWidth.thin),
+              color: isDropTarget ? _dropTargetFill : AppColors.surface300,
+              border: Border.all(color: isDropTarget ? AppColors.grass600 : AppColors.surface400, width: AppBorderWidth.thin),
             ),
             child: characterCopy == null
                 ? null

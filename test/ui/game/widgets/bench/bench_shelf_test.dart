@@ -24,6 +24,16 @@ Future<void> finishResizing(WidgetTester tester) async {
   await tester.pump(resizeDuration);
 }
 
+Future<void> dragBenchCopy(WidgetTester tester, {required String fromLabel, required String toLabel}) async {
+  final gesture = await tester.startGesture(tester.getCenter(find.bySemanticsLabel(fromLabel)));
+  await gesture.moveBy(const Offset(20, 0));
+  await tester.pump();
+  await gesture.moveTo(tester.getCenter(find.bySemanticsLabel(toLabel)));
+  await tester.pump();
+  await gesture.up();
+  await finishResizing(tester);
+}
+
 Future<MatchRepository> showMatchBottom(WidgetTester tester, {List<CharacterCopy> benchCopies = const []}) async {
   final startingMatchProgress = startMatch(backyard, randomGenerator: Random(1));
   var inventory = startingMatchProgress.playerRoster.inventory;
@@ -116,6 +126,51 @@ void main() {
     await finishResizing(tester);
 
     expect(find.text('SEU TIME'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('with the bench open, dragging an animal to an empty slot moves it there', (tester) async {
+    const cat2 = CharacterCopy(stars: 2, character: cat);
+    final matchRepository = await showMatchBottom(tester, benchCopies: [cat2]);
+
+    await tester.tap(find.byType(BenchSlot).first);
+    await finishResizing(tester);
+    await dragBenchCopy(tester, fromLabel: 'Banco 1: Gato, 2 estrelas', toLabel: 'Banco 3: vazio');
+
+    final inventory = matchRepository.currentMatchProgress!.playerRoster.inventory;
+    expect(inventory.entryAt(0), isNull);
+    expect(inventory.entryAt(2), cat2);
+    expect(find.bySemanticsLabel('Banco 3: Gato, 2 estrelas'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('dropping an animal on another one swaps them', (tester) async {
+    const cat2 = CharacterCopy(stars: 2, character: cat);
+    const duck1 = CharacterCopy(stars: 1, character: duck);
+    final matchRepository = await showMatchBottom(tester, benchCopies: [cat2, duck1]);
+
+    await tester.tap(find.byType(BenchSlot).first);
+    await finishResizing(tester);
+    await dragBenchCopy(tester, fromLabel: 'Banco 1: Gato, 2 estrelas', toLabel: 'Banco 2: Pato, 1 estrela');
+
+    final inventory = matchRepository.currentMatchProgress!.playerRoster.inventory;
+    expect(inventory.entryAt(0), duck1);
+    expect(inventory.entryAt(1), cat2);
+    expect(find.bySemanticsLabel('Banco 1: Pato, 1 estrela'), findsOneWidget);
+    expect(find.bySemanticsLabel('Banco 2: Gato, 2 estrelas'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('with the bench closed, dragging does not move anything', (tester) async {
+    const cat2 = CharacterCopy(stars: 2, character: cat);
+    final matchRepository = await showMatchBottom(tester, benchCopies: [cat2]);
+
+    await dragBenchCopy(tester, fromLabel: 'Banco 1: Gato, 2 estrelas', toLabel: 'Banco 3: vazio');
+
+    expect(matchRepository.currentMatchProgress!.playerRoster.inventory.entryAt(0), cat2);
 
     await tester.pumpWidget(const SizedBox());
   });
