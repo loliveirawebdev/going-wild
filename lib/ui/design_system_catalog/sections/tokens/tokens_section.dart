@@ -4,7 +4,7 @@ import 'package:going_wild/ui/design_system_catalog/sections/tokens/color_tokens
 import 'package:going_wild/ui/design_system_catalog/sections/tokens/shape_tokens.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/tokens/spacing_tokens.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/tokens/text_style_tokens.dart';
-import 'package:going_wild/ui/design_system_catalog/sections/tokens/token_block_title.dart';
+import 'package:going_wild/ui/design_system_catalog/catalog_block_title.dart';
 
 class TokensSection extends StatelessWidget {
   const TokensSection({super.key});
@@ -14,13 +14,13 @@ class TokensSection extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.space4),
       children: const [
-        TokenBlockTitle('Cores'),
+        CatalogBlockTitle('Cores'),
         ColorTokens(),
-        TokenBlockTitle('Texto'),
+        CatalogBlockTitle('Texto'),
         TextStyleTokens(),
-        TokenBlockTitle('Formas'),
+        CatalogBlockTitle('Formas'),
         ShapeTokens(),
-        TokenBlockTitle('Espaços'),
+        CatalogBlockTitle('Espaços'),
         SpacingTokens(),
       ],
     );

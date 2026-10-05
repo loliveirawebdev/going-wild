@@ -2,9 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:going_wild/ui/core/design/app_spacing.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
 
-class TokenBlockTitle extends StatelessWidget {
+class CatalogBlockTitle extends StatelessWidget {
   final String title;
-  const TokenBlockTitle(this.title, {super.key});
+  const CatalogBlockTitle(this.title, {super.key});
 
   @override
   Widget build(BuildContext context) {

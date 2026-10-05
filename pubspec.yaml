@@ -12,6 +12,7 @@ dependencies:
   flutter_bloc: ^9.1.1
   flutter_localizations:
     sdk: flutter
+  flutter_svg: ^2.3.0
   go_router: ^18.0.1
   meta: ^1.19.0
   slang: ^4.19.2
@@ -27,6 +28,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/glyphs/
 
   fonts:
     - family: LilitaOne
