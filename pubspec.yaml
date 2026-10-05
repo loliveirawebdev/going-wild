@@ -33,6 +33,7 @@ flutter:
     - assets/icons/
     - assets/glyphs/
     - assets/scenes/
+    - lib/content/phase/backyard/cover.jpg
 
   fonts:
     - family: LilitaOne
