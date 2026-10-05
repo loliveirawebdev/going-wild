@@ -18,6 +18,21 @@
     "levelLabel": "$name: $count de $nextTierCount, nível $level",
     "completeLabel": "$name: $count, completo"
   },
+  "setDialog": {
+    "closeButton": "Fechar",
+    "levelsTitle": "Níveis",
+    "membersTitle": "Quem ativa",
+    "activeTag": "Ativo",
+    "inactiveStatus": "Inativo",
+    "levelStatus": "Nível $level ativo",
+    "completeStatus": "Completo",
+    "missingForLevel(param=missing)": {
+      "one": "falta $missing para o nível $level",
+      "other": "faltam $missing para o nível $level"
+    },
+    "memberOnField": "$name, em campo",
+    "memberMissing": "$name, fora do campo"
+  },
   "rejections": {
     "fightInProgress": "A luta está acontecendo",
     "matchIsOver": "A partida acabou",

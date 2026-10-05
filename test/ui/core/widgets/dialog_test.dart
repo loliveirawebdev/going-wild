@@ -18,7 +18,7 @@ Future<void> openDialog(WidgetTester tester, {VoidCallback? onConfirmed}) async 
                 dialog: Dialog(
                   closeLabel: 'Fechar',
                   title: 'Reiniciar progresso?',
-                  body: 'Isso não dá para desfazer.',
+                  body: const Text('Isso não dá para desfazer.'),
                   actions: [Button(label: 'Reiniciar', onPressed: onConfirmed ?? () {})],
                 ),
               ),

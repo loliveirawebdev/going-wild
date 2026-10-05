@@ -21,7 +21,7 @@ class ExitMatchDialog extends StatelessWidget {
     final translations = context.t.game.exitDialog;
 
     return Dialog(
-      body: translations.body,
+      body: Text(translations.body),
       title: translations.title,
       closeLabel: translations.closeButton,
       actions: [

@@ -83,4 +83,15 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('tapping a set opens its dialog', (tester) async {
+    await showSetChipRow(tester, boardCharacters: [dog, sheep]);
+
+    await tester.tap(find.bySemanticsLabel('Pastoreio: 2, completo'));
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('QUEM ATIVA'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

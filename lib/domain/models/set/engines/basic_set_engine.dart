@@ -21,8 +21,8 @@ class BasicSetEngine extends SetEngine {
     final activeCharactersSet = activeCharacters.toSet();
 
     for (final set in sets) {
-      final presentMemberCount = set.members.where(activeCharactersSet.contains).length;
-      if (presentMemberCount > 0) setPresences.add(SetPresence(set: set, presentMemberCount: presentMemberCount));
+      final presentMembers = set.members.where(activeCharactersSet.contains).toList();
+      if (presentMembers.isNotEmpty) setPresences.add(SetPresence(set: set, presentMembers: presentMembers));
     }
 
     return setPresences;

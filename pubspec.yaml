@@ -33,6 +33,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/glyphs/
+    - assets/portraits/
     - assets/sets/
     - assets/scenes/
     - lib/content/phase/backyard/cover.jpg

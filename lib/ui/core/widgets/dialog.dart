@@ -37,9 +37,9 @@ Future<T?> presentDialog<T>(BuildContext context, {required Widget dialog, requi
 }
 
 class Dialog extends StatelessWidget {
-  const Dialog({required this.body, required this.title, required this.actions, required this.closeLabel, super.key});
+  const Dialog({required this.body, required this.title, required this.closeLabel, super.key, this.actions = const []});
 
-  final String body;
+  final Widget body;
   final String title;
   final String closeLabel;
   final List<Widget> actions;
@@ -67,19 +67,22 @@ class Dialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _DialogHead(title: title, closeLabel: closeLabel),
-                    Padding(
-                      padding: const EdgeInsets.all(AppSpacing.space4),
-                      child: Text(body, style: AppTextStyles.body),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(AppSpacing.space4, 0, AppSpacing.space4, AppSpacing.space4),
-                      child: Wrap(
-                        spacing: AppSpacing.space2,
-                        runSpacing: AppSpacing.space2,
-                        alignment: WrapAlignment.end,
-                        children: actions,
+                    Flexible(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(AppSpacing.space4),
+                        child: body,
                       ),
                     ),
+                    if (actions.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(AppSpacing.space4, 0, AppSpacing.space4, AppSpacing.space4),
+                        child: Wrap(
+                          spacing: AppSpacing.space2,
+                          runSpacing: AppSpacing.space2,
+                          alignment: WrapAlignment.end,
+                          children: actions,
+                        ),
+                      ),
                   ],
                 ),
               ),

@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/set/set_presence.dart';
-import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_spacing.dart';
-import 'package:going_wild/ui/core/localization/set_name.dart';
 import 'package:going_wild/ui/core/widgets/zoom.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
 import 'package:going_wild/ui/game/widgets/set_chips/set_chip.dart';
+import 'package:going_wild/ui/game/widgets/set_chips/set_chip_semantic_label.dart';
+import 'package:going_wild/ui/game/widgets/set_dialog/set_dialog.dart';
 
 const _chipScale = 0.76;
 const _chipSpacing = 6.0;
@@ -47,7 +47,11 @@ class SetChipRow extends StatelessWidget {
                   scale: _chipScale,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: setPresence.isComplete ? _celebrationMargin : 0),
-                    child: SetChip(setPresence: setPresence, semanticLabel: _semanticLabelOf(context, setPresence)),
+                    child: SetChip(
+                      setPresence: setPresence,
+                      semanticLabel: setChipSemanticLabelOf(context, setPresence),
+                      onPressed: () => presentSetDialog(context, setPresence: setPresence),
+                    ),
                   ),
                 ),
             ],
@@ -64,17 +68,5 @@ class SetChipRow extends StatelessWidget {
         ? previewBoardCharacters
         : [for (final placement in placements) placement.characterCopy.character];
     return matchProgress.phase.engines.setEngine.setPresences(boardCharacters)..sort(_compareByHighlight);
-  }
-
-  String _semanticLabelOf(BuildContext context, SetPresence setPresence) {
-    final translations = context.t.game.setChips;
-    final name = setNameOf(context.t, setPresence.set);
-    final count = setPresence.presentMemberCount;
-    final nextTier = setPresence.nextTier;
-
-    if (setPresence.isComplete || nextTier == null) return translations.completeLabel(name: name, count: count);
-    if (setPresence.reachedTierCount == 0) return translations.inactiveLabel(name: name, count: count, nextTierCount: nextTier.count);
-
-    return translations.levelLabel(name: name, count: count, nextTierCount: nextTier.count, level: setPresence.reachedTierCount);
   }
 }

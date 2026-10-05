@@ -19,7 +19,7 @@ class SetChipSection extends StatelessWidget {
         Widget chipOf(TeamSet set, {required int presentMemberCount}) => SetChip(
           semanticLabel: '${set.id.value}: $presentMemberCount',
           onPressed: tapOf('${set.id.value} com $presentMemberCount'),
-          setPresence: SetPresence(set: set, presentMemberCount: presentMemberCount),
+          setPresence: SetPresence(set: set, presentMembers: set.members.take(presentMemberCount).toList()),
         );
 
         return ListView(

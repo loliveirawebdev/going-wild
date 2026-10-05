@@ -26,7 +26,7 @@ class DialogSection extends StatelessWidget {
                 dialog: Dialog(
                   closeLabel: 'Fechar',
                   title: 'Reiniciar progresso?',
-                  body: 'Você vai perder todas as fases vencidas e voltar para o começo. Isso não dá para desfazer.',
+                  body: const Text('Você vai perder todas as fases vencidas e voltar para o começo. Isso não dá para desfazer.'),
                   actions: [
                     Button(
                       label: 'Cancelar',

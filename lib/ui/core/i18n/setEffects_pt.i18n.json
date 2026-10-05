@@ -1,0 +1,31 @@
+{
+  "percentIncrease": "+$percent% de $stat",
+  "percentDecrease": "−$percent% de $stat",
+  "valueIncrease": "+$value de $stat",
+  "valueDecrease": "−$value de $stat",
+  "startingShield": "$value de escudo por $seconds segundos",
+  "bonusCoins(param=coins)": {
+    "one": "+$coins moeda por rodada",
+    "other": "+$coins moedas por rodada"
+  },
+  "joiner": " e ",
+  "targets": {
+    "setMembers": "$effects para os membros do set",
+    "entireTeam": "$effects para todo o time",
+    "teamMelees": "$effects para quem luta de perto",
+    "teamRangeds": "$effects para quem ataca de longe",
+    "allEnemies": "$effects para os inimigos",
+    "specificCharacter": "$name: $effects"
+  },
+  "stats": {
+    "health": "vida",
+    "damage": "dano",
+    "armor": "armadura",
+    "attackSpeed": "velocidade de ataque",
+    "moveSpeed": "velocidade de movimento",
+    "damageTakenPercentage": "dano recebido",
+    "manaStart": "mana inicial",
+    "manaMax": "mana máxima",
+    "range": "alcance"
+  }
+}

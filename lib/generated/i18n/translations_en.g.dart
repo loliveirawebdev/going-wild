@@ -65,6 +65,10 @@ class TranslationsEn with BaseTranslations<AppLocale, Translations> implements T
   @override
   late final _Translations$privacy$en privacy = _Translations$privacy$en._(_root);
   @override
+  late final _Translations$setDescriptions$en setDescriptions = _Translations$setDescriptions$en._(_root);
+  @override
+  late final _Translations$setEffects$en setEffects = _Translations$setEffects$en._(_root);
+  @override
   late final _Translations$sets$en sets = _Translations$sets$en._(_root);
   @override
   late final _Translations$settings$en settings = _Translations$settings$en._(_root);
@@ -200,6 +204,8 @@ class _Translations$game$en implements Translations$game$pt {
   @override
   late final _Translations$game$setChips$en setChips = _Translations$game$setChips$en._(_root);
   @override
+  late final _Translations$game$setDialog$en setDialog = _Translations$game$setDialog$en._(_root);
+  @override
   late final _Translations$game$rejections$en rejections = _Translations$game$rejections$en._(_root);
 }
 
@@ -271,6 +277,65 @@ class _Translations$privacy$en implements Translations$privacy$pt {
   late final _Translations$privacy$deletingYourData$en deletingYourData = _Translations$privacy$deletingYourData$en._(_root);
   @override
   late final _Translations$privacy$contact$en contact = _Translations$privacy$contact$en._(_root);
+}
+
+// Path: setDescriptions
+class _Translations$setDescriptions$en implements Translations$setDescriptions$pt {
+  _Translations$setDescriptions$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get brutes => 'The farm\'s heavyweights can take a beating: the more Brutes together, the more health they have.';
+  @override
+  String get davidAndGoliath =>
+      'The smallest and the biggest fight side by side: the Guinea Pig hits much harder and the Bull gets tougher.';
+  @override
+  String get dayAndNight => 'The Rooster guards the day and the Cat guards the night: together, both hit harder.';
+  @override
+  String get flyers => 'Those who fly strike from above: Flyers deal more damage and, with the whole flock, attack faster.';
+  @override
+  String get guardians => 'The barn\'s protectors hold the front line: melee fighters take less damage.';
+  @override
+  String get herding => 'The Dog and the Sheep keep the herd together: the whole team gets tougher.';
+  @override
+  String get pets => 'The pets cheer everyone up: the whole team attacks faster.';
+  @override
+  String get producers => 'Milk, wool and honey keep the farm going: the whole team starts the fight behind a shield.';
+  @override
+  String get trackers => 'The Sow and the Rabbit sniff out weak spots: enemies lose armor.';
+}
+
+// Path: setEffects
+class _Translations$setEffects$en implements Translations$setEffects$pt {
+  _Translations$setEffects$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String percentIncrease({required Object percent, required Object stat}) => '+${percent}% ${stat}';
+  @override
+  String percentDecrease({required Object percent, required Object stat}) => '−${percent}% ${stat}';
+  @override
+  String valueIncrease({required Object value, required Object stat}) => '+${value} ${stat}';
+  @override
+  String valueDecrease({required Object value, required Object stat}) => '−${value} ${stat}';
+  @override
+  String startingShield({required Object value, required Object seconds}) => '${value} shield for ${seconds} seconds';
+  @override
+  String bonusCoins({required num coins}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+    coins,
+    one: '+${coins} coin per round',
+    other: '+${coins} coins per round',
+  );
+  @override
+  String get joiner => ' and ';
+  @override
+  late final _Translations$setEffects$targets$en targets = _Translations$setEffects$targets$en._(_root);
+  @override
+  late final _Translations$setEffects$stats$en stats = _Translations$setEffects$stats$en._(_root);
 }
 
 // Path: sets
@@ -431,6 +496,39 @@ class _Translations$game$setChips$en implements Translations$game$setChips$pt {
   String completeLabel({required Object name, required Object count}) => '${name}: ${count}, complete';
 }
 
+// Path: game.setDialog
+class _Translations$game$setDialog$en implements Translations$game$setDialog$pt {
+  _Translations$game$setDialog$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get closeButton => 'Close';
+  @override
+  String get levelsTitle => 'Levels';
+  @override
+  String get membersTitle => 'Who activates it';
+  @override
+  String get activeTag => 'Active';
+  @override
+  String get inactiveStatus => 'Inactive';
+  @override
+  String levelStatus({required Object level}) => 'Level ${level} active';
+  @override
+  String get completeStatus => 'Complete';
+  @override
+  String missingForLevel({required num missing, required Object level}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+    missing,
+    one: '${missing} more for level ${level}',
+    other: '${missing} more for level ${level}',
+  );
+  @override
+  String memberOnField({required Object name}) => '${name}, on the field';
+  @override
+  String memberMissing({required Object name}) => '${name}, not on the field';
+}
+
 // Path: game.rejections
 class _Translations$game$rejections$en implements Translations$game$rejections$pt {
   _Translations$game$rejections$en._(this._root);
@@ -538,6 +636,54 @@ class _Translations$privacy$contact$en implements Translations$privacy$contact$p
   List<String> get paragraphs => [
     'Questions about privacy: reach us through the email on the game\'s store page.',
   ];
+}
+
+// Path: setEffects.targets
+class _Translations$setEffects$targets$en implements Translations$setEffects$targets$pt {
+  _Translations$setEffects$targets$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String setMembers({required Object effects}) => '${effects} for the set members';
+  @override
+  String entireTeam({required Object effects}) => '${effects} for the whole team';
+  @override
+  String teamMelees({required Object effects}) => '${effects} for melee fighters';
+  @override
+  String teamRangeds({required Object effects}) => '${effects} for ranged attackers';
+  @override
+  String allEnemies({required Object effects}) => '${effects} for the enemies';
+  @override
+  String specificCharacter({required Object name, required Object effects}) => '${name}: ${effects}';
+}
+
+// Path: setEffects.stats
+class _Translations$setEffects$stats$en implements Translations$setEffects$stats$pt {
+  _Translations$setEffects$stats$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get health => 'health';
+  @override
+  String get damage => 'damage';
+  @override
+  String get armor => 'armor';
+  @override
+  String get attackSpeed => 'attack speed';
+  @override
+  String get moveSpeed => 'move speed';
+  @override
+  String get damageTakenPercentage => 'damage taken';
+  @override
+  String get manaStart => 'starting mana';
+  @override
+  String get manaMax => 'max mana';
+  @override
+  String get range => 'range';
 }
 
 // Path: terms.gameUse
@@ -670,6 +816,21 @@ extension on TranslationsEn {
         required Object level,
       }) => '${name}: ${count} of ${nextTierCount}, level ${level}',
       'game.setChips.completeLabel' => ({required Object name, required Object count}) => '${name}: ${count}, complete',
+      'game.setDialog.closeButton' => 'Close',
+      'game.setDialog.levelsTitle' => 'Levels',
+      'game.setDialog.membersTitle' => 'Who activates it',
+      'game.setDialog.activeTag' => 'Active',
+      'game.setDialog.inactiveStatus' => 'Inactive',
+      'game.setDialog.levelStatus' => ({required Object level}) => 'Level ${level} active',
+      'game.setDialog.completeStatus' => 'Complete',
+      'game.setDialog.missingForLevel' =>
+        ({required num missing, required Object level}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+          missing,
+          one: '${missing} more for level ${level}',
+          other: '${missing} more for level ${level}',
+        ),
+      'game.setDialog.memberOnField' => ({required Object name}) => '${name}, on the field',
+      'game.setDialog.memberMissing' => ({required Object name}) => '${name}, not on the field',
       'game.rejections.fightInProgress' => 'The fight is happening',
       'game.rejections.matchIsOver' => 'The match is over',
       'game.rejections.notEnoughCoins' => 'Not enough coins',
@@ -708,6 +869,42 @@ extension on TranslationsEn {
       'privacy.deletingYourData.paragraphs.0' => 'Use "Reset progress" in the settings or uninstall the game.',
       'privacy.contact.title' => 'Contact',
       'privacy.contact.paragraphs.0' => 'Questions about privacy: reach us through the email on the game\'s store page.',
+      'setDescriptions.brutes' => 'The farm\'s heavyweights can take a beating: the more Brutes together, the more health they have.',
+      'setDescriptions.davidAndGoliath' =>
+        'The smallest and the biggest fight side by side: the Guinea Pig hits much harder and the Bull gets tougher.',
+      'setDescriptions.dayAndNight' => 'The Rooster guards the day and the Cat guards the night: together, both hit harder.',
+      'setDescriptions.flyers' => 'Those who fly strike from above: Flyers deal more damage and, with the whole flock, attack faster.',
+      'setDescriptions.guardians' => 'The barn\'s protectors hold the front line: melee fighters take less damage.',
+      'setDescriptions.herding' => 'The Dog and the Sheep keep the herd together: the whole team gets tougher.',
+      'setDescriptions.pets' => 'The pets cheer everyone up: the whole team attacks faster.',
+      'setDescriptions.producers' => 'Milk, wool and honey keep the farm going: the whole team starts the fight behind a shield.',
+      'setDescriptions.trackers' => 'The Sow and the Rabbit sniff out weak spots: enemies lose armor.',
+      'setEffects.percentIncrease' => ({required Object percent, required Object stat}) => '+${percent}% ${stat}',
+      'setEffects.percentDecrease' => ({required Object percent, required Object stat}) => '−${percent}% ${stat}',
+      'setEffects.valueIncrease' => ({required Object value, required Object stat}) => '+${value} ${stat}',
+      'setEffects.valueDecrease' => ({required Object value, required Object stat}) => '−${value} ${stat}',
+      'setEffects.startingShield' => ({required Object value, required Object seconds}) => '${value} shield for ${seconds} seconds',
+      'setEffects.bonusCoins' => ({required num coins}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+        coins,
+        one: '+${coins} coin per round',
+        other: '+${coins} coins per round',
+      ),
+      'setEffects.joiner' => ' and ',
+      'setEffects.targets.setMembers' => ({required Object effects}) => '${effects} for the set members',
+      'setEffects.targets.entireTeam' => ({required Object effects}) => '${effects} for the whole team',
+      'setEffects.targets.teamMelees' => ({required Object effects}) => '${effects} for melee fighters',
+      'setEffects.targets.teamRangeds' => ({required Object effects}) => '${effects} for ranged attackers',
+      'setEffects.targets.allEnemies' => ({required Object effects}) => '${effects} for the enemies',
+      'setEffects.targets.specificCharacter' => ({required Object name, required Object effects}) => '${name}: ${effects}',
+      'setEffects.stats.health' => 'health',
+      'setEffects.stats.damage' => 'damage',
+      'setEffects.stats.armor' => 'armor',
+      'setEffects.stats.attackSpeed' => 'attack speed',
+      'setEffects.stats.moveSpeed' => 'move speed',
+      'setEffects.stats.damageTakenPercentage' => 'damage taken',
+      'setEffects.stats.manaStart' => 'starting mana',
+      'setEffects.stats.manaMax' => 'max mana',
+      'setEffects.stats.range' => 'range',
       'sets.brutes' => 'Brutes',
       'sets.davidAndGoliath' => 'David and Goliath',
       'sets.dayAndNight' => 'Day and Night',

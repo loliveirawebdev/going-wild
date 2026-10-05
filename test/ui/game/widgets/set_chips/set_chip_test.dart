@@ -9,7 +9,7 @@ import 'package:going_wild/ui/game/widgets/set_chips/set_chip.dart';
 SetChip flyersChipWith({required int presentMemberCount, VoidCallback? onPressed}) => SetChip(
   onPressed: onPressed,
   semanticLabel: 'Voadores',
-  setPresence: SetPresence(set: flyers, presentMemberCount: presentMemberCount),
+  setPresence: SetPresence(set: flyers, presentMembers: flyers.members.take(presentMemberCount).toList()),
 );
 
 Future<void> showChip(WidgetTester tester, SetChip chip, {bool disablesAnimations = false}) async {

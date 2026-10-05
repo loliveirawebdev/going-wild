@@ -1,0 +1,31 @@
+{
+  "percentIncrease": "+$percent% $stat",
+  "percentDecrease": "−$percent% $stat",
+  "valueIncrease": "+$value $stat",
+  "valueDecrease": "−$value $stat",
+  "startingShield": "$value shield for $seconds seconds",
+  "bonusCoins(param=coins)": {
+    "one": "+$coins coin per round",
+    "other": "+$coins coins per round"
+  },
+  "joiner": " and ",
+  "targets": {
+    "setMembers": "$effects for the set members",
+    "entireTeam": "$effects for the whole team",
+    "teamMelees": "$effects for melee fighters",
+    "teamRangeds": "$effects for ranged attackers",
+    "allEnemies": "$effects for the enemies",
+    "specificCharacter": "$name: $effects"
+  },
+  "stats": {
+    "health": "health",
+    "damage": "damage",
+    "armor": "armor",
+    "attackSpeed": "attack speed",
+    "moveSpeed": "move speed",
+    "damageTakenPercentage": "damage taken",
+    "manaStart": "starting mana",
+    "manaMax": "max mana",
+    "range": "range"
+  }
+}

@@ -20,7 +20,7 @@ class ProgressSettingsSection extends StatelessWidget {
       dialog: Dialog(
         closeLabel: translations.closeButton,
         title: translations.resetDialogTitle,
-        body: translations.resetDialogBody,
+        body: Text(translations.resetDialogBody),
         actions: [
           Builder(
             builder: (context) => Button(

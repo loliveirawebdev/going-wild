@@ -1,11 +1,14 @@
+import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/set/set_tier.dart';
 import 'package:going_wild/domain/models/set/team_set.dart';
 
 class SetPresence {
-  const SetPresence({required this.set, required this.presentMemberCount});
+  const SetPresence({required this.set, required this.presentMembers});
 
   final TeamSet set;
-  final int presentMemberCount;
+  final List<Character> presentMembers;
+
+  int get presentMemberCount => presentMembers.length;
 
   List<SetTier> get reachedTiers => [
     for (final tier in set.tiers)

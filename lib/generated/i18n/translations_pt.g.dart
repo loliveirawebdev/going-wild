@@ -57,6 +57,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
   late final Translations$phaseSelection$pt phaseSelection = Translations$phaseSelection$pt._(_root);
   late final Translations$phases$pt phases = Translations$phases$pt._(_root);
   late final Translations$privacy$pt privacy = Translations$privacy$pt._(_root);
+  late final Translations$setDescriptions$pt setDescriptions = Translations$setDescriptions$pt._(_root);
+  late final Translations$setEffects$pt setEffects = Translations$setEffects$pt._(_root);
   late final Translations$sets$pt sets = Translations$sets$pt._(_root);
   late final Translations$settings$pt settings = Translations$settings$pt._(_root);
   late final Translations$terms$pt terms = Translations$terms$pt._(_root);
@@ -218,6 +220,7 @@ class Translations$game$pt {
   late final Translations$game$topBar$pt topBar = Translations$game$topBar$pt._(_root);
   late final Translations$game$exitDialog$pt exitDialog = Translations$game$exitDialog$pt._(_root);
   late final Translations$game$setChips$pt setChips = Translations$game$setChips$pt._(_root);
+  late final Translations$game$setDialog$pt setDialog = Translations$game$setDialog$pt._(_root);
   late final Translations$game$rejections$pt rejections = Translations$game$rejections$pt._(_root);
 }
 
@@ -295,6 +298,80 @@ class Translations$privacy$pt {
   late final Translations$privacy$whatWeShare$pt whatWeShare = Translations$privacy$whatWeShare$pt._(_root);
   late final Translations$privacy$deletingYourData$pt deletingYourData = Translations$privacy$deletingYourData$pt._(_root);
   late final Translations$privacy$contact$pt contact = Translations$privacy$contact$pt._(_root);
+}
+
+// Path: setDescriptions
+class Translations$setDescriptions$pt {
+  Translations$setDescriptions$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Os grandalhões da fazenda aguentam o tranco: quanto mais Brutos juntos, mais vida eles têm.'
+  String get brutes => 'Os grandalhões da fazenda aguentam o tranco: quanto mais Brutos juntos, mais vida eles têm.';
+
+  /// pt: 'O menor e o maior lutam lado a lado: o Porquinho-da-índia bate muito mais forte e o Touro fica mais protegido.'
+  String get davidAndGoliath =>
+      'O menor e o maior lutam lado a lado: o Porquinho-da-índia bate muito mais forte e o Touro fica mais protegido.';
+
+  /// pt: 'O Galo cuida do dia e o Gato cuida da noite: juntos, os dois batem mais forte.'
+  String get dayAndNight => 'O Galo cuida do dia e o Gato cuida da noite: juntos, os dois batem mais forte.';
+
+  /// pt: 'Quem voa ataca de cima: os Voadores causam mais dano e, com o bando completo, atacam mais rápido.'
+  String get flyers => 'Quem voa ataca de cima: os Voadores causam mais dano e, com o bando completo, atacam mais rápido.';
+
+  /// pt: 'Os protetores do celeiro seguram a linha de frente: quem luta de perto recebe menos dano.'
+  String get guardians => 'Os protetores do celeiro seguram a linha de frente: quem luta de perto recebe menos dano.';
+
+  /// pt: 'O Cachorro e a Ovelha mantêm o rebanho unido: todo o time fica mais resistente.'
+  String get herding => 'O Cachorro e a Ovelha mantêm o rebanho unido: todo o time fica mais resistente.';
+
+  /// pt: 'Os bichos de estimação animam a turma: todo o time ataca mais rápido.'
+  String get pets => 'Os bichos de estimação animam a turma: todo o time ataca mais rápido.';
+
+  /// pt: 'Leite, lã e mel sustentam a fazenda: todo o time começa a luta protegido por um escudo.'
+  String get producers => 'Leite, lã e mel sustentam a fazenda: todo o time começa a luta protegido por um escudo.';
+
+  /// pt: 'A Porca e o Coelho farejam os pontos fracos: os inimigos perdem armadura.'
+  String get trackers => 'A Porca e o Coelho farejam os pontos fracos: os inimigos perdem armadura.';
+}
+
+// Path: setEffects
+class Translations$setEffects$pt {
+  Translations$setEffects$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: '+$percent% de $stat'
+  String percentIncrease({required Object percent, required Object stat}) => '+${percent}% de ${stat}';
+
+  /// pt: '−$percent% de $stat'
+  String percentDecrease({required Object percent, required Object stat}) => '−${percent}% de ${stat}';
+
+  /// pt: '+$value de $stat'
+  String valueIncrease({required Object value, required Object stat}) => '+${value} de ${stat}';
+
+  /// pt: '−$value de $stat'
+  String valueDecrease({required Object value, required Object stat}) => '−${value} de ${stat}';
+
+  /// pt: '$value de escudo por $seconds segundos'
+  String startingShield({required Object value, required Object seconds}) => '${value} de escudo por ${seconds} segundos';
+
+  /// pt: '(one) {+$coins moeda por rodada} (other) {+$coins moedas por rodada}'
+  String bonusCoins({required num coins}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+    coins,
+    one: '+${coins} moeda por rodada',
+    other: '+${coins} moedas por rodada',
+  );
+
+  /// pt: ' e '
+  String get joiner => ' e ';
+
+  late final Translations$setEffects$targets$pt targets = Translations$setEffects$targets$pt._(_root);
+  late final Translations$setEffects$stats$pt stats = Translations$setEffects$stats$pt._(_root);
 }
 
 // Path: sets
@@ -499,6 +576,49 @@ class Translations$game$setChips$pt {
   String completeLabel({required Object name, required Object count}) => '${name}: ${count}, completo';
 }
 
+// Path: game.setDialog
+class Translations$game$setDialog$pt {
+  Translations$game$setDialog$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Fechar'
+  String get closeButton => 'Fechar';
+
+  /// pt: 'Níveis'
+  String get levelsTitle => 'Níveis';
+
+  /// pt: 'Quem ativa'
+  String get membersTitle => 'Quem ativa';
+
+  /// pt: 'Ativo'
+  String get activeTag => 'Ativo';
+
+  /// pt: 'Inativo'
+  String get inactiveStatus => 'Inativo';
+
+  /// pt: 'Nível $level ativo'
+  String levelStatus({required Object level}) => 'Nível ${level} ativo';
+
+  /// pt: 'Completo'
+  String get completeStatus => 'Completo';
+
+  /// pt: '(one) {falta $missing para o nível $level} (other) {faltam $missing para o nível $level}'
+  String missingForLevel({required num missing, required Object level}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+    missing,
+    one: 'falta ${missing} para o nível ${level}',
+    other: 'faltam ${missing} para o nível ${level}',
+  );
+
+  /// pt: '$name, em campo'
+  String memberOnField({required Object name}) => '${name}, em campo';
+
+  /// pt: '$name, fora do campo'
+  String memberMissing({required Object name}) => '${name}, fora do campo';
+}
+
 // Path: game.rejections
 class Translations$game$rejections$pt {
   Translations$game$rejections$pt._(this._root);
@@ -625,6 +745,69 @@ class Translations$privacy$contact$pt {
   List<String> get paragraphs => [
     'Dúvidas sobre privacidade: contato pelo e-mail da página do jogo na loja.',
   ];
+}
+
+// Path: setEffects.targets
+class Translations$setEffects$targets$pt {
+  Translations$setEffects$targets$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: '$effects para os membros do set'
+  String setMembers({required Object effects}) => '${effects} para os membros do set';
+
+  /// pt: '$effects para todo o time'
+  String entireTeam({required Object effects}) => '${effects} para todo o time';
+
+  /// pt: '$effects para quem luta de perto'
+  String teamMelees({required Object effects}) => '${effects} para quem luta de perto';
+
+  /// pt: '$effects para quem ataca de longe'
+  String teamRangeds({required Object effects}) => '${effects} para quem ataca de longe';
+
+  /// pt: '$effects para os inimigos'
+  String allEnemies({required Object effects}) => '${effects} para os inimigos';
+
+  /// pt: '$name: $effects'
+  String specificCharacter({required Object name, required Object effects}) => '${name}: ${effects}';
+}
+
+// Path: setEffects.stats
+class Translations$setEffects$stats$pt {
+  Translations$setEffects$stats$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'vida'
+  String get health => 'vida';
+
+  /// pt: 'dano'
+  String get damage => 'dano';
+
+  /// pt: 'armadura'
+  String get armor => 'armadura';
+
+  /// pt: 'velocidade de ataque'
+  String get attackSpeed => 'velocidade de ataque';
+
+  /// pt: 'velocidade de movimento'
+  String get moveSpeed => 'velocidade de movimento';
+
+  /// pt: 'dano recebido'
+  String get damageTakenPercentage => 'dano recebido';
+
+  /// pt: 'mana inicial'
+  String get manaStart => 'mana inicial';
+
+  /// pt: 'mana máxima'
+  String get manaMax => 'mana máxima';
+
+  /// pt: 'alcance'
+  String get range => 'alcance';
 }
 
 // Path: terms.gameUse
@@ -761,6 +944,21 @@ extension on Translations {
         required Object level,
       }) => '${name}: ${count} de ${nextTierCount}, nível ${level}',
       'game.setChips.completeLabel' => ({required Object name, required Object count}) => '${name}: ${count}, completo',
+      'game.setDialog.closeButton' => 'Fechar',
+      'game.setDialog.levelsTitle' => 'Níveis',
+      'game.setDialog.membersTitle' => 'Quem ativa',
+      'game.setDialog.activeTag' => 'Ativo',
+      'game.setDialog.inactiveStatus' => 'Inativo',
+      'game.setDialog.levelStatus' => ({required Object level}) => 'Nível ${level} ativo',
+      'game.setDialog.completeStatus' => 'Completo',
+      'game.setDialog.missingForLevel' =>
+        ({required num missing, required Object level}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+          missing,
+          one: 'falta ${missing} para o nível ${level}',
+          other: 'faltam ${missing} para o nível ${level}',
+        ),
+      'game.setDialog.memberOnField' => ({required Object name}) => '${name}, em campo',
+      'game.setDialog.memberMissing' => ({required Object name}) => '${name}, fora do campo',
       'game.rejections.fightInProgress' => 'A luta está acontecendo',
       'game.rejections.matchIsOver' => 'A partida acabou',
       'game.rejections.notEnoughCoins' => 'Moedas insuficientes',
@@ -799,6 +997,42 @@ extension on Translations {
       'privacy.deletingYourData.paragraphs.0' => 'Use "Reiniciar progresso" nas configurações ou desinstale o jogo.',
       'privacy.contact.title' => 'Contato',
       'privacy.contact.paragraphs.0' => 'Dúvidas sobre privacidade: contato pelo e-mail da página do jogo na loja.',
+      'setDescriptions.brutes' => 'Os grandalhões da fazenda aguentam o tranco: quanto mais Brutos juntos, mais vida eles têm.',
+      'setDescriptions.davidAndGoliath' =>
+        'O menor e o maior lutam lado a lado: o Porquinho-da-índia bate muito mais forte e o Touro fica mais protegido.',
+      'setDescriptions.dayAndNight' => 'O Galo cuida do dia e o Gato cuida da noite: juntos, os dois batem mais forte.',
+      'setDescriptions.flyers' => 'Quem voa ataca de cima: os Voadores causam mais dano e, com o bando completo, atacam mais rápido.',
+      'setDescriptions.guardians' => 'Os protetores do celeiro seguram a linha de frente: quem luta de perto recebe menos dano.',
+      'setDescriptions.herding' => 'O Cachorro e a Ovelha mantêm o rebanho unido: todo o time fica mais resistente.',
+      'setDescriptions.pets' => 'Os bichos de estimação animam a turma: todo o time ataca mais rápido.',
+      'setDescriptions.producers' => 'Leite, lã e mel sustentam a fazenda: todo o time começa a luta protegido por um escudo.',
+      'setDescriptions.trackers' => 'A Porca e o Coelho farejam os pontos fracos: os inimigos perdem armadura.',
+      'setEffects.percentIncrease' => ({required Object percent, required Object stat}) => '+${percent}% de ${stat}',
+      'setEffects.percentDecrease' => ({required Object percent, required Object stat}) => '−${percent}% de ${stat}',
+      'setEffects.valueIncrease' => ({required Object value, required Object stat}) => '+${value} de ${stat}',
+      'setEffects.valueDecrease' => ({required Object value, required Object stat}) => '−${value} de ${stat}',
+      'setEffects.startingShield' => ({required Object value, required Object seconds}) => '${value} de escudo por ${seconds} segundos',
+      'setEffects.bonusCoins' => ({required num coins}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+        coins,
+        one: '+${coins} moeda por rodada',
+        other: '+${coins} moedas por rodada',
+      ),
+      'setEffects.joiner' => ' e ',
+      'setEffects.targets.setMembers' => ({required Object effects}) => '${effects} para os membros do set',
+      'setEffects.targets.entireTeam' => ({required Object effects}) => '${effects} para todo o time',
+      'setEffects.targets.teamMelees' => ({required Object effects}) => '${effects} para quem luta de perto',
+      'setEffects.targets.teamRangeds' => ({required Object effects}) => '${effects} para quem ataca de longe',
+      'setEffects.targets.allEnemies' => ({required Object effects}) => '${effects} para os inimigos',
+      'setEffects.targets.specificCharacter' => ({required Object name, required Object effects}) => '${name}: ${effects}',
+      'setEffects.stats.health' => 'vida',
+      'setEffects.stats.damage' => 'dano',
+      'setEffects.stats.armor' => 'armadura',
+      'setEffects.stats.attackSpeed' => 'velocidade de ataque',
+      'setEffects.stats.moveSpeed' => 'velocidade de movimento',
+      'setEffects.stats.damageTakenPercentage' => 'dano recebido',
+      'setEffects.stats.manaStart' => 'mana inicial',
+      'setEffects.stats.manaMax' => 'mana máxima',
+      'setEffects.stats.range' => 'alcance',
       'sets.brutes' => 'Brutos',
       'sets.davidAndGoliath' => 'Davi e Golias',
       'sets.dayAndNight' => 'Dia e Noite',
