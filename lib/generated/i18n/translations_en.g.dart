@@ -208,6 +208,8 @@ class _Translations$game$en implements Translations$game$pt {
   @override
   late final _Translations$game$infoShelf$en infoShelf = _Translations$game$infoShelf$en._(_root);
   @override
+  late final _Translations$game$bench$en bench = _Translations$game$bench$en._(_root);
+  @override
   late final _Translations$game$rejections$en rejections = _Translations$game$rejections$en._(_root);
 }
 
@@ -563,6 +565,31 @@ class _Translations$game$infoShelf$en implements Translations$game$infoShelf$pt 
   String teamOnFieldLabel({required Object count, required Object limit}) => '${count} of ${limit} animals on the field';
 }
 
+// Path: game.bench
+class _Translations$game$bench$en implements Translations$game$bench$pt {
+  _Translations$game$bench$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String occupiedSlot({required Object slot, required Object name, required Object stars}) => 'Bench ${slot}: ${name}, ${stars}';
+  @override
+  String emptySlot({required Object slot}) => 'Bench ${slot}: empty';
+  @override
+  String stars({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+    count,
+    one: '${count} star',
+    other: '${count} stars',
+  );
+  @override
+  String get shopButton => 'Open shop';
+  @override
+  String get expandButton => 'Open bench';
+  @override
+  String get collapseButton => 'Close bench';
+}
+
 // Path: game.rejections
 class _Translations$game$rejections$en implements Translations$game$rejections$pt {
   _Translations$game$rejections$en._(this._root);
@@ -885,6 +912,20 @@ extension on TranslationsEn {
       ),
       'game.infoShelf.teamOnField' => 'on field',
       'game.infoShelf.teamOnFieldLabel' => ({required Object count, required Object limit}) => '${count} of ${limit} animals on the field',
+      'game.bench.occupiedSlot' => ({
+        required Object slot,
+        required Object name,
+        required Object stars,
+      }) => 'Bench ${slot}: ${name}, ${stars}',
+      'game.bench.emptySlot' => ({required Object slot}) => 'Bench ${slot}: empty',
+      'game.bench.stars' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+        count,
+        one: '${count} star',
+        other: '${count} stars',
+      ),
+      'game.bench.shopButton' => 'Open shop',
+      'game.bench.expandButton' => 'Open bench',
+      'game.bench.collapseButton' => 'Close bench',
       'game.rejections.fightInProgress' => 'The fight is happening',
       'game.rejections.matchIsOver' => 'The match is over',
       'game.rejections.notEnoughCoins' => 'Not enough coins',

@@ -47,6 +47,17 @@
     "teamOnField": "on field",
     "teamOnFieldLabel": "$count of $limit animals on the field"
   },
+  "bench": {
+    "occupiedSlot": "Bench $slot: $name, $stars",
+    "emptySlot": "Bench $slot: empty",
+    "stars(param=count)": {
+      "one": "$count star",
+      "other": "$count stars"
+    },
+    "shopButton": "Open shop",
+    "expandButton": "Open bench",
+    "collapseButton": "Close bench"
+  },
   "rejections": {
     "fightInProgress": "The fight is happening",
     "matchIsOver": "The match is over",

@@ -1,4 +1,5 @@
 import 'package:going_wild/ui/design_system_catalog/design_system_catalog_section.dart';
+import 'package:going_wild/ui/design_system_catalog/sections/bench_slot/bench_slot_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/button/button_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/dialog/dialog_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/icons/icons_section.dart';
@@ -12,6 +13,7 @@ import 'package:going_wild/ui/design_system_catalog/sections/set_dialog/set_dial
 import 'package:going_wild/ui/design_system_catalog/sections/settings_controls/slider_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/settings_controls/speed_selector_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/settings_controls/switch_section.dart';
+import 'package:going_wild/ui/design_system_catalog/sections/stars/stars_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/stat_counter/stat_counter_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/tokens/tokens_section.dart';
 
@@ -31,4 +33,6 @@ final designSystemCatalogSections = [
   DesignSystemCatalogSection(title: 'SetDialog', builder: (context) => const SetDialogSection()),
   DesignSystemCatalogSection(title: 'LevelMeter', builder: (context) => const LevelMeterSection()),
   DesignSystemCatalogSection(title: 'StatCounter', builder: (context) => const StatCounterSection()),
+  DesignSystemCatalogSection(title: 'Stars', builder: (context) => const StarsSection()),
+  DesignSystemCatalogSection(title: 'BenchSlot', builder: (context) => const BenchSlotSection()),
 ];

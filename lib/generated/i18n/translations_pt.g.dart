@@ -222,6 +222,7 @@ class Translations$game$pt {
   late final Translations$game$setChips$pt setChips = Translations$game$setChips$pt._(_root);
   late final Translations$game$setDialog$pt setDialog = Translations$game$setDialog$pt._(_root);
   late final Translations$game$infoShelf$pt infoShelf = Translations$game$infoShelf$pt._(_root);
+  late final Translations$game$bench$pt bench = Translations$game$bench$pt._(_root);
   late final Translations$game$rejections$pt rejections = Translations$game$rejections$pt._(_root);
 }
 
@@ -661,6 +662,37 @@ class Translations$game$infoShelf$pt {
   String teamOnFieldLabel({required Object count, required Object limit}) => '${count} de ${limit} bichos no campo';
 }
 
+// Path: game.bench
+class Translations$game$bench$pt {
+  Translations$game$bench$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Banco $slot: $name, $stars'
+  String occupiedSlot({required Object slot, required Object name, required Object stars}) => 'Banco ${slot}: ${name}, ${stars}';
+
+  /// pt: 'Banco $slot: vazio'
+  String emptySlot({required Object slot}) => 'Banco ${slot}: vazio';
+
+  /// pt: '(one) {$count estrela} (other) {$count estrelas}'
+  String stars({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+    count,
+    one: '${count} estrela',
+    other: '${count} estrelas',
+  );
+
+  /// pt: 'Abrir loja'
+  String get shopButton => 'Abrir loja';
+
+  /// pt: 'Abrir banco'
+  String get expandButton => 'Abrir banco';
+
+  /// pt: 'Fechar banco'
+  String get collapseButton => 'Fechar banco';
+}
+
 // Path: game.rejections
 class Translations$game$rejections$pt {
   Translations$game$rejections$pt._(this._root);
@@ -1021,6 +1053,20 @@ extension on Translations {
       ),
       'game.infoShelf.teamOnField' => 'no campo',
       'game.infoShelf.teamOnFieldLabel' => ({required Object count, required Object limit}) => '${count} de ${limit} bichos no campo',
+      'game.bench.occupiedSlot' => ({
+        required Object slot,
+        required Object name,
+        required Object stars,
+      }) => 'Banco ${slot}: ${name}, ${stars}',
+      'game.bench.emptySlot' => ({required Object slot}) => 'Banco ${slot}: vazio',
+      'game.bench.stars' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+        count,
+        one: '${count} estrela',
+        other: '${count} estrelas',
+      ),
+      'game.bench.shopButton' => 'Abrir loja',
+      'game.bench.expandButton' => 'Abrir banco',
+      'game.bench.collapseButton' => 'Fechar banco',
       'game.rejections.fightInProgress' => 'A luta está acontecendo',
       'game.rejections.matchIsOver' => 'A partida acabou',
       'game.rejections.notEnoughCoins' => 'Moedas insuficientes',

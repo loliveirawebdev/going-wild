@@ -47,6 +47,17 @@
     "teamOnField": "no campo",
     "teamOnFieldLabel": "$count de $limit bichos no campo"
   },
+  "bench": {
+    "occupiedSlot": "Banco $slot: $name, $stars",
+    "emptySlot": "Banco $slot: vazio",
+    "stars(param=count)": {
+      "one": "$count estrela",
+      "other": "$count estrelas"
+    },
+    "shopButton": "Abrir loja",
+    "expandButton": "Abrir banco",
+    "collapseButton": "Fechar banco"
+  },
   "rejections": {
     "fightInProgress": "A luta está acontecendo",
     "matchIsOver": "A partida acabou",
