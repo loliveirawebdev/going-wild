@@ -34,7 +34,8 @@
     "shopAlreadyLocked": "A loja já está travada",
     "shopAlreadyUnlocked": "A loja já está destravada",
     "teamIsFull": "Time cheio para o seu nível",
-    "positionOutsideTeamHalf": "Fora do seu lado do campo",
+    "positionOutsideTeamSide": "Fora do seu lado do campo",
+    "positionTakenByEnemy": "Um inimigo ocupa essa casa",
     "noPlacementAtPosition": "Não tem ninguém aqui",
     "emptyInventorySlot": "Espaço vazio no banco",
     "unknown": "Ação indisponível"

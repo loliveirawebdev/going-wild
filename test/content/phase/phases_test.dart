@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:going_wild/content/board.dart';
 import 'package:going_wild/content/engines/character/basic_character_engine.dart';
 import 'package:going_wild/content/phase/phases.dart';
 import 'package:going_wild/domain/models/phase/phase_wave.dart';
@@ -24,18 +23,15 @@ void main() {
         }
       });
 
-      test('every enemy stands inside the enemy half of the board', () {
+      test('every enemy stands on a cell of the enemy side of the board', () {
+        final board = phase.engines.combatEngine.board;
+
         for (final (index, wave) in phase.waves.indexed) {
           for (final enemy in wave.enemies) {
             expect(
-              enemy.position.row,
-              inInclusiveRange(0, board.rows ~/ 2 - 1),
-              reason: 'round ${index + 1} ${enemy.characterCopy.character.id.value}',
-            );
-            expect(
-              enemy.position.column,
-              inInclusiveRange(0, board.columns - 1),
-              reason: 'round ${index + 1} ${enemy.characterCopy.character.id.value}',
+              board.isPositionOnEnemySide(enemy.position),
+              isTrue,
+              reason: 'round ${index + 1} ${enemy.characterCopy.character.id.value} at ${enemy.position}',
             );
           }
         }

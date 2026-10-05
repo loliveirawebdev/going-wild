@@ -61,7 +61,7 @@ const fiveRats = PhaseWave(
   coinsReward: 10,
   enemies: [
     Placement(
-      position: Position(row: 1, column: 0),
+      position: Position(row: 0, column: 1),
       characterCopy: CharacterCopy(stars: 1, character: rat),
     ),
     Placement(

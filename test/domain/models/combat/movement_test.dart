@@ -5,13 +5,13 @@ import 'package:going_wild/domain/models/combatant/faction.dart';
 import '../../../helpers/combat_helpers.dart';
 
 void main() {
-  test('steps one cell toward the target, diagonals allowed', () {
+  test('steps to the neighbor cell that gets straightest toward the target', () {
     final enemy = combatant(at: at(0, 4), faction: Faction.enemy);
     final walker = combatant(at: at(7, 0), faction: Faction.team).createCopyWith(targetCombatantId: enemy.id);
 
     final movedCombat = moveTowardTarget(combatWith([walker, enemy]), walker.id);
 
-    expect(findCombatant(movedCombat, walker).position, at(6, 1));
+    expect(findCombatant(movedCombat, walker).position, at(6, 0));
   });
 
   test('moves once per 1 / moveSpeed seconds', () {

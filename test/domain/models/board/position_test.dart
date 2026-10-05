@@ -4,25 +4,38 @@ import 'package:going_wild/domain/models/board/position.dart';
 import '../../../helpers/combat_helpers.dart';
 
 void main() {
-  test('distance is the king move count: diagonal costs one', () {
+  test('distance counts hexagon steps, and the row below a half-shifted row touches two cells', () {
     expect(at(0, 0).distanceToPosition(at(0, 0)), 0);
+    expect(at(0, 0).distanceToPosition(at(1, 0)), 1);
     expect(at(0, 0).distanceToPosition(at(1, 1)), 1);
-    expect(at(0, 0).distanceToPosition(at(3, 1)), 3);
-    expect(at(2, 4).distanceToPosition(at(0, 0)), 4);
+    expect(at(0, 0).distanceToPosition(at(0, 3)), 3);
+    expect(at(0, 0).distanceToPosition(at(2, 0)), 2);
+    expect(at(0, 0).distanceToPosition(at(4, 0)), 4);
+    expect(at(3, 4).distanceToPosition(at(0, 0)), 5);
   });
 
-  test('board knows its bounds', () {
-    expect(testBoard.isPositionWithinBounds(at(0, 0)), isTrue);
-    expect(testBoard.isPositionWithinBounds(at(7, 4)), isTrue);
-    expect(testBoard.isPositionWithinBounds(at(8, 0)), isFalse);
-    expect(testBoard.isPositionWithinBounds(at(0, 5)), isFalse);
-    expect(testBoard.isPositionWithinBounds(at(-1, 0)), isFalse);
-  });
-
-  test('neighbors include diagonals and stop at the edge', () {
-    expect(testBoard.neighborPositionsAround(at(3, 2)).length, 8);
-    expect(testBoard.neighborPositionsAround(at(0, 2)).length, 5);
+  test('a cell has six neighbors inside the board and fewer on the edges', () {
+    expect(testBoard.neighborPositionsAround(at(3, 2)).length, 6);
+    expect(testBoard.neighborPositionsAround(at(0, 2)).length, 4);
     expect(testBoard.neighborPositionsAround(at(0, 0)).length, 3);
+    expect(testBoard.neighborPositionsAround(at(1, 0)).toSet(), {at(1, 1), at(0, 0), at(2, 0)});
+  });
+
+  test('every neighbor is one step away', () {
+    for (final position in testBoard.allPositions) {
+      expect(
+        testBoard.neighborPositionsAround(position),
+        everyElement(predicate<Position>((neighbor) => neighbor.distanceToPosition(position) == 1)),
+      );
+    }
+  });
+
+  test('moving away from an origin follows a straight line', () {
+    expect(at(3, 1).positionAwayFrom(at(3, 0), steps: 1), at(3, 2));
+    expect(at(3, 1).positionAwayFrom(at(3, 0), steps: 2), at(3, 3));
+    expect(at(3, 1).positionAwayFrom(at(2, 1), steps: 1), at(4, 0));
+    expect(at(3, 1).positionAwayFrom(at(2, 1), steps: 2), at(5, 0));
+    expect(at(3, 1).positionAwayFrom(at(3, 1), steps: 2), at(3, 1));
   });
 
   test('positions are values', () {

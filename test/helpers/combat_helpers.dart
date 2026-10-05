@@ -1,7 +1,9 @@
 import 'dart:math';
 
-import 'package:going_wild/content/board.dart';
 import 'package:going_wild/content/engines/combat/basic_combat_engine.dart';
+import 'package:going_wild/domain/models/board/board.dart';
+import 'package:going_wild/domain/models/board/board_row.dart';
+import 'package:going_wild/domain/models/board/board_side.dart';
 import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/character/abilities/ability.dart';
 import 'package:going_wild/domain/models/character/abilities/ability_trigger.dart';
@@ -24,7 +26,18 @@ import 'package:going_wild/domain/models/combatant/faction.dart';
 
 final testRules = basicCombatEngine.rules;
 
-const testBoard = board;
+const testBoard = Board(
+  rows: [
+    BoardRow(side: BoardSide.enemy, cellCount: 5),
+    BoardRow(side: BoardSide.enemy, cellCount: 5),
+    BoardRow(side: BoardSide.enemy, cellCount: 5),
+    BoardRow(side: BoardSide.enemy, cellCount: 5),
+    BoardRow(side: BoardSide.team, cellCount: 5),
+    BoardRow(side: BoardSide.team, cellCount: 5),
+    BoardRow(side: BoardSide.team, cellCount: 5),
+    BoardRow(side: BoardSide.team, cellCount: 5),
+  ],
+);
 const noAbility = Ability(effects: [], trigger: ManaFullTrigger());
 
 Character dummy({Role role = Role.damage, Ability ability = noAbility, CharacterId id = const CharacterId('cat')}) => Character(

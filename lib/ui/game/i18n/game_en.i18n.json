@@ -34,7 +34,8 @@
     "shopAlreadyLocked": "The shop is already locked",
     "shopAlreadyUnlocked": "The shop is already unlocked",
     "teamIsFull": "Team is full for your level",
-    "positionOutsideTeamHalf": "Outside your side of the board",
+    "positionOutsideTeamSide": "Outside your side of the board",
+    "positionTakenByEnemy": "An enemy holds this spot",
     "noPlacementAtPosition": "Nobody is here",
     "emptyInventorySlot": "Empty bench slot",
     "unknown": "Action unavailable"

@@ -282,12 +282,12 @@ void main() {
 
     final castCombat = castAbilityIfReady(combatWith([caster, enemy]), caster.id);
 
-    expect(findCombatant(castCombat, enemy).position, at(0, 2));
+    expect(findCombatant(castCombat, enemy).position, at(0, 1));
   });
 
   test('knockback pushes the farthest targets first so the ones behind never block the ones in front', () {
     final focus = combatant(faction: Faction.enemy, at: at(3, 2));
-    final enemyBehind = combatant(faction: Faction.enemy, at: at(2, 2));
+    final enemyBehind = combatant(faction: Faction.enemy, at: at(2, 1));
     final caster = combatant(
       at: at(4, 2),
       faction: Faction.team,
@@ -297,8 +297,8 @@ void main() {
 
     final castCombat = castAbilityIfReady(combatWith([caster, focus, enemyBehind]), caster.id);
 
-    expect(findCombatant(castCombat, enemyBehind).position, at(1, 2));
-    expect(findCombatant(castCombat, focus).position, at(2, 2));
+    expect(findCombatant(castCombat, enemyBehind).position, at(1, 1));
+    expect(findCombatant(castCombat, focus).position, at(2, 1));
   });
 
   test('lifesteal heals the caster by the damage dealt', () {

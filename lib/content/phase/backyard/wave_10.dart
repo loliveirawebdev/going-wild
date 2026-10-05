@@ -20,11 +20,11 @@ const PhaseWave backyardWave10 = PhaseWave(
       characterCopy: CharacterCopy(character: alligator, stars: 2),
     ),
     Placement(
-      position: Position(row: 0, column: 1),
+      position: Position(row: 0, column: 0),
       characterCopy: CharacterCopy(character: bat, stars: 3),
     ),
     Placement(
-      position: Position(row: 0, column: 2),
+      position: Position(row: 0, column: 1),
       characterCopy: CharacterCopy(character: dragon, stars: 2),
     ),
     Placement(

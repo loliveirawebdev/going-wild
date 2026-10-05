@@ -44,14 +44,12 @@ class KnockbackEffect extends TargetedCombatEffect {
   }) {
     final pusherCombatant = context.combatantWithId(pusherCombatantId);
     final targetCombatant = context.combatantWithId(targetCombatantId);
-    final rowDirection = (targetCombatant.position.row - pusherCombatant.position.row).sign;
-    final columnDirection = (targetCombatant.position.column - pusherCombatant.position.column).sign;
-    if (rowDirection == 0 && columnDirection == 0) return context;
+    if (targetCombatant.position == pusherCombatant.position) return context;
 
     var landingPosition = targetCombatant.position;
 
-    for (var step = 0; step < cells; step++) {
-      final nextPosition = landingPosition.createCopyMovedBy(rows: rowDirection, columns: columnDirection);
+    for (var step = 1; step <= cells; step++) {
+      final nextPosition = targetCombatant.position.positionAwayFrom(pusherCombatant.position, steps: step);
       if (!context.isPositionFree(nextPosition)) break;
       landingPosition = nextPosition;
     }

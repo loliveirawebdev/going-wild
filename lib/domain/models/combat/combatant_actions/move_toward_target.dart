@@ -65,13 +65,14 @@ Position? findNextStepToward(Combat combat, Combatant combatant, Combatant targe
 }
 
 List<Position> _neighborPositionsClosestToGoal(Combat combat, Position fromPosition, Position goalPosition) {
-  int manhattanDistanceToGoal(Position position) => (position.row - goalPosition.row).abs() + (position.column - goalPosition.column).abs();
-
   return combat.battlefield.board.neighborPositionsAround(fromPosition).toList()..sort((firstNeighbor, secondNeighbor) {
     final distanceOrder = firstNeighbor.distanceToPosition(goalPosition).compareTo(secondNeighbor.distanceToPosition(goalPosition));
     if (distanceOrder != 0) return distanceOrder;
 
-    final straightnessOrder = manhattanDistanceToGoal(firstNeighbor).compareTo(manhattanDistanceToGoal(secondNeighbor));
+    final straightnessOrder = firstNeighbor
+        .straightLineDistanceToPosition(goalPosition)
+        .compareTo(secondNeighbor.straightLineDistanceToPosition(goalPosition));
+
     if (straightnessOrder != 0) return straightnessOrder;
 
     final rowOrder = firstNeighbor.row.compareTo(secondNeighbor.row);

@@ -384,7 +384,10 @@ class Translations$game$rejections$pt {
   String get teamIsFull => 'Time cheio para o seu nível';
 
   /// pt: 'Fora do seu lado do campo'
-  String get positionOutsideTeamHalf => 'Fora do seu lado do campo';
+  String get positionOutsideTeamSide => 'Fora do seu lado do campo';
+
+  /// pt: 'Um inimigo ocupa essa casa'
+  String get positionTakenByEnemy => 'Um inimigo ocupa essa casa';
 
   /// pt: 'Não tem ninguém aqui'
   String get noPlacementAtPosition => 'Não tem ninguém aqui';
@@ -477,7 +480,8 @@ extension on Translations {
       'game.rejections.shopAlreadyLocked' => 'A loja já está travada',
       'game.rejections.shopAlreadyUnlocked' => 'A loja já está destravada',
       'game.rejections.teamIsFull' => 'Time cheio para o seu nível',
-      'game.rejections.positionOutsideTeamHalf' => 'Fora do seu lado do campo',
+      'game.rejections.positionOutsideTeamSide' => 'Fora do seu lado do campo',
+      'game.rejections.positionTakenByEnemy' => 'Um inimigo ocupa essa casa',
       'game.rejections.noPlacementAtPosition' => 'Não tem ninguém aqui',
       'game.rejections.emptyInventorySlot' => 'Espaço vazio no banco',
       'game.rejections.unknown' => 'Ação indisponível',

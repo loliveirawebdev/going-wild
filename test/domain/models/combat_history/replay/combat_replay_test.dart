@@ -18,8 +18,8 @@ final team = [
   placed(cow, 4, 1, stars: 2),
   placed(sheep, 5, 3, stars: 2),
   placed(cat, 6, 0, stars: 2),
-  placed(queenBee, 6, 4, stars: 2),
-  placed(chicken, 7, 2, stars: 2),
+  placed(queenBee, 6, 3, stars: 2),
+  placed(chicken, 6, 2, stars: 2),
 ];
 
 List<Placement> enemiesOfWave(int waveNumber) => backyard.waves[waveNumber - 1].enemies;

@@ -315,7 +315,9 @@ class _Translations$game$rejections$en implements Translations$game$rejections$p
   @override
   String get teamIsFull => 'Team is full for your level';
   @override
-  String get positionOutsideTeamHalf => 'Outside your side of the board';
+  String get positionOutsideTeamSide => 'Outside your side of the board';
+  @override
+  String get positionTakenByEnemy => 'An enemy holds this spot';
   @override
   String get noPlacementAtPosition => 'Nobody is here';
   @override
@@ -404,7 +406,8 @@ extension on TranslationsEn {
       'game.rejections.shopAlreadyLocked' => 'The shop is already locked',
       'game.rejections.shopAlreadyUnlocked' => 'The shop is already unlocked',
       'game.rejections.teamIsFull' => 'Team is full for your level',
-      'game.rejections.positionOutsideTeamHalf' => 'Outside your side of the board',
+      'game.rejections.positionOutsideTeamSide' => 'Outside your side of the board',
+      'game.rejections.positionTakenByEnemy' => 'An enemy holds this spot',
       'game.rejections.noPlacementAtPosition' => 'Nobody is here',
       'game.rejections.emptyInventorySlot' => 'Empty bench slot',
       'game.rejections.unknown' => 'Action unavailable',

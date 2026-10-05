@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:going_wild/domain/models/board/errors/no_placement_at_position_error.dart';
-import 'package:going_wild/domain/models/board/errors/position_outside_team_half_error.dart';
+import 'package:going_wild/domain/models/board/errors/position_outside_team_side_error.dart';
+import 'package:going_wild/domain/models/board/errors/position_taken_by_enemy_error.dart';
 import 'package:going_wild/domain/models/board/errors/team_is_full_error.dart';
 import 'package:going_wild/domain/models/inventory/errors/empty_inventory_slot_error.dart';
 import 'package:going_wild/domain/models/inventory/errors/inventory_is_full_error.dart';
@@ -44,7 +45,8 @@ String rejectionMessageOf(Translations translations, RejectedPlayerActionError r
     ShopAlreadyLockedError() => rejectionTranslations.shopAlreadyLocked,
     ShopAlreadyUnlockedError() => rejectionTranslations.shopAlreadyUnlocked,
     NoPlacementAtPositionError() => rejectionTranslations.noPlacementAtPosition,
-    PositionOutsideTeamHalfError() => rejectionTranslations.positionOutsideTeamHalf,
+    PositionTakenByEnemyError() => rejectionTranslations.positionTakenByEnemy,
+    PositionOutsideTeamSideError() => rejectionTranslations.positionOutsideTeamSide,
     _ => rejectionTranslations.unknown,
   };
 }

@@ -84,14 +84,14 @@ class _PreparingViewState extends State<PreparingView> {
             final teamPlacement = _placementAt(matchProgress.playerRoster.placements, position);
             final enemyPlacement = _placementAt(matchProgress.currentWave.enemies, position);
             final characterCopy = teamPlacement?.characterCopy ?? enemyPlacement?.characterCopy;
-            final isTeamHalf = board.isPositionOnTeamHalf(position);
+            final isTeamSide = board.isPositionOnTeamSide(position);
 
             return CharacterCopyCell(
               characterCopy: characterCopy,
               isEnemy: enemyPlacement != null,
               isSelected: selectedSlot is BoardSlot && selectedSlot.position == position,
               attackRange: characterCopy == null ? null : attackRangeOf(matchProgress, characterCopy.character),
-              onTap: isTeamHalf ? _onTapOf(BoardSlot(position: position), isOccupied: teamPlacement != null) : null,
+              onTap: isTeamSide ? _onTapOf(BoardSlot(position: position), isOccupied: teamPlacement != null) : null,
             );
           },
         ),

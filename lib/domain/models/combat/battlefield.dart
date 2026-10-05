@@ -63,19 +63,12 @@ class Battlefield {
   }
 
   Position? pickRandomFreePositionClosestTo(Position origin, Random randomGenerator) {
-    final farthestPossibleDistance = max(board.rows, board.columns);
+    final freePositions = board.allPositions.where((position) => position != origin && isPositionFree(position)).toList();
+    if (freePositions.isEmpty) return null;
 
-    for (var distance = 1; distance <= farthestPossibleDistance; distance++) {
-      final freePositionsAtDistance = board.allPositions
-          .where((position) => position.distanceToPosition(origin) == distance && isPositionFree(position))
-          .toList();
+    final closestDistance = freePositions.map((position) => position.distanceToPosition(origin)).reduce(min);
+    final closestFreePositions = freePositions.where((position) => position.distanceToPosition(origin) == closestDistance).toList();
 
-      if (freePositionsAtDistance.isNotEmpty) {
-        final randomIndex = randomGenerator.nextInt(freePositionsAtDistance.length);
-        return freePositionsAtDistance[randomIndex];
-      }
-    }
-
-    return null;
+    return closestFreePositions[randomGenerator.nextInt(closestFreePositions.length)];
   }
 }

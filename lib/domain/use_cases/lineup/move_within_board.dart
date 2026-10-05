@@ -1,5 +1,6 @@
 import 'package:going_wild/domain/models/board/errors/no_placement_at_position_error.dart';
-import 'package:going_wild/domain/models/board/errors/position_outside_team_half_error.dart';
+import 'package:going_wild/domain/models/board/errors/position_outside_team_side_error.dart';
+import 'package:going_wild/domain/models/board/errors/position_taken_by_enemy_error.dart';
 import 'package:going_wild/domain/models/board/placement.dart';
 import 'package:going_wild/domain/models/board/placement_list.dart';
 import 'package:going_wild/domain/models/board/position.dart';
@@ -13,7 +14,8 @@ RejectedPlayerActionError? checkMovingWithinBoard(
 }) {
   if (matchProgress.checkPreparingActions() case final rejection?) return rejection;
   final board = matchProgress.phase.engines.combatEngine.board;
-  if (!board.isPositionOnTeamHalf(toPosition)) return PositionOutsideTeamHalfError(position: toPosition);
+  if (!board.isPositionOnTeamSide(toPosition)) return PositionOutsideTeamSideError(position: toPosition);
+  if (matchProgress.currentWave.enemies.placementAt(toPosition) != null) return PositionTakenByEnemyError(position: toPosition);
   if (matchProgress.playerRoster.placements.placementAt(fromPosition) == null) return NoPlacementAtPositionError(position: fromPosition);
 
   return null;

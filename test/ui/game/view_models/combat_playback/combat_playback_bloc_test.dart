@@ -20,7 +20,7 @@ CombatHistory recordedHistory() => basicCombatEngine
     .simulate(
       recordsHistory: true,
       randomGenerator: Random(1),
-      team: [placed(bull, 6, 2), placed(cat, 7, 1)],
+      team: [placed(bull, 6, 2), placed(cat, 5, 1)],
       enemies: [placed(rat, 1, 2), placed(fox, 1, 3)],
     )
     .history;

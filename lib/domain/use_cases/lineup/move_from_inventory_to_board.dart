@@ -1,4 +1,5 @@
-import 'package:going_wild/domain/models/board/errors/position_outside_team_half_error.dart';
+import 'package:going_wild/domain/models/board/errors/position_outside_team_side_error.dart';
+import 'package:going_wild/domain/models/board/errors/position_taken_by_enemy_error.dart';
 import 'package:going_wild/domain/models/board/errors/team_is_full_error.dart';
 import 'package:going_wild/domain/models/board/placement.dart';
 import 'package:going_wild/domain/models/board/placement_list.dart';
@@ -17,7 +18,8 @@ RejectedPlayerActionError? checkMovingFromInventoryToBoard(
   if (matchProgress.checkPreparingActions() case final rejection?) return rejection;
   final roster = matchProgress.playerRoster;
   final board = matchProgress.phase.engines.combatEngine.board;
-  if (!board.isPositionOnTeamHalf(position)) return PositionOutsideTeamHalfError(position: position);
+  if (!board.isPositionOnTeamSide(position)) return PositionOutsideTeamSideError(position: position);
+  if (matchProgress.currentWave.enemies.placementAt(position) != null) return PositionTakenByEnemyError(position: position);
   if (roster.inventory.entryAt(inventoryIndex) == null) return EmptyInventorySlotError(index: inventoryIndex);
 
   final teamLimit = matchProgress.playerLevelProgress.level.teamSize;

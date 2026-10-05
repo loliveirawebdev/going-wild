@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/content/character/team/team.dart';
-import 'package:going_wild/domain/models/board/errors/position_outside_team_half_error.dart';
+import 'package:going_wild/domain/models/board/errors/position_outside_team_side_error.dart';
 import 'package:going_wild/domain/models/board/errors/team_is_full_error.dart';
 import 'package:going_wild/domain/models/inventory/errors/empty_inventory_slot_error.dart';
 import 'package:going_wild/domain/models/inventory/errors/inventory_is_full_error.dart';
@@ -59,7 +59,7 @@ void main() {
     final enemyHalf = BoardSlot(position: at(0, 0));
     final freeTeamSpot = BoardSlot(position: at(6, 3));
 
-    expect(checkMovingCopyBetweenRosterSlots(matchProgress, to: enemyHalf, from: cowInInventory), isA<PositionOutsideTeamHalfError>());
+    expect(checkMovingCopyBetweenRosterSlots(matchProgress, to: enemyHalf, from: cowInInventory), isA<PositionOutsideTeamSideError>());
     expect(checkMovingCopyBetweenRosterSlots(matchProgress, to: freeTeamSpot, from: cowInInventory), isA<TeamIsFullError>());
     expect(
       checkMovingCopyBetweenRosterSlots(matchProgress, to: freeTeamSpot, from: const InventorySlot(index: 1)),

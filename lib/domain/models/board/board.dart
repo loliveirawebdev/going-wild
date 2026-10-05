@@ -1,38 +1,25 @@
+import 'package:going_wild/domain/models/board/board_row.dart';
+import 'package:going_wild/domain/models/board/board_side.dart';
 import 'package:going_wild/domain/models/board/position.dart';
 
 class Board {
-  const Board({required this.rows, required this.columns});
-
-  final int rows;
-  final int columns;
+  const Board({required this.rows});
+  final List<BoardRow> rows;
 
   bool isPositionWithinBounds(Position position) {
-    final rowIsInside = position.row >= 0 && position.row < rows;
-    final columnIsInside = position.column >= 0 && position.column < columns;
-    return rowIsInside && columnIsInside;
+    final rowIsInside = position.row >= 0 && position.row < rows.length;
+    return rowIsInside && rows[position.row].hasCellAt(position.column);
   }
 
-  bool isPositionOnTeamHalf(Position position) {
-    final firstRowOfTeamHalf = rows ~/ 2;
-    return isPositionWithinBounds(position) && position.row >= firstRowOfTeamHalf;
-  }
-
-  Iterable<Position> neighborPositionsAround(Position center) sync* {
-    for (var rowStep = -1; rowStep <= 1; rowStep++) {
-      for (var columnStep = -1; columnStep <= 1; columnStep++) {
-        final isTheCenterItself = rowStep == 0 && columnStep == 0;
-        if (isTheCenterItself) continue;
-
-        final neighbor = center.createCopyMovedBy(rows: rowStep, columns: columnStep);
-        if (isPositionWithinBounds(neighbor)) yield neighbor;
-      }
-    }
-  }
+  int get widestRowCellCount => rows.fold(0, (widest, row) => row.cellCount > widest ? row.cellCount : widest);
+  Iterable<Position> neighborPositionsAround(Position center) => center.adjacentPositions.where(isPositionWithinBounds);
+  bool isPositionOnTeamSide(Position position) => isPositionWithinBounds(position) && rows[position.row].side != BoardSide.enemy;
+  bool isPositionOnEnemySide(Position position) => isPositionWithinBounds(position) && rows[position.row].side != BoardSide.team;
 
   Iterable<Position> get allPositions sync* {
-    for (var row = 0; row < rows; row++) {
-      for (var column = 0; column < columns; column++) {
-        yield Position(row: row, column: column);
+    for (final (rowIndex, row) in rows.indexed) {
+      for (var column = 0; column < row.cellCount; column++) {
+        if (row.hasCellAt(column)) yield Position(row: rowIndex, column: column);
       }
     }
   }

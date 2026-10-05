@@ -188,7 +188,7 @@ void main() {
     test('two attackers on the same target in the same tick record their own damage', () {
       final enemy = combatant(at: at(0, 1), faction: Faction.enemy);
       final firstAttacker = combatant(
-        at: at(1, 0),
+        at: at(1, 1),
         faction: Faction.team,
         stats: statsOf(damage: 100),
       ).createCopyWith(targetCombatantId: enemy.id);

@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/content/character/team/team.dart';
 import 'package:going_wild/content/engines/economy/basic_economy_engine.dart';
 import 'package:going_wild/domain/models/board/errors/no_placement_at_position_error.dart';
-import 'package:going_wild/domain/models/board/errors/position_outside_team_half_error.dart';
+import 'package:going_wild/domain/models/board/errors/position_outside_team_side_error.dart';
 import 'package:going_wild/domain/models/board/errors/team_is_full_error.dart';
 import 'package:going_wild/domain/models/inventory/errors/empty_inventory_slot_error.dart';
 import 'package:going_wild/domain/models/inventory/errors/inventory_index_out_of_range_error.dart';
@@ -46,15 +46,15 @@ void main() {
 
     test('characters move and swap inside the inventory and inside the board', () {
       final matchProgressWithInventory = withInventory(startWith([oneRat]), [characterCopyOf(cat), characterCopyOf(dog)]);
-      final matchProgress = matchProgressWithInventory.createCopyWithPlayerPlacements([placed(cow, 6, 0), placed(goat, 6, 4)]);
+      final matchProgress = matchProgressWithInventory.createCopyWithPlayerPlacements([placed(cow, 6, 0), placed(goat, 5, 4)]);
 
       final inventorySwapped = moveWithinInventory(matchProgress, toIndex: 1, fromIndex: 0);
       expect(inventorySwapped.playerRoster.inventory.entries.map((characterCopy) => characterCopy.character), [dog, cat]);
 
-      final boardSwapped = moveWithinBoard(matchProgress, toPosition: at(6, 4), fromPosition: at(6, 0));
+      final boardSwapped = moveWithinBoard(matchProgress, toPosition: at(5, 4), fromPosition: at(6, 0));
       expect(boardSwapped.playerRoster.placements.map((placement) => (placement.characterCopy.character, placement.position)), [
         (goat, at(6, 0)),
-        (cow, at(6, 4)),
+        (cow, at(5, 4)),
       ]);
     });
 
@@ -63,7 +63,7 @@ void main() {
 
       expect(
         () => moveFromInventoryToBoard(matchProgress, inventoryIndex: 0, position: at(1, 2)),
-        throwsA(isA<PositionOutsideTeamHalfError>()),
+        throwsA(isA<PositionOutsideTeamSideError>()),
       );
       expect(
         () => moveFromInventoryToBoard(matchProgress, inventoryIndex: -1, position: at(6, 2)),
@@ -101,7 +101,7 @@ void main() {
     final matchProgress = startWith([oneRat]).createCopyWithPlayerPlacements([placed(cat, 6, 2)]);
     expect(
       () => moveWithinBoard(matchProgress, toPosition: at(1, 2), fromPosition: at(6, 2)),
-      throwsA(isA<PositionOutsideTeamHalfError>()),
+      throwsA(isA<PositionOutsideTeamSideError>()),
     );
     expect(() => moveWithinBoard(matchProgress, toPosition: at(6, 1), fromPosition: at(6, 0)), throwsA(isA<NoPlacementAtPositionError>()));
   });

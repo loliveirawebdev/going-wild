@@ -53,9 +53,9 @@ void main() {
       final moved = moveCopyBetweenRosterSlots(
         matchProgress,
         from: BoardSlot(position: at(6, 0)),
-        to: BoardSlot(position: at(6, 4)),
+        to: BoardSlot(position: at(5, 4)),
       );
-      final expected = moveWithinBoard(matchProgress, toPosition: at(6, 4), fromPosition: at(6, 0));
+      final expected = moveWithinBoard(matchProgress, toPosition: at(5, 4), fromPosition: at(6, 0));
 
       expect(rosterOf(moved), rosterOf(expected));
     });
