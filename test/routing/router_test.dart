@@ -61,7 +61,7 @@ void main() {
     await tester.tap(find.text(t.home.playButton));
     await tester.pumpAndSettle();
     await tester.tap(find.text(t.phaseSelection.playButton));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 1));
 
     expect(find.byType(GameScreen), findsOneWidget);
   });

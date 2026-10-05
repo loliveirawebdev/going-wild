@@ -217,6 +217,7 @@ class Translations$game$pt {
   // Translations
   late final Translations$game$topBar$pt topBar = Translations$game$topBar$pt._(_root);
   late final Translations$game$exitDialog$pt exitDialog = Translations$game$exitDialog$pt._(_root);
+  late final Translations$game$setChips$pt setChips = Translations$game$setChips$pt._(_root);
   late final Translations$game$rejections$pt rejections = Translations$game$rejections$pt._(_root);
 }
 
@@ -478,6 +479,26 @@ class Translations$game$exitDialog$pt {
   String get exitButton => 'Sair';
 }
 
+// Path: game.setChips
+class Translations$game$setChips$pt {
+  Translations$game$setChips$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: '$name: $count de $nextTierCount, inativo'
+  String inactiveLabel({required Object name, required Object count, required Object nextTierCount}) =>
+      '${name}: ${count} de ${nextTierCount}, inativo';
+
+  /// pt: '$name: $count de $nextTierCount, nível $level'
+  String levelLabel({required Object name, required Object count, required Object nextTierCount, required Object level}) =>
+      '${name}: ${count} de ${nextTierCount}, nível ${level}';
+
+  /// pt: '$name: $count, completo'
+  String completeLabel({required Object name, required Object count}) => '${name}: ${count}, completo';
+}
+
 // Path: game.rejections
 class Translations$game$rejections$pt {
   Translations$game$rejections$pt._(this._root);
@@ -728,6 +749,18 @@ extension on Translations {
       'game.exitDialog.closeButton' => 'Fechar',
       'game.exitDialog.continueButton' => 'Continuar',
       'game.exitDialog.exitButton' => 'Sair',
+      'game.setChips.inactiveLabel' => ({
+        required Object name,
+        required Object count,
+        required Object nextTierCount,
+      }) => '${name}: ${count} de ${nextTierCount}, inativo',
+      'game.setChips.levelLabel' => ({
+        required Object name,
+        required Object count,
+        required Object nextTierCount,
+        required Object level,
+      }) => '${name}: ${count} de ${nextTierCount}, nível ${level}',
+      'game.setChips.completeLabel' => ({required Object name, required Object count}) => '${name}: ${count}, completo',
       'game.rejections.fightInProgress' => 'A luta está acontecendo',
       'game.rejections.matchIsOver' => 'A partida acabou',
       'game.rejections.notEnoughCoins' => 'Moedas insuficientes',

@@ -13,6 +13,11 @@
     "continueButton": "Continuar",
     "exitButton": "Sair"
   },
+  "setChips": {
+    "inactiveLabel": "$name: $count de $nextTierCount, inativo",
+    "levelLabel": "$name: $count de $nextTierCount, nível $level",
+    "completeLabel": "$name: $count, completo"
+  },
   "rejections": {
     "fightInProgress": "A luta está acontecendo",
     "matchIsOver": "A partida acabou",

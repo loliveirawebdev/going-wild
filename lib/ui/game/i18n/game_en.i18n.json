@@ -13,6 +13,11 @@
     "continueButton": "Keep playing",
     "exitButton": "Leave"
   },
+  "setChips": {
+    "inactiveLabel": "$name: $count of $nextTierCount, inactive",
+    "levelLabel": "$name: $count of $nextTierCount, level $level",
+    "completeLabel": "$name: $count, complete"
+  },
   "rejections": {
     "fightInProgress": "The fight is happening",
     "matchIsOver": "The match is over",

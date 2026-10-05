@@ -1,0 +1,80 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:going_wild/domain/models/character/character.dart';
+import 'package:going_wild/domain/models/match_progress/match_progress.dart';
+import 'package:going_wild/domain/models/set/set_presence.dart';
+import 'package:going_wild/generated/i18n/translations.g.dart';
+import 'package:going_wild/ui/core/design/app_spacing.dart';
+import 'package:going_wild/ui/core/localization/set_name.dart';
+import 'package:going_wild/ui/core/widgets/zoom.dart';
+import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
+import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
+import 'package:going_wild/ui/game/widgets/set_chips/set_chip.dart';
+
+const _chipScale = 0.76;
+const _chipSpacing = 6.0;
+const _celebrationMargin = 6.0;
+
+int _compareByHighlight(SetPresence first, SetPresence second) {
+  if (first.isComplete != second.isComplete) return first.isComplete ? -1 : 1;
+  if (first.reachedTierCount != second.reachedTierCount) return second.reachedTierCount - first.reachedTierCount;
+  if (first.presentMemberCount != second.presentMemberCount) return second.presentMemberCount - first.presentMemberCount;
+  return first.set.id.value.compareTo(second.set.id.value);
+}
+
+class SetChipRow extends StatelessWidget {
+  const SetChipRow({super.key, this.previewBoardCharacters});
+
+  final List<Character>? previewBoardCharacters;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PreparationBloc, PreparationState>(
+      builder: (context, state) {
+        if (state is! ReadyPreparationState) return const SizedBox.shrink();
+        final setPresences = _sortedSetPresencesOf(state.matchProgress);
+        if (setPresences.isEmpty) return const SizedBox.shrink();
+
+        return SingleChildScrollView(
+          clipBehavior: Clip.none,
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.fromLTRB(AppSpacing.space3, AppSpacing.space4, AppSpacing.space3, AppSpacing.space3),
+          child: Row(
+            spacing: _chipSpacing,
+            children: [
+              for (final setPresence in setPresences)
+                Zoom(
+                  scale: _chipScale,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: setPresence.isComplete ? _celebrationMargin : 0),
+                    child: SetChip(setPresence: setPresence, semanticLabel: _semanticLabelOf(context, setPresence)),
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  List<SetPresence> _sortedSetPresencesOf(MatchProgress matchProgress) {
+    final placements = matchProgress.playerRoster.placements;
+    final previewBoardCharacters = this.previewBoardCharacters;
+    final boardCharacters = placements.isEmpty && previewBoardCharacters != null
+        ? previewBoardCharacters
+        : [for (final placement in placements) placement.characterCopy.character];
+    return matchProgress.phase.engines.setEngine.setPresences(boardCharacters)..sort(_compareByHighlight);
+  }
+
+  String _semanticLabelOf(BuildContext context, SetPresence setPresence) {
+    final translations = context.t.game.setChips;
+    final name = setNameOf(context.t, setPresence.set);
+    final count = setPresence.presentMemberCount;
+    final nextTier = setPresence.nextTier;
+
+    if (setPresence.isComplete || nextTier == null) return translations.completeLabel(name: name, count: count);
+    if (setPresence.reachedTierCount == 0) return translations.inactiveLabel(name: name, count: count, nextTierCount: nextTier.count);
+
+    return translations.levelLabel(name: name, count: count, nextTierCount: nextTier.count, level: setPresence.reachedTierCount);
+  }
+}

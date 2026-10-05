@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:going_wild/content/set/sets.dart';
+import 'package:going_wild/domain/models/set/set_presence.dart';
 import 'package:going_wild/domain/models/set/team_set.dart';
 import 'package:going_wild/ui/core/design/app_spacing.dart';
 import 'package:going_wild/ui/design_system_catalog/catalog_block_title.dart';
@@ -16,11 +17,9 @@ class SetChipSection extends StatelessWidget {
     return CatalogTapLog(
       builder: (context, tapOf) {
         Widget chipOf(TeamSet set, {required int presentMemberCount}) => SetChip(
-          setId: set.id,
-          presentMemberCount: presentMemberCount,
-          onPressed: tapOf('${set.id.value} com $presentMemberCount'),
           semanticLabel: '${set.id.value}: $presentMemberCount',
-          tierCounts: [for (final tier in set.tiers) tier.count],
+          onPressed: tapOf('${set.id.value} com $presentMemberCount'),
+          setPresence: SetPresence(set: set, presentMemberCount: presentMemberCount),
         );
 
         return ListView(

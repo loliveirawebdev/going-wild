@@ -7,6 +7,7 @@ import 'package:going_wild/domain/models/set/active_set.dart';
 import 'package:going_wild/domain/models/set/engines/set_engine.dart';
 import 'package:going_wild/domain/models/set/set_effect_side.dart';
 import 'package:going_wild/domain/models/set/set_effect_targeting.dart';
+import 'package:going_wild/domain/models/set/set_presence.dart';
 import 'package:going_wild/domain/models/set/team_set.dart';
 
 class BasicSetEngine extends SetEngine {
@@ -15,14 +16,25 @@ class BasicSetEngine extends SetEngine {
   final List<TeamSet> sets;
 
   @override
-  List<ActiveSet> activeSets(List<Character> activeCharacters) {
-    final activeSets = <ActiveSet>[];
+  List<SetPresence> setPresences(List<Character> activeCharacters) {
+    final setPresences = <SetPresence>[];
     final activeCharactersSet = activeCharacters.toSet();
 
     for (final set in sets) {
       final presentMemberCount = set.members.where(activeCharactersSet.contains).length;
-      final reachedTiers = set.tiers.where((tier) => tier.count <= presentMemberCount);
-      if (reachedTiers.isNotEmpty) activeSets.add(ActiveSet(set: set, tier: reachedTiers.last));
+      if (presentMemberCount > 0) setPresences.add(SetPresence(set: set, presentMemberCount: presentMemberCount));
+    }
+
+    return setPresences;
+  }
+
+  @override
+  List<ActiveSet> activeSets(List<Character> activeCharacters) {
+    final activeSets = <ActiveSet>[];
+
+    for (final setPresence in setPresences(activeCharacters)) {
+      final reachedTiers = setPresence.reachedTiers;
+      if (reachedTiers.isNotEmpty) activeSets.add(ActiveSet(set: setPresence.set, tier: reachedTiers.last));
     }
 
     return activeSets;
