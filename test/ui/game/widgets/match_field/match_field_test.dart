@@ -20,6 +20,7 @@ import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_mode
 import 'package:going_wild/ui/game/view_models/round_banner/round_banner_view_model.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 import 'package:going_wild/ui/game/widgets/game_screen.dart';
+import 'package:going_wild/ui/game/widgets/match_field/drop_target/field_drop_target.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
 
 import '../../../../helpers/manual_combat_playback_clock.dart';
@@ -29,8 +30,12 @@ const benchCat = CharacterCopy(stars: 1, character: cat);
 const fieldDog = CharacterCopy(stars: 1, character: dog);
 const fieldSheep = CharacterCopy(stars: 1, character: sheep);
 
-Future<MatchRepository> showGameScreen(WidgetTester tester, {List<Placement> placements = const []}) async {
-  tester.view.physicalSize = screenSize * 3;
+Future<MatchRepository> showGameScreen(
+  WidgetTester tester, {
+  Size size = screenSize,
+  List<Placement> placements = const [],
+}) async {
+  tester.view.physicalSize = size * 3;
   tester.view.devicePixelRatio = 3;
   addTearDown(tester.view.reset);
 
@@ -62,13 +67,16 @@ Future<MatchRepository> showGameScreen(WidgetTester tester, {List<Placement> pla
     ),
   );
   await tester.pump();
+  await tester.pump();
+  await tester.pump();
 
   return matchRepository;
 }
 
-Offset cellCenterOf(Position position) {
-  final scale = BoardSceneLayout.scaleFor(screenSize.width);
-  return BoardSceneLayout.cellRectOf(backyard.engines.combatEngine.board, position, scale: scale).center;
+Offset cellCenterOf(WidgetTester tester, Position position) {
+  final field = tester.renderObject<RenderBox>(find.byType(FieldDropTarget));
+  final scale = BoardSceneLayout.scaleFor(field.size.width);
+  return field.localToGlobal(BoardSceneLayout.cellRectOf(backyard.engines.combatEngine.board, position, scale: scale).center);
 }
 
 Future<void> dragFromBenchTo(WidgetTester tester, Offset target) =>
@@ -103,7 +111,7 @@ void main() {
     final matchRepository = await showGameScreen(tester);
     const teamPosition = Position(row: 6, column: 1);
 
-    await dragFromBenchTo(tester, cellCenterOf(teamPosition));
+    await dragFromBenchTo(tester, cellCenterOf(tester, teamPosition));
 
     final matchProgress = matchRepository.currentMatchProgress!;
     expect(matchProgress.playerRoster.placements.single.position, teamPosition);
@@ -116,7 +124,7 @@ void main() {
   testWidgets('dropping on the enemy side keeps the animal on the bench and tells why', (tester) async {
     final matchRepository = await showGameScreen(tester);
 
-    await dragFromBenchTo(tester, cellCenterOf(const Position(row: 0, column: 1)));
+    await dragFromBenchTo(tester, cellCenterOf(tester, const Position(row: 0, column: 1)));
 
     expect(matchRepository.currentMatchProgress!.playerRoster.placements, isEmpty);
     expect(find.text('Fora do seu lado do campo'), findsOneWidget);
@@ -135,7 +143,7 @@ void main() {
       placements: [const Placement(position: from, characterCopy: fieldDog)],
     );
 
-    await dragBetween(tester, from: cellCenterOf(from), to: cellCenterOf(to));
+    await dragBetween(tester, from: cellCenterOf(tester, from), to: cellCenterOf(tester, to));
 
     expect(matchRepository.currentMatchProgress!.playerRoster.placements.single.position, to);
 
@@ -153,7 +161,7 @@ void main() {
       ],
     );
 
-    await dragBetween(tester, from: cellCenterOf(dogPosition), to: cellCenterOf(sheepPosition));
+    await dragBetween(tester, from: cellCenterOf(tester, dogPosition), to: cellCenterOf(tester, sheepPosition));
 
     final placements = matchRepository.currentMatchProgress!.playerRoster.placements;
     expect(placements.firstWhere((placement) => placement.characterCopy == fieldDog).position, sheepPosition);
@@ -169,7 +177,7 @@ void main() {
       placements: [const Placement(position: from, characterCopy: fieldDog)],
     );
 
-    await dragBetween(tester, from: cellCenterOf(from), to: tester.getCenter(find.bySemanticsLabel('Banco 3: vazio')));
+    await dragBetween(tester, from: cellCenterOf(tester, from), to: tester.getCenter(find.bySemanticsLabel('Banco 3: vazio')));
 
     final roster = matchRepository.currentMatchProgress!.playerRoster;
     expect(roster.placements, isEmpty);
@@ -179,8 +187,8 @@ void main() {
   });
 
   testWidgets('with the bench open, picking an animal on the field closes the bench and still moves it', (tester) async {
-    const from = Position(row: 6, column: 1);
-    const to = Position(row: 5, column: 2);
+    const from = Position(row: 4, column: 1);
+    const to = Position(row: 4, column: 2);
     final matchRepository = await showGameScreen(
       tester,
       placements: [const Placement(position: from, characterCopy: fieldDog)],
@@ -191,7 +199,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.text('Gato'), findsOneWidget);
 
-    await dragBetween(tester, from: cellCenterOf(from), to: cellCenterOf(to));
+    await dragBetween(tester, from: cellCenterOf(tester, from), to: cellCenterOf(tester, to));
 
     expect(find.text('Gato'), findsNothing);
     expect(matchRepository.currentMatchProgress!.playerRoster.placements.single.position, to);
@@ -206,7 +214,7 @@ void main() {
       placements: [const Placement(position: position, characterCopy: fieldDog)],
     );
 
-    await tester.tapAt(cellCenterOf(position));
+    await tester.tapAt(cellCenterOf(tester, position));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
@@ -220,7 +228,7 @@ void main() {
     final matchRepository = await showGameScreen(tester);
     final enemyPosition = matchRepository.currentMatchProgress!.currentWave.enemies.first.position;
 
-    await tester.tapAt(cellCenterOf(enemyPosition));
+    await tester.tapAt(cellCenterOf(tester, enemyPosition));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 

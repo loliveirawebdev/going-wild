@@ -13,7 +13,8 @@ import 'package:going_wild/ui/game/widgets/match_shelves/match_info_shelf.dart';
 const _shelfSpacing = AppSpacing.space1;
 
 class MatchBottom extends StatefulWidget {
-  const MatchBottom({super.key});
+  final ValueChanged<double> onClosedBenchTopChanged;
+  const MatchBottom({required this.onClosedBenchTopChanged, super.key});
 
   @override
   State<MatchBottom> createState() => _MatchBottomState();
@@ -21,8 +22,33 @@ class MatchBottom extends StatefulWidget {
 
 class _MatchBottomState extends State<MatchBottom> {
   var _isBenchExpanded = false;
+
+  double? _closedBenchHeight;
   bool? _isDraggedCopyOverBench;
+  double? _reportedClosedBenchTop;
   final _benchAreaKey = GlobalKey();
+  final _infoShelfKey = GlobalKey();
+
+  void _reportClosedBenchTop() {
+    final benchArea = _benchAreaKey.currentContext?.findRenderObject() as RenderBox?;
+    final infoShelf = _infoShelfKey.currentContext?.findRenderObject() as RenderBox?;
+    if (benchArea == null || infoShelf == null || !benchArea.hasSize || benchArea.size.height == 0) return;
+
+    if (!_isBenchExpanded) _closedBenchHeight ??= benchArea.size.height;
+    final closedBenchHeight = _closedBenchHeight;
+    if (closedBenchHeight == null) return;
+
+    final closedBenchTop =
+        infoShelf.localToGlobal(Offset.zero, ancestor: context.findRenderObject()).dy - _shelfSpacing - closedBenchHeight;
+    if (closedBenchTop == _reportedClosedBenchTop) return;
+
+    _reportedClosedBenchTop = closedBenchTop;
+    widget.onClosedBenchTopChanged(closedBenchTop);
+  }
+
+  void _scheduleClosedBenchTopReport() => WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (mounted) _reportClosedBenchTop();
+  });
 
   void _followDrag(RosterDrag? drag) {
     final globalPosition = drag?.globalPosition;
@@ -57,6 +83,7 @@ class _MatchBottomState extends State<MatchBottom> {
   @override
   Widget build(BuildContext context) {
     final safeAreaBottom = MediaQuery.paddingOf(context).bottom;
+    _scheduleClosedBenchTopReport();
 
     return MultiBlocListener(
       listeners: [
@@ -65,6 +92,7 @@ class _MatchBottomState extends State<MatchBottom> {
           listener: (context, state) => _changeBenchExpansion(false),
         ),
         BlocListener<RosterDragViewModel, RosterDrag?>(listener: (context, drag) => _followDrag(drag)),
+        BlocListener<PreparationBloc, PreparationState>(listener: (context, state) => _scheduleClosedBenchTopReport()),
       ],
       child: Align(
         alignment: Alignment.bottomCenter,
@@ -84,7 +112,7 @@ class _MatchBottomState extends State<MatchBottom> {
                 ),
               ),
 
-              const MatchInfoShelf(),
+              KeyedSubtree(key: _infoShelfKey, child: const MatchInfoShelf()),
               const FightShelf(),
             ],
           ),

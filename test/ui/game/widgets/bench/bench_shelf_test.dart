@@ -60,7 +60,8 @@ Future<MatchRepository> showMatchBottom(WidgetTester tester, {List<CharacterCopy
             BlocProvider(create: (context) => CombatPlaybackBloc(clock: ManualCombatPlaybackClock())),
             BlocProvider(create: (context) => PreparationBloc(matchRepository: matchRepository)..add(const PreparationStarted())),
           ],
-          child: const Scaffold(body: MatchBottom()),
+
+          child: Scaffold(body: MatchBottom(onClosedBenchTopChanged: (closedBenchTop) {})),
         ),
       ),
     ),

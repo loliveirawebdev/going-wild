@@ -12,6 +12,7 @@ class ResultRoundBanner extends RoundBanner {
   final int roundNumber;
   final int coinsGained;
   final int experienceGained;
+
   const ResultRoundBanner({
     required this.livesLost,
     required this.isVictory,
