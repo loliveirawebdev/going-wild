@@ -23,7 +23,12 @@ void main() {
     matchRepository.replaceMatchProgress(
       matchProgress.createCopyWith(
         playerRoster: matchProgress.playerRoster.createCopyWith(
-          placements: const [Placement(position: Position(row: 4, column: 1), characterCopy: CharacterCopy(stars: 2, character: bull))],
+          placements: const [
+            Placement(
+              position: Position(row: 4, column: 1),
+              characterCopy: CharacterCopy(stars: 2, character: bull),
+            ),
+          ],
         ),
       ),
     );

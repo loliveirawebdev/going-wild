@@ -234,9 +234,22 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
+  testWidgets('the predators of the round arrive in a puff of smoke that goes away by itself', (tester) async {
+    final matchRepository = await showGameScreen(tester);
+    final enemyCount = matchRepository.currentMatchProgress!.currentWave.enemies.length;
+
+    expect(find.byType(SummonPoof), findsNWidgets(enemyCount));
+
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.byType(SummonPoof), findsNothing);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('a quick tap on a predator opens its sheet without the sale', (tester) async {
     final matchRepository = await showGameScreen(tester);
     final enemyPosition = matchRepository.currentMatchProgress!.currentWave.enemies.first.position;
+    await tester.pump(const Duration(seconds: 1));
 
     await tester.tapAt(cellCenterOf(tester, enemyPosition));
     await tester.pump();

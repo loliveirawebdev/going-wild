@@ -19,6 +19,7 @@ import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/combat_units_layer.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/damage/enemy_damage_numbers_layer.dart';
+import 'package:going_wild/ui/game/widgets/match_field/combat/projectiles/ranged_attacks_layer.dart';
 import 'package:going_wild/ui/game/widgets/match_field/drop_target/field_drop_target.dart';
 import 'package:going_wild/ui/game/widgets/match_field/rejection/field_rejection_toast.dart';
 import 'package:going_wild/ui/game/widgets/match_field/summons/field_summon_poofs.dart';
@@ -129,6 +130,12 @@ class _MatchFieldState extends State<MatchField> {
               scale: scale,
               combatFrame: combatFrame,
               matchProgress: matchProgress,
+            ),
+          ),
+          Positioned.fill(
+            child: RangedAttacksLayer(
+              scale: scale,
+              board: matchProgress.phase.engines.combatEngine.board,
             ),
           ),
           Positioned.fill(
