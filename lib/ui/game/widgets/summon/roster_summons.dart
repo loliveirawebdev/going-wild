@@ -1,11 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:going_wild/domain/models/match_progress/match_progress.dart';
-import 'package:going_wild/domain/models/match_progress/round_stage.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
-import 'package:going_wild/ui/game/widgets/summon/summoned_slots.dart';
 
 typedef SummonFinished<SlotKey> = void Function(SlotKey slotKey, int summonId);
 
@@ -20,32 +17,12 @@ class RosterSummons<SlotKey extends Object> extends StatefulWidget {
 
 class _RosterSummonsState<SlotKey extends Object> extends State<RosterSummons<SlotKey>> {
   var _nextSummonId = 0;
-
-  MatchProgress? _lastMatchProgress;
   final _summonIds = <SlotKey, int>{};
 
-  @override
-  void initState() {
-    super.initState();
-    final preparationState = context.read<PreparationBloc>().state;
-    if (preparationState is ReadyPreparationState) _lastMatchProgress = preparationState.matchProgress;
-  }
-
   void _followPreparation(BuildContext context, PreparationState preparationState) {
-    if (preparationState is! ReadyPreparationState) return;
+    if (preparationState is! ReadyPreparationState || MediaQuery.disableAnimationsOf(context)) return;
 
-    final previousMatchProgress = _lastMatchProgress;
-    final currentMatchProgress = preparationState.matchProgress;
-    _lastMatchProgress = currentMatchProgress;
-
-    final isRearranging =
-        previousMatchProgress?.roundStage == RoundStage.preparing && currentMatchProgress.roundStage == RoundStage.preparing;
-    if (previousMatchProgress == null || !isRearranging || MediaQuery.disableAnimationsOf(context)) return;
-
-    final summonedSlotKeys = summonedSlotsBetween(
-      previous: previousMatchProgress.playerRoster,
-      current: currentMatchProgress.playerRoster,
-    ).map(widget.slotKeyOf).nonNulls;
+    final summonedSlotKeys = preparationState.summonedSlots.map(widget.slotKeyOf).nonNulls;
     if (summonedSlotKeys.isEmpty) return;
 
     setState(() {

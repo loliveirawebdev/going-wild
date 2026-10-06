@@ -26,7 +26,7 @@ bool _isSummoned(
     BoardSlot() => wasOnBench,
     InventorySlot() => wasOnBoard,
   };
-  final hasGainedStar = !wasOnBoard && !wasOnBench && characterCopy.stars > 1;
 
+  final hasGainedStar = !wasOnBoard && !wasOnBench && characterCopy.stars > 1;
   return hasChangedSides || hasGainedStar;
 }

@@ -1,9 +1,10 @@
 part of 'preparation_state.dart';
 
 class ReadyPreparationState extends PreparationState {
-  const ReadyPreparationState({required this.matchProgress, this.rejection});
+  const ReadyPreparationState({required this.matchProgress, this.rejection, this.summonedSlots = const []});
 
   final MatchProgress matchProgress;
+  final List<RosterSlot> summonedSlots;
   final PreparationRejection? rejection;
 
   @override

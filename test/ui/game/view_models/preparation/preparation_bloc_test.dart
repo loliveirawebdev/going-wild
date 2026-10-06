@@ -148,6 +148,28 @@ void main() {
     expect(shownMatchProgress().playerRoster.placements, hasLength(1));
   });
 
+  test('an accepted action publishes the slots where an animal arrives from the other side, nothing else does', () async {
+    await startPreparingStoredMatch();
+    List<RosterSlot> shownSummonedSlots() => (preparationBloc.state as ReadyPreparationState).summonedSlots;
+
+    preparationBloc.add(ShopOfferBought(offerIndex: firstOfferIndexOf(startingMatchProgress)));
+    await settle();
+    expect(shownSummonedSlots(), isEmpty);
+
+    preparationBloc.add(const CopyMovedBetweenRosterSlots(from: inventoryFirstSlot, to: teamHalfSlot));
+    await settle();
+    expect(shownSummonedSlots().map((slot) => slot.toString()), [teamHalfSlot.toString()]);
+
+    const otherTeamSlot = BoardSlot(position: Position(row: 6, column: 1));
+    preparationBloc.add(const CopyMovedBetweenRosterSlots(from: teamHalfSlot, to: otherTeamSlot));
+    await settle();
+    expect(shownSummonedSlots(), isEmpty);
+
+    matchRepository.replaceMatchProgress(shownMatchProgress().createCopyWith());
+    await settle();
+    expect(shownSummonedSlots(), isEmpty);
+  });
+
   test('every preparing action is rejected while the match is fighting', () async {
     final fightingMatchProgress = startFight(startingMatchProgress, recordsHistory: false).fightingMatchProgress;
     matchRepository.replaceMatchProgress(fightingMatchProgress);

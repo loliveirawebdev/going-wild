@@ -5,9 +5,9 @@ import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/roster/roster.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
-import 'package:going_wild/ui/game/widgets/summon/summoned_slots.dart';
+import 'package:going_wild/domain/use_cases/roster/summoned_slots_between.dart';
 
-import '../../../../helpers/inventory_helpers.dart';
+import '../../../helpers/inventory_helpers.dart';
 
 const catCopy = CharacterCopy(stars: 1, character: cat);
 const dogCopy = CharacterCopy(stars: 1, character: dog);

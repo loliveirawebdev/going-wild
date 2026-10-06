@@ -2,9 +2,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/data/repositories/match_repository.dart';
 import 'package:going_wild/domain/models/match_progress/errors/rejected_player_action_error.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
+import 'package:going_wild/domain/models/roster/roster_slot.dart';
 import 'package:going_wild/domain/use_cases/level/buy_experience.dart';
 import 'package:going_wild/domain/use_cases/lineup/move_copy_between_roster_slots.dart';
 import 'package:going_wild/domain/use_cases/lineup/sell_copy_from_roster_slot.dart';
+import 'package:going_wild/domain/use_cases/roster/summoned_slots_between.dart';
 import 'package:going_wild/domain/use_cases/shop/buy_shop_offer.dart';
 import 'package:going_wild/domain/use_cases/shop/reroll_shop.dart';
 import 'package:going_wild/domain/use_cases/shop/toggle_shop_lock.dart';
@@ -19,8 +21,10 @@ import 'package:going_wild/ui/game/view_models/preparation/events/shop_rerolled.
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
 
 class PreparationBloc extends Bloc<PreparationEvent, PreparationState> {
-  final MatchRepository _matchRepository;
   var _nextRejectionId = 0;
+
+  final MatchRepository _matchRepository;
+  final _summonedSlotsByMatchProgress = Expando<List<RosterSlot>>();
 
   PreparationBloc({required this._matchRepository}) : super(const NoMatchPreparationState()) {
     on<PreparationStarted>(_onPreparationStarted);
@@ -38,7 +42,10 @@ class PreparationBloc extends Bloc<PreparationEvent, PreparationState> {
 
     await emit.forEach(
       _matchRepository.matchProgressChanges,
-      onData: (matchProgress) => ReadyPreparationState(matchProgress: matchProgress),
+      onData: (matchProgress) => ReadyPreparationState(
+        matchProgress: matchProgress,
+        summonedSlots: _summonedSlotsByMatchProgress[matchProgress] ?? const [],
+      ),
     );
   }
 
@@ -75,7 +82,14 @@ class PreparationBloc extends Bloc<PreparationEvent, PreparationState> {
     if (matchProgress == null) return;
 
     try {
-      _matchRepository.replaceMatchProgress(playerAction(matchProgress));
+      final changedMatchProgress = playerAction(matchProgress);
+
+      _summonedSlotsByMatchProgress[changedMatchProgress] = summonedSlotsBetween(
+        previous: matchProgress.playerRoster,
+        current: changedMatchProgress.playerRoster,
+      );
+
+      _matchRepository.replaceMatchProgress(changedMatchProgress);
     } on RejectedPlayerActionError catch (error) {
       final rejection = PreparationRejection(id: _nextRejectionId++, error: error, event: event);
       emit(ReadyPreparationState(matchProgress: matchProgress, rejection: rejection));
