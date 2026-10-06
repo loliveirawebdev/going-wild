@@ -18,10 +18,13 @@ import 'package:going_wild/ui/game/view_models/preparation/events/preparation_st
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/view_models/round_banner/round_banner_view_model.dart';
+import 'package:going_wild/ui/game/widgets/bench/bench_shelf.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 import 'package:going_wild/ui/game/widgets/game_screen.dart';
 import 'package:going_wild/ui/game/widgets/match_field/drop_target/field_drop_target.dart';
+import 'package:going_wild/ui/game/widgets/match_field/match_field.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
+import 'package:going_wild/ui/game/widgets/summon/summon_poof.dart';
 
 import '../../../../helpers/manual_combat_playback_clock.dart';
 
@@ -107,7 +110,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('dragging an animal from the bench to a free cell of the team places it there', (tester) async {
+  testWidgets('dragging an animal from the bench to a free cell of the team places it there in a puff of smoke', (tester) async {
     final matchRepository = await showGameScreen(tester);
     const teamPosition = Position(row: 6, column: 1);
 
@@ -117,6 +120,10 @@ void main() {
     expect(matchProgress.playerRoster.placements.single.position, teamPosition);
     expect(matchProgress.playerRoster.inventory.entryAt(0), isNull);
     expect(tester.widgetList<FieldUnitToken>(find.byType(FieldUnitToken)).where((token) => token.side == FieldUnitSide.team), hasLength(1));
+    expect(find.descendant(of: find.byType(MatchField), matching: find.byType(SummonPoof)), findsOneWidget);
+
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byType(SummonPoof), findsNothing);
 
     await tester.pumpWidget(const SizedBox());
   });
@@ -135,7 +142,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('an animal on the field moves to another free cell of the team', (tester) async {
+  testWidgets('an animal on the field moves to another free cell of the team without smoke', (tester) async {
     const from = Position(row: 6, column: 1);
     const to = Position(row: 5, column: 2);
     final matchRepository = await showGameScreen(
@@ -146,6 +153,7 @@ void main() {
     await dragBetween(tester, from: cellCenterOf(tester, from), to: cellCenterOf(tester, to));
 
     expect(matchRepository.currentMatchProgress!.playerRoster.placements.single.position, to);
+    expect(find.byType(SummonPoof), findsNothing);
 
     await tester.pumpWidget(const SizedBox());
   });
@@ -170,7 +178,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('an animal of the field dropped on the bench goes back to it', (tester) async {
+  testWidgets('an animal of the field dropped on the bench goes back to it in a puff of smoke', (tester) async {
     const from = Position(row: 6, column: 1);
     final matchRepository = await showGameScreen(
       tester,
@@ -182,6 +190,7 @@ void main() {
     final roster = matchRepository.currentMatchProgress!.playerRoster;
     expect(roster.placements, isEmpty);
     expect(roster.inventory.entries, contains(fieldDog));
+    expect(find.descendant(of: find.byType(BenchShelf), matching: find.byType(SummonPoof)), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
   });
@@ -203,6 +212,7 @@ void main() {
 
     expect(find.text('Gato'), findsNothing);
     expect(matchRepository.currentMatchProgress!.playerRoster.placements.single.position, to);
+    expect(find.byType(SummonPoof), findsNothing);
 
     await tester.pumpWidget(const SizedBox());
   });

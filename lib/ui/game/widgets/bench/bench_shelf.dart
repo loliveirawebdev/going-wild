@@ -12,6 +12,7 @@ import 'package:going_wild/ui/game/view_models/preparation/states/preparation_st
 import 'package:going_wild/ui/game/widgets/bench/animated_bench.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_handle.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/match_shelf.dart';
+import 'package:going_wild/ui/game/widgets/summon/roster_summons.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/roster_unit_sheet.dart';
 
 class BenchShelf extends StatelessWidget {
@@ -43,18 +44,26 @@ class BenchShelf extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               onTap: isExpanded ? null : () => onExpandedChanged(true),
               child: MatchShelf(
-                child: AnimatedBench(
-                  isExpanded: isExpanded,
-                  benchCopies: benchCopies,
-                  canDragCopies: matchProgress.checkPreparingActions() == null,
-                  onCopyMoved: (fromIndex, toIndex) => _moveCopy(context, matchProgress, fromIndex, toIndex),
-                  onBoardCopyDropped: (fromPosition, toIndex) => _moveBoardCopyToBench(context, matchProgress, fromPosition, toIndex),
+                child: RosterSummons<int>(
+                  slotKeyOf: (slot) => switch (slot) {
+                    InventorySlot(:final index) => index,
+                    BoardSlot() => null,
+                  },
+                  builder: (context, summonIds, onSummonFinished) => AnimatedBench(
+                    summonIds: summonIds,
+                    isExpanded: isExpanded,
+                    benchCopies: benchCopies,
+                    onSummonFinished: onSummonFinished,
+                    canDragCopies: matchProgress.checkPreparingActions() == null,
+                    onCopyMoved: (fromIndex, toIndex) => _moveCopy(context, matchProgress, fromIndex, toIndex),
+                    onBoardCopyDropped: (fromPosition, toIndex) => _moveBoardCopyToBench(context, matchProgress, fromPosition, toIndex),
 
-                  onSlotPressed: (slotIndex, characterCopy) => presentRosterUnitSheet(
-                    context,
-                    matchProgress: matchProgress,
-                    characterCopy: characterCopy,
-                    rosterSlot: InventorySlot(index: slotIndex),
+                    onSlotPressed: (slotIndex, characterCopy) => presentRosterUnitSheet(
+                      context,
+                      matchProgress: matchProgress,
+                      characterCopy: characterCopy,
+                      rosterSlot: InventorySlot(index: slotIndex),
+                    ),
                   ),
                 ),
               ),

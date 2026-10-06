@@ -25,10 +25,12 @@ class DraggableBenchSlot extends StatelessWidget {
     required this.canDrag,
     super.key,
     this.onPressed,
+    this.summonId,
   });
 
   final bool canDrag;
   final int slotIndex;
+  final int? summonId;
   final double nameOpacity;
   final Offset slideOffset;
   final VoidCallback? onPressed;
@@ -55,6 +57,7 @@ class DraggableBenchSlot extends StatelessWidget {
 
       builder: (context, candidates, rejections) {
         final slot = BenchSlot(
+          summonId: summonId,
           onPressed: onPressed,
           nameOpacity: nameOpacity,
           slotNumber: slotIndex + 1,

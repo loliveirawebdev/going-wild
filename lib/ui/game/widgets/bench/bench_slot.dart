@@ -6,6 +6,7 @@ import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/localization/character_name.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_unit.dart';
+import 'package:going_wild/ui/game/widgets/summon/summon_appear.dart';
 
 const _innerRadius = BorderRadius.all(Radius.circular(8 - AppBorderWidth.thin));
 const _dropTargetDuration = Duration(milliseconds: 120);
@@ -18,9 +19,11 @@ class BenchSlot extends StatelessWidget {
     required this.characterCopy,
     super.key,
     this.onPressed,
+    this.summonId,
     this.isDropTarget = false,
   });
 
+  final int? summonId;
   final int slotNumber;
   final bool isDropTarget;
   final double nameOpacity;
@@ -47,9 +50,12 @@ class BenchSlot extends StatelessWidget {
             ),
             child: characterCopy == null
                 ? null
-                : ClipRRect(
-                    borderRadius: _innerRadius,
-                    child: BenchUnit(nameOpacity: nameOpacity, characterCopy: characterCopy),
+                : SummonAppear(
+                    summonId: summonId,
+                    child: ClipRRect(
+                      borderRadius: _innerRadius,
+                      child: BenchUnit(nameOpacity: nameOpacity, characterCopy: characterCopy),
+                    ),
                   ),
           ),
         ),

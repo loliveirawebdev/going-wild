@@ -4,14 +4,19 @@ import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_layout.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_shop_tile.dart';
 import 'package:going_wild/ui/game/widgets/bench/draggable_bench_slot.dart';
+import 'package:going_wild/ui/game/widgets/summon/roster_summons.dart';
+import 'package:going_wild/ui/game/widgets/summon/summon_poof.dart';
 
 const _expansionDuration = Duration(milliseconds: 420);
 const _swapDuration = Duration(milliseconds: 220);
+const _poofToSlotSide = 1.3;
 
 class AnimatedBench extends StatefulWidget {
   const AnimatedBench({
+    required this.summonIds,
     required this.isExpanded,
     required this.benchCopies,
+    required this.onSummonFinished,
     required this.onCopyMoved,
     required this.onSlotPressed,
     required this.onBoardCopyDropped,
@@ -21,7 +26,9 @@ class AnimatedBench extends StatefulWidget {
 
   final bool isExpanded;
   final bool canDragCopies;
+  final Map<int, int> summonIds;
   final List<CharacterCopy?> benchCopies;
+  final SummonFinished<int> onSummonFinished;
   final void Function(Position fromPosition, int toIndex) onBoardCopyDropped;
   final bool Function(int fromIndex, int toIndex) onCopyMoved;
   final void Function(int slotIndex, CharacterCopy characterCopy) onSlotPressed;
@@ -136,11 +143,24 @@ class _AnimatedBenchState extends State<AnimatedBench> with TickerProviderStateM
                   rect: layout.shopRect,
                   child: BenchShopTile(size: layout.shopRect.size, radius: layout.shopRadius),
                 ),
+                for (final MapEntry(key: slotIndex, value: summonId) in widget.summonIds.entries)
+                  _buildSummonPoof(slotIndex, summonId, layout),
               ],
             ),
           );
         },
       ),
+    );
+  }
+
+  Widget _buildSummonPoof(int slotIndex, int summonId, BenchLayout layout) {
+    final slotRect = layout.slotRectOf(slotIndex);
+    final poofSize = slotRect.longestSide * _poofToSlotSide;
+
+    return Positioned.fromRect(
+      key: ValueKey(('summon', summonId)),
+      rect: Rect.fromCenter(center: slotRect.center, width: poofSize, height: poofSize),
+      child: SummonPoof(size: poofSize, onDone: () => widget.onSummonFinished(slotIndex, summonId)),
     );
   }
 
@@ -150,6 +170,7 @@ class _AnimatedBenchState extends State<AnimatedBench> with TickerProviderStateM
     return DraggableBenchSlot(
       slotIndex: slotIndex,
       characterCopy: characterCopy,
+      summonId: widget.summonIds[slotIndex],
       canDrag: widget.canDragCopies,
       nameOpacity: layout.nameOpacity,
       slideOffset: _slideOffsetOf(slotIndex, layout),

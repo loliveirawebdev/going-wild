@@ -20,8 +20,10 @@ import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_mode
 import 'package:going_wild/ui/game/widgets/match_field/combat/combat_units_layer.dart';
 import 'package:going_wild/ui/game/widgets/match_field/drop_target/field_drop_target.dart';
 import 'package:going_wild/ui/game/widgets/match_field/rejection/field_rejection_toast.dart';
+import 'package:going_wild/ui/game/widgets/match_field/summons/field_summon_poofs.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/enemy_units_layer.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/team_units_layer.dart';
+import 'package:going_wild/ui/game/widgets/summon/roster_summons.dart';
 
 const _toastDuration = Duration(milliseconds: 1800);
 
@@ -74,18 +76,36 @@ class _MatchFieldState extends State<MatchField> {
         if (preparationState is! ReadyPreparationState) return const SizedBox.shrink();
         final matchProgress = preparationState.matchProgress;
 
-        return BlocBuilder<CombatPlaybackBloc, CombatPlaybackState>(
-          builder: (context, playbackState) => BlocBuilder<RosterDragViewModel, RosterDrag?>(
-            buildWhen: (previous, current) =>
-                previous?.draggedSlot != current?.draggedSlot || previous?.hoveredPosition != current?.hoveredPosition,
-            builder: (context, drag) => _buildLayers(matchProgress, _combatFrameOf(matchProgress, playbackState), drag),
+        return RosterSummons<Position>(
+          slotKeyOf: (slot) => switch (slot) {
+            BoardSlot(:final position) => position,
+            InventorySlot() => null,
+          },
+          builder: (context, summonIds, onSummonFinished) => BlocBuilder<CombatPlaybackBloc, CombatPlaybackState>(
+            builder: (context, playbackState) => BlocBuilder<RosterDragViewModel, RosterDrag?>(
+              buildWhen: (previous, current) =>
+                  previous?.draggedSlot != current?.draggedSlot || previous?.hoveredPosition != current?.hoveredPosition,
+              builder: (context, drag) => _buildLayers(
+                drag: drag,
+                summonIds: summonIds,
+                matchProgress: matchProgress,
+                onSummonFinished: onSummonFinished,
+                combatFrame: _combatFrameOf(matchProgress, playbackState),
+              ),
+            ),
           ),
         );
       },
     );
   }
 
-  Widget _buildLayers(MatchProgress matchProgress, CombatReplayFrame? combatFrame, RosterDrag? drag) {
+  Widget _buildLayers({
+    required RosterDrag? drag,
+    required MatchProgress matchProgress,
+    required Map<Position, int> summonIds,
+    required CombatReplayFrame? combatFrame,
+    required SummonFinished<Position> onSummonFinished,
+  }) {
     final scale = widget.scale;
     final rejection = _rejection;
     final isDragActive = drag != null;
@@ -113,6 +133,7 @@ class _MatchFieldState extends State<MatchField> {
           Positioned.fill(
             child: TeamUnitsLayer(
               scale: scale,
+              summonIds: summonIds,
               isDragActive: isDragActive,
               matchProgress: matchProgress,
             ),
@@ -125,6 +146,14 @@ class _MatchFieldState extends State<MatchField> {
                 matchProgress: matchProgress,
               ),
             ),
+          Positioned.fill(
+            child: FieldSummonPoofs(
+              scale: scale,
+              summonIds: summonIds,
+              onSummonFinished: onSummonFinished,
+              board: matchProgress.phase.engines.combatEngine.board,
+            ),
+          ),
         ],
 
         if (rejection != null)
