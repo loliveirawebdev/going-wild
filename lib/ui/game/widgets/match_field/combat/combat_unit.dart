@@ -23,12 +23,10 @@ class CombatUnit extends StatelessWidget {
       side: combatant.faction == Faction.team ? FieldUnitSide.team : FieldUnitSide.enemy,
     );
 
-    if (combatant.isAlive) return unit;
-
     return AnimatedOpacity(
-      opacity: _fallenOpacity,
       duration: _fadeDuration,
-      child: ColorFiltered(colorFilter: AppColorFilters.inactiveIcon, child: unit),
+      opacity: combatant.isAlive ? 1 : _fallenOpacity,
+      child: ColorFiltered(colorFilter: combatant.isAlive ? AppColorFilters.none : AppColorFilters.inactiveIcon, child: unit),
     );
   }
 }

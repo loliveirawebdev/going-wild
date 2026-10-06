@@ -6,6 +6,7 @@ import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_border_width.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
+import 'package:going_wild/ui/core/widgets/segmented_fill.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
 import 'package:going_wild/ui/core/design/game_icon.dart';
 import 'package:going_wild/ui/core/localization/formatted_number.dart';
@@ -16,7 +17,6 @@ const _iconSize = 20.0;
 const _barHeight = 6.0;
 const _barBorderWidth = 1.5;
 const _barRadius = BorderRadius.all(Radius.circular(4));
-const _barResolution = 1000;
 
 const _labelStyle = TextStyle(
   fontSize: 11,
@@ -101,8 +101,6 @@ class UnitStatGrid extends StatelessWidget {
 
 double _fractionOf(double value, double maxValue) => maxValue <= 0 ? 0 : (value / maxValue).clamp(0, 1);
 
-typedef _BarSegment = ({double fraction, Color color});
-
 class _StatTile extends StatelessWidget {
   const _StatTile({required this.icon, required this.label, required this.value, this.maxValue, this.barSegments});
 
@@ -110,7 +108,7 @@ class _StatTile extends StatelessWidget {
   final String value;
   final GameIcon icon;
   final String? maxValue;
-  final List<_BarSegment>? barSegments;
+  final List<FillSegment>? barSegments;
 
   @override
   Widget build(BuildContext context) {
@@ -149,9 +147,7 @@ class _StatTile extends StatelessWidget {
 class _StatBar extends StatelessWidget {
   const _StatBar({required this.segments});
 
-  final List<_BarSegment> segments;
-
-  double get _emptyFraction => 1 - segments.fold(0.0, (sum, segment) => sum + segment.fraction);
+  final List<FillSegment> segments;
 
   @override
   Widget build(BuildContext context) {
@@ -163,18 +159,7 @@ class _StatBar extends StatelessWidget {
         borderRadius: _barRadius,
         border: Border.all(color: AppColors.outline, width: _barBorderWidth),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (final segment in segments)
-            if (segment.fraction > 0)
-              Expanded(
-                flex: (segment.fraction * _barResolution).round(),
-                child: ColoredBox(color: segment.color),
-              ),
-          if (_emptyFraction > 0) Spacer(flex: (_emptyFraction * _barResolution).round()),
-        ],
-      ),
+      child: SegmentedFill(segments: segments),
     );
   }
 }

@@ -91,7 +91,7 @@ void main() {
     await fastestPlayback.close();
   });
 
-  test('changing the speed while playing keeps the current tick', () async {
+  test('changing the speed while playing keeps the current tick without replaying what already happened', () async {
     final combatPlaybackBloc = await startedPlayback(clock);
     clock.beat();
     await settle();
@@ -99,6 +99,7 @@ void main() {
     combatPlaybackBloc.add(const CombatPlaybackSpeedChanged(speed: CombatPlaybackSpeed.fast));
     await settle();
     expect(playingStateOf(combatPlaybackBloc).currentTick, 1);
+    expect(playingStateOf(combatPlaybackBloc).entriesSincePreviousTick, isEmpty);
 
     clock.beat();
     await settle();

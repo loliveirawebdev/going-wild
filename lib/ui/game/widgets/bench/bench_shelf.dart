@@ -82,13 +82,12 @@ class BenchShelf extends StatelessWidget {
     context.read<PreparationBloc>().add(CopyMovedBetweenRosterSlots(to: to, from: from));
   }
 
-  bool _moveCopy(BuildContext context, MatchProgress matchProgress, int fromIndex, int toIndex) {
+  void _moveCopy(BuildContext context, MatchProgress matchProgress, int fromIndex, int toIndex) {
     final from = InventorySlot(index: fromIndex);
     final to = InventorySlot(index: toIndex);
-    if (checkMovingCopyBetweenRosterSlots(matchProgress, to: to, from: from) != null) return false;
+    if (checkMovingCopyBetweenRosterSlots(matchProgress, to: to, from: from) != null) return;
 
     context.read<PreparationBloc>().add(CopyMovedBetweenRosterSlots(to: to, from: from));
-    return true;
   }
 
   List<CharacterCopy?> _benchCopiesOf(Inventory<CharacterCopy> inventory) => [

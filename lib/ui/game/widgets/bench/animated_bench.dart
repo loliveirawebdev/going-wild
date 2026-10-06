@@ -30,7 +30,7 @@ class AnimatedBench extends StatefulWidget {
   final List<CharacterCopy?> benchCopies;
   final SummonFinished<int> onSummonFinished;
   final void Function(Position fromPosition, int toIndex) onBoardCopyDropped;
-  final bool Function(int fromIndex, int toIndex) onCopyMoved;
+  final void Function(int fromIndex, int toIndex) onCopyMoved;
   final void Function(int slotIndex, CharacterCopy characterCopy) onSlotPressed;
 
   @override
@@ -38,7 +38,7 @@ class AnimatedBench extends StatefulWidget {
 }
 
 class _AnimatedBenchState extends State<AnimatedBench> with TickerProviderStateMixin {
-  ({int fromIndex, int toIndex, CharacterCopy movedCopy})? _pendingMove;
+  int? _dropTargetIndex;
   ({int fromIndex, int toIndex})? _swapSlide;
   late final _swapController = AnimationController(vsync: this, duration: _swapDuration);
   late final _swap = CurvedAnimation(parent: _swapController, curve: Curves.easeOutCubic);
@@ -54,7 +54,7 @@ class _AnimatedBenchState extends State<AnimatedBench> with TickerProviderStateM
   @override
   void didUpdateWidget(AnimatedBench oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _finishPendingMove();
+    _slideDisplacedCopy(oldWidget.benchCopies);
 
     if (widget.isExpanded == oldWidget.isExpanded) return;
 
@@ -66,29 +66,29 @@ class _AnimatedBenchState extends State<AnimatedBench> with TickerProviderStateM
     _expansionController.reverse();
   }
 
-  void _finishPendingMove() {
-    final pendingMove = _pendingMove;
-    if (pendingMove == null || !identical(widget.benchCopies[pendingMove.toIndex], pendingMove.movedCopy)) return;
+  void _slideDisplacedCopy(List<CharacterCopy?> previousCopies) {
+    final dropTargetIndex = _dropTargetIndex;
+    final hasBenchChanged = [
+      for (final (slotIndex, characterCopy) in widget.benchCopies.indexed) identical(characterCopy, previousCopies[slotIndex]),
+    ].contains(false);
+    if (dropTargetIndex == null || !hasBenchChanged) return;
 
-    _pendingMove = null;
-    if (widget.benchCopies[pendingMove.fromIndex] == null) return;
+    _dropTargetIndex = null;
+    final displacedCopy = previousCopies[dropTargetIndex];
+    final displacedIndex = widget.benchCopies.indexWhere(
+      (characterCopy) => characterCopy != null && identical(characterCopy, displacedCopy),
+    );
+    if (displacedIndex == -1 || displacedIndex == dropTargetIndex) return;
 
-    _swapSlide = (fromIndex: pendingMove.toIndex, toIndex: pendingMove.fromIndex);
+    _swapSlide = (fromIndex: dropTargetIndex, toIndex: displacedIndex);
     _swapController.forward(from: 0);
   }
 
   void _moveCopy(int fromIndex, int toIndex) {
-    final movedCopy = widget.benchCopies[fromIndex];
-    if (movedCopy == null || !widget.onCopyMoved(fromIndex, toIndex)) return;
-    setState(() => _pendingMove = (fromIndex: fromIndex, toIndex: toIndex, movedCopy: movedCopy));
-  }
+    if (widget.benchCopies[fromIndex] == null) return;
 
-  CharacterCopy? _shownCopyAt(int slotIndex) {
-    final pendingMove = _pendingMove;
-    if (pendingMove == null) return widget.benchCopies[slotIndex];
-    if (slotIndex == pendingMove.fromIndex) return null;
-    if (slotIndex == pendingMove.toIndex) return widget.benchCopies[pendingMove.fromIndex];
-    return widget.benchCopies[slotIndex];
+    _dropTargetIndex = toIndex;
+    widget.onCopyMoved(fromIndex, toIndex);
   }
 
   List<int> _slotIndicesInPaintOrder() {
@@ -165,7 +165,7 @@ class _AnimatedBenchState extends State<AnimatedBench> with TickerProviderStateM
   }
 
   Widget _buildSlot(int slotIndex, BenchLayout layout) {
-    final characterCopy = _shownCopyAt(slotIndex);
+    final characterCopy = widget.benchCopies[slotIndex];
 
     return DraggableBenchSlot(
       slotIndex: slotIndex,

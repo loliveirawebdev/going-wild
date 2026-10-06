@@ -31,7 +31,7 @@ class PlayingCombatPlaybackState extends CombatPlaybackState {
   PlayingCombatPlaybackState createCopyWithSpeed(CombatPlaybackSpeed speed) => PlayingCombatPlaybackState(
     speed: speed,
     currentTick: currentTick,
-    previousTick: previousTick,
+    previousTick: currentTick,
     combatReplay: combatReplay,
   );
 

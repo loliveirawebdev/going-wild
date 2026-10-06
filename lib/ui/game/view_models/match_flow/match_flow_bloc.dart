@@ -28,7 +28,7 @@ class MatchFlowBloc extends Bloc<MatchFlowEvent, MatchFlowState> {
 
   void _onFightingStarted(FightingStarted event, Emitter<MatchFlowState> emit) {
     final matchProgress = _matchRepository.currentMatchProgress;
-    if (state is! PreparingMatchFlowState || matchProgress == null) return;
+    if (state is! PreparingMatchFlowState || matchProgress == null || checkStartingFight(matchProgress) != null) return;
     final startedFight = startFight(matchProgress, recordsHistory: true);
 
     _matchRepository.replaceMatchProgress(startedFight.fightingMatchProgress);

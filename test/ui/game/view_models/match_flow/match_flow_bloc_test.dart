@@ -65,6 +65,19 @@ void main() {
 
   group('fighting', () {
     blocTest<MatchFlowBloc, MatchFlowState>(
+      'a fight that can no longer start is ignored instead of throwing',
+      setUp: () {
+        storeStartedMatch(backyard);
+        final matchProgress = matchRepository.currentMatchProgress!;
+        matchRepository.replaceMatchProgress(matchProgress.createCopyWith(roundStage: RoundStage.fighting));
+      },
+      build: buildMatchFlowBloc,
+      seed: () => const PreparingMatchFlowState(),
+      act: (matchFlowBloc) => matchFlowBloc.add(const FightingStarted()),
+      expect: () => <MatchFlowState>[],
+    );
+
+    blocTest<MatchFlowBloc, MatchFlowState>(
       'starting a fight stores the match as fighting and holds the result until the playback finishes',
       setUp: () => storeStartedMatch(backyard),
       build: buildMatchFlowBloc,

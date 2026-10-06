@@ -5,6 +5,7 @@ import 'package:going_wild/domain/models/combat_history/replay/combat_replay_com
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
+import 'package:going_wild/ui/core/widgets/segmented_fill.dart';
 import 'package:going_wild/ui/core/widgets/stars.dart';
 
 const _healthBarHeight = 5.0;
@@ -77,10 +78,8 @@ class FieldUnitStatus extends StatelessWidget {
 
 class _Bar extends StatelessWidget {
   final double height;
-  final List<({double fraction, Color color})> segments;
+  final List<FillSegment> segments;
   const _Bar({required this.height, required this.segments});
-
-  double get _emptyFraction => 1 - segments.fold(0.0, (sum, segment) => sum + segment.fraction);
 
   @override
   Widget build(BuildContext context) {
@@ -92,18 +91,8 @@ class _Bar extends StatelessWidget {
         borderRadius: AppRadius.pill,
         border: Border.all(color: AppColors.wood700, width: _barBorderWidth),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          for (final segment in segments)
-            if (segment.fraction > 0)
-              Expanded(
-                flex: (segment.fraction * 1000).round(),
-                child: ColoredBox(color: segment.color),
-              ),
-          if (_emptyFraction > 0) Spacer(flex: (_emptyFraction * 1000).round()),
-        ],
-      ),
+
+      child: SegmentedFill(segments: segments),
     );
   }
 }
