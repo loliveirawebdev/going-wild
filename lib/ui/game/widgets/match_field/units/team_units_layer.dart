@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:going_wild/domain/models/board/position.dart';
+import 'package:going_wild/domain/models/combat_history/replay/combat_replay_combatant.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
@@ -15,6 +16,7 @@ class TeamUnitsLayer extends StatelessWidget {
     required this.summonIds,
     required this.isDragActive,
     required this.matchProgress,
+    required this.startingCombatants,
     super.key,
   });
 
@@ -22,11 +24,11 @@ class TeamUnitsLayer extends StatelessWidget {
   final bool isDragActive;
   final MatchProgress matchProgress;
   final Map<Position, int> summonIds;
+  final Map<Position, CombatReplayCombatant> startingCombatants;
 
   @override
   Widget build(BuildContext context) {
-    final engines = matchProgress.phase.engines;
-    final board = engines.combatEngine.board;
+    final board = matchProgress.phase.engines.combatEngine.board;
 
     return Stack(
       children: [
@@ -40,9 +42,7 @@ class TeamUnitsLayer extends StatelessWidget {
 
                 child: DraggableFieldUnit(
                   position: placement.position,
-                  vitals: startingVitalsOf(
-                    engines.characterEngine.statsAtStars(placement.characterCopy.character, stars: placement.characterCopy.stars),
-                  ),
+                  vitals: combatVitalsOf(startingCombatants[placement.position]!),
                   isAnotherDragActive: isDragActive,
                   diameter: fieldTokenDiameterFor(scale),
                   characterCopy: placement.characterCopy,
@@ -50,6 +50,7 @@ class TeamUnitsLayer extends StatelessWidget {
                     context,
                     matchProgress: matchProgress,
                     characterCopy: placement.characterCopy,
+                    stats: startingCombatants[placement.position]!.stats,
                     rosterSlot: BoardSlot(position: placement.position),
                   ),
                 ),

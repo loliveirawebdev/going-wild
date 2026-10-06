@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
+import 'package:going_wild/domain/models/character/stats/stats.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
 import 'package:going_wild/domain/use_cases/lineup/sell_copy_from_roster_slot.dart';
@@ -17,6 +18,7 @@ Future<void> presentRosterUnitSheet(
   required RosterSlot rosterSlot,
   required MatchProgress matchProgress,
   required CharacterCopy characterCopy,
+  Stats? stats,
 }) {
   final preparationBloc = context.read<PreparationBloc>();
   final engines = matchProgress.phase.engines;
@@ -24,6 +26,7 @@ Future<void> presentRosterUnitSheet(
 
   return presentUnitSheet(
     context,
+    stats: stats,
     engines: engines,
     side: UnitSide.team,
     characterCopy: characterCopy,

@@ -1,6 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:going_wild/domain/models/character/stats/stat.dart';
-import 'package:going_wild/domain/models/character/stats/stats.dart';
 import 'package:going_wild/domain/models/combat_history/replay/combat_replay_combatant.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
@@ -17,12 +15,6 @@ const _mediumHealthFraction = 0.6;
 const _lowHealthFraction = 0.3;
 
 typedef FieldUnitVitals = ({double healthFraction, double shieldFraction, double manaFraction});
-
-FieldUnitVitals startingVitalsOf(Stats stats) => (
-  healthFraction: 1,
-  shieldFraction: 0,
-  manaFraction: _fractionOf(stats[Stat.manaStart], stats[Stat.manaMax]),
-);
 
 FieldUnitVitals combatVitalsOf(CombatReplayCombatant combatant) {
   final healthFraction = _fractionOf(combatant.currentHealth, combatant.maxHealth);

@@ -4,6 +4,7 @@ import 'package:going_wild/content/character/team/team.dart';
 import 'package:going_wild/content/phase/backyard/backyard.dart';
 import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/combat_history/replay/combat_replay_combatant.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage_over_time/damage_over_time_combat_lasting_effect.dart';
@@ -21,9 +22,10 @@ const catCopy = CharacterCopy(stars: 1, character: cat);
 
 CombatReplayCombatant combatantWith({double currentHealth = 230, List<CombatLastingEffect> effects = const []}) => CombatReplayCombatant(
   id: 1,
-  maxMana: 60,
-  maxHealth: 500,
-  attackRange: 1,
+  stats: backyard.engines.characterEngine
+      .statsAtStars(dog, stars: 1)
+      .createCopyWithStat(Stat.health, 500)
+      .createCopyWithStat(Stat.manaMax, 60),
   currentMana: 22,
   faction: Faction.team,
   characterCopy: catCopy,

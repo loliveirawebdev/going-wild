@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/domain/models/board/position.dart';
+import 'package:going_wild/domain/models/combat_history/replay/combat_replay_combatant.dart';
 import 'package:going_wild/domain/models/combat_history/replay/combat_replay_frame.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/match_progress/round_stage.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
+import 'package:going_wild/domain/use_cases/round/starting_combatants_of.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/localization/rejection_message.dart';
 import 'package:going_wild/ui/game/view_models/combat_playback/combat_playback_bloc.dart';
@@ -126,6 +128,11 @@ class _MatchFieldState extends State<MatchField> {
     final scale = widget.scale;
     final rejection = _rejection;
     final isDragActive = drag != null;
+    final startingCombatants = combatFrame != null
+        ? const <Position, CombatReplayCombatant>{}
+        : {
+            for (final combatant in startingCombatantsOf(matchProgress)) combatant.position: CombatReplayCombatant.fromCombatant(combatant),
+          };
 
     return Stack(
       clipBehavior: Clip.none,
@@ -165,6 +172,7 @@ class _MatchFieldState extends State<MatchField> {
             child: TeamUnitsLayer(
               scale: scale,
               summonIds: summonIds,
+              startingCombatants: startingCombatants,
               isDragActive: isDragActive,
               matchProgress: matchProgress,
             ),
@@ -173,6 +181,7 @@ class _MatchFieldState extends State<MatchField> {
             Positioned.fill(
               child: EnemyUnitsLayer(
                 scale: scale,
+                startingCombatants: startingCombatants,
                 isDragActive: isDragActive,
                 matchProgress: matchProgress,
               ),

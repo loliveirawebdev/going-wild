@@ -2,19 +2,19 @@ import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/character/stats/melee_range.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/character/stats/stats.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combatant.dart';
+import 'package:going_wild/domain/models/combatant/current_stat.dart';
 import 'package:going_wild/domain/models/combatant/faction.dart';
 import 'package:meta/meta.dart';
 
 class CombatReplayCombatant {
   const CombatReplayCombatant({
     required this.id,
+    required this.stats,
     required this.faction,
-    required this.maxMana,
     required this.position,
-    required this.maxHealth,
-    required this.attackRange,
     required this.currentMana,
     required this.characterCopy,
     required this.currentHealth,
@@ -25,29 +25,30 @@ class CombatReplayCombatant {
   CombatReplayCombatant.fromCombatant(Combatant combatant)
     : this(
         id: combatant.id,
+        stats: combatant.stats,
         faction: combatant.faction,
         position: combatant.position,
         currentMana: combatant.currentMana,
-        maxMana: combatant.stats[Stat.manaMax],
         characterCopy: combatant.characterCopy,
         currentHealth: combatant.currentHealth,
-        maxHealth: combatant.stats[Stat.health],
-        attackRange: combatant.stats[Stat.range],
         targetCombatantId: combatant.targetCombatantId,
         combatLastingEffects: combatant.combatLastingEffects,
       );
 
   final int id;
+  final Stats stats;
   final Faction faction;
-  final double maxMana;
   final Position position;
-  final double maxHealth;
-  final double attackRange;
   final double currentMana;
   final CharacterCopy characterCopy;
   final double currentHealth;
   final int? targetCombatantId;
   final List<CombatLastingEffect> combatLastingEffects;
+
+  double get maxMana => stats[Stat.manaMax];
+  double get maxHealth => stats[Stat.health];
+  double get attackRange => stats[Stat.range];
+  Stats get currentStats => currentStatsOf(stats: stats, combatLastingEffects: combatLastingEffects);
 
   bool get isAlive => currentHealth > 0;
   bool get isRanged => !isMeleeRange(attackRange);
@@ -62,10 +63,8 @@ class CombatReplayCombatant {
     List<CombatLastingEffect>? combatLastingEffects,
   }) => CombatReplayCombatant(
     id: id,
+    stats: stats,
     faction: faction,
-    maxMana: maxMana,
-    maxHealth: maxHealth,
-    attackRange: attackRange,
     characterCopy: characterCopy,
     position: position ?? this.position,
     currentMana: currentMana ?? this.currentMana,

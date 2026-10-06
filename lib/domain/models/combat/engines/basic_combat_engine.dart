@@ -47,7 +47,7 @@ class BasicCombatEngine extends CombatEngine {
     required Random randomGenerator,
     required List<Placement> enemies,
   }) {
-    final combatants = _buildCombatants(team: team, enemies: enemies);
+    final combatants = startingCombatantsOf(team: team, enemies: enemies);
     final combatantIds = combatants.map((combatant) => combatant.id).toList();
 
     final startingCombat = Combat(
@@ -70,7 +70,8 @@ class BasicCombatEngine extends CombatEngine {
     return combatInProgress.createCombatResult(winningFaction: _winningFactionOf(combatInProgress.combat));
   }
 
-  List<Combatant> _buildCombatants({required List<Placement> team, required List<Placement> enemies}) {
+  @override
+  List<Combatant> startingCombatantsOf({required List<Placement> team, required List<Placement> enemies}) {
     var nextCombatantId = 1;
     final teamActiveSets = setEngine.activeSets(team.map((placement) => placement.characterCopy.character).toList());
 

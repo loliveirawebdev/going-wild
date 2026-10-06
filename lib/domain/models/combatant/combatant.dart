@@ -1,8 +1,8 @@
 import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
-import 'package:going_wild/domain/models/character/stats/stat_modification.dart';
 import 'package:going_wild/domain/models/character/stats/stats.dart';
+import 'package:going_wild/domain/models/combatant/current_stat.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/faction.dart';
 import 'package:meta/meta.dart';
@@ -41,16 +41,7 @@ class Combatant {
   bool get isTargetable => isAlive && !combatLastingEffects.any((combatLastingEffect) => combatLastingEffect.preventsBeingTargeted);
   double get currentShield => combatLastingEffects.fold(0, (sum, combatLastingEffect) => sum + combatLastingEffect.absorbableDamage);
 
-  double getCurrentStat(Stat stat) {
-    if (combatLastingEffects.isEmpty) return stats[stat];
-
-    final relatedStatModifications = combatLastingEffects
-        .map((combatLastingEffect) => combatLastingEffect.statModification)
-        .nonNulls
-        .where((statModification) => statModification.stat == stat);
-
-    return applyStatModifications(stats[stat], relatedStatModifications);
-  }
+  double getCurrentStat(Stat stat) => currentStatOf(stat, stats: stats, combatLastingEffects: combatLastingEffects);
 
   @useResult
   Combatant createCopyWith({

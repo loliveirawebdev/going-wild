@@ -9,6 +9,7 @@ import 'package:going_wild/data/repositories/match_repository.dart';
 import 'package:going_wild/domain/models/board/placement.dart';
 import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/use_cases/round/start_match.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/localization/configure_plural_resolvers.dart';
@@ -243,6 +244,33 @@ void main() {
 
     await tester.pump(const Duration(seconds: 1));
     expect(find.byType(SummonPoof), findsNothing);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('the sheet of an animal on the field shows its stats with the active set bonuses', (tester) async {
+    const bullPosition = Position(row: 6, column: 1);
+    await showGameScreen(
+      tester,
+      placements: [
+        const Placement(
+          position: bullPosition,
+          characterCopy: CharacterCopy(stars: 1, character: bull),
+        ),
+        const Placement(
+          position: Position(row: 6, column: 2),
+          characterCopy: CharacterCopy(stars: 1, character: horse),
+        ),
+      ],
+    );
+    final baseHealth = backyard.engines.characterEngine.statsAtStars(bull, stars: 1)[Stat.health];
+
+    await tester.tapAt(cellCenterOf(tester, bullPosition));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('${(baseHealth * 1.15).round()}'), findsOneWidget);
+    expect(find.text('${baseHealth.round()}'), findsNothing);
 
     await tester.pumpWidget(const SizedBox());
   });

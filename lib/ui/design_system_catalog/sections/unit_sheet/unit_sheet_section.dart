@@ -113,11 +113,9 @@ CombatReplayCombatant _combatantOf(
 
   return CombatReplayCombatant(
     id: 1,
+    stats: stats,
     faction: Faction.team,
-    attackRange: stats[Stat.range],
-    maxMana: stats[Stat.manaMax],
     characterCopy: characterCopy,
-    maxHealth: stats[Stat.health],
     combatLastingEffects: effects,
     targetCombatantId: null,
     currentMana: stats[Stat.manaMax] * mana,

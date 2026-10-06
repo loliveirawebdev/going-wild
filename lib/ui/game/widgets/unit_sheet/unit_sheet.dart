@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/character/stats/stats.dart';
 import 'package:going_wild/domain/models/combat_history/replay/combat_replay_combatant.dart';
 import 'package:going_wild/domain/models/phase/phase_engines.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
@@ -32,21 +33,31 @@ Future<void> presentUnitSheet(
   required PhaseEngines engines,
   required CharacterCopy characterCopy,
   UnitSale? sale,
+  Stats? stats,
 }) {
   return presentDialog<void>(
     context,
     barrierLabel: context.t.game.unitSheet.closeButton,
-    dialog: UnitSheet(side: side, sale: sale, engines: engines, characterCopy: characterCopy),
+    dialog: UnitSheet(side: side, sale: sale, stats: stats, engines: engines, characterCopy: characterCopy),
   );
 }
 
 class UnitSheet extends StatelessWidget {
-  const UnitSheet({required this.side, required this.engines, required this.characterCopy, super.key, this.sale, this.combatant});
+  const UnitSheet({
+    required this.side,
+    required this.engines,
+    required this.characterCopy,
+    super.key,
+    this.sale,
+    this.stats,
+    this.combatant,
+  });
 
   final UnitSide side;
   final UnitSale? sale;
   final PhaseEngines engines;
   final CharacterCopy characterCopy;
+  final Stats? stats;
   final CombatReplayCombatant? combatant;
 
   @override
@@ -54,7 +65,7 @@ class UnitSheet extends StatelessWidget {
     final sale = this.sale;
     final combatant = this.combatant;
     final character = characterCopy.character;
-    final stats = engines.characterEngine.statsAtStars(character, stars: characterCopy.stars);
+    final stats = combatant?.currentStats ?? this.stats ?? engines.characterEngine.statsAtStars(character, stars: characterCopy.stars);
 
     return DefaultTextStyle(
       style: AppTextStyles.body,
