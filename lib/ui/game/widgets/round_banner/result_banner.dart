@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:going_wild/domain/models/round_result/round_result.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_border_width.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
@@ -10,7 +11,6 @@ import 'package:going_wild/ui/core/design/app_text_styles.dart';
 import 'package:going_wild/ui/core/design/game_icon.dart';
 import 'package:going_wild/ui/core/widgets/game_icon_image.dart';
 import 'package:going_wild/ui/core/widgets/pop_in.dart';
-import 'package:going_wild/ui/game/view_models/round_banner/round_banner.dart';
 import 'package:going_wild/ui/game/widgets/round_banner/banner_ribbon.dart';
 import 'package:going_wild/ui/game/widgets/round_banner/reward_pill.dart';
 import 'package:going_wild/ui/game/widgets/round_banner/victory_rays.dart';
@@ -34,8 +34,8 @@ const _subtitleStyle = TextStyle(
 
 class ResultBanner extends StatefulWidget {
   final VoidCallback onDone;
-  final ResultRoundBanner resultBanner;
-  const ResultBanner({required this.onDone, required this.resultBanner, super.key});
+  final RoundResult roundResult;
+  const ResultBanner({required this.onDone, required this.roundResult, super.key});
 
   @override
   State<ResultBanner> createState() => _ResultBannerState();
@@ -58,8 +58,8 @@ class _ResultBannerState extends State<ResultBanner> {
 
   @override
   Widget build(BuildContext context) {
-    final resultBanner = widget.resultBanner;
-    final isVictory = resultBanner.isVictory;
+    final roundResult = widget.roundResult;
+    final isVictory = roundResult.isVictory;
     final translations = context.t.game.roundBanner;
     final popDuration = MediaQuery.disableAnimationsOf(context) ? Duration.zero : _badgePopDuration;
 
@@ -86,7 +86,7 @@ class _ResultBannerState extends State<ResultBanner> {
                     : BannerRibbon(tone: BannerRibbonTone.defeat, title: translations.defeatTitle),
               ),
               Text(
-                isVictory ? translations.victorySubtitle(round: resultBanner.roundNumber) : translations.defeatSubtitle,
+                isVictory ? translations.victorySubtitle(round: roundResult.roundNumber) : translations.defeatSubtitle,
                 textAlign: TextAlign.center,
                 style: _subtitleStyle,
               ),
@@ -106,23 +106,23 @@ class _ResultBannerState extends State<ResultBanner> {
 
   List<Widget> _buildRewards(BuildContext context) {
     final translations = context.t.game.roundBanner;
-    final resultBanner = widget.resultBanner;
-    final coinsPill = resultBanner.coinsGained > 0
+    final roundResult = widget.roundResult;
+    final coinsPill = roundResult.coinsGained > 0
         ? RewardPill(
             icon: GameIcon.gold,
-            value: '+${resultBanner.coinsGained}',
-            label: translations.coins(count: resultBanner.coinsGained),
+            value: '+${roundResult.coinsGained}',
+            label: translations.coins(count: roundResult.coinsGained),
           )
         : null;
 
-    if (!resultBanner.isVictory) {
+    if (!roundResult.isVictory) {
       return [
-        if (resultBanner.livesLost > 0)
+        if (roundResult.livesLost > 0)
           RewardPill(
             isNegative: true,
             icon: GameIcon.heart,
-            value: '−${resultBanner.livesLost}',
-            label: translations.lives(count: resultBanner.livesLost),
+            value: '−${roundResult.livesLost}',
+            label: translations.lives(count: roundResult.livesLost),
           ),
         ?coinsPill,
       ];
@@ -130,8 +130,8 @@ class _ResultBannerState extends State<ResultBanner> {
 
     return [
       ?coinsPill,
-      if (resultBanner.experienceGained > 0)
-        RewardPill(icon: GameIcon.experience, value: '+${resultBanner.experienceGained}', label: translations.experience),
+      if (roundResult.experienceGained > 0)
+        RewardPill(icon: GameIcon.experience, value: '+${roundResult.experienceGained}', label: translations.experience),
     ];
   }
 }

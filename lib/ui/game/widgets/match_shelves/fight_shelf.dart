@@ -14,9 +14,10 @@ import 'package:going_wild/ui/game/view_models/combat_playback/combat_playback_b
 import 'package:going_wild/ui/game/view_models/combat_playback/combat_playback_speed.dart';
 import 'package:going_wild/ui/game/view_models/combat_playback/events/combat_playback_speed_changed.dart';
 import 'package:going_wild/ui/game/view_models/combat_playback/states/combat_playback_state.dart';
+import 'package:going_wild/ui/game/view_models/match_flow/events/fight_requested.dart';
+import 'package:going_wild/ui/game/view_models/match_flow/match_flow_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
-import 'package:going_wild/ui/game/view_models/round_banner/round_banner_view_model.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/match_shelf.dart';
 
 const _speedLabelStyle = TextStyle(
@@ -70,7 +71,7 @@ class _FightButton extends StatelessWidget {
       variant: ButtonVariant.primary,
       label: context.t.game.fightShelf.fightButton,
       disabledReason: rejection == null ? null : rejectionMessageOf(context.t, rejection),
-      onPressed: rejection == null ? context.read<RoundBannerViewModel>().startCountdown : null,
+      onPressed: rejection == null ? () => context.read<MatchFlowBloc>().add(const FightRequested()) : null,
     );
   }
 }

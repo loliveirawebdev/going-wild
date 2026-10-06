@@ -10,11 +10,14 @@ import 'package:going_wild/domain/models/match_progress/round_stage.dart';
 import 'package:going_wild/domain/models/phase/phase.dart';
 import 'package:going_wild/domain/models/phase/phase_id.dart';
 import 'package:going_wild/domain/models/phase/phase_status.dart';
+import 'package:going_wild/domain/use_cases/round/round_result_of.dart';
 import 'package:going_wild/domain/use_cases/round/start_fight.dart';
 import 'package:going_wild/domain/use_cases/round/start_match.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/events/fighting_playback_finished.dart';
-import 'package:going_wild/ui/game/view_models/match_flow/events/fighting_started.dart';
+import 'package:going_wild/ui/game/view_models/match_flow/events/countdown_finished.dart';
+import 'package:going_wild/ui/game/view_models/match_flow/events/fight_requested.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/events/match_started.dart';
+import 'package:going_wild/ui/game/view_models/match_flow/events/round_result_dismissed.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/match_flow_bloc.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/states/match_flow_state.dart';
 
@@ -32,10 +35,28 @@ void main() {
   void storeStartedMatch(Phase phase) => matchRepository.replaceMatchProgress(startMatch(phase, randomGenerator: Random(seed)));
 
   FightingMatchFlowState fightingStateOfStoredMatch() {
-    final startedFight = startFight(matchRepository.currentMatchProgress!, recordsHistory: true);
+    final matchProgress = matchRepository.currentMatchProgress!;
+    final startedFight = startFight(matchProgress, recordsHistory: true);
     matchRepository.replaceMatchProgress(startedFight.fightingMatchProgress);
 
-    return FightingMatchFlowState(combatResult: startedFight.combatResult, matchProgressAfterFight: startedFight.matchProgressAfterFight);
+    return FightingMatchFlowState(
+      matchProgressBeforeFight: matchProgress,
+      combatResult: startedFight.combatResult,
+      matchProgressAfterFight: startedFight.matchProgressAfterFight,
+    );
+  }
+
+  ShowingRoundResultMatchFlowState roundResultStateOfStoredMatch() {
+    final fightingState = fightingStateOfStoredMatch();
+
+    return ShowingRoundResultMatchFlowState(
+      matchProgressAfterFight: fightingState.matchProgressAfterFight,
+      roundResult: roundResultOf(
+        combatResult: fightingState.combatResult,
+        matchProgressAfterFight: fightingState.matchProgressAfterFight,
+        matchProgressBeforeFight: fightingState.matchProgressBeforeFight,
+      ),
+    );
   }
 
   group('starting', () {
@@ -63,29 +84,60 @@ void main() {
     );
   });
 
-  group('fighting', () {
+  group('counting down', () {
     blocTest<MatchFlowBloc, MatchFlowState>(
-      'a fight that can no longer start is ignored instead of throwing',
+      'asking to fight while preparing starts the countdown without touching the match yet',
+      setUp: () => storeStartedMatch(backyard),
+      build: buildMatchFlowBloc,
+      seed: () => const PreparingMatchFlowState(),
+      act: (matchFlowBloc) => matchFlowBloc.add(const FightRequested()),
+      expect: () => [isA<CountingDownMatchFlowState>()],
+      verify: (_) => expect(matchRepository.currentMatchProgress!.roundStage, RoundStage.preparing),
+    );
+
+    blocTest<MatchFlowBloc, MatchFlowState>(
+      'asking to fight before the match starts or while a countdown runs is ignored',
+      setUp: () => storeStartedMatch(backyard),
+      build: buildMatchFlowBloc,
+      seed: () => const CountingDownMatchFlowState(),
+      act: (matchFlowBloc) => matchFlowBloc.add(const FightRequested()),
+      expect: () => <MatchFlowState>[],
+    );
+
+    blocTest<MatchFlowBloc, MatchFlowState>(
+      'a countdown that ends when the fight can no longer start goes back to preparing instead of throwing',
       setUp: () {
         storeStartedMatch(backyard);
         final matchProgress = matchRepository.currentMatchProgress!;
         matchRepository.replaceMatchProgress(matchProgress.createCopyWith(roundStage: RoundStage.fighting));
       },
       build: buildMatchFlowBloc,
-      seed: () => const PreparingMatchFlowState(),
-      act: (matchFlowBloc) => matchFlowBloc.add(const FightingStarted()),
-      expect: () => <MatchFlowState>[],
+      seed: () => const CountingDownMatchFlowState(),
+      act: (matchFlowBloc) => matchFlowBloc.add(const CountdownFinished()),
+      expect: () => [isA<PreparingMatchFlowState>()],
     );
 
     blocTest<MatchFlowBloc, MatchFlowState>(
-      'starting a fight stores the match as fighting and holds the result until the playback finishes',
+      'a countdown that finishes outside the countdown is ignored',
       setUp: () => storeStartedMatch(backyard),
       build: buildMatchFlowBloc,
       seed: () => const PreparingMatchFlowState(),
-      act: (matchFlowBloc) => matchFlowBloc.add(const FightingStarted()),
+      act: (matchFlowBloc) => matchFlowBloc.add(const CountdownFinished()),
+      expect: () => <MatchFlowState>[],
+    );
+  });
+
+  group('fighting', () {
+    blocTest<MatchFlowBloc, MatchFlowState>(
+      'the end of the countdown stores the match as fighting and holds what comes after until the playback finishes',
+      setUp: () => storeStartedMatch(backyard),
+      build: buildMatchFlowBloc,
+      seed: () => const CountingDownMatchFlowState(),
+      act: (matchFlowBloc) => matchFlowBloc.add(const CountdownFinished()),
       expect: () => [
         isA<FightingMatchFlowState>()
             .having((state) => state.combatResult.history.entries, 'history', isNotEmpty)
+            .having((state) => state.matchProgressBeforeFight.currentRoundNumber, 'round before the fight', 1)
             .having((state) => state.matchProgressAfterFight.currentRoundNumber, 'round after the fight', 2),
       ],
       verify: (_) {
@@ -95,41 +147,15 @@ void main() {
     );
 
     blocTest<MatchFlowBloc, MatchFlowState>(
-      'fighting before the match starts is ignored',
-      build: buildMatchFlowBloc,
-      act: (matchFlowBloc) => matchFlowBloc.add(const FightingStarted()),
-      expect: () => <MatchFlowState>[],
-    );
-
-    blocTest<MatchFlowBloc, MatchFlowState>(
-      'a second fight is ignored while fighting',
-      setUp: () => storeStartedMatch(backyard),
-      build: buildMatchFlowBloc,
-      seed: fightingStateOfStoredMatch,
-      act: (matchFlowBloc) => matchFlowBloc.add(const FightingStarted()),
-      expect: () => <MatchFlowState>[],
-    );
-
-    blocTest<MatchFlowBloc, MatchFlowState>(
-      'when the fight playback finishes the match after the fight is stored and the next round is prepared',
+      'when the playback finishes the round result is shown while the match still holds the fight',
       setUp: () => storeStartedMatch(backyard),
       build: buildMatchFlowBloc,
       seed: fightingStateOfStoredMatch,
       act: (matchFlowBloc) => matchFlowBloc.add(const FightingPlaybackFinished()),
-      expect: () => [isA<PreparingMatchFlowState>()],
-      verify: (_) {
-        expect(matchRepository.currentMatchProgress!.currentRoundNumber, 2);
-        expect(matchRepository.currentMatchProgress!.roundStage, RoundStage.preparing);
-      },
-    );
-
-    blocTest<MatchFlowBloc, MatchFlowState>(
-      'when the playback of the last round finishes the match ends',
-      setUp: () => storeStartedMatch(singleWavePhase),
-      build: buildMatchFlowBloc,
-      seed: fightingStateOfStoredMatch,
-      act: (matchFlowBloc) => matchFlowBloc.add(const FightingPlaybackFinished()),
-      expect: () => [isA<EndedMatchFlowState>().having((state) => state.phaseStatus, 'status', isNot(PhaseStatus.inProgress))],
+      expect: () => [
+        isA<ShowingRoundResultMatchFlowState>().having((state) => state.roundResult.roundNumber, 'round of the result', 1),
+      ],
+      verify: (_) => expect(matchRepository.currentMatchProgress!.roundStage, RoundStage.fighting),
     );
 
     blocTest<MatchFlowBloc, MatchFlowState>(
@@ -138,6 +164,41 @@ void main() {
       seed: () => const PreparingMatchFlowState(),
       act: (matchFlowBloc) => matchFlowBloc.add(const FightingPlaybackFinished()),
       expect: () => <MatchFlowState>[],
+    );
+  });
+
+  group('round result', () {
+    blocTest<MatchFlowBloc, MatchFlowState>(
+      'closing the result stores the match after the fight and prepares the next round',
+      setUp: () => storeStartedMatch(backyard),
+      build: buildMatchFlowBloc,
+      seed: roundResultStateOfStoredMatch,
+      act: (matchFlowBloc) => matchFlowBloc.add(const RoundResultDismissed()),
+      expect: () => [isA<PreparingMatchFlowState>()],
+      verify: (_) {
+        expect(matchRepository.currentMatchProgress!.currentRoundNumber, 2);
+        expect(matchRepository.currentMatchProgress!.roundStage, RoundStage.preparing);
+      },
+    );
+
+    blocTest<MatchFlowBloc, MatchFlowState>(
+      'closing the result of the last round ends the match',
+      setUp: () => storeStartedMatch(singleWavePhase),
+      build: buildMatchFlowBloc,
+      seed: roundResultStateOfStoredMatch,
+      act: (matchFlowBloc) => matchFlowBloc.add(const RoundResultDismissed()),
+      expect: () => [isA<EndedMatchFlowState>().having((state) => state.phaseStatus, 'status', isNot(PhaseStatus.inProgress))],
+    );
+
+    blocTest<MatchFlowBloc, MatchFlowState>(
+      'closing a result twice or outside the result is ignored',
+      setUp: () => storeStartedMatch(backyard),
+      build: buildMatchFlowBloc,
+      seed: roundResultStateOfStoredMatch,
+      act: (matchFlowBloc) => matchFlowBloc
+        ..add(const RoundResultDismissed())
+        ..add(const RoundResultDismissed()),
+      expect: () => [isA<PreparingMatchFlowState>()],
     );
   });
 }

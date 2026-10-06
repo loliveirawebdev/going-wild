@@ -8,23 +8,24 @@ import 'package:going_wild/data/repositories/match_repository.dart';
 import 'package:going_wild/domain/models/match_progress/round_stage.dart';
 import 'package:going_wild/ui/game/view_models/combat_playback/combat_playback_bloc.dart';
 import 'package:going_wild/ui/game/view_models/combat_playback/states/combat_playback_state.dart';
-import 'package:going_wild/ui/game/view_models/match_flow/events/fighting_started.dart';
+import 'package:going_wild/ui/game/view_models/match_flow/events/countdown_finished.dart';
+import 'package:going_wild/ui/game/view_models/match_flow/events/fight_requested.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/events/match_started.dart';
+import 'package:going_wild/ui/game/view_models/match_flow/events/round_result_dismissed.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/match_flow_bloc.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/states/match_flow_state.dart';
-import 'package:going_wild/ui/game/view_models/round_banner/round_banner.dart';
-import 'package:going_wild/ui/game/view_models/round_banner/round_banner_view_model.dart';
 import 'package:going_wild/ui/game/widgets/combat_playback_bridge.dart';
 
 import '../../../helpers/manual_combat_playback_clock.dart';
 
 void main() {
-  testWidgets('a fight is played back and the match moves on to the next round when the playback finishes', (tester) async {
+  testWidgets('a fight is played back, its result is shown when the playback finishes and closing it moves on to the next round', (
+    tester,
+  ) async {
     final clock = ManualCombatPlaybackClock();
     final matchRepository = MatchRepository();
     final combatPlaybackBloc = CombatPlaybackBloc(clock: clock);
     final matchFlowBloc = MatchFlowBloc(randomGenerator: Random(1), matchRepository: matchRepository);
-    final roundBannerViewModel = RoundBannerViewModel();
 
     await tester.pumpWidget(
       RepositoryProvider(
@@ -34,7 +35,6 @@ void main() {
           providers: [
             BlocProvider(create: (context) => matchFlowBloc),
             BlocProvider(create: (context) => combatPlaybackBloc),
-            BlocProvider(create: (context) => roundBannerViewModel),
           ],
           child: const CombatPlaybackBridge(child: SizedBox()),
         ),
@@ -43,7 +43,9 @@ void main() {
 
     matchFlowBloc.add(const MatchStarted(phase: backyard));
     await tester.pump();
-    matchFlowBloc.add(const FightingStarted());
+    matchFlowBloc
+      ..add(const FightRequested())
+      ..add(const CountdownFinished());
     await tester.pump();
     await tester.pump();
 
@@ -57,10 +59,10 @@ void main() {
     }
 
     await tester.pump();
-    expect(roundBannerViewModel.state, isA<ResultRoundBanner>());
-    expect(matchFlowBloc.state, isA<FightingMatchFlowState>());
+    expect(matchFlowBloc.state, isA<ShowingRoundResultMatchFlowState>());
+    expect(matchRepository.currentMatchProgress!.roundStage, RoundStage.fighting);
 
-    roundBannerViewModel.dismiss();
+    matchFlowBloc.add(const RoundResultDismissed());
     await tester.pump();
     await tester.pump();
 
