@@ -1,10 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/app.dart';
 import 'package:going_wild/content/phase/phases.dart';
+import 'package:going_wild/data/repositories/match_repository.dart';
 import 'package:going_wild/data/repositories/settings_repository.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/routing/router.dart';
+import 'package:going_wild/routing/routes.dart';
 import 'package:going_wild/ui/core/localization/configure_plural_resolvers.dart';
 import 'package:going_wild/ui/core/localization/phase_name.dart';
 import 'package:going_wild/ui/game/widgets/game_screen.dart';
@@ -81,5 +87,23 @@ void main() {
   testWidgets('back from home does not return to the entrypoint', (tester) async {
     await openTheApp(tester);
     expect(find.byType(BackButton), findsNothing);
+  });
+
+  testWidgets('trying a phase again starts a fresh match instead of reusing the old one', (tester) async {
+    await openTheApp(tester);
+    await tester.tap(find.text(t.home.playButton));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(t.phaseSelection.playButton));
+    await tester.pump(const Duration(seconds: 1));
+
+    final gameContext = tester.element(find.byType(GameScreen));
+    final firstMatchRepository = gameContext.read<MatchRepository>();
+
+    unawaited(GoRouter.of(gameContext).pushReplacement(Routes.gameOf(allPhases.first.id)));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+
+    expect(find.byType(GameScreen), findsOneWidget);
+    expect(tester.element(find.byType(GameScreen)).read<MatchRepository>(), isNot(same(firstMatchRepository)));
   });
 }

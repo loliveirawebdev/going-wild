@@ -18,9 +18,9 @@ import 'package:going_wild/ui/game/view_models/preparation/states/preparation_st
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/combat_units_layer.dart';
-import 'package:going_wild/ui/game/widgets/match_field/units/enemy_units_layer.dart';
 import 'package:going_wild/ui/game/widgets/match_field/drop_target/field_drop_target.dart';
 import 'package:going_wild/ui/game/widgets/match_field/rejection/field_rejection_toast.dart';
+import 'package:going_wild/ui/game/widgets/match_field/units/enemy_units_layer.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/team_units_layer.dart';
 
 const _toastDuration = Duration(milliseconds: 1800);
@@ -103,17 +103,30 @@ class _MatchFieldState extends State<MatchField> {
         ),
         if (combatFrame != null)
           Positioned.fill(
-            child: CombatUnitsLayer(scale: scale, combatFrame: combatFrame, matchProgress: matchProgress),
+            child: CombatUnitsLayer(
+              scale: scale,
+              combatFrame: combatFrame,
+              matchProgress: matchProgress,
+            ),
           )
         else ...[
           Positioned.fill(
-            child: TeamUnitsLayer(scale: scale, isDragActive: isDragActive, matchProgress: matchProgress),
+            child: TeamUnitsLayer(
+              scale: scale,
+              isDragActive: isDragActive,
+              matchProgress: matchProgress,
+            ),
           ),
           if (matchProgress.isInProgress)
             Positioned.fill(
-              child: EnemyUnitsLayer(scale: scale, isDragActive: isDragActive, matchProgress: matchProgress),
+              child: EnemyUnitsLayer(
+                scale: scale,
+                isDragActive: isDragActive,
+                matchProgress: matchProgress,
+              ),
             ),
         ],
+
         if (rejection != null)
           PositionedFieldRejectionToast(
             scale: scale,

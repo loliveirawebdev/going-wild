@@ -18,8 +18,9 @@ class SparkPlacement {
 }
 
 class TwinklingSpark extends StatelessWidget {
-  const TwinklingSpark({required this.placement, required this.sparkCycle, super.key});
+  const TwinklingSpark({required this.placement, required this.sparkCycle, super.key, this.painter = const SparkPainter()});
 
+  final SparkPainter painter;
   final SparkPlacement placement;
   final Animation<double>? sparkCycle;
 
@@ -27,7 +28,7 @@ class TwinklingSpark extends StatelessWidget {
   Widget build(BuildContext context) {
     final sparkImage = SizedBox.square(
       dimension: placement.size,
-      child: const CustomPaint(painter: SparkPainter()),
+      child: CustomPaint(painter: painter),
     );
     final sparkCycle = this.sparkCycle;
     if (sparkCycle == null) return sparkImage;

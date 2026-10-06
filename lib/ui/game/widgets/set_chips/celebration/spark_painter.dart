@@ -5,7 +5,9 @@ const _sparkStrokeWidth = 2.0;
 const _sparkViewBoxSize = 24.0;
 
 class SparkPainter extends CustomPainter {
-  const SparkPainter();
+  final Color fillColor;
+  final Color strokeColor;
+  const SparkPainter({this.fillColor = AppColors.sun400, this.strokeColor = AppColors.sun600});
 
   static final _sparkPath = Path()
     ..moveTo(12, 2)
@@ -21,17 +23,17 @@ class SparkPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.scale(size.width / _sparkViewBoxSize);
-    canvas.drawPath(_sparkPath, Paint()..color = AppColors.sun400);
+    canvas.drawPath(_sparkPath, Paint()..color = fillColor);
     canvas.drawPath(
       _sparkPath,
       Paint()
         ..style = PaintingStyle.stroke
-        ..color = AppColors.sun600
+        ..color = strokeColor
         ..strokeJoin = StrokeJoin.round
         ..strokeWidth = _sparkStrokeWidth,
     );
   }
 
   @override
-  bool shouldRepaint(SparkPainter oldDelegate) => false;
+  bool shouldRepaint(SparkPainter oldDelegate) => oldDelegate.fillColor != fillColor || oldDelegate.strokeColor != strokeColor;
 }

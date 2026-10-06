@@ -267,6 +267,10 @@ class _Translations$game$en implements Translations$game$pt {
   @override
   late final _Translations$game$fightShelf$en fightShelf = _Translations$game$fightShelf$en._(_root);
   @override
+  late final _Translations$game$roundBanner$en roundBanner = _Translations$game$roundBanner$en._(_root);
+  @override
+  late final _Translations$game$phaseResult$en phaseResult = _Translations$game$phaseResult$en._(_root);
+  @override
   late final _Translations$game$bench$en bench = _Translations$game$bench$en._(_root);
   @override
   late final _Translations$game$unitSheet$en unitSheet = _Translations$game$unitSheet$en._(_root);
@@ -662,6 +666,68 @@ class _Translations$game$fightShelf$en implements Translations$game$fightShelf$p
   String get fightButton => 'Fight!';
   @override
   String get speedLabel => 'Speed';
+}
+
+// Path: game.roundBanner
+class _Translations$game$roundBanner$en implements Translations$game$roundBanner$pt {
+  _Translations$game$roundBanner$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get countdownLabel => 'Fight in';
+  @override
+  String get goTitle => 'Fight!';
+  @override
+  String get victoryTitle => 'Victory!';
+  @override
+  String get defeatTitle => 'Defeat';
+  @override
+  String victorySubtitle({required Object round}) => 'Round ${round} won';
+  @override
+  String get defeatSubtitle => 'A youngling was taken';
+  @override
+  String coins({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+    count,
+    one: 'coin',
+    other: 'coins',
+  );
+  @override
+  String get experience => 'XP';
+  @override
+  String lives({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+    count,
+    one: 'life',
+    other: 'lives',
+  );
+}
+
+// Path: game.phaseResult
+class _Translations$game$phaseResult$en implements Translations$game$phaseResult$pt {
+  _Translations$game$phaseResult$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get victoryTitle => 'Phase cleared!';
+  @override
+  String get defeatTitle => 'Phase lost';
+  @override
+  String phaseNumber({required Object number}) => 'Phase ${number}';
+  @override
+  String get roundsLabel => 'Rounds';
+  @override
+  String get livesLabel => 'Lives';
+  @override
+  String get defeatMessage => 'The predators took the younglings. Build another team and try again!';
+  @override
+  String get continueButton => 'Continue';
+  @override
+  String get retryButton => 'Try again';
+  @override
+  String get backButton => 'Back to phases';
 }
 
 // Path: game.bench
@@ -1145,6 +1211,32 @@ extension on TranslationsEn {
       'game.infoShelf.teamOnFieldLabel' => ({required Object count, required Object limit}) => '${count} of ${limit} animals on the field',
       'game.fightShelf.fightButton' => 'Fight!',
       'game.fightShelf.speedLabel' => 'Speed',
+      'game.roundBanner.countdownLabel' => 'Fight in',
+      'game.roundBanner.goTitle' => 'Fight!',
+      'game.roundBanner.victoryTitle' => 'Victory!',
+      'game.roundBanner.defeatTitle' => 'Defeat',
+      'game.roundBanner.victorySubtitle' => ({required Object round}) => 'Round ${round} won',
+      'game.roundBanner.defeatSubtitle' => 'A youngling was taken',
+      'game.roundBanner.coins' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+        count,
+        one: 'coin',
+        other: 'coins',
+      ),
+      'game.roundBanner.experience' => 'XP',
+      'game.roundBanner.lives' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+        count,
+        one: 'life',
+        other: 'lives',
+      ),
+      'game.phaseResult.victoryTitle' => 'Phase cleared!',
+      'game.phaseResult.defeatTitle' => 'Phase lost',
+      'game.phaseResult.phaseNumber' => ({required Object number}) => 'Phase ${number}',
+      'game.phaseResult.roundsLabel' => 'Rounds',
+      'game.phaseResult.livesLabel' => 'Lives',
+      'game.phaseResult.defeatMessage' => 'The predators took the younglings. Build another team and try again!',
+      'game.phaseResult.continueButton' => 'Continue',
+      'game.phaseResult.retryButton' => 'Try again',
+      'game.phaseResult.backButton' => 'Back to phases',
       'game.bench.occupiedSlot' => ({
         required Object slot,
         required Object name,

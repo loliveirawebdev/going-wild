@@ -15,8 +15,10 @@ import 'package:going_wild/ui/game/view_models/match_flow/match_flow_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/events/preparation_started.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
+import 'package:going_wild/ui/game/view_models/round_banner/round_banner_view_model.dart';
 import 'package:going_wild/ui/game/widgets/combat_playback_bridge.dart';
 import 'package:going_wild/ui/game/widgets/game_screen.dart';
+import 'package:going_wild/ui/game/widgets/round_banner/countdown_banner.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/combat_unit.dart';
 
 import '../../../../helpers/manual_combat_playback_clock.dart';
@@ -38,6 +40,7 @@ Future<(MatchRepository, CombatPlaybackBloc, ManualCombatPlaybackClock)> showMat
           child: MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => RosterDragViewModel()),
+              BlocProvider(create: (context) => RoundBannerViewModel()),
               BlocProvider(create: (context) => combatPlaybackBloc),
               BlocProvider(create: (context) => PreparationBloc(matchRepository: matchRepository)..add(const PreparationStarted())),
               BlocProvider(
@@ -66,7 +69,16 @@ void main() {
 
     await tester.tap(find.text('Lutar!'));
     await tester.pump();
-    await tester.pump();
+    expect(find.text('Combate em'), findsOneWidget);
+    expect(find.descendant(of: find.byType(CountdownBanner), matching: find.text('3')), findsOneWidget);
+
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.descendant(of: find.byType(CountdownBanner), matching: find.text('2')), findsOneWidget);
+    await tester.pump(const Duration(seconds: 2));
+    expect(find.text('Lutem!'), findsOneWidget);
+
+    await tester.pump(const Duration(milliseconds: 800));
+    await tester.pump(const Duration(milliseconds: 300));
     await tester.pump();
 
     expect(find.text('Lutar!'), findsNothing);
@@ -91,6 +103,11 @@ void main() {
       await tester.pump();
     }
     await tester.pump();
+    expect(find.text('Derrota'), findsOneWidget);
+    expect(find.text('−1'), findsOneWidget);
+
+    await tester.pump(const Duration(milliseconds: 2400));
+    await tester.pump(const Duration(milliseconds: 300));
     await tester.pump();
 
     expect(matchRepository.currentMatchProgress!.currentRoundNumber, 2);

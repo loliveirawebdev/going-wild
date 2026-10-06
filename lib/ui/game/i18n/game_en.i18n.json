@@ -49,6 +49,34 @@
     "fightButton": "Fight!",
     "speedLabel": "Speed"
   },
+  "roundBanner": {
+    "countdownLabel": "Fight in",
+    "goTitle": "Fight!",
+    "victoryTitle": "Victory!",
+    "defeatTitle": "Defeat",
+    "victorySubtitle": "Round $round won",
+    "defeatSubtitle": "A youngling was taken",
+    "coins(param=count)": {
+      "one": "coin",
+      "other": "coins"
+    },
+    "experience": "XP",
+    "lives(param=count)": {
+      "one": "life",
+      "other": "lives"
+    }
+  },
+  "phaseResult": {
+    "victoryTitle": "Phase cleared!",
+    "defeatTitle": "Phase lost",
+    "phaseNumber": "Phase $number",
+    "roundsLabel": "Rounds",
+    "livesLabel": "Lives",
+    "defeatMessage": "The predators took the younglings. Build another team and try again!",
+    "continueButton": "Continue",
+    "retryButton": "Try again",
+    "backButton": "Back to phases"
+  },
   "bench": {
     "occupiedSlot": "Bench $slot: $name, $stars",
     "emptySlot": "Bench $slot: empty",

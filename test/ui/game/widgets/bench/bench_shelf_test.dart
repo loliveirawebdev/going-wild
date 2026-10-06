@@ -15,6 +15,7 @@ import 'package:going_wild/ui/game/view_models/combat_playback/combat_playback_b
 import 'package:going_wild/ui/game/view_models/preparation/events/preparation_started.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
+import 'package:going_wild/ui/game/view_models/round_banner/round_banner_view_model.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_shop_tile.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_slot.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/match_bottom.dart';
@@ -55,6 +56,7 @@ Future<MatchRepository> showMatchBottom(WidgetTester tester, {List<CharacterCopy
         home: MultiBlocProvider(
           providers: [
             BlocProvider(create: (context) => RosterDragViewModel()),
+            BlocProvider(create: (context) => RoundBannerViewModel()),
             BlocProvider(create: (context) => CombatPlaybackBloc(clock: ManualCombatPlaybackClock())),
             BlocProvider(create: (context) => PreparationBloc(matchRepository: matchRepository)..add(const PreparationStarted())),
           ],

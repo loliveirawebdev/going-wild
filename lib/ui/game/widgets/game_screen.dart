@@ -6,6 +6,8 @@ import 'package:going_wild/ui/game/widgets/board_scene/board_scene.dart';
 import 'package:going_wild/ui/game/widgets/match_field/match_field.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/match_bottom.dart';
 import 'package:going_wild/ui/game/widgets/match_top_bar/match_top_bar.dart';
+import 'package:going_wild/ui/game/widgets/phase_result/phase_result_overlay.dart';
+import 'package:going_wild/ui/game/widgets/round_banner/round_banner_overlay.dart';
 import 'package:going_wild/ui/game/widgets/set_chips/set_chip_row.dart';
 
 class GameScreen extends StatelessWidget {
@@ -41,6 +43,8 @@ class GameScreen extends StatelessWidget {
               ),
             ),
             const Positioned.fill(child: MatchBottom()),
+            const Positioned.fill(child: RoundBannerOverlay()),
+            const Positioned.fill(child: PhaseResultOverlay()),
           ],
         ),
       ),

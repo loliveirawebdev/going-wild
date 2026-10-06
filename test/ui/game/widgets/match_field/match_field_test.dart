@@ -13,9 +13,11 @@ import 'package:going_wild/domain/use_cases/round/start_match.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/localization/configure_plural_resolvers.dart';
 import 'package:going_wild/ui/game/view_models/combat_playback/combat_playback_bloc.dart';
+import 'package:going_wild/ui/game/view_models/match_flow/match_flow_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/events/preparation_started.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
+import 'package:going_wild/ui/game/view_models/round_banner/round_banner_view_model.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 import 'package:going_wild/ui/game/widgets/game_screen.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
@@ -47,6 +49,10 @@ Future<MatchRepository> showGameScreen(WidgetTester tester, {List<Placement> pla
         home: MultiBlocProvider(
           providers: [
             BlocProvider(create: (context) => RosterDragViewModel()),
+            BlocProvider(create: (context) => RoundBannerViewModel()),
+            BlocProvider(
+              create: (context) => MatchFlowBloc(randomGenerator: Random(1), matchRepository: matchRepository),
+            ),
             BlocProvider(create: (context) => CombatPlaybackBloc(clock: ManualCombatPlaybackClock())),
             BlocProvider(create: (context) => PreparationBloc(matchRepository: matchRepository)..add(const PreparationStarted())),
           ],

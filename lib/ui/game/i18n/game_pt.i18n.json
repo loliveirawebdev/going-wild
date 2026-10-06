@@ -49,6 +49,34 @@
     "fightButton": "Lutar!",
     "speedLabel": "Velocidade"
   },
+  "roundBanner": {
+    "countdownLabel": "Combate em",
+    "goTitle": "Lutem!",
+    "victoryTitle": "Vitória!",
+    "defeatTitle": "Derrota",
+    "victorySubtitle": "Rodada $round vencida",
+    "defeatSubtitle": "Levaram um filhote",
+    "coins(param=count)": {
+      "one": "moeda",
+      "other": "moedas"
+    },
+    "experience": "XP",
+    "lives(param=count)": {
+      "one": "vida",
+      "other": "vidas"
+    }
+  },
+  "phaseResult": {
+    "victoryTitle": "Fase vencida!",
+    "defeatTitle": "Fase perdida",
+    "phaseNumber": "Fase $number",
+    "roundsLabel": "Rodadas",
+    "livesLabel": "Vidas",
+    "defeatMessage": "Os predadores levaram os filhotes. Monte outro time e tente de novo!",
+    "continueButton": "Continuar",
+    "retryButton": "Tentar de novo",
+    "backButton": "Voltar às fases"
+  },
   "bench": {
     "occupiedSlot": "Banco $slot: $name, $stars",
     "emptySlot": "Banco $slot: vazio",

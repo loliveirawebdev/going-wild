@@ -297,6 +297,8 @@ class Translations$game$pt {
   late final Translations$game$setDialog$pt setDialog = Translations$game$setDialog$pt._(_root);
   late final Translations$game$infoShelf$pt infoShelf = Translations$game$infoShelf$pt._(_root);
   late final Translations$game$fightShelf$pt fightShelf = Translations$game$fightShelf$pt._(_root);
+  late final Translations$game$roundBanner$pt roundBanner = Translations$game$roundBanner$pt._(_root);
+  late final Translations$game$phaseResult$pt phaseResult = Translations$game$phaseResult$pt._(_root);
   late final Translations$game$bench$pt bench = Translations$game$bench$pt._(_root);
   late final Translations$game$unitSheet$pt unitSheet = Translations$game$unitSheet$pt._(_root);
   late final Translations$game$shop$pt shop = Translations$game$shop$pt._(_root);
@@ -782,6 +784,86 @@ class Translations$game$fightShelf$pt {
 
   /// pt: 'Velocidade'
   String get speedLabel => 'Velocidade';
+}
+
+// Path: game.roundBanner
+class Translations$game$roundBanner$pt {
+  Translations$game$roundBanner$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Combate em'
+  String get countdownLabel => 'Combate em';
+
+  /// pt: 'Lutem!'
+  String get goTitle => 'Lutem!';
+
+  /// pt: 'Vitória!'
+  String get victoryTitle => 'Vitória!';
+
+  /// pt: 'Derrota'
+  String get defeatTitle => 'Derrota';
+
+  /// pt: 'Rodada $round vencida'
+  String victorySubtitle({required Object round}) => 'Rodada ${round} vencida';
+
+  /// pt: 'Levaram um filhote'
+  String get defeatSubtitle => 'Levaram um filhote';
+
+  /// pt: '(one) {moeda} (other) {moedas}'
+  String coins({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+    count,
+    one: 'moeda',
+    other: 'moedas',
+  );
+
+  /// pt: 'XP'
+  String get experience => 'XP';
+
+  /// pt: '(one) {vida} (other) {vidas}'
+  String lives({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+    count,
+    one: 'vida',
+    other: 'vidas',
+  );
+}
+
+// Path: game.phaseResult
+class Translations$game$phaseResult$pt {
+  Translations$game$phaseResult$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Fase vencida!'
+  String get victoryTitle => 'Fase vencida!';
+
+  /// pt: 'Fase perdida'
+  String get defeatTitle => 'Fase perdida';
+
+  /// pt: 'Fase $number'
+  String phaseNumber({required Object number}) => 'Fase ${number}';
+
+  /// pt: 'Rodadas'
+  String get roundsLabel => 'Rodadas';
+
+  /// pt: 'Vidas'
+  String get livesLabel => 'Vidas';
+
+  /// pt: 'Os predadores levaram os filhotes. Monte outro time e tente de novo!'
+  String get defeatMessage => 'Os predadores levaram os filhotes. Monte outro time e tente de novo!';
+
+  /// pt: 'Continuar'
+  String get continueButton => 'Continuar';
+
+  /// pt: 'Tentar de novo'
+  String get retryButton => 'Tentar de novo';
+
+  /// pt: 'Voltar às fases'
+  String get backButton => 'Voltar às fases';
 }
 
 // Path: game.bench
@@ -1340,6 +1422,32 @@ extension on Translations {
       'game.infoShelf.teamOnFieldLabel' => ({required Object count, required Object limit}) => '${count} de ${limit} bichos no campo',
       'game.fightShelf.fightButton' => 'Lutar!',
       'game.fightShelf.speedLabel' => 'Velocidade',
+      'game.roundBanner.countdownLabel' => 'Combate em',
+      'game.roundBanner.goTitle' => 'Lutem!',
+      'game.roundBanner.victoryTitle' => 'Vitória!',
+      'game.roundBanner.defeatTitle' => 'Derrota',
+      'game.roundBanner.victorySubtitle' => ({required Object round}) => 'Rodada ${round} vencida',
+      'game.roundBanner.defeatSubtitle' => 'Levaram um filhote',
+      'game.roundBanner.coins' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+        count,
+        one: 'moeda',
+        other: 'moedas',
+      ),
+      'game.roundBanner.experience' => 'XP',
+      'game.roundBanner.lives' => ({required num count}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+        count,
+        one: 'vida',
+        other: 'vidas',
+      ),
+      'game.phaseResult.victoryTitle' => 'Fase vencida!',
+      'game.phaseResult.defeatTitle' => 'Fase perdida',
+      'game.phaseResult.phaseNumber' => ({required Object number}) => 'Fase ${number}',
+      'game.phaseResult.roundsLabel' => 'Rodadas',
+      'game.phaseResult.livesLabel' => 'Vidas',
+      'game.phaseResult.defeatMessage' => 'Os predadores levaram os filhotes. Monte outro time e tente de novo!',
+      'game.phaseResult.continueButton' => 'Continuar',
+      'game.phaseResult.retryButton' => 'Tentar de novo',
+      'game.phaseResult.backButton' => 'Voltar às fases',
       'game.bench.occupiedSlot' => ({
         required Object slot,
         required Object name,
