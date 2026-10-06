@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/board/position.dart';
+import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_layout.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_shop_tile.dart';
 import 'package:going_wild/ui/game/widgets/bench/draggable_bench_slot.dart';
@@ -15,10 +15,12 @@ class AnimatedBench extends StatefulWidget {
     required this.onCopyMoved,
     required this.onSlotPressed,
     required this.onBoardCopyDropped,
+    required this.canDragCopies,
     super.key,
   });
 
   final bool isExpanded;
+  final bool canDragCopies;
   final List<CharacterCopy?> benchCopies;
   final void Function(Position fromPosition, int toIndex) onBoardCopyDropped;
   final bool Function(int fromIndex, int toIndex) onCopyMoved;
@@ -148,6 +150,7 @@ class _AnimatedBenchState extends State<AnimatedBench> with TickerProviderStateM
     return DraggableBenchSlot(
       slotIndex: slotIndex,
       characterCopy: characterCopy,
+      canDrag: widget.canDragCopies,
       nameOpacity: layout.nameOpacity,
       slideOffset: _slideOffsetOf(slotIndex, layout),
       onBoardCopyDropped: (fromPosition) => widget.onBoardCopyDropped(fromPosition, slotIndex),

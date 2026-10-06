@@ -12,12 +12,15 @@ import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/use_cases/round/start_match.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/localization/configure_plural_resolvers.dart';
+import 'package:going_wild/ui/game/view_models/combat_playback/combat_playback_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/events/preparation_started.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 import 'package:going_wild/ui/game/widgets/game_screen.dart';
-import 'package:going_wild/ui/game/widgets/match_field/field_unit_token.dart';
+import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
+
+import '../../../../helpers/manual_combat_playback_clock.dart';
 
 const screenSize = Size(402, 874);
 const benchCat = CharacterCopy(stars: 1, character: cat);
@@ -44,6 +47,7 @@ Future<MatchRepository> showGameScreen(WidgetTester tester, {List<Placement> pla
         home: MultiBlocProvider(
           providers: [
             BlocProvider(create: (context) => RosterDragViewModel()),
+            BlocProvider(create: (context) => CombatPlaybackBloc(clock: ManualCombatPlaybackClock())),
             BlocProvider(create: (context) => PreparationBloc(matchRepository: matchRepository)..add(const PreparationStarted())),
           ],
           child: const GameScreen(phase: backyard),

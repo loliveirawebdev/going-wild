@@ -22,10 +22,12 @@ class DraggableBenchSlot extends StatelessWidget {
     required this.characterCopy,
     required this.onCopyDropped,
     required this.onBoardCopyDropped,
+    required this.canDrag,
     super.key,
     this.onPressed,
   });
 
+  final bool canDrag;
   final int slotIndex;
   final double nameOpacity;
   final Offset slideOffset;
@@ -71,6 +73,7 @@ class DraggableBenchSlot extends StatelessWidget {
 
         return Draggable<RosterSlot>(
           data: _inventorySlot,
+          maxSimultaneousDrags: canDrag ? 1 : 0,
           dragAnchorStrategy: pointerDragAnchorStrategy,
           onDragEnd: (details) => rosterDragViewModel.stopDragging(),
           onDragStarted: () => rosterDragViewModel.startDragging(_inventorySlot),

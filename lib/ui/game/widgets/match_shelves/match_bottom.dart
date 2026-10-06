@@ -7,6 +7,7 @@ import 'package:going_wild/ui/game/view_models/preparation/states/preparation_st
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_shelf.dart';
+import 'package:going_wild/ui/game/widgets/match_shelves/fight_shelf.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/match_info_shelf.dart';
 
 const _shelfSpacing = AppSpacing.space1;
@@ -82,7 +83,9 @@ class _MatchBottomState extends State<MatchBottom> {
                   onExpandedChanged: _changeBenchExpansion,
                 ),
               ),
+
               const MatchInfoShelf(),
+              const FightShelf(),
             ],
           ),
         ),

@@ -265,6 +265,8 @@ class _Translations$game$en implements Translations$game$pt {
   @override
   late final _Translations$game$infoShelf$en infoShelf = _Translations$game$infoShelf$en._(_root);
   @override
+  late final _Translations$game$fightShelf$en fightShelf = _Translations$game$fightShelf$en._(_root);
+  @override
   late final _Translations$game$bench$en bench = _Translations$game$bench$en._(_root);
   @override
   late final _Translations$game$unitSheet$en unitSheet = _Translations$game$unitSheet$en._(_root);
@@ -647,6 +649,19 @@ class _Translations$game$infoShelf$en implements Translations$game$infoShelf$pt 
   String get teamOnField => 'on field';
   @override
   String teamOnFieldLabel({required Object count, required Object limit}) => '${count} of ${limit} animals on the field';
+}
+
+// Path: game.fightShelf
+class _Translations$game$fightShelf$en implements Translations$game$fightShelf$pt {
+  _Translations$game$fightShelf$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get fightButton => 'Fight!';
+  @override
+  String get speedLabel => 'Speed';
 }
 
 // Path: game.bench
@@ -1128,6 +1143,8 @@ extension on TranslationsEn {
       ),
       'game.infoShelf.teamOnField' => 'on field',
       'game.infoShelf.teamOnFieldLabel' => ({required Object count, required Object limit}) => '${count} of ${limit} animals on the field',
+      'game.fightShelf.fightButton' => 'Fight!',
+      'game.fightShelf.speedLabel' => 'Speed',
       'game.bench.occupiedSlot' => ({
         required Object slot,
         required Object name,

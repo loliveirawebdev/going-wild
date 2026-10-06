@@ -33,8 +33,12 @@ class BenchShelf extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Center(
-              child: BenchHandle(isExpanded: isExpanded, onExpandedChanged: onExpandedChanged),
+              child: BenchHandle(
+                isExpanded: isExpanded,
+                onExpandedChanged: onExpandedChanged,
+              ),
             ),
+
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: isExpanded ? null : () => onExpandedChanged(true),
@@ -42,8 +46,10 @@ class BenchShelf extends StatelessWidget {
                 child: AnimatedBench(
                   isExpanded: isExpanded,
                   benchCopies: benchCopies,
-                  onBoardCopyDropped: (fromPosition, toIndex) => _moveBoardCopyToBench(context, matchProgress, fromPosition, toIndex),
+                  canDragCopies: matchProgress.checkPreparingActions() == null,
                   onCopyMoved: (fromIndex, toIndex) => _moveCopy(context, matchProgress, fromIndex, toIndex),
+                  onBoardCopyDropped: (fromPosition, toIndex) => _moveBoardCopyToBench(context, matchProgress, fromPosition, toIndex),
+
                   onSlotPressed: (slotIndex, characterCopy) => presentRosterUnitSheet(
                     context,
                     matchProgress: matchProgress,

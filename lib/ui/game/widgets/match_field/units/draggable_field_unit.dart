@@ -5,7 +5,7 @@ import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
 import 'package:going_wild/ui/core/design/app_shadows.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
-import 'package:going_wild/ui/game/widgets/match_field/field_unit_token.dart';
+import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
 
 const _liftedScale = 1.2;
 

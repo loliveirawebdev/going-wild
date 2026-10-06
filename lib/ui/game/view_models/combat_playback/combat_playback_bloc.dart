@@ -12,7 +12,8 @@ import 'package:going_wild/ui/game/view_models/combat_playback/states/combat_pla
 class CombatPlaybackBloc extends Bloc<CombatPlaybackEvent, CombatPlaybackState> {
   final CombatPlaybackClock _clock;
 
-  CombatPlaybackBloc({required this._clock}) : super(const IdleCombatPlaybackState(speed: CombatPlaybackSpeed.normal)) {
+  CombatPlaybackBloc({required this._clock, CombatPlaybackSpeed initialSpeed = CombatPlaybackSpeed.normal})
+    : super(IdleCombatPlaybackState(speed: initialSpeed)) {
     on<CombatPlaybackSpeedChanged>(_onCombatPlaybackSpeedChanged);
     on<CombatPlaybackStarted>(_onCombatPlaybackStarted);
   }

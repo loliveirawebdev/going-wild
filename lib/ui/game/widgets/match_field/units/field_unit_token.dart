@@ -2,8 +2,12 @@ import 'package:flutter/widgets.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/character_art.dart';
+import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 
 const _ringWidth = 3.0;
+const _cellHeightFraction = 0.82;
+
+double fieldTokenDiameterFor(double scale) => BoardSceneLayout.cellSize.height * scale * _cellHeightFraction;
 
 enum FieldUnitSide {
   team(ringColor: AppColors.grass600),

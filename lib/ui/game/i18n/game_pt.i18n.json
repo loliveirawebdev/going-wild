@@ -45,6 +45,10 @@
     "teamOnField": "no campo",
     "teamOnFieldLabel": "$count de $limit bichos no campo"
   },
+  "fightShelf": {
+    "fightButton": "Lutar!",
+    "speedLabel": "Velocidade"
+  },
   "bench": {
     "occupiedSlot": "Banco $slot: $name, $stars",
     "emptySlot": "Banco $slot: vazio",

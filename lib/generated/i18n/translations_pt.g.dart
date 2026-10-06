@@ -296,6 +296,7 @@ class Translations$game$pt {
   late final Translations$game$setChips$pt setChips = Translations$game$setChips$pt._(_root);
   late final Translations$game$setDialog$pt setDialog = Translations$game$setDialog$pt._(_root);
   late final Translations$game$infoShelf$pt infoShelf = Translations$game$infoShelf$pt._(_root);
+  late final Translations$game$fightShelf$pt fightShelf = Translations$game$fightShelf$pt._(_root);
   late final Translations$game$bench$pt bench = Translations$game$bench$pt._(_root);
   late final Translations$game$unitSheet$pt unitSheet = Translations$game$unitSheet$pt._(_root);
   late final Translations$game$shop$pt shop = Translations$game$shop$pt._(_root);
@@ -766,6 +767,21 @@ class Translations$game$infoShelf$pt {
 
   /// pt: '$count de $limit bichos no campo'
   String teamOnFieldLabel({required Object count, required Object limit}) => '${count} de ${limit} bichos no campo';
+}
+
+// Path: game.fightShelf
+class Translations$game$fightShelf$pt {
+  Translations$game$fightShelf$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Lutar!'
+  String get fightButton => 'Lutar!';
+
+  /// pt: 'Velocidade'
+  String get speedLabel => 'Velocidade';
 }
 
 // Path: game.bench
@@ -1322,6 +1338,8 @@ extension on Translations {
       ),
       'game.infoShelf.teamOnField' => 'no campo',
       'game.infoShelf.teamOnFieldLabel' => ({required Object count, required Object limit}) => '${count} de ${limit} bichos no campo',
+      'game.fightShelf.fightButton' => 'Lutar!',
+      'game.fightShelf.speedLabel' => 'Velocidade',
       'game.bench.occupiedSlot' => ({
         required Object slot,
         required Object name,

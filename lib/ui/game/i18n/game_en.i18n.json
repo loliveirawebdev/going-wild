@@ -45,6 +45,10 @@
     "teamOnField": "on field",
     "teamOnFieldLabel": "$count of $limit animals on the field"
   },
+  "fightShelf": {
+    "fightButton": "Fight!",
+    "speedLabel": "Speed"
+  },
   "bench": {
     "occupiedSlot": "Bench $slot: $name, $stars",
     "emptySlot": "Bench $slot: empty",
