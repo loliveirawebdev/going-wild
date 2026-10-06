@@ -72,6 +72,35 @@ void main() {
     expect(find.byType(GameScreen), findsOneWidget);
   });
 
+  testWidgets('the system back inside a match asks before leaving and only leaves after confirming', (tester) async {
+    await openTheApp(tester);
+    await tester.tap(find.text(t.home.playButton));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(t.phaseSelection.playButton));
+    await tester.pump(const Duration(seconds: 1));
+
+    await tester.binding.handlePopRoute();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text(t.game.exitDialog.title), findsOneWidget);
+
+    await tester.tap(find.text(t.game.exitDialog.continueButton));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text(t.game.exitDialog.title), findsNothing);
+    expect(find.byType(GameScreen), findsOneWidget);
+
+    await tester.binding.handlePopRoute();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.tap(find.text(t.game.exitDialog.exitButton));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+
+    expect(find.byType(GameScreen), findsNothing);
+    expect(find.byType(PhaseSelectionScreen), findsOneWidget);
+  });
+
   testWidgets('home opens the settings and back returns to home', (tester) async {
     await openTheApp(tester);
 

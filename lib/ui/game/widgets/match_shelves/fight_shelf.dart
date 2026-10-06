@@ -37,9 +37,20 @@ class FightShelf extends StatelessWidget {
       builder: (context, state) {
         if (state is! ReadyPreparationState) return const SizedBox.shrink();
         final matchProgress = state.matchProgress;
+        final isFighting = matchProgress.roundStage == RoundStage.fighting;
 
-        if (matchProgress.roundStage == RoundStage.fighting) return const _SpeedShelf();
-        return _FightButton(matchProgress: matchProgress);
+        return Stack(
+          children: [
+            Visibility(
+              maintainSize: true,
+              maintainState: true,
+              visible: !isFighting,
+              maintainAnimation: true,
+              child: _FightButton(matchProgress: matchProgress),
+            ),
+            if (isFighting) const Positioned.fill(child: _SpeedShelf()),
+          ],
+        );
       },
     );
   }

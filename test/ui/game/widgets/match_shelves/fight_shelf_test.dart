@@ -20,6 +20,7 @@ import 'package:going_wild/ui/game/widgets/combat_playback_bridge.dart';
 import 'package:going_wild/ui/game/widgets/game_screen.dart';
 import 'package:going_wild/ui/game/widgets/round_banner/countdown_banner.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/combat_unit.dart';
+import 'package:going_wild/ui/game/widgets/match_shelves/fight_shelf.dart';
 
 import '../../../../helpers/manual_combat_playback_clock.dart';
 
@@ -63,9 +64,12 @@ Future<(MatchRepository, CombatPlaybackBloc, ManualCombatPlaybackClock)> showMat
 void main() {
   setUpAll(configurePluralResolvers);
 
-  testWidgets('fighting shows the speed, plays the fight on the field and comes back to the next round', (tester) async {
+  testWidgets('fighting swaps the button for the speed in the same space, plays the fight on the field and comes back to the next round', (
+    tester,
+  ) async {
     final (matchRepository, combatPlaybackBloc, clock) = await showMatch(tester);
     expect(find.text('Lutar!'), findsOneWidget);
+    final preparingShelfSize = tester.getSize(find.byType(FightShelf));
 
     await tester.tap(find.text('Lutar!'));
     await tester.pump();
@@ -81,7 +85,8 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
     await tester.pump();
 
-    expect(find.text('Lutar!'), findsNothing);
+    expect(find.text('Lutar!').hitTestable(), findsNothing);
+    expect(tester.getSize(find.byType(FightShelf)), preparingShelfSize);
     expect(find.text('VELOCIDADE'), findsOneWidget);
     expect(find.text('2×'), findsOneWidget);
     expect(find.byType(CombatUnit), findsWidgets);

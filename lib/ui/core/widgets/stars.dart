@@ -8,17 +8,18 @@ const _crownLift = 0.12;
 const _crownScale = 1.12;
 
 class Stars extends StatelessWidget {
-  const Stars({required this.count, required this.semanticLabel, super.key, this.size = 18});
+  const Stars({required this.count, required this.semanticLabel, super.key, this.size = 18, this.outlineColor = AppColors.sun600});
 
   final int count;
   final double size;
+  final Color outlineColor;
   final String semanticLabel;
 
   @override
   Widget build(BuildContext context) {
     final star = SizedBox.square(
       dimension: size,
-      child: const CustomPaint(painter: _StarPainter()),
+      child: CustomPaint(painter: _StarPainter(outlineColor: outlineColor)),
     );
 
     return Semantics(
@@ -46,7 +47,8 @@ class Stars extends StatelessWidget {
 }
 
 class _StarPainter extends CustomPainter {
-  const _StarPainter();
+  final Color outlineColor;
+  const _StarPainter({required this.outlineColor});
 
   static final _starPath = Path()
     ..moveTo(12, 2.5)
@@ -69,12 +71,12 @@ class _StarPainter extends CustomPainter {
       _starPath,
       Paint()
         ..style = PaintingStyle.stroke
-        ..color = AppColors.sun600
+        ..color = outlineColor
         ..strokeJoin = StrokeJoin.round
         ..strokeWidth = _starStrokeWidth,
     );
   }
 
   @override
-  bool shouldRepaint(_StarPainter oldDelegate) => false;
+  bool shouldRepaint(_StarPainter oldDelegate) => oldDelegate.outlineColor != outlineColor;
 }

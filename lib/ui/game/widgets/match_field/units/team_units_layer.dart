@@ -4,6 +4,7 @@ import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/draggable_field_unit.dart';
+import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_status.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
 import 'package:going_wild/ui/game/widgets/summon/summon_appear.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/roster_unit_sheet.dart';
@@ -24,7 +25,8 @@ class TeamUnitsLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final board = matchProgress.phase.engines.combatEngine.board;
+    final engines = matchProgress.phase.engines;
+    final board = engines.combatEngine.board;
 
     return Stack(
       children: [
@@ -38,6 +40,9 @@ class TeamUnitsLayer extends StatelessWidget {
 
                 child: DraggableFieldUnit(
                   position: placement.position,
+                  vitals: startingVitalsOf(
+                    engines.characterEngine.statsAtStars(placement.characterCopy.character, stars: placement.characterCopy.stars),
+                  ),
                   isAnotherDragActive: isDragActive,
                   diameter: fieldTokenDiameterFor(scale),
                   characterCopy: placement.characterCopy,

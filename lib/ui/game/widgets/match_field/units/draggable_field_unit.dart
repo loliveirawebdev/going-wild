@@ -5,6 +5,8 @@ import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
 import 'package:going_wild/ui/core/design/app_shadows.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
+import 'package:going_wild/ui/game/widgets/match_field/units/field_unit.dart';
+import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_status.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
 
 const _liftedScale = 1.2;
@@ -14,8 +16,10 @@ class DraggableFieldUnit extends StatelessWidget {
   final Position position;
   final VoidCallback onPressed;
   final bool isAnotherDragActive;
+  final FieldUnitVitals vitals;
   final CharacterCopy characterCopy;
   const DraggableFieldUnit({
+    required this.vitals,
     required this.diameter,
     required this.position,
     required this.onPressed,
@@ -29,6 +33,7 @@ class DraggableFieldUnit extends StatelessWidget {
     final boardSlot = BoardSlot(position: position);
     final rosterDragViewModel = context.read<RosterDragViewModel>();
     final token = FieldUnitToken(side: FieldUnitSide.team, diameter: diameter, characterCopy: characterCopy);
+    final unit = FieldUnit(side: FieldUnitSide.team, vitals: vitals, diameter: diameter, characterCopy: characterCopy);
 
     return IgnorePointer(
       ignoring: isAnotherDragActive,
@@ -38,7 +43,7 @@ class DraggableFieldUnit extends StatelessWidget {
         onDragEnd: (details) => rosterDragViewModel.stopDragging(),
         onDragStarted: () => rosterDragViewModel.startDragging(boardSlot),
         onDragUpdate: (details) => rosterDragViewModel.moveDragTo(details.globalPosition),
-        childWhenDragging: SizedBox.square(dimension: diameter),
+        childWhenDragging: Opacity(opacity: 0, child: unit),
         feedback: Transform.translate(
           offset: Offset(-diameter / 2, -diameter / 2),
           child: Transform.scale(
@@ -49,7 +54,7 @@ class DraggableFieldUnit extends StatelessWidget {
             ),
           ),
         ),
-        child: GestureDetector(onTap: onPressed, child: token),
+        child: GestureDetector(onTap: onPressed, child: unit),
       ),
     );
   }
