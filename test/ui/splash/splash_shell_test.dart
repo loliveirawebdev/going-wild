@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:going_wild/data/repositories/progress_repository.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/routing/routes.dart';
 import 'package:going_wild/ui/entrypoint/view_models/default_entrypoint_view_model.dart';
@@ -10,7 +11,10 @@ import 'package:going_wild/ui/entrypoint/widgets/entrypoint_screen.dart';
 import 'package:going_wild/ui/entrypoint/widgets/loading_panel.dart';
 import 'package:going_wild/ui/home/home_route.dart';
 import 'package:going_wild/ui/phase_selection/phase_selection_route.dart';
+import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 import 'package:going_wild/ui/splash/widgets/splash_scene.dart';
+
+import '../../helpers/in_memory_local_storage.dart';
 
 GoRouter splashRouter() => GoRouter(
   initialLocation: Routes.entrypoint,
@@ -39,7 +43,14 @@ GoRouter splashRouter() => GoRouter(
 );
 
 Future<void> pumpSplash(WidgetTester tester) async {
-  await tester.pumpWidget(TranslationProvider(child: MaterialApp.router(routerConfig: splashRouter())));
+  await tester.pumpWidget(
+    TranslationProvider(
+      child: BlocProvider(
+        create: (context) => PhaseProgressViewModel(progressRepository: ProgressRepository(localStorage: InMemoryLocalStorage())),
+        child: MaterialApp.router(routerConfig: splashRouter()),
+      ),
+    ),
+  );
 }
 
 void main() {

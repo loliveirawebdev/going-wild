@@ -1,12 +1,16 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:going_wild/content/phase/phases.dart';
+import 'package:going_wild/domain/models/progress/phase_availability.dart';
+import 'package:going_wild/domain/use_cases/progress/phase_availability_of.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/routing/routes.dart';
 import 'package:going_wild/ui/core/design/app_spacing.dart';
 import 'package:going_wild/ui/phase_selection/widgets/phase_carousel.dart';
 import 'package:going_wild/ui/phase_selection/widgets/phase_page_dots.dart';
 import 'package:going_wild/ui/phase_selection/widgets/phase_selection_top_bar.dart';
+import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 import 'package:going_wild/ui/splash/widgets/splash_bottom_slot.dart';
 import 'package:going_wild/ui/splash/widgets/splash_play_button.dart';
 
@@ -23,8 +27,8 @@ class PhaseSelectionScreen extends StatefulWidget {
 }
 
 class _PhaseSelectionScreenState extends State<PhaseSelectionScreen> {
-  var _selectedIndex = 0;
-  final _pageController = PageController(viewportFraction: _cardViewportFraction);
+  late var _selectedIndex = firstPhaseToPlayIndexOf(allPhases, progress: context.read<PhaseProgressViewModel>().state);
+  late final _pageController = PageController(initialPage: _selectedIndex, viewportFraction: _cardViewportFraction);
 
   @override
   void dispose() {
@@ -36,7 +40,15 @@ class _PhaseSelectionScreenState extends State<PhaseSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final translations = context.t;
     final selectedPhase = allPhases[_selectedIndex];
+    final progress = context.watch<PhaseProgressViewModel>().state;
+    final selectedAvailability = phaseAvailabilityOf(selectedPhase, phases: allPhases, progress: progress);
+
+    final lockedIndices = {
+      for (final (index, phase) in allPhases.indexed)
+        if (phaseAvailabilityOf(phase, phases: allPhases, progress: progress) is LockedPhaseAvailability) index,
+    };
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -53,6 +65,7 @@ class _PhaseSelectionScreenState extends State<PhaseSelectionScreen> {
                 Expanded(
                   child: PhaseCarousel(
                     phases: allPhases,
+                    progress: progress,
                     controller: _pageController,
                     selectedIndex: _selectedIndex,
                     onPhaseChanged: (index) => setState(() => _selectedIndex = index),
@@ -60,7 +73,12 @@ class _PhaseSelectionScreenState extends State<PhaseSelectionScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: AppSpacing.space2, bottom: AppSpacing.space4),
-                  child: PhasePageDots(count: allPhases.length, onDotTapped: _goToPhase, selectedIndex: _selectedIndex),
+                  child: PhasePageDots(
+                    count: allPhases.length,
+                    onDotTapped: _goToPhase,
+                    lockedIndices: lockedIndices,
+                    selectedIndex: _selectedIndex,
+                  ),
                 ),
               ],
             ),
@@ -68,8 +86,9 @@ class _PhaseSelectionScreenState extends State<PhaseSelectionScreen> {
         ),
         SplashBottomSlot(
           child: SplashPlayButton(
-            label: context.t.phaseSelection.playButton,
-            onPressed: () => context.push(Routes.gameOf(selectedPhase.id)),
+            label: translations.phaseSelection.playButton,
+            disabledReason: lockedReasonOf(translations, selectedAvailability),
+            onPressed: selectedAvailability is LockedPhaseAvailability ? null : () => context.push(Routes.gameOf(selectedPhase.id)),
           ),
         ),
       ],

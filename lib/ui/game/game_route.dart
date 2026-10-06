@@ -16,6 +16,7 @@ import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_mode
 import 'package:going_wild/ui/game/view_models/round_banner/round_banner_view_model.dart';
 import 'package:going_wild/ui/game/widgets/combat_playback_bridge.dart';
 import 'package:going_wild/ui/game/widgets/game_screen.dart';
+import 'package:going_wild/ui/game/widgets/phase_victory_recorder.dart';
 import 'package:going_wild/ui/settings/view_models/settings_view_model.dart';
 
 final gameRoute = GoRoute(
@@ -50,7 +51,10 @@ final gameRoute = GoRoute(
           BlocProvider(create: (context) => RosterDragViewModel()),
           BlocProvider(create: (context) => RoundBannerViewModel()),
         ],
-        child: CombatPlaybackBridge(child: GameScreen(phase: phase)),
+        child: PhaseVictoryRecorder(
+          phase: phase,
+          child: CombatPlaybackBridge(child: GameScreen(phase: phase)),
+        ),
       ),
     );
   },

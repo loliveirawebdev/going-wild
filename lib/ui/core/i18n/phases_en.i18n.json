@@ -1,5 +1,11 @@
 {
   "backyard": {
     "name": "Backyard"
+  },
+  "pond_edge": {
+    "name": "Pond Edge"
+  },
+  "cornfield": {
+    "name": "Cornfield"
   }
 }

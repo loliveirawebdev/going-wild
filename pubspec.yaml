@@ -41,6 +41,8 @@ flutter:
     - assets/sets/
     - assets/scenes/
     - lib/content/phase/backyard/cover.jpg
+    - lib/content/phase/pond_edge/cover.jpg
+    - lib/content/phase/cornfield/cover.jpg
 
   fonts:
     - family: LilitaOne

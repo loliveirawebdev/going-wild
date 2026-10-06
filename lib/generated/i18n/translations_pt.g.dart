@@ -346,6 +346,9 @@ class Translations$phaseSelection$pt {
 
   /// pt: 'Jogar'
   String get playButton => 'Jogar';
+
+  /// pt: 'Vença $phase para liberar'
+  String lockedReason({required Object phase}) => 'Vença ${phase} para liberar';
 }
 
 // Path: phases
@@ -356,6 +359,8 @@ class Translations$phases$pt {
 
   // Translations
   late final Translations$phases$backyard$pt backyard = Translations$phases$backyard$pt._(_root);
+  late final Translations$phases$pond_edge$pt pond_edge = Translations$phases$pond_edge$pt._(_root);
+  late final Translations$phases$cornfield$pt cornfield = Translations$phases$cornfield$pt._(_root);
 }
 
 // Path: privacy
@@ -1042,6 +1047,30 @@ class Translations$phases$backyard$pt {
   String get name => 'Quintal';
 }
 
+// Path: phases.pond_edge
+class Translations$phases$pond_edge$pt {
+  Translations$phases$pond_edge$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Beira do Brejo'
+  String get name => 'Beira do Brejo';
+}
+
+// Path: phases.cornfield
+class Translations$phases$cornfield$pt {
+  Translations$phases$cornfield$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Milharal'
+  String get name => 'Milharal';
+}
+
 // Path: privacy.whatWeStore
 class Translations$privacy$whatWeStore$pt {
   Translations$privacy$whatWeStore$pt._(this._root);
@@ -1562,7 +1591,10 @@ extension on Translations {
       'phaseSelection.phaseNumber' => ({required Object number}) => 'Fase ${number}',
       'phaseSelection.backButton' => 'Voltar',
       'phaseSelection.playButton' => 'Jogar',
+      'phaseSelection.lockedReason' => ({required Object phase}) => 'Vença ${phase} para liberar',
       'phases.backyard.name' => 'Quintal',
+      'phases.pond_edge.name' => 'Beira do Brejo',
+      'phases.cornfield.name' => 'Milharal',
       'privacy.title' => 'Privacidade',
       'privacy.intro' => 'O Going Wild foi feito para ser jogado sem conta e sem coleta de dados pessoais.',
       'privacy.updated' => 'Atualizado em 5 de outubro de 2026',

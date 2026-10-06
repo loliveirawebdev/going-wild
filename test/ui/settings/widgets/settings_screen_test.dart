@@ -2,12 +2,14 @@ import 'package:flutter/material.dart' hide Slider, Switch;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:going_wild/data/repositories/progress_repository.dart';
 import 'package:going_wild/data/repositories/settings_repository.dart';
 import 'package:going_wild/domain/models/settings/settings.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/routing/routes.dart';
 import 'package:going_wild/ui/core/widgets/switch.dart';
 import 'package:going_wild/ui/settings/settings_route.dart';
+import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 import 'package:going_wild/ui/settings/view_models/default_settings_view_model.dart';
 import 'package:going_wild/ui/settings/view_models/settings_view_model.dart';
 
@@ -20,8 +22,13 @@ Future<SettingsViewModel> openSettings(WidgetTester tester) async {
 
   await tester.pumpWidget(
     TranslationProvider(
-      child: BlocProvider<SettingsViewModel>.value(
-        value: settingsViewModel,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<SettingsViewModel>.value(value: settingsViewModel),
+          BlocProvider(
+            create: (context) => PhaseProgressViewModel(progressRepository: ProgressRepository(localStorage: InMemoryLocalStorage())),
+          ),
+        ],
         child: MaterialApp.router(
           routerConfig: GoRouter(initialLocation: Routes.settings, routes: [settingsRoute]),
         ),

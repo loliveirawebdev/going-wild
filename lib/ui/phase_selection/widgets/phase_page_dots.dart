@@ -9,9 +9,16 @@ const _selectedDotWidth = 30.0;
 const _dotDuration = Duration(milliseconds: 200);
 
 class PhasePageDots extends StatelessWidget {
-  const PhasePageDots({required this.count, required this.onDotTapped, required this.selectedIndex, super.key});
+  const PhasePageDots({
+    required this.count,
+    required this.onDotTapped,
+    required this.selectedIndex,
+    super.key,
+    this.lockedIndices = const {},
+  });
 
   final int count;
+  final Set<int> lockedIndices;
   final int selectedIndex;
   final ValueChanged<int> onDotTapped;
 
@@ -24,7 +31,7 @@ class PhasePageDots extends StatelessWidget {
         for (var index = 0; index < count; index++)
           GestureDetector(
             onTap: () => onDotTapped(index),
-            child: _PageDot(isSelected: index == selectedIndex),
+            child: _PageDot(isSelected: index == selectedIndex, isLocked: lockedIndices.contains(index)),
           ),
       ],
     );
@@ -32,8 +39,9 @@ class PhasePageDots extends StatelessWidget {
 }
 
 class _PageDot extends StatelessWidget {
-  const _PageDot({required this.isSelected});
+  const _PageDot({required this.isSelected, required this.isLocked});
 
+  final bool isLocked;
   final bool isSelected;
 
   @override
@@ -44,7 +52,11 @@ class _PageDot extends StatelessWidget {
       width: isSelected ? _selectedDotWidth : _dotSize,
       decoration: BoxDecoration(
         borderRadius: AppRadius.pill,
-        color: isSelected ? AppColors.grass400 : AppColors.surface100,
+        color: switch ((isSelected, isLocked)) {
+          (true, _) => AppColors.grass400,
+          (false, true) => AppColors.surface400,
+          (false, false) => AppColors.surface100,
+        },
         border: Border.all(color: isSelected ? AppColors.grass600 : AppColors.surface400, width: AppBorderWidth.thin),
       ),
     );

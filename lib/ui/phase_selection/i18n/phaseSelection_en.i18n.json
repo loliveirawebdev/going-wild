@@ -6,5 +6,6 @@
   },
   "phaseNumber": "Phase $number",
   "backButton": "Back",
-  "playButton": "Play"
+  "playButton": "Play",
+  "lockedReason": "Win $phase to unlock"
 }

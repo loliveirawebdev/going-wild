@@ -12,6 +12,7 @@ import 'package:going_wild/ui/core/design/painted_scene.dart';
 import 'package:going_wild/ui/core/design/role_icon.dart';
 import 'package:going_wild/ui/core/design/set_icon.dart';
 import 'package:going_wild/ui/entrypoint/view_models/entrypoint_view_model.dart';
+import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 import 'package:going_wild/ui/settings/view_models/settings_view_model.dart';
 
 const _simulatedLoadingDurationInDebug = Duration(milliseconds: 2500);
@@ -19,6 +20,7 @@ const _simulatedLoadingDurationInDebug = Duration(milliseconds: 2500);
 List<LoadingStep> splashLoadingStepsOf(BuildContext context) {
   final loadingSteps = <LoadingStep>[
     () => context.read<SettingsViewModel>().load(),
+    () => context.read<PhaseProgressViewModel>().load(),
     () => precacheImage(AssetImage(PaintedScene.splash.assetPath), context),
     () => precacheImage(const AssetImage(BrandLogo.assetPath), context),
     for (final icon in GameIcon.values) () => SvgAssetLoader(icon.assetPath).loadBytes(null),

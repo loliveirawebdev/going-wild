@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/widgets/button.dart';
 import 'package:going_wild/ui/core/widgets/dialog.dart';
+import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 import 'package:going_wild/ui/settings/view_models/settings_view_model.dart';
 import 'package:going_wild/ui/settings/widgets/settings_rows.dart';
 import 'package:going_wild/ui/settings/widgets/settings_section.dart';
@@ -13,6 +14,7 @@ class ProgressSettingsSection extends StatelessWidget {
   Future<void> _confirmReset(BuildContext context) {
     final translations = context.t.settings;
     final settingsViewModel = context.read<SettingsViewModel>();
+    final phaseProgressViewModel = context.read<PhaseProgressViewModel>();
 
     return presentDialog<void>(
       context,
@@ -38,6 +40,7 @@ class ProgressSettingsSection extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
                 settingsViewModel.reset();
+                phaseProgressViewModel.reset();
               },
             ),
           ),

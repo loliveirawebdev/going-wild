@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:going_wild/app.dart';
 import 'package:going_wild/config/logging/configure_logging.dart';
+import 'package:going_wild/data/repositories/progress_repository.dart';
 import 'package:going_wild/data/repositories/settings_repository.dart';
 import 'package:going_wild/data/services/local_storage/shared_preferences_local_storage.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
@@ -24,6 +25,7 @@ Future<void> main() async {
         talker: talker,
         router: buildRouter(talker: talker),
         settingsRepository: SettingsRepository(localStorage: localStorage),
+        progressRepository: ProgressRepository(localStorage: localStorage),
       ),
     ),
   );

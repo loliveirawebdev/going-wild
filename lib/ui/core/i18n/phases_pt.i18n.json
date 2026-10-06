@@ -1,5 +1,11 @@
 {
   "backyard": {
     "name": "Quintal"
+  },
+  "pond_edge": {
+    "name": "Beira do Brejo"
+  },
+  "cornfield": {
+    "name": "Milharal"
   }
 }

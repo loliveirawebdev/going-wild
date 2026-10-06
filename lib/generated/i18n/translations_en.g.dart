@@ -314,6 +314,8 @@ class _Translations$phaseSelection$en implements Translations$phaseSelection$pt 
   String get backButton => 'Back';
   @override
   String get playButton => 'Play';
+  @override
+  String lockedReason({required Object phase}) => 'Win ${phase} to unlock';
 }
 
 // Path: phases
@@ -325,6 +327,10 @@ class _Translations$phases$en implements Translations$phases$pt {
   // Translations
   @override
   late final _Translations$phases$backyard$en backyard = _Translations$phases$backyard$en._(_root);
+  @override
+  late final _Translations$phases$pond_edge$en pond_edge = _Translations$phases$pond_edge$en._(_root);
+  @override
+  late final _Translations$phases$cornfield$en cornfield = _Translations$phases$cornfield$en._(_root);
 }
 
 // Path: privacy
@@ -867,6 +873,28 @@ class _Translations$phases$backyard$en implements Translations$phases$backyard$p
   String get name => 'Backyard';
 }
 
+// Path: phases.pond_edge
+class _Translations$phases$pond_edge$en implements Translations$phases$pond_edge$pt {
+  _Translations$phases$pond_edge$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get name => 'Pond Edge';
+}
+
+// Path: phases.cornfield
+class _Translations$phases$cornfield$en implements Translations$phases$cornfield$pt {
+  _Translations$phases$cornfield$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get name => 'Cornfield';
+}
+
 // Path: privacy.whatWeStore
 class _Translations$privacy$whatWeStore$en implements Translations$privacy$whatWeStore$pt {
   _Translations$privacy$whatWeStore$en._(this._root);
@@ -1343,7 +1371,10 @@ extension on TranslationsEn {
       'phaseSelection.phaseNumber' => ({required Object number}) => 'Phase ${number}',
       'phaseSelection.backButton' => 'Back',
       'phaseSelection.playButton' => 'Play',
+      'phaseSelection.lockedReason' => ({required Object phase}) => 'Win ${phase} to unlock',
       'phases.backyard.name' => 'Backyard',
+      'phases.pond_edge.name' => 'Pond Edge',
+      'phases.cornfield.name' => 'Cornfield',
       'privacy.title' => 'Privacy',
       'privacy.intro' => 'Going Wild was made to be played with no account and no collection of personal data.',
       'privacy.updated' => 'Updated on October 5, 2026',

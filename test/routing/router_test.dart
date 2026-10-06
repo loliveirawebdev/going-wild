@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/app.dart';
 import 'package:going_wild/content/phase/phases.dart';
 import 'package:going_wild/data/repositories/match_repository.dart';
+import 'package:going_wild/data/repositories/progress_repository.dart';
 import 'package:going_wild/data/repositories/settings_repository.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/routing/router.dart';
@@ -25,13 +26,15 @@ import '../helpers/in_memory_local_storage.dart';
 Future<void> openTheApp(WidgetTester tester) async {
   configurePluralResolvers();
   final silentTalker = Talker(settings: TalkerSettings(useConsoleLogs: false));
+  final localStorage = InMemoryLocalStorage();
 
   await tester.pumpWidget(
     TranslationProvider(
       child: MainApp(
         talker: silentTalker,
         router: buildRouter(talker: silentTalker),
-        settingsRepository: SettingsRepository(localStorage: InMemoryLocalStorage()),
+        settingsRepository: SettingsRepository(localStorage: localStorage),
+        progressRepository: ProgressRepository(localStorage: localStorage),
       ),
     ),
   );

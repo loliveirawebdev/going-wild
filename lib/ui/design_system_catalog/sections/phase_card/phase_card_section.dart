@@ -17,6 +17,25 @@ class PhaseCardSection extends StatelessWidget {
         Center(
           child: PhaseCard(name: 'Quintal', numberLabel: 'Fase 1', coverAssetPath: phaseCoverAssetPathOf(backyard)),
         ),
+        const CatalogBlockTitle('Vencida'),
+        Center(
+          child: PhaseCard(
+            name: 'Quintal',
+            numberLabel: 'Fase 1',
+            status: PhaseCardStatus.won,
+            coverAssetPath: phaseCoverAssetPathOf(backyard),
+          ),
+        ),
+        const CatalogBlockTitle('Trancada'),
+        Center(
+          child: PhaseCard(
+            numberLabel: 'Fase 2',
+            name: 'Beira do Brejo',
+            status: PhaseCardStatus.locked,
+            lockedReason: 'Vença Quintal para liberar',
+            coverAssetPath: phaseCoverAssetPathOf(pondEdge),
+          ),
+        ),
         const CatalogBlockTitle('Nome comprido'),
         Center(
           child: PhaseCard(
