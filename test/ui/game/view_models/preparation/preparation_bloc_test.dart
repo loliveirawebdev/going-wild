@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:going_wild/content/phase/backyard/backyard.dart';
 import 'package:going_wild/data/repositories/match_repository.dart';
+import 'package:going_wild/domain/models/board/errors/position_outside_team_side_error.dart';
 import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
@@ -121,6 +122,30 @@ void main() {
 
     expect(shownMatchProgress().playerRoster.placements, isEmpty);
     expect(shownMatchProgress().playerRoster.inventory.entries, hasLength(1));
+  });
+
+  test('a rejected action tells which action failed and why, a new id for each refusal, cleared by the next change', () async {
+    await startPreparingStoredMatch();
+    preparationBloc.add(ShopOfferBought(offerIndex: firstOfferIndexOf(startingMatchProgress)));
+    await settle();
+
+    PreparationRejection? shownRejection() => (preparationBloc.state as ReadyPreparationState).rejection;
+    const rejectedMove = CopyMovedBetweenRosterSlots(from: inventoryFirstSlot, to: enemyHalfSlot);
+
+    preparationBloc.add(rejectedMove);
+    await settle();
+    final firstRejection = shownRejection()!;
+    expect(firstRejection.event, same(rejectedMove));
+    expect(firstRejection.error, isA<PositionOutsideTeamSideError>());
+
+    preparationBloc.add(rejectedMove);
+    await settle();
+    expect(shownRejection()!.id, isNot(firstRejection.id));
+
+    preparationBloc.add(const CopyMovedBetweenRosterSlots(from: inventoryFirstSlot, to: teamHalfSlot));
+    await settle();
+    expect(shownRejection(), isNull);
+    expect(shownMatchProgress().playerRoster.placements, hasLength(1));
   });
 
   test('every preparing action is rejected while the match is fighting', () async {

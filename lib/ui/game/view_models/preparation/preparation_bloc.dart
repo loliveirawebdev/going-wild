@@ -20,6 +20,7 @@ import 'package:going_wild/ui/game/view_models/preparation/states/preparation_st
 
 class PreparationBloc extends Bloc<PreparationEvent, PreparationState> {
   final MatchRepository _matchRepository;
+  var _nextRejectionId = 0;
 
   PreparationBloc({required this._matchRepository}) : super(const NoMatchPreparationState()) {
     on<PreparationStarted>(_onPreparationStarted);
@@ -42,37 +43,42 @@ class PreparationBloc extends Bloc<PreparationEvent, PreparationState> {
   }
 
   void _onShopOfferBought(ShopOfferBought event, Emitter<PreparationState> emit) {
-    _prepare((matchProgress) => buyShopOffer(matchProgress, offerIndex: event.offerIndex));
+    _applyPlayerAction(event, emit, (matchProgress) => buyShopOffer(matchProgress, offerIndex: event.offerIndex));
   }
 
   void _onShopRerolled(ShopRerolled event, Emitter<PreparationState> emit) {
-    _prepare(rerollShop);
+    _applyPlayerAction(event, emit, rerollShop);
   }
 
   void _onShopLockToggled(ShopLockToggled event, Emitter<PreparationState> emit) {
-    _prepare(toggleShopLock);
+    _applyPlayerAction(event, emit, toggleShopLock);
   }
 
   void _onExperienceBought(ExperienceBought event, Emitter<PreparationState> emit) {
-    _prepare(buyExperience);
+    _applyPlayerAction(event, emit, buyExperience);
   }
 
   void _onCopyMovedBetweenRosterSlots(CopyMovedBetweenRosterSlots event, Emitter<PreparationState> emit) {
-    _prepare((matchProgress) => moveCopyBetweenRosterSlots(matchProgress, to: event.to, from: event.from));
+    _applyPlayerAction(event, emit, (matchProgress) => moveCopyBetweenRosterSlots(matchProgress, to: event.to, from: event.from));
   }
 
   void _onCopySoldFromRosterSlot(CopySoldFromRosterSlot event, Emitter<PreparationState> emit) {
-    _prepare((matchProgress) => sellCopyFromRosterSlot(matchProgress, from: event.from));
+    _applyPlayerAction(event, emit, (matchProgress) => sellCopyFromRosterSlot(matchProgress, from: event.from));
   }
 
-  void _prepare(MatchProgress Function(MatchProgress matchProgress) playerAction) {
+  void _applyPlayerAction(
+    PreparationEvent event,
+    Emitter<PreparationState> emit,
+    MatchProgress Function(MatchProgress matchProgress) playerAction,
+  ) {
     final matchProgress = _matchRepository.currentMatchProgress;
     if (matchProgress == null) return;
 
     try {
       _matchRepository.replaceMatchProgress(playerAction(matchProgress));
-    } on RejectedPlayerActionError {
-      return;
+    } on RejectedPlayerActionError catch (error) {
+      final rejection = PreparationRejection(id: _nextRejectionId++, error: error, event: event);
+      emit(ReadyPreparationState(matchProgress: matchProgress, rejection: rejection));
     }
   }
 }

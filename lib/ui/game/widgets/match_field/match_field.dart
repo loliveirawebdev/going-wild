@@ -7,7 +7,6 @@ import 'package:going_wild/domain/models/combat_history/replay/combat_replay_fra
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/match_progress/round_stage.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
-import 'package:going_wild/domain/use_cases/lineup/move_copy_between_roster_slots.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/localization/rejection_message.dart';
 import 'package:going_wild/ui/game/view_models/combat_playback/combat_playback_bloc.dart';
@@ -47,18 +46,32 @@ class _MatchFieldState extends State<MatchField> {
     super.dispose();
   }
 
-  void _dropSlot(MatchProgress matchProgress, RosterSlot draggedSlot, Position position) {
-    final boardSlot = BoardSlot(position: position);
-    final rejection = checkMovingCopyBetweenRosterSlots(matchProgress, to: boardSlot, from: draggedSlot);
+  void _dropSlot(RosterSlot draggedSlot, Position position) {
+    context.read<PreparationBloc>().add(
+      CopyMovedBetweenRosterSlots(
+        to: BoardSlot(position: position),
+        from: draggedSlot,
+      ),
+    );
+  }
 
-    if (rejection == null) {
-      context.read<PreparationBloc>().add(CopyMovedBetweenRosterSlots(to: boardSlot, from: draggedSlot));
-      return;
-    }
+  bool _isNewRejection(PreparationState previous, PreparationState current) {
+    final previousRejection = previous is ReadyPreparationState ? previous.rejection : null;
+    final currentRejection = current is ReadyPreparationState ? current.rejection : null;
+    return currentRejection != null && currentRejection.id != previousRejection?.id;
+  }
+
+  void _showRejection(BuildContext context, PreparationState preparationState) {
+    final rejection = preparationState is ReadyPreparationState ? preparationState.rejection : null;
+    final rejectedEvent = rejection?.event;
+    if (rejection == null || rejectedEvent is! CopyMovedBetweenRosterSlots) return;
+
+    final target = rejectedEvent.to;
+    if (target is! BoardSlot) return;
 
     _toastTimer?.cancel();
     _toastTimer = Timer(_toastDuration, () => setState(() => _rejection = null));
-    setState(() => _rejection = (message: rejectionMessageOf(context.t, rejection), position: position));
+    setState(() => _rejection = (message: rejectionMessageOf(context.t, rejection.error), position: target.position));
   }
 
   CombatReplayFrame? _combatFrameOf(MatchProgress matchProgress, CombatPlaybackState playbackState) {
@@ -73,7 +86,9 @@ class _MatchFieldState extends State<MatchField> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PreparationBloc, PreparationState>(
+    return BlocConsumer<PreparationBloc, PreparationState>(
+      listenWhen: _isNewRejection,
+      listener: _showRejection,
       builder: (context, preparationState) {
         if (preparationState is! ReadyPreparationState) return const SizedBox.shrink();
         final matchProgress = preparationState.matchProgress;
@@ -120,7 +135,7 @@ class _MatchFieldState extends State<MatchField> {
             drag: drag,
             scale: scale,
             matchProgress: matchProgress,
-            onSlotDropped: (draggedSlot, position) => _dropSlot(matchProgress, draggedSlot, position),
+            onSlotDropped: _dropSlot,
           ),
         ),
 

@@ -21,6 +21,9 @@ void main() {
     expect(roundResult.roundNumber, 1);
     expect(roundResult.livesLost, 1);
     expect(roundResult.coinsGained, startedFight.matchProgressAfterFight.player.coins - matchProgress.player.coins);
-    expect(roundResult.experienceGained, backyard.engines.levelEngine.experienceForRound(matchProgress: startedFight.matchProgressAfterFight));
+    expect(
+      roundResult.experienceGained,
+      backyard.engines.levelEngine.experienceForRound(matchProgress: startedFight.matchProgressAfterFight),
+    );
   });
 }

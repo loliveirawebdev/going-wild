@@ -1,11 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/inventory/inventory.dart';
-import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
-import 'package:going_wild/domain/use_cases/lineup/move_copy_between_roster_slots.dart';
 import 'package:going_wild/ui/game/view_models/preparation/events/copy_moved_between_roster_slots.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
@@ -55,8 +52,16 @@ class BenchShelf extends StatelessWidget {
                     benchCopies: benchCopies,
                     onSummonFinished: onSummonFinished,
                     canDragCopies: matchProgress.checkPreparingActions() == null,
-                    onCopyMoved: (fromIndex, toIndex) => _moveCopy(context, matchProgress, fromIndex, toIndex),
-                    onBoardCopyDropped: (fromPosition, toIndex) => _moveBoardCopyToBench(context, matchProgress, fromPosition, toIndex),
+                    onCopyMoved: (fromIndex, toIndex) => _moveCopy(
+                      context,
+                      from: InventorySlot(index: fromIndex),
+                      to: InventorySlot(index: toIndex),
+                    ),
+                    onBoardCopyDropped: (fromPosition, toIndex) => _moveCopy(
+                      context,
+                      from: BoardSlot(position: fromPosition),
+                      to: InventorySlot(index: toIndex),
+                    ),
 
                     onSlotPressed: (slotIndex, characterCopy) => presentRosterUnitSheet(
                       context,
@@ -74,19 +79,7 @@ class BenchShelf extends StatelessWidget {
     );
   }
 
-  void _moveBoardCopyToBench(BuildContext context, MatchProgress matchProgress, Position fromPosition, int toIndex) {
-    final from = BoardSlot(position: fromPosition);
-    final to = InventorySlot(index: toIndex);
-    if (checkMovingCopyBetweenRosterSlots(matchProgress, to: to, from: from) != null) return;
-
-    context.read<PreparationBloc>().add(CopyMovedBetweenRosterSlots(to: to, from: from));
-  }
-
-  void _moveCopy(BuildContext context, MatchProgress matchProgress, int fromIndex, int toIndex) {
-    final from = InventorySlot(index: fromIndex);
-    final to = InventorySlot(index: toIndex);
-    if (checkMovingCopyBetweenRosterSlots(matchProgress, to: to, from: from) != null) return;
-
+  void _moveCopy(BuildContext context, {required RosterSlot from, required RosterSlot to}) {
     context.read<PreparationBloc>().add(CopyMovedBetweenRosterSlots(to: to, from: from));
   }
 

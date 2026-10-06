@@ -137,6 +137,9 @@ void main() {
     await tester.pump(const Duration(seconds: 2));
     expect(find.text('Fora do seu lado do campo'), findsNothing);
 
+    await dragFromBenchTo(tester, cellCenterOf(tester, const Position(row: 0, column: 1)));
+    expect(find.text('Fora do seu lado do campo'), findsOneWidget);
+
     await tester.pumpWidget(const SizedBox());
   });
 
