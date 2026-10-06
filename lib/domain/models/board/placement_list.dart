@@ -1,7 +1,10 @@
 import 'package:going_wild/domain/models/board/placement.dart';
 import 'package:going_wild/domain/models/board/position.dart';
+import 'package:going_wild/domain/models/character/character.dart';
 
 extension PlacementList on List<Placement> {
+  List<Character> get characters => [for (final placement in this) placement.characterCopy.character];
+
   Placement? placementAt(Position position) {
     for (final placement in this) {
       if (placement.position == position) {

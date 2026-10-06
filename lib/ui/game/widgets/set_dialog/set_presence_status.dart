@@ -21,8 +21,8 @@ class SetPresenceStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final translations = context.t.game.setDialog;
-    final nextTier = setPresence.nextTier;
     final reachedTierCount = setPresence.reachedTierCount;
+    final missingForNextTier = setPresence.missingForNextTier;
 
     final (status, color) = switch (setPresence) {
       SetPresence(isComplete: true) => (translations.completeStatus, AppColors.sun600),
@@ -35,11 +35,10 @@ class SetPresenceStatus extends StatelessWidget {
       TextSpan(
         text: status,
         children: [
-          if (nextTier != null)
+          if (missingForNextTier != null)
             TextSpan(
               style: _missingStyle,
-              text:
-                  ' · ${translations.missingForLevel(missing: nextTier.count - setPresence.presentMemberCount, level: reachedTierCount + 1)}',
+              text: ' · ${translations.missingForLevel(missing: missingForNextTier, level: reachedTierCount + 1)}',
             ),
         ],
       ),

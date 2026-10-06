@@ -10,7 +10,8 @@ class SetTierList extends StatelessWidget {
   final SetPresence setPresence;
 
   SetTierRowState _stateOf(int tierIndex) {
-    final activeTierIndex = setPresence.reachedTierCount - 1;
+    final activeTier = setPresence.activeTier;
+    final activeTierIndex = activeTier == null ? -1 : setPresence.set.tiers.indexOf(activeTier);
     if (tierIndex == activeTierIndex) return SetTierRowState.active;
     if (tierIndex < activeTierIndex) return SetTierRowState.surpassed;
     return SetTierRowState.pending;

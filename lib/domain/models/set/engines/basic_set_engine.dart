@@ -38,8 +38,8 @@ class BasicSetEngine extends SetEngine {
     final activeSets = <ActiveSet>[];
 
     for (final setPresence in setPresences(activeCharacters)) {
-      final reachedTiers = setPresence.reachedTiers;
-      if (reachedTiers.isNotEmpty) activeSets.add(ActiveSet(set: setPresence.set, tier: reachedTiers.last));
+      final activeTier = setPresence.activeTier;
+      if (activeTier != null) activeSets.add(ActiveSet(set: setPresence.set, tier: activeTier));
     }
 
     return activeSets;

@@ -59,7 +59,6 @@ class SetChipRow extends StatelessWidget {
   }
 
   List<SetPresence> _sortedSetPresencesOf(MatchProgress matchProgress) {
-    final boardCharacters = [for (final placement in matchProgress.playerRoster.placements) placement.characterCopy.character];
-    return matchProgress.phase.engines.setEngine.setPresences(boardCharacters)..sort(_compareByHighlight);
+    return [...matchProgress.setPresences]..sort(_compareByHighlight);
   }
 }

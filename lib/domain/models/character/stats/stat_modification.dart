@@ -8,6 +8,13 @@ class StatModification {
   final double value;
   final StatChangeType changeType;
 
+  bool get raisesStat => switch (changeType) {
+    StatChangeType.multiplier => value > 1,
+    StatChangeType.absoluteValue => value > 0,
+  };
+
+  bool get isBeneficial => raisesStat == stat.isHigherBetter;
+
   @override
   bool operator ==(Object other) =>
       other is StatModification && other.stat == stat && other.value == value && other.changeType == changeType;

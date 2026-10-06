@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:going_wild/domain/models/board/placement_list.dart';
 import 'package:going_wild/domain/models/level/player_level_progress.dart';
 import 'package:going_wild/domain/models/match_progress/errors/fight_in_progress_error.dart';
 import 'package:going_wild/domain/models/match_progress/errors/match_is_over_error.dart';
@@ -11,6 +12,8 @@ import 'package:going_wild/domain/models/phase/phase_status.dart';
 import 'package:going_wild/domain/models/phase/phase_wave.dart';
 import 'package:going_wild/domain/models/player/player.dart';
 import 'package:going_wild/domain/models/roster/roster.dart';
+import 'package:going_wild/domain/models/set/active_set.dart';
+import 'package:going_wild/domain/models/set/set_presence.dart';
 import 'package:going_wild/domain/models/shop/shop.dart';
 
 class MatchProgress {
@@ -37,6 +40,8 @@ class MatchProgress {
   final PlayerLevelProgress playerLevelProgress;
 
   bool get isInProgress => status == PhaseStatus.inProgress;
+  List<ActiveSet> get activeSets => phase.engines.setEngine.activeSets(playerRoster.placements.characters);
+  List<SetPresence> get setPresences => phase.engines.setEngine.setPresences(playerRoster.placements.characters);
 
   void requireInProgress() {
     if (!isInProgress) {

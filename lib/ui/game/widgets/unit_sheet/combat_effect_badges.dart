@@ -1,6 +1,3 @@
-import 'package:going_wild/domain/models/character/stats/stat.dart';
-import 'package:going_wild/domain/models/character/stats/stat_change_type.dart';
-import 'package:going_wild/domain/models/character/stats/stat_modification.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/ambush/vanished_combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/catalog/damage_over_time/damage_over_time_combat_lasting_effect.dart';
@@ -34,16 +31,7 @@ CombatEffectBadge? _badgeOf(Translations translations, CombatLastingEffect comba
     StunCombatLastingEffect() => (icon: CombatEffectIcon.stunned, label: labels.stunned),
     TauntCombatLastingEffect() => (icon: CombatEffectIcon.taunting, label: labels.taunted),
     _ when statModification == null => null,
-    _ when _strengthens(statModification) => (icon: CombatEffectIcon.buffed, label: labels.buffed),
+    _ when statModification.isBeneficial => (icon: CombatEffectIcon.buffed, label: labels.buffed),
     _ => (icon: CombatEffectIcon.debuffed, label: labels.debuffed),
   };
-}
-
-bool _strengthens(StatModification statModification) {
-  final raisesStat = switch (statModification.changeType) {
-    StatChangeType.multiplier => statModification.value > 1,
-    StatChangeType.absoluteValue => statModification.value > 0,
-  };
-
-  return statModification.stat == Stat.damageTakenPercentage ? !raisesStat : raisesStat;
 }

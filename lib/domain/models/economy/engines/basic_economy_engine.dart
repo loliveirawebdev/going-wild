@@ -42,10 +42,7 @@ class BasicEconomyEngine extends EconomyEngine {
   int roundIncome({required MatchProgress matchProgress}) {
     final engines = matchProgress.phase.engines;
     final waveReward = matchProgress.currentWave.coinsReward;
-    final boardCharacters = matchProgress.playerRoster.placements.map((placement) => placement.characterCopy.character).toList();
-    final activeSets = engines.setEngine.activeSets(boardCharacters);
-
-    return waveReward + engines.setEngine.bonusCoinsPerRound(activeSets);
+    return waveReward + engines.setEngine.bonusCoinsPerRound(matchProgress.activeSets);
   }
 
   @override

@@ -16,6 +16,8 @@ class SetPresence {
   ];
 
   int get reachedTierCount => reachedTiers.length;
-  bool get isComplete => reachedTierCount > 0 && reachedTierCount == set.tiers.length;
+  SetTier? get activeTier => reachedTiers.lastOrNull;
   SetTier? get nextTier => set.tiers.elementAtOrNull(reachedTierCount);
+  bool get isComplete => reachedTierCount > 0 && reachedTierCount == set.tiers.length;
+  int? get missingForNextTier => nextTier == null ? null : nextTier!.count - presentMemberCount;
 }

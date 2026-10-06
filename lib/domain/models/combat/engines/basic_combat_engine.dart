@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:going_wild/domain/models/board/board.dart';
 import 'package:going_wild/domain/models/board/placement.dart';
+import 'package:going_wild/domain/models/board/placement_list.dart';
 import 'package:going_wild/domain/models/character/engines/character_engine.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/combat/battlefield.dart';
@@ -73,7 +74,7 @@ class BasicCombatEngine extends CombatEngine {
   @override
   List<Combatant> startingCombatantsOf({required List<Placement> team, required List<Placement> enemies}) {
     var nextCombatantId = 1;
-    final teamActiveSets = setEngine.activeSets(team.map((placement) => placement.characterCopy.character).toList());
+    final teamActiveSets = setEngine.activeSets(team.characters);
 
     Combatant buildCombatant(Placement placement, Faction faction, SetEffectSide side) {
       final combatantId = nextCombatantId++;

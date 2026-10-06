@@ -28,4 +28,14 @@ void main() {
     expect(presenceOf(flyers, memberCount: 3).nextTier, flyers.tiers.last);
     expect(presenceOf(flyers, memberCount: 4).nextTier, isNull);
   });
+
+  test('the active tier is the highest one reached, and the missing count points to the next one', () {
+    expect(presenceOf(flyers, memberCount: 1).activeTier, isNull);
+    expect(presenceOf(flyers, memberCount: 3).activeTier, flyers.tiers.first);
+    expect(presenceOf(flyers, memberCount: 4).activeTier, flyers.tiers.last);
+
+    expect(presenceOf(flyers, memberCount: 1).missingForNextTier, flyers.tiers.first.count - 1);
+    expect(presenceOf(flyers, memberCount: 3).missingForNextTier, flyers.tiers.last.count - 3);
+    expect(presenceOf(flyers, memberCount: 4).missingForNextTier, isNull);
+  });
 }
