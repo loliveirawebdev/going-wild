@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stats.dart';
+import 'package:going_wild/domain/models/combat_history/replay/combat_replay_combatant.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_border_width.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
@@ -12,6 +13,10 @@ import 'package:going_wild/ui/core/widgets/game_icon_image.dart';
 
 const _gridSpacing = 6.0;
 const _iconSize = 20.0;
+const _barHeight = 6.0;
+const _barBorderWidth = 1.5;
+const _barRadius = BorderRadius.all(Radius.circular(4));
+const _barResolution = 1000;
 
 const _labelStyle = TextStyle(
   fontSize: 11,
@@ -29,10 +34,13 @@ const _valueStyle = TextStyle(
   fontWeight: FontWeight.w400,
 );
 
+const _maxValueStyle = TextStyle(fontSize: 12, color: AppColors.inkMuted);
+
 class UnitStatGrid extends StatelessWidget {
-  const UnitStatGrid({required this.stats, super.key});
+  const UnitStatGrid({required this.stats, super.key, this.combatant});
 
   final Stats stats;
+  final CombatReplayCombatant? combatant;
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +48,32 @@ class UnitStatGrid extends StatelessWidget {
     final statLabels = translations.stats;
     final attackSpeed = formattedNumberOf(context.t, (stats[Stat.attackSpeed] * 10).round() / 10);
 
+    final combatant = this.combatant;
+    final healthFraction = combatant == null ? 0.0 : _fractionOf(combatant.currentHealth, combatant.maxHealth);
+
     final tiles = [
-      _StatTile(icon: GameIcon.heart, label: statLabels.health, value: '${stats[Stat.health].round()}'),
-      _StatTile(icon: GameIcon.mana, label: statLabels.mana, value: '${stats[Stat.manaMax].round()}'),
+      if (combatant == null) ...[
+        _StatTile(icon: GameIcon.heart, label: statLabels.health, value: '${stats[Stat.health].round()}'),
+        _StatTile(icon: GameIcon.mana, label: statLabels.mana, value: '${stats[Stat.manaMax].round()}'),
+      ] else ...[
+        _StatTile(
+          icon: GameIcon.heart,
+          label: statLabels.health,
+          value: '${combatant.currentHealth.clamp(0, combatant.maxHealth).ceil()}',
+          maxValue: '${combatant.maxHealth.round()}',
+          barSegments: [
+            (fraction: healthFraction, color: AppColors.healthHigh),
+            (fraction: _fractionOf(combatant.currentShield, combatant.maxHealth).clamp(0, 1 - healthFraction), color: AppColors.shieldBar),
+          ],
+        ),
+        _StatTile(
+          icon: GameIcon.mana,
+          label: statLabels.mana,
+          value: '${combatant.currentMana.clamp(0, combatant.maxMana).floor()}',
+          maxValue: '${combatant.maxMana.round()}',
+          barSegments: [(fraction: _fractionOf(combatant.currentMana, combatant.maxMana), color: AppColors.mana)],
+        ),
+      ],
       _StatTile(icon: GameIcon.sword, label: statLabels.damage, value: '${stats[Stat.damage].round()}'),
       _StatTile(icon: GameIcon.shield, label: statLabels.armor, value: '${stats[Stat.armor].round()}'),
       _StatTile(
@@ -68,12 +99,18 @@ class UnitStatGrid extends StatelessWidget {
   }
 }
 
+double _fractionOf(double value, double maxValue) => maxValue <= 0 ? 0 : (value / maxValue).clamp(0, 1);
+
+typedef _BarSegment = ({double fraction, Color color});
+
 class _StatTile extends StatelessWidget {
-  const _StatTile({required this.icon, required this.label, required this.value});
+  const _StatTile({required this.icon, required this.label, required this.value, this.maxValue, this.barSegments});
 
   final String label;
   final String value;
   final GameIcon icon;
+  final String? maxValue;
+  final List<_BarSegment>? barSegments;
 
   @override
   Widget build(BuildContext context) {
@@ -84,12 +121,58 @@ class _StatTile extends StatelessWidget {
         borderRadius: AppRadius.small,
         border: Border.all(color: AppColors.surface400, width: AppBorderWidth.thin),
       ),
-      child: Row(
-        spacing: 6,
+      child: Column(
+        spacing: 2,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          GameIconImage(icon, size: _iconSize),
-          Expanded(child: Text(label, style: _labelStyle)),
-          Text(value, style: _valueStyle),
+          Row(
+            spacing: 6,
+            children: [
+              GameIconImage(icon, size: _iconSize),
+              Expanded(child: Text(label, style: _labelStyle)),
+              Text.rich(
+                TextSpan(
+                  text: value,
+                  children: [if (maxValue case final maxValue?) TextSpan(text: '/$maxValue', style: _maxValueStyle)],
+                ),
+                style: _valueStyle,
+              ),
+            ],
+          ),
+          if (barSegments case final barSegments?) _StatBar(segments: barSegments),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatBar extends StatelessWidget {
+  const _StatBar({required this.segments});
+
+  final List<_BarSegment> segments;
+
+  double get _emptyFraction => 1 - segments.fold(0.0, (sum, segment) => sum + segment.fraction);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: _barHeight,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: AppColors.surface300,
+        borderRadius: _barRadius,
+        border: Border.all(color: AppColors.outline, width: _barBorderWidth),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final segment in segments)
+            if (segment.fraction > 0)
+              Expanded(
+                flex: (segment.fraction * _barResolution).round(),
+                child: ColoredBox(color: segment.color),
+              ),
+          if (_emptyFraction > 0) Spacer(flex: (_emptyFraction * _barResolution).round()),
         ],
       ),
     );

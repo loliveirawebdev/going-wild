@@ -106,6 +106,17 @@
       "damage": "Damage",
       "support": "Support"
     },
+    "effects": {
+      "none": "No active effects",
+      "fallen": "Fallen",
+      "hidden": "Hidden",
+      "poisoned": "Poisoned",
+      "healing": "Healing",
+      "buffed": "Buffed",
+      "debuffed": "Weakened",
+      "stunned": "Stunned",
+      "taunted": "Taunted"
+    },
     "stats": {
       "health": "Health",
       "mana": "Mana",

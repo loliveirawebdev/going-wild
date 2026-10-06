@@ -37,6 +37,7 @@ flutter:
     - assets/headshots/
     - assets/brand/
     - assets/roles/
+    - assets/effects/
     - assets/sets/
     - assets/scenes/
     - lib/content/phase/backyard/cover.jpg

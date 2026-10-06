@@ -106,6 +106,17 @@
       "damage": "Dano",
       "support": "Suporte"
     },
+    "effects": {
+      "none": "Nenhum efeito ativo",
+      "fallen": "Caído",
+      "hidden": "Escondido",
+      "poisoned": "Envenenado",
+      "healing": "Curando",
+      "buffed": "Fortalecido",
+      "debuffed": "Enfraquecido",
+      "stunned": "Atordoado",
+      "taunted": "Provocado"
+    },
     "stats": {
       "health": "Vida",
       "mana": "Mana",

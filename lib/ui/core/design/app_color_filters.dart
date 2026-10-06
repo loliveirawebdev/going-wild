@@ -20,4 +20,6 @@ abstract final class AppColorFilters {
   static final lostIcon = _desaturatedFilterOf(saturation: 0, opacity: 0.35);
   static final soldCard = _desaturatedFilterOf(saturation: 0, opacity: 0.35);
   static final lockedCard = _desaturatedFilterOf(saturation: 0.35, opacity: 0.7);
+  static final fallenArt = _desaturatedFilterOf(saturation: 0, opacity: 1);
+  static final none = _desaturatedFilterOf(saturation: 1, opacity: 1);
 }

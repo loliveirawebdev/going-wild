@@ -787,6 +787,8 @@ class _Translations$game$unitSheet$en implements Translations$game$unitSheet$pt 
   @override
   late final _Translations$game$unitSheet$roles$en roles = _Translations$game$unitSheet$roles$en._(_root);
   @override
+  late final _Translations$game$unitSheet$effects$en effects = _Translations$game$unitSheet$effects$en._(_root);
+  @override
   late final _Translations$game$unitSheet$stats$en stats = _Translations$game$unitSheet$stats$en._(_root);
 }
 
@@ -1051,6 +1053,33 @@ class _Translations$game$unitSheet$roles$en implements Translations$game$unitShe
   String get support => 'Support';
 }
 
+// Path: game.unitSheet.effects
+class _Translations$game$unitSheet$effects$en implements Translations$game$unitSheet$effects$pt {
+  _Translations$game$unitSheet$effects$en._(this._root);
+
+  final TranslationsEn _root; // ignore: unused_field
+
+  // Translations
+  @override
+  String get none => 'No active effects';
+  @override
+  String get fallen => 'Fallen';
+  @override
+  String get hidden => 'Hidden';
+  @override
+  String get poisoned => 'Poisoned';
+  @override
+  String get healing => 'Healing';
+  @override
+  String get buffed => 'Buffed';
+  @override
+  String get debuffed => 'Weakened';
+  @override
+  String get stunned => 'Stunned';
+  @override
+  String get taunted => 'Taunted';
+}
+
 // Path: game.unitSheet.stats
 class _Translations$game$unitSheet$stats$en implements Translations$game$unitSheet$stats$pt {
   _Translations$game$unitSheet$stats$en._(this._root);
@@ -1266,6 +1295,15 @@ extension on TranslationsEn {
       'game.unitSheet.roles.guard' => 'Guard',
       'game.unitSheet.roles.damage' => 'Damage',
       'game.unitSheet.roles.support' => 'Support',
+      'game.unitSheet.effects.none' => 'No active effects',
+      'game.unitSheet.effects.fallen' => 'Fallen',
+      'game.unitSheet.effects.hidden' => 'Hidden',
+      'game.unitSheet.effects.poisoned' => 'Poisoned',
+      'game.unitSheet.effects.healing' => 'Healing',
+      'game.unitSheet.effects.buffed' => 'Buffed',
+      'game.unitSheet.effects.debuffed' => 'Weakened',
+      'game.unitSheet.effects.stunned' => 'Stunned',
+      'game.unitSheet.effects.taunted' => 'Taunted',
       'game.unitSheet.stats.health' => 'Health',
       'game.unitSheet.stats.mana' => 'Mana',
       'game.unitSheet.stats.damage' => 'Damage',

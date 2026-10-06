@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/combat_history/replay/combat_replay_combatant.dart';
 import 'package:going_wild/domain/models/phase/phase_engines.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
@@ -13,6 +14,7 @@ import 'package:going_wild/ui/core/widgets/dialog.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/range_badge.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/role_badge.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/unit_ability_block.dart';
+import 'package:going_wild/ui/game/widgets/unit_sheet/unit_combat_effects.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/unit_sale.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/unit_sell_button.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/unit_sheet_art.dart';
@@ -39,16 +41,18 @@ Future<void> presentUnitSheet(
 }
 
 class UnitSheet extends StatelessWidget {
-  const UnitSheet({required this.side, required this.engines, required this.characterCopy, super.key, this.sale});
+  const UnitSheet({required this.side, required this.engines, required this.characterCopy, super.key, this.sale, this.combatant});
 
   final UnitSide side;
   final UnitSale? sale;
   final PhaseEngines engines;
   final CharacterCopy characterCopy;
+  final CombatReplayCombatant? combatant;
 
   @override
   Widget build(BuildContext context) {
     final sale = this.sale;
+    final combatant = this.combatant;
     final character = characterCopy.character;
     final stats = engines.characterEngine.statsAtStars(character, stars: characterCopy.stars);
 
@@ -73,7 +77,12 @@ class UnitSheet extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      UnitSheetArt(side: side, character: character, sets: engines.setEngine.setsOf(character)),
+                      UnitSheetArt(
+                        side: side,
+                        character: character,
+                        sets: engines.setEngine.setsOf(character),
+                        isFallen: combatant != null && !combatant.isAlive,
+                      ),
                       UnitSheetNameBar(characterCopy: characterCopy),
                       Padding(
                         padding: const EdgeInsets.all(AppSpacing.space3),
@@ -89,8 +98,9 @@ class UnitSheet extends StatelessWidget {
                                 RangeBadge(range: stats[Stat.range].round()),
                               ],
                             ),
-                            UnitStatGrid(stats: stats),
+                            UnitStatGrid(stats: stats, combatant: combatant),
                             UnitAbilityBlock(stars: characterCopy.stars, ability: character.ability, manaCost: stats[Stat.manaMax]),
+                            if (combatant != null) UnitCombatEffects(combatant: combatant, edgeBleed: AppSpacing.space3),
                             if (side == UnitSide.team && sale != null) UnitSellButton(sale: sale),
                           ],
                         ),

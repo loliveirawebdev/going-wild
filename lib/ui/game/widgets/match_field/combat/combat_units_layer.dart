@@ -7,9 +7,9 @@ import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/localization/rejection_message.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/combat_unit.dart';
+import 'package:going_wild/ui/game/widgets/match_field/combat/live_combat_unit_sheet.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/unit_sale.dart';
-import 'package:going_wild/ui/game/widgets/unit_sheet/unit_sheet.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/unit_side.dart';
 
 const _combatStepDuration = Duration(milliseconds: 180);
@@ -54,16 +54,17 @@ class CombatUnitsLayer extends StatelessWidget {
     final characterCopy = combatant.characterCopy;
 
     if (combatant.faction == Faction.enemy) {
-      presentUnitSheet(context, engines: engines, side: UnitSide.enemy, characterCopy: characterCopy);
+      presentLiveCombatUnitSheet(context, engines: engines, side: UnitSide.enemy, combatant: combatant);
       return;
     }
 
     final rejection = matchProgress.checkPreparingActions();
-    presentUnitSheet(
+
+    presentLiveCombatUnitSheet(
       context,
       engines: engines,
       side: UnitSide.team,
-      characterCopy: characterCopy,
+      combatant: combatant,
       sale: UnitSale(
         onSell: null,
         valueInCoins: engines.economyEngine.sellPriceOf(characterCopy, matchProgress: matchProgress),

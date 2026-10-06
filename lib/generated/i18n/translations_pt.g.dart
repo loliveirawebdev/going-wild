@@ -939,6 +939,7 @@ class Translations$game$unitSheet$pt {
   String attackSpeedValue({required Object value}) => '${value}/s';
 
   late final Translations$game$unitSheet$roles$pt roles = Translations$game$unitSheet$roles$pt._(_root);
+  late final Translations$game$unitSheet$effects$pt effects = Translations$game$unitSheet$effects$pt._(_root);
   late final Translations$game$unitSheet$stats$pt stats = Translations$game$unitSheet$stats$pt._(_root);
 }
 
@@ -1254,6 +1255,42 @@ class Translations$game$unitSheet$roles$pt {
   String get support => 'Suporte';
 }
 
+// Path: game.unitSheet.effects
+class Translations$game$unitSheet$effects$pt {
+  Translations$game$unitSheet$effects$pt._(this._root);
+
+  final Translations _root; // ignore: unused_field
+
+  // Translations
+
+  /// pt: 'Nenhum efeito ativo'
+  String get none => 'Nenhum efeito ativo';
+
+  /// pt: 'Caído'
+  String get fallen => 'Caído';
+
+  /// pt: 'Escondido'
+  String get hidden => 'Escondido';
+
+  /// pt: 'Envenenado'
+  String get poisoned => 'Envenenado';
+
+  /// pt: 'Curando'
+  String get healing => 'Curando';
+
+  /// pt: 'Fortalecido'
+  String get buffed => 'Fortalecido';
+
+  /// pt: 'Enfraquecido'
+  String get debuffed => 'Enfraquecido';
+
+  /// pt: 'Atordoado'
+  String get stunned => 'Atordoado';
+
+  /// pt: 'Provocado'
+  String get taunted => 'Provocado';
+}
+
 // Path: game.unitSheet.stats
 class Translations$game$unitSheet$stats$pt {
   Translations$game$unitSheet$stats$pt._(this._root);
@@ -1477,6 +1514,15 @@ extension on Translations {
       'game.unitSheet.roles.guard' => 'Guarda',
       'game.unitSheet.roles.damage' => 'Dano',
       'game.unitSheet.roles.support' => 'Suporte',
+      'game.unitSheet.effects.none' => 'Nenhum efeito ativo',
+      'game.unitSheet.effects.fallen' => 'Caído',
+      'game.unitSheet.effects.hidden' => 'Escondido',
+      'game.unitSheet.effects.poisoned' => 'Envenenado',
+      'game.unitSheet.effects.healing' => 'Curando',
+      'game.unitSheet.effects.buffed' => 'Fortalecido',
+      'game.unitSheet.effects.debuffed' => 'Enfraquecido',
+      'game.unitSheet.effects.stunned' => 'Atordoado',
+      'game.unitSheet.effects.taunted' => 'Provocado',
       'game.unitSheet.stats.health' => 'Vida',
       'game.unitSheet.stats.mana' => 'Mana',
       'game.unitSheet.stats.damage' => 'Dano',

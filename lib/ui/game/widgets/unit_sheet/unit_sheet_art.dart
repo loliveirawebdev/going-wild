@@ -3,6 +3,7 @@ import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/set/team_set.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_border_width.dart';
+import 'package:going_wild/ui/core/design/app_color_filters.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
@@ -35,8 +36,9 @@ const _setTagStyle = TextStyle(
 );
 
 class UnitSheetArt extends StatelessWidget {
-  const UnitSheetArt({required this.side, required this.sets, required this.character, super.key});
+  const UnitSheetArt({required this.side, required this.sets, required this.character, super.key, this.isFallen = false});
 
+  final bool isFallen;
   final UnitSide side;
   final Character character;
   final List<TeamSet> sets;
@@ -51,7 +53,10 @@ class UnitSheetArt extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           const ColoredBox(color: AppColors.surface300),
-          Image.asset(characterAvatarAssetPathOf(character), fit: BoxFit.cover, alignment: Alignment.centerRight),
+          ColorFiltered(
+            colorFilter: isFallen ? AppColorFilters.fallenArt : AppColorFilters.none,
+            child: Image.asset(characterAvatarAssetPathOf(character), fit: BoxFit.cover, alignment: Alignment.centerRight),
+          ),
           DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
