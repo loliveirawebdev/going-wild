@@ -8,6 +8,7 @@ import 'package:going_wild/domain/models/phase/phase_id.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/routing/routes.dart';
 import 'package:going_wild/ui/phase_selection/widgets/phase_card.dart';
+import 'package:going_wild/ui/phase_selection/widgets/phase_page_dots.dart';
 import 'package:going_wild/ui/phase_selection/widgets/phase_selection_screen.dart';
 import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 
@@ -34,7 +35,10 @@ Future<void> showPhaseSelection(WidgetTester tester, {List<PhaseId> wonPhaseIds 
                 path: '/',
                 builder: (context, state) => const Scaffold(body: PhaseSelectionScreen()),
               ),
-              GoRoute(path: Routes.game, builder: (context, state) => Text('jogo ${state.pathParameters['phaseId']}')),
+              GoRoute(
+                path: Routes.game,
+                builder: (context, state) => _FakeMatch(phaseId: PhaseId(state.pathParameters['phaseId']!)),
+              ),
             ],
           ),
         ),
@@ -74,4 +78,67 @@ void main() {
 
     expect(find.text('jogo pond_edge'), findsOneWidget);
   });
+
+  testWidgets('coming back from a won phase slides the selection to the phase it unlocked', (tester) async {
+    await showPhaseSelection(tester);
+
+    await tester.tap(find.text('Jogar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('vencer'));
+    await tester.pumpAndSettle();
+
+    expect(tester.widget<PhasePageDots>(find.byType(PhasePageDots)).selectedIndex, 1);
+  });
+
+  testWidgets('a retry after a defeat that ends in a win also slides to the unlocked phase', (tester) async {
+    await showPhaseSelection(tester);
+
+    await tester.tap(find.text('Jogar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('tentar de novo'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('vencer'));
+    await tester.pumpAndSettle();
+
+    expect(tester.widget<PhasePageDots>(find.byType(PhasePageDots)).selectedIndex, 1);
+  });
+
+  testWidgets('coming back from a lost phase keeps the selection where it was', (tester) async {
+    await showPhaseSelection(tester);
+
+    await tester.tap(find.text('Jogar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('voltar'));
+    await tester.pumpAndSettle();
+
+    expect(tester.widget<PhasePageDots>(find.byType(PhasePageDots)).selectedIndex, 0);
+  });
+}
+
+class _FakeMatch extends StatelessWidget {
+  const _FakeMatch({required this.phaseId});
+
+  final PhaseId phaseId;
+
+  @override
+  Widget build(BuildContext context) {
+    final router = GoRouter.of(context);
+
+    return Scaffold(
+      body: Column(
+        children: [
+          Text('jogo ${phaseId.value}'),
+          TextButton(
+            onPressed: () async {
+              await context.read<PhaseProgressViewModel>().markPhaseWon(phaseId);
+              router.pop();
+            },
+            child: const Text('vencer'),
+          ),
+          TextButton(onPressed: () => router.pushReplacement(Routes.gameOf(phaseId)), child: const Text('tentar de novo')),
+          TextButton(onPressed: router.pop, child: const Text('voltar')),
+        ],
+      ),
+    );
+  }
 }
