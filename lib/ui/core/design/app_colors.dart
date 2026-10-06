@@ -40,7 +40,7 @@ abstract final class AppColors {
   static const Color fieldSelected = Color(0xFFFFE9A8);
   static const Color sideTeam = Color(0xFF7AD14F);
   static const Color sideEnemy = Color(0xFFE5533D);
-  static const Color sceneGrass = Color(0xFF57734F);
-  static const Color sceneForest = Color(0xFF182B34);
-  static const Color sceneNight = Color(0xFF0C171C);
+  static const Color sceneGrass = Color(0xFF557949);
+  static const Color sceneForest = Color(0xFF4D7454);
+  static const Color sceneNight = Color(0xFF263A2A);
 }

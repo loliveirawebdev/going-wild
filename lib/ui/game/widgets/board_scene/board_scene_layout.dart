@@ -13,19 +13,19 @@ const _hexagonCornerFractions = [
 ];
 
 abstract final class BoardSceneLayout {
-  static const imageSize = Size(768, 1376);
-  static const cellSize = Size(116, 90);
+  static const imageSize = Size(937, 1678);
+  static const cellSize = Size(146, 112);
 
-  static const rowCenterHeights = <double>[380, 462, 545, 625, 705, 788, 870];
+  static const rowCenterHeights = <double>[441, 540, 637, 734, 836, 946, 1053];
 
   static const rowCenterWidths = <List<double>>[
-    [170, 305, 440, 575],
-    [242, 374, 505, 640],
-    [180, 315, 448, 578],
-    [120, 255, 385, 515, 640],
-    [185, 315, 448, 578],
-    [120, 250, 385, 515, 650],
-    [180, 315, 450, 580],
+    [208, 368, 527, 686],
+    [296, 452, 610, 766],
+    [221, 378, 537, 695],
+    [150, 307, 462, 618, 777],
+    [226, 383, 542, 701],
+    [145, 304, 466, 628, 789],
+    [221, 382, 545, 711],
   ];
 
   static double scaleFor(double displayedWidth) => displayedWidth / imageSize.width;

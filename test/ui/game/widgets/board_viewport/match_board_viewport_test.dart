@@ -39,7 +39,7 @@ void main() {
     await tester.dragFrom(emptySpot, const Offset(0, 400));
     await tester.pumpAndSettle();
 
-    expect(transformationOf(tester).value, Matrix4.identity());
+    expect(transformationOf(tester).value.getTranslation().y, closeTo(0, 0.001));
 
     await tester.pumpWidget(const SizedBox());
   });

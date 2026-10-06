@@ -35,7 +35,7 @@ void main() {
     final cellRect = BoardSceneLayout.cellRectOf(board, firstCellOfSecondRow, scale: 1);
 
     expect(firstCellOfSecondRow.column, 1);
-    expect(cellRect.center, const Offset(242, 462));
+    expect(cellRect.center, const Offset(296, 540));
   });
 
   testWidgets('the scene takes the whole width and keeps the painting proportions even on a shorter screen', (tester) async {
@@ -51,6 +51,6 @@ void main() {
 
     final sceneSize = tester.getSize(find.byType(BoardScene));
     expect(sceneSize.width, 800);
-    expect(sceneSize.height, closeTo(800 * 1376 / 768, 0.01));
+    expect(sceneSize.height, closeTo(800 * 1678 / 937, 0.01));
   });
 }

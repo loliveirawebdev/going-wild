@@ -9,7 +9,7 @@ const _grassFade = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
   stops: [_grassFadeStart, 1],
-  colors: [Color(0x0057734F), AppColors.sceneGrass],
+  colors: [Color(0x00557949), AppColors.sceneGrass],
 );
 
 class BoardScene extends StatelessWidget {
