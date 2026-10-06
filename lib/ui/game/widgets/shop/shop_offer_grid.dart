@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/player/errors/not_enough_coins_error.dart';
 import 'package:going_wild/domain/use_cases/shop/buy_shop_offer.dart';
@@ -47,11 +46,10 @@ class ShopOfferGrid extends StatelessWidget {
 
     final engines = matchProgress.phase.engines;
     final rejection = checkBuyingShopOffer(matchProgress, offerIndex: offerIndex);
-    final stats = engines.characterEngine.statsAtStars(character, stars: 1);
 
     return ShopCard(
       character: character,
-      range: stats[Stat.range].round(),
+      stats: engines.characterEngine.statsAtStars(character, stars: 1),
       sets: engines.setEngine.setsOf(character),
       state: _stateOf(isSold: shop.offers[offerIndex] == null, isRejectedForCoins: rejection is NotEnoughCoinsError),
       priceInCoins: engines.economyEngine.priceOf(character, matchProgress: matchProgress),

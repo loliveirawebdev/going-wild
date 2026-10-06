@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:going_wild/domain/models/character/stats/stat.dart';
+import 'package:going_wild/domain/models/character/stats/stats.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/set/team_set.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
@@ -33,11 +35,11 @@ const _setStyle = TextStyle(
 );
 
 class ShopCardArt extends StatelessWidget {
-  final int range;
+  final Stats stats;
   final bool isFaded;
   final List<TeamSet> sets;
   final Character character;
-  const ShopCardArt({required this.sets, required this.range, required this.character, required this.isFaded, super.key});
+  const ShopCardArt({required this.sets, required this.stats, required this.character, required this.isFaded, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +71,7 @@ class ShopCardArt extends StatelessWidget {
           Positioned(
             top: _edgeInset,
             right: _edgeInset,
-            child: _RangeTag(range: range),
+            child: _RangeTag(stats: stats),
           ),
           Positioned(
             left: _edgeInset,
@@ -88,12 +90,12 @@ class ShopCardArt extends StatelessWidget {
 }
 
 class _RangeTag extends StatelessWidget {
-  final int range;
-  const _RangeTag({required this.range});
+  final Stats stats;
+  const _RangeTag({required this.stats});
 
   @override
   Widget build(BuildContext context) {
-    final isMelee = range <= 1;
+    final isMelee = stats.isMelee;
 
     return Container(
       padding: const EdgeInsets.all(2),
@@ -105,7 +107,7 @@ class _RangeTag extends StatelessWidget {
           if (!isMelee)
             Padding(
               padding: const EdgeInsets.only(left: 1, right: 3),
-              child: Text('$range', style: _rangeStyle),
+              child: Text('${stats[Stat.range].round()}', style: _rangeStyle),
             ),
         ],
       ),

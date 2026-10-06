@@ -9,7 +9,6 @@ import 'package:going_wild/domain/models/board/placement.dart';
 import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
-import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/phase/phase.dart';
 import 'package:going_wild/domain/models/phase/phase_id.dart';
 import 'package:going_wild/domain/models/phase/phase_status.dart';
@@ -128,7 +127,7 @@ List<Position> positionsFrom(Map<int, List<int>> columnsByRow) => [
     for (final column in columns) Position(row: row, column: column),
 ];
 
-bool isRanged(Character character) => character.statMultipliers[Stat.range] > 1;
+bool isRanged(Character character) => basicPhaseEngines.characterEngine.statsAtStars(character, stars: 1).isRanged;
 
 PhaseWave waveFrom(List<CharacterCopy> enemyCopies, int coinsReward) {
   final takenPositions = <Position>{};

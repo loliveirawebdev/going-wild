@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:going_wild/content/character/team/team.dart';
 import 'package:going_wild/content/phase/backyard/backyard.dart';
 import 'package:going_wild/domain/models/character/character.dart';
-import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/ui/core/design/app_spacing.dart';
 import 'package:going_wild/ui/design_system_catalog/catalog_block_title.dart';
 import 'package:going_wild/ui/design_system_catalog/catalog_tap_log.dart';
@@ -29,7 +28,7 @@ class ShopCardSection extends StatelessWidget {
             disabledReason: disabledReason,
             sets: engines.setEngine.setsOf(character),
             priceInCoins: character.rarity.index + 1,
-            range: engines.characterEngine.statsAtStars(character, stars: 1)[Stat.range].round(),
+            stats: engines.characterEngine.statsAtStars(character, stars: 1),
             onPressed: state == ShopCardState.normal ? tapOf(character.id.value) : null,
           ),
         );

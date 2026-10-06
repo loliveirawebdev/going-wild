@@ -1,5 +1,6 @@
 import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/character/character_copy.dart';
+import 'package:going_wild/domain/models/character/stats/melee_range.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/combatant/combat_effects/base/lasting/combat_lasting_effect.dart';
 import 'package:going_wild/domain/models/combatant/combatant.dart';
@@ -49,6 +50,7 @@ class CombatReplayCombatant {
   final List<CombatLastingEffect> combatLastingEffects;
 
   bool get isAlive => currentHealth > 0;
+  bool get isRanged => !isMeleeRange(attackRange);
   double get currentShield => combatLastingEffects.fold(0, (sum, combatLastingEffect) => sum + combatLastingEffect.absorbableDamage);
 
   @useResult

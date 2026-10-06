@@ -8,8 +8,6 @@ import 'package:going_wild/ui/game/view_models/combat_playback/states/combat_pla
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/projectiles/thrown_pebble.dart';
 
-const _meleeRange = 1;
-
 typedef _Throw = ({int id, Position from, Position to});
 
 class RangedAttacksLayer extends StatefulWidget {
@@ -32,7 +30,7 @@ class _RangedAttacksLayerState extends State<RangedAttacksLayer> {
     final newThrows = <_Throw>[
       for (final attack in playbackState.entriesSincePreviousTick.whereType<AttackLandedHistoryEntry>())
         if ((combatantsById[attack.combatantId], combatantsById[attack.targetCombatantId]) case (final attacker?, final target?)
-            when attacker.attackRange > _meleeRange)
+            when attacker.isRanged)
           (id: _nextThrowId++, from: attacker.position, to: target.position),
     ];
 

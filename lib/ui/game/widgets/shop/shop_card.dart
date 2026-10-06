@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:going_wild/domain/models/character/stats/stats.dart';
 import 'package:going_wild/domain/models/character/character.dart';
 import 'package:going_wild/domain/models/set/team_set.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
@@ -29,7 +30,7 @@ const _nameStyle = TextStyle(
 class ShopCard extends StatelessWidget {
   const ShopCard({
     required this.sets,
-    required this.range,
+    required this.stats,
     required this.state,
     required this.character,
     required this.priceInCoins,
@@ -38,7 +39,7 @@ class ShopCard extends StatelessWidget {
     this.disabledReason,
   });
 
-  final int range;
+  final Stats stats;
   final int priceInCoins;
   final Character character;
   final List<TeamSet> sets;
@@ -118,7 +119,7 @@ class ShopCard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ShopCardArt(sets: sets, range: range, character: character, isFaded: isUnaffordable),
+        ShopCardArt(sets: sets, stats: stats, character: character, isFaded: isUnaffordable),
         Container(
           height: shopCardBandHeight,
           color: isUnaffordable ? AppColors.surface300 : rarityColor,

@@ -95,7 +95,7 @@ class UnitSheet extends StatelessWidget {
                               runSpacing: 6,
                               children: [
                                 RoleBadge(role: character.role),
-                                RangeBadge(range: stats[Stat.range].round()),
+                                RangeBadge(stats: stats),
                               ],
                             ),
                             UnitStatGrid(stats: stats, combatant: combatant),
