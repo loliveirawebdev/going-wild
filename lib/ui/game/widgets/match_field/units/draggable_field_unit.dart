@@ -15,11 +15,14 @@ class DraggableFieldUnit extends StatelessWidget {
   final double diameter;
   final Position position;
   final VoidCallback onPressed;
+  final bool canDrag;
   final bool isAnotherDragActive;
   final FieldUnitVitals vitals;
   final CharacterCopy characterCopy;
+
   const DraggableFieldUnit({
     required this.vitals,
+    required this.canDrag,
     required this.diameter,
     required this.position,
     required this.onPressed,
@@ -39,6 +42,7 @@ class DraggableFieldUnit extends StatelessWidget {
       ignoring: isAnotherDragActive,
       child: Draggable<RosterSlot>(
         data: boardSlot,
+        maxSimultaneousDrags: canDrag ? 1 : 0,
         dragAnchorStrategy: pointerDragAnchorStrategy,
         onDragEnd: (details) => rosterDragViewModel.stopDragging(),
         onDragStarted: () => rosterDragViewModel.startDragging(boardSlot),

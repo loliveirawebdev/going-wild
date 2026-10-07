@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
-import 'package:going_wild/domain/use_cases/level/buy_experience.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/localization/rejection_message.dart';
 import 'package:going_wild/ui/game/view_models/preparation/events/experience_bought.dart';
+import 'package:going_wild/ui/game/view_models/preparation/player_options.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/buy_experience_button.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/level_meter.dart';
@@ -57,8 +57,7 @@ class ExperiencePill extends StatelessWidget {
 
   Widget _buildBuyExperienceButton(BuildContext context) {
     final translations = context.t.game.infoShelf;
-    final rejection = checkBuyingExperience(matchProgress);
-    final costInCoins = matchProgress.phase.engines.economyEngine.experiencePurchaseCostInCoins(matchProgress: matchProgress);
+    final (:rejection, :costInCoins) = PlayerOptions(matchProgress).experiencePurchase;
 
     return BuyExperienceButton(
       costInCoins: costInCoins,

@@ -5,6 +5,8 @@ class ReadyPreparationState extends PreparationState {
 
   final MatchProgress matchProgress;
   final List<RosterSlot> summonedSlots;
+
+  PlayerOptions get playerOptions => PlayerOptions(matchProgress);
   final PreparationRejection? rejection;
 
   @override

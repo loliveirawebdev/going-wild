@@ -14,6 +14,7 @@ import 'package:going_wild/ui/core/localization/rejection_message.dart';
 import 'package:going_wild/ui/game/view_models/combat_playback/combat_playback_bloc.dart';
 import 'package:going_wild/ui/game/view_models/combat_playback/states/combat_playback_state.dart';
 import 'package:going_wild/ui/game/view_models/preparation/events/copy_moved_between_roster_slots.dart';
+import 'package:going_wild/ui/game/view_models/preparation/player_options.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag.dart';
@@ -171,6 +172,7 @@ class _MatchFieldState extends State<MatchField> {
           Positioned.fill(
             child: TeamUnitsLayer(
               scale: scale,
+              canRearrangeRoster: PlayerOptions(matchProgress).canRearrangeRoster,
               summonIds: summonIds,
               startingCombatants: startingCombatants,
               isDragActive: isDragActive,

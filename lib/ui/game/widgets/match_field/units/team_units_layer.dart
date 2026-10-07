@@ -16,12 +16,14 @@ class TeamUnitsLayer extends StatelessWidget {
     required this.summonIds,
     required this.isDragActive,
     required this.matchProgress,
+    required this.canRearrangeRoster,
     required this.startingCombatants,
     super.key,
   });
 
   final double scale;
   final bool isDragActive;
+  final bool canRearrangeRoster;
   final MatchProgress matchProgress;
   final Map<Position, int> summonIds;
   final Map<Position, CombatReplayCombatant> startingCombatants;
@@ -43,6 +45,7 @@ class TeamUnitsLayer extends StatelessWidget {
                 child: DraggableFieldUnit(
                   position: placement.position,
                   vitals: combatVitalsOf(startingCombatants[placement.position]!),
+                  canDrag: canRearrangeRoster,
                   isAnotherDragActive: isDragActive,
                   diameter: fieldTokenDiameterFor(scale),
                   characterCopy: placement.characterCopy,

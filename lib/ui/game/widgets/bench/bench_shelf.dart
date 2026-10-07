@@ -51,7 +51,7 @@ class BenchShelf extends StatelessWidget {
                     isExpanded: isExpanded,
                     benchCopies: benchCopies,
                     onSummonFinished: onSummonFinished,
-                    canDragCopies: matchProgress.checkPreparingActions() == null,
+                    canDragCopies: state.playerOptions.canRearrangeRoster,
                     onCopyMoved: (fromIndex, toIndex) => _moveCopy(
                       context,
                       from: InventorySlot(index: fromIndex),

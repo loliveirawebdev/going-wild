@@ -4,7 +4,7 @@ import 'package:going_wild/domain/models/board/board.dart';
 import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
-import 'package:going_wild/domain/use_cases/lineup/move_copy_between_roster_slots.dart';
+import 'package:going_wild/ui/game/view_models/preparation/player_options.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
@@ -75,8 +75,12 @@ class FieldDropTarget extends StatelessWidget {
     final drag = this.drag;
     if (drag == null) return FieldCellHighlight.none;
 
-    final boardSlot = BoardSlot(position: position);
-    final acceptsDrag = checkMovingCopyBetweenRosterSlots(matchProgress, to: boardSlot, from: drag.draggedSlot) == null;
+    final moveRejection = PlayerOptions(matchProgress).moveRejectionOf(
+      from: drag.draggedSlot,
+      to: BoardSlot(position: position),
+    );
+
+    final acceptsDrag = moveRejection == null;
 
     if (drag.hoveredPosition == position) return acceptsDrag ? FieldCellHighlight.hoveredAvailable : FieldCellHighlight.hoveredForbidden;
     return acceptsDrag ? FieldCellHighlight.available : FieldCellHighlight.none;

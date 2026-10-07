@@ -1,8 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
-import 'package:going_wild/domain/use_cases/shop/reroll_shop.dart';
-import 'package:going_wild/domain/use_cases/shop/toggle_shop_lock.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_border_width.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
@@ -18,6 +16,7 @@ import 'package:going_wild/ui/core/widgets/round_icon_button.dart';
 import 'package:going_wild/ui/core/widgets/stat_counter.dart';
 import 'package:going_wild/ui/game/view_models/preparation/events/shop_lock_toggled.dart';
 import 'package:going_wild/ui/game/view_models/preparation/events/shop_rerolled.dart';
+import 'package:going_wild/ui/game/view_models/preparation/player_options.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
 import 'package:going_wild/ui/game/widgets/shop/coin_cost_pill.dart';
@@ -118,7 +117,7 @@ class _ShopHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final translations = context.t.game;
     final coins = matchProgress.player.coins;
-    final lockRejection = checkTogglingShopLock(matchProgress);
+    final lockRejection = PlayerOptions(matchProgress).shopLockRejection;
 
     return Row(
       spacing: AppSpacing.space2,
@@ -157,8 +156,7 @@ class _RerollButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final translations = context.t.game.shop;
-    final rejection = checkRerollingShop(matchProgress);
-    final costInCoins = matchProgress.phase.engines.economyEngine.rerollCostInCoins(matchProgress: matchProgress);
+    final (:rejection, :costInCoins) = PlayerOptions(matchProgress).reroll;
 
     return Semantics(
       label: translations.rerollLabel(cost: costInCoins),

@@ -5,6 +5,7 @@ import 'package:going_wild/domain/models/combatant/faction.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/localization/rejection_message.dart';
+import 'package:going_wild/ui/game/view_models/preparation/player_options.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/combat_unit.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/live_combat_unit_sheet.dart';
@@ -58,7 +59,7 @@ class CombatUnitsLayer extends StatelessWidget {
       return;
     }
 
-    final rejection = matchProgress.checkPreparingActions();
+    final (:valueInCoins, :rejection) = PlayerOptions(matchProgress).saleOf(characterCopy);
 
     presentLiveCombatUnitSheet(
       context,
@@ -67,7 +68,7 @@ class CombatUnitsLayer extends StatelessWidget {
       combatant: combatant,
       sale: UnitSale(
         onSell: null,
-        valueInCoins: engines.economyEngine.sellPriceOf(characterCopy, matchProgress: matchProgress),
+        valueInCoins: valueInCoins,
         disabledReason: rejection == null ? null : rejectionMessageOf(context.t, rejection),
       ),
     );

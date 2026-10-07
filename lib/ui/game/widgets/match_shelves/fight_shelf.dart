@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/match_progress/round_stage.dart';
-import 'package:going_wild/domain/use_cases/round/start_fight.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_spacing.dart';
@@ -16,6 +15,7 @@ import 'package:going_wild/ui/game/view_models/combat_playback/events/combat_pla
 import 'package:going_wild/ui/game/view_models/combat_playback/states/combat_playback_state.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/events/fight_requested.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/match_flow_bloc.dart';
+import 'package:going_wild/ui/game/view_models/preparation/player_options.dart';
 import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart';
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/match_shelf.dart';
@@ -63,7 +63,7 @@ class _FightButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rejection = checkStartingFight(matchProgress);
+    final rejection = PlayerOptions(matchProgress).fightRejection;
 
     return Button(
       fillsWidth: true,
