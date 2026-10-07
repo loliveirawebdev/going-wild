@@ -20,8 +20,11 @@ import 'package:going_wild/ui/game/widgets/game_screen.dart';
 import 'package:going_wild/ui/game/widgets/round_banner/countdown_banner.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/combat_unit.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/fight_shelf.dart';
+import 'package:going_wild/data/repositories/progress_repository.dart';
+import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 
 import '../../../../helpers/manual_combat_playback_clock.dart';
+import '../../../../helpers/in_memory_local_storage.dart';
 
 Future<(MatchRepository, CombatPlaybackBloc, ManualCombatPlaybackClock)> showMatch(WidgetTester tester) async {
   tester.view.physicalSize = const Size(402 * 3, 874 * 3);
@@ -44,7 +47,8 @@ Future<(MatchRepository, CombatPlaybackBloc, ManualCombatPlaybackClock)> showMat
               BlocProvider(create: (context) => PreparationBloc(matchRepository: matchRepository)..add(const PreparationStarted())),
               BlocProvider(
                 create: (context) =>
-                    MatchFlowBloc(randomGenerator: Random(1), matchRepository: matchRepository)..add(const MatchStarted(phase: backyard)),
+                    MatchFlowBloc(randomGenerator: Random(1), matchRepository: matchRepository, phaseProgress: testPhaseProgress())
+                      ..add(const MatchStarted(phase: backyard)),
               ),
             ],
             child: const CombatPlaybackBridge(child: GameScreen(phase: backyard)),
@@ -58,6 +62,9 @@ Future<(MatchRepository, CombatPlaybackBloc, ManualCombatPlaybackClock)> showMat
 
   return (matchRepository, combatPlaybackBloc, clock);
 }
+
+PhaseProgressViewModel testPhaseProgress() =>
+    PhaseProgressViewModel(progressRepository: ProgressRepository(localStorage: InMemoryLocalStorage()));
 
 void main() {
   setUpAll(configurePluralResolvers);

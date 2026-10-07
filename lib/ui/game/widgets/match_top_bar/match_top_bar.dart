@@ -45,9 +45,9 @@ class MatchTopBar extends StatelessWidget {
   }
 
   List<Widget> _buildMatchPills(BuildContext context, MatchProgress matchProgress) {
+    final maxLives = matchProgress.maxLives;
     final translations = context.t.game.topBar;
     final lives = matchProgress.player.remainingLives;
-    final maxLives = matchProgress.phase.engines.playerEngine.startingLives;
 
     return [
       TopBarPill(

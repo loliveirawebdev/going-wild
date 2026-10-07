@@ -15,7 +15,7 @@ import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/combat_playback_bridge.dart';
 import 'package:going_wild/ui/game/widgets/game_screen.dart';
-import 'package:going_wild/ui/game/widgets/phase_victory_recorder.dart';
+import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 import 'package:going_wild/ui/settings/view_models/settings_view_model.dart';
 
 final gameRoute = GoRoute(
@@ -36,8 +36,11 @@ final gameRoute = GoRoute(
 
           BlocProvider(
             lazy: false,
-            create: (context) =>
-                MatchFlowBloc(randomGenerator: Random(), matchRepository: context.read<MatchRepository>())..add(MatchStarted(phase: phase)),
+            create: (context) => MatchFlowBloc(
+              randomGenerator: Random(),
+              matchRepository: context.read<MatchRepository>(),
+              phaseProgress: context.read<PhaseProgressViewModel>(),
+            )..add(MatchStarted(phase: phase)),
           ),
 
           BlocProvider(
@@ -49,10 +52,7 @@ final gameRoute = GoRoute(
 
           BlocProvider(create: (context) => RosterDragViewModel()),
         ],
-        child: PhaseVictoryRecorder(
-          phase: phase,
-          child: CombatPlaybackBridge(child: GameScreen(phase: phase)),
-        ),
+        child: CombatPlaybackBridge(child: GameScreen(phase: phase)),
       ),
     );
   },

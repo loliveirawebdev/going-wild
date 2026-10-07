@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/data/repositories/match_repository.dart';
+import 'package:going_wild/domain/models/phase/phase_status.dart';
 import 'package:going_wild/domain/use_cases/round/round_result_of.dart';
 import 'package:going_wild/domain/use_cases/round/start_fight.dart';
 import 'package:going_wild/domain/use_cases/round/start_match.dart';
@@ -12,12 +13,15 @@ import 'package:going_wild/ui/game/view_models/match_flow/events/match_flow_even
 import 'package:going_wild/ui/game/view_models/match_flow/events/match_started.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/events/round_result_dismissed.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/states/match_flow_state.dart';
+import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 
 class MatchFlowBloc extends Bloc<MatchFlowEvent, MatchFlowState> {
   final Random _randomGenerator;
   final MatchRepository _matchRepository;
+  final PhaseProgressViewModel _phaseProgress;
 
-  MatchFlowBloc({required this._randomGenerator, required this._matchRepository}) : super(const NotStartedMatchFlowState()) {
+  MatchFlowBloc({required this._randomGenerator, required this._matchRepository, required this._phaseProgress})
+    : super(const NotStartedMatchFlowState()) {
     on<MatchStarted>(_onMatchStarted);
     on<FightRequested>(_onFightRequested);
     on<CountdownFinished>(_onCountdownFinished);
@@ -86,6 +90,7 @@ class MatchFlowBloc extends Bloc<MatchFlowEvent, MatchFlowState> {
       return;
     }
 
+    if (matchProgressAfterFight.status == PhaseStatus.won) _phaseProgress.markPhaseWon(matchProgressAfterFight.phase.id);
     emit(EndedMatchFlowState(phaseStatus: matchProgressAfterFight.status));
   }
 }

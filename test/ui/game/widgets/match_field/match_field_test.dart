@@ -25,8 +25,11 @@ import 'package:going_wild/ui/game/widgets/match_field/drop_target/field_drop_ta
 import 'package:going_wild/ui/game/widgets/match_field/match_field.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
 import 'package:going_wild/ui/game/widgets/summon/summon_poof.dart';
+import 'package:going_wild/data/repositories/progress_repository.dart';
+import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 
 import '../../../../helpers/manual_combat_playback_clock.dart';
+import '../../../../helpers/in_memory_local_storage.dart';
 
 const screenSize = Size(402, 874);
 const benchCat = CharacterCopy(stars: 1, character: cat);
@@ -58,7 +61,8 @@ Future<MatchRepository> showGameScreen(
           providers: [
             BlocProvider(create: (context) => RosterDragViewModel()),
             BlocProvider(
-              create: (context) => MatchFlowBloc(randomGenerator: Random(1), matchRepository: matchRepository),
+              create: (context) =>
+                  MatchFlowBloc(randomGenerator: Random(1), matchRepository: matchRepository, phaseProgress: testPhaseProgress()),
             ),
             BlocProvider(create: (context) => CombatPlaybackBloc(clock: ManualCombatPlaybackClock())),
             BlocProvider(create: (context) => PreparationBloc(matchRepository: matchRepository)..add(const PreparationStarted())),
@@ -95,6 +99,9 @@ Future<void> dragBetween(WidgetTester tester, {required Offset from, required Of
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 500));
 }
+
+PhaseProgressViewModel testPhaseProgress() =>
+    PhaseProgressViewModel(progressRepository: ProgressRepository(localStorage: InMemoryLocalStorage()));
 
 void main() {
   setUpAll(configurePluralResolvers);

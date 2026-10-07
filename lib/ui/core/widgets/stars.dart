@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:going_wild/domain/models/character/stars/star_values.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 
 const _starViewBoxSize = 24.0;
@@ -32,7 +33,7 @@ class Stars extends StatelessWidget {
             for (var starIndex = 0; starIndex < count; starIndex++)
               Align(
                 widthFactor: _starOverlapWidthFactor,
-                child: count == 3 && starIndex == 1
+                child: count == StarValues.maxStars && starIndex == 1
                     ? Transform.translate(
                         offset: Offset(0, -size * _crownLift),
                         child: Transform.scale(scale: _crownScale, child: star),

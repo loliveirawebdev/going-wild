@@ -22,10 +22,8 @@ RejectedPlayerActionError? checkMovingFromInventoryToBoard(
   if (matchProgress.currentWave.enemies.placementAt(position) != null) return PositionTakenByEnemyError(position: position);
   if (roster.inventory.entryAt(inventoryIndex) == null) return EmptyInventorySlotError(index: inventoryIndex);
 
-  final teamLimit = matchProgress.playerLevelProgress.level.teamSize;
-  final isTeamFull = roster.placements.length >= teamLimit;
   final occupiesNewPosition = roster.placements.placementAt(position) == null;
-  if (occupiesNewPosition && isTeamFull) return TeamIsFullError(limit: teamLimit);
+  if (occupiesNewPosition && matchProgress.isTeamFull) return TeamIsFullError(limit: matchProgress.teamLimit);
 
   return null;
 }

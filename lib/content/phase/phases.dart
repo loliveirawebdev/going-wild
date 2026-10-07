@@ -8,3 +8,5 @@ export 'cornfield/cornfield.dart';
 export 'pond_edge/pond_edge.dart';
 
 const List<Phase> allPhases = [backyard, pondEdge, cornfield];
+
+int phaseNumberOf(Phase phase) => allPhases.indexOf(phase) + 1;

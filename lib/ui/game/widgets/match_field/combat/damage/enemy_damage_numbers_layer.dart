@@ -11,6 +11,7 @@ import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/damage/floating_damage_number.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
 
+const _minimumShownDamage = 0.5;
 const _numberBoxSize = Size(48, 16);
 const _sideSpreads = <double>[0, -7, 7];
 
@@ -37,7 +38,8 @@ class _EnemyDamageNumbersLayerState extends State<EnemyDamageNumbersLayer> {
 
     final newNumbers = <_DamageNumber>[
       for (final damage in playbackState.entriesSincePreviousTick.whereType<DamageTakenHistoryEntry>())
-        if (combatantsById[damage.combatantId] case final victim? when victim.faction == Faction.enemy && damage.amount >= 0.5)
+        if (combatantsById[damage.combatantId] case final victim?
+            when victim.faction == Faction.enemy && damage.amount >= _minimumShownDamage)
           (
             id: _nextNumberId,
             amount: damage.amount.round(),

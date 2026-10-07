@@ -39,7 +39,11 @@ class MatchProgress {
   final Random randomGenerator;
   final PlayerLevelProgress playerLevelProgress;
 
+  bool get isTeamFull => teamSize >= teamLimit;
+  int get teamSize => playerRoster.placements.length;
+  int get teamLimit => playerLevelProgress.level.teamSize;
   bool get isInProgress => status == PhaseStatus.inProgress;
+  int get maxLives => phase.engines.playerEngine.startingLives;
   List<ActiveSet> get activeSets => phase.engines.setEngine.activeSets(playerRoster.placements.characters);
   List<SetPresence> get setPresences => phase.engines.setEngine.setPresences(playerRoster.placements.characters);
 

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:going_wild/content/phase/phases.dart';
 import 'package:going_wild/domain/models/phase/phase.dart';
 import 'package:going_wild/domain/models/progress/phase_availability.dart';
 import 'package:going_wild/domain/models/progress/phase_progress.dart';
@@ -65,7 +66,7 @@ class PhaseCarousel extends StatelessWidget {
     return PhaseCard(
       name: phaseNameOf(translations, phase),
       coverAssetPath: phaseCoverAssetPathOf(phase),
-      numberLabel: translations.phaseSelection.phaseNumber(number: index + 1),
+      numberLabel: translations.phaseSelection.phaseNumber(number: phaseNumberOf(phase)),
       status: switch (availability) {
         OpenPhaseAvailability() => PhaseCardStatus.open,
         WonPhaseAvailability() => PhaseCardStatus.won,

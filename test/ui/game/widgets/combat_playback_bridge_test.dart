@@ -15,8 +15,14 @@ import 'package:going_wild/ui/game/view_models/match_flow/events/round_result_di
 import 'package:going_wild/ui/game/view_models/match_flow/match_flow_bloc.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/states/match_flow_state.dart';
 import 'package:going_wild/ui/game/widgets/combat_playback_bridge.dart';
+import 'package:going_wild/data/repositories/progress_repository.dart';
+import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 
 import '../../../helpers/manual_combat_playback_clock.dart';
+import '../../../helpers/in_memory_local_storage.dart';
+
+PhaseProgressViewModel testPhaseProgress() =>
+    PhaseProgressViewModel(progressRepository: ProgressRepository(localStorage: InMemoryLocalStorage()));
 
 void main() {
   testWidgets('a fight is played back, its result is shown when the playback finishes and closing it moves on to the next round', (
@@ -25,7 +31,7 @@ void main() {
     final clock = ManualCombatPlaybackClock();
     final matchRepository = MatchRepository();
     final combatPlaybackBloc = CombatPlaybackBloc(clock: clock);
-    final matchFlowBloc = MatchFlowBloc(randomGenerator: Random(1), matchRepository: matchRepository);
+    final matchFlowBloc = MatchFlowBloc(randomGenerator: Random(1), matchRepository: matchRepository, phaseProgress: testPhaseProgress());
 
     await tester.pumpWidget(
       RepositoryProvider(

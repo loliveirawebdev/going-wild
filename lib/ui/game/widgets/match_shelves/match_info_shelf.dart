@@ -28,8 +28,8 @@ class MatchInfoShelf extends StatelessWidget {
             children: [
               Expanded(child: ExperiencePill(matchProgress: matchProgress)),
               TeamCountPill(
-                teamSize: matchProgress.playerRoster.placements.length,
-                teamLimit: matchProgress.playerLevelProgress.level.teamSize,
+                teamSize: matchProgress.teamSize,
+                teamLimit: matchProgress.teamLimit,
               ),
               StatCounter(
                 icon: GameIcon.gold,

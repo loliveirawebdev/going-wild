@@ -20,17 +20,30 @@ import 'package:going_wild/ui/game/view_models/match_flow/events/match_started.d
 import 'package:going_wild/ui/game/view_models/match_flow/events/round_result_dismissed.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/match_flow_bloc.dart';
 import 'package:going_wild/ui/game/view_models/match_flow/states/match_flow_state.dart';
+import 'package:going_wild/data/repositories/progress_repository.dart';
+import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
+
+import '../../../../helpers/in_memory_local_storage.dart';
 
 const seed = 1;
 const singleWavePhase = Phase(id: PhaseId('single_wave'), engines: basicPhaseEngines, waves: [backyardWave1]);
 
+PhaseProgressViewModel testPhaseProgress() =>
+    PhaseProgressViewModel(progressRepository: ProgressRepository(localStorage: InMemoryLocalStorage()));
+
 void main() {
   late MatchRepository matchRepository;
 
-  setUp(() => matchRepository = MatchRepository());
+  late PhaseProgressViewModel phaseProgress;
+
+  setUp(() {
+    matchRepository = MatchRepository();
+    phaseProgress = testPhaseProgress();
+  });
   tearDown(() => matchRepository.dispose());
 
-  MatchFlowBloc buildMatchFlowBloc() => MatchFlowBloc(randomGenerator: Random(seed), matchRepository: matchRepository);
+  MatchFlowBloc buildMatchFlowBloc() =>
+      MatchFlowBloc(randomGenerator: Random(seed), matchRepository: matchRepository, phaseProgress: phaseProgress);
 
   void storeStartedMatch(Phase phase) => matchRepository.replaceMatchProgress(startMatch(phase, randomGenerator: Random(seed)));
 
@@ -199,6 +212,40 @@ void main() {
         ..add(const RoundResultDismissed())
         ..add(const RoundResultDismissed()),
       expect: () => [isA<PreparingMatchFlowState>()],
+    );
+  });
+
+  group('phase progress', () {
+    blocTest<MatchFlowBloc, MatchFlowState>(
+      'closing the result of a won match records the phase as won',
+      setUp: () => storeStartedMatch(singleWavePhase),
+      build: buildMatchFlowBloc,
+      seed: () {
+        final roundResultState = roundResultStateOfStoredMatch();
+        return ShowingRoundResultMatchFlowState(
+          roundResult: roundResultState.roundResult,
+          matchProgressAfterFight: roundResultState.matchProgressAfterFight.createCopyWith(status: PhaseStatus.won),
+        );
+      },
+      act: (matchFlowBloc) => matchFlowBloc.add(const RoundResultDismissed()),
+      expect: () => [isA<EndedMatchFlowState>().having((state) => state.phaseStatus, 'status', PhaseStatus.won)],
+      verify: (_) => expect(phaseProgress.state.hasWon(singleWavePhase.id), isTrue),
+    );
+
+    blocTest<MatchFlowBloc, MatchFlowState>(
+      'closing the result of a lost match leaves the progress untouched',
+      setUp: () => storeStartedMatch(singleWavePhase),
+      build: buildMatchFlowBloc,
+      seed: () {
+        final roundResultState = roundResultStateOfStoredMatch();
+        return ShowingRoundResultMatchFlowState(
+          roundResult: roundResultState.roundResult,
+          matchProgressAfterFight: roundResultState.matchProgressAfterFight.createCopyWith(status: PhaseStatus.lost),
+        );
+      },
+      act: (matchFlowBloc) => matchFlowBloc.add(const RoundResultDismissed()),
+      expect: () => [isA<EndedMatchFlowState>()],
+      verify: (_) => expect(phaseProgress.state.wonPhaseIds, isEmpty),
     );
   });
 }
