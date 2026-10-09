@@ -1,32 +1,28 @@
 import 'package:flutter/widgets.dart';
 import 'package:going_wild/domain/models/combat_history/replay/combat_replay_combatant.dart';
 import 'package:going_wild/domain/models/combatant/faction.dart';
-import 'package:going_wild/ui/core/design/app_color_filters.dart';
+import 'package:going_wild/ui/game/unit_stage/unit/unit_head_height.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/field_unit.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_status.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
 
-const _fallenOpacity = 0.45;
-const _fadeDuration = Duration(milliseconds: 250);
-
 class CombatUnit extends StatelessWidget {
-  final double diameter;
+  final double scale;
   final CombatReplayCombatant combatant;
-  const CombatUnit({required this.diameter, required this.combatant, super.key});
+  const CombatUnit({required this.scale, required this.combatant, super.key});
 
   @override
   Widget build(BuildContext context) {
-    final unit = FieldUnit(
-      diameter: diameter,
-      vitals: combatVitalsOf(combatant),
-      characterCopy: combatant.characterCopy,
-      side: combatant.faction == Faction.team ? FieldUnitSide.team : FieldUnitSide.enemy,
-    );
+    final sprite = combatant.characterCopy.character.sprite;
 
-    return AnimatedOpacity(
-      duration: _fadeDuration,
-      opacity: combatant.isAlive ? 1 : _fallenOpacity,
-      child: ColorFiltered(colorFilter: combatant.isAlive ? AppColorFilters.none : AppColorFilters.inactiveIcon, child: unit),
+    return FieldUnit(
+      vitals: combatVitalsOf(combatant),
+      diameter: fieldTokenDiameterFor(scale),
+      characterCopy: combatant.characterCopy,
+      statusSpot: switch (combatant.faction) {
+        Faction.team => const BelowFeetStatusSpot(),
+        Faction.enemy => AboveHeadStatusSpot(headHeight: headHeightAboveCellCenterOf(sprite) * scale),
+      },
     );
   }
 }

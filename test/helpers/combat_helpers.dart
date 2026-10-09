@@ -12,6 +12,9 @@ import 'package:going_wild/domain/models/character/character_copy.dart';
 import 'package:going_wild/domain/models/character/character_id.dart';
 import 'package:going_wild/domain/models/character/rarity.dart';
 import 'package:going_wild/domain/models/character/role.dart';
+import 'package:going_wild/domain/models/character/sprite/ability_visuals.dart';
+import 'package:going_wild/domain/models/character/sprite/character_sprite.dart';
+import 'package:going_wild/domain/models/character/sprite/sprite_movement.dart';
 import 'package:going_wild/domain/models/character/stars/star_values.dart';
 import 'package:going_wild/domain/models/character/stats/stat.dart';
 import 'package:going_wild/domain/models/character/stats/stat_multipliers.dart';
@@ -40,12 +43,20 @@ const testBoard = Board(
 );
 const noAbility = Ability(effects: [], trigger: ManaFullTrigger());
 
+const dummySprite = CharacterSprite(
+  atlasPath: 'lib/content/character/team/cat/atlas.webp',
+  boardScale: 1,
+  movement: WalkingMovement(),
+  abilityVisuals: AbilityVisuals(),
+);
+
 Character dummy({Role role = Role.damage, Ability ability = noAbility, CharacterId id = const CharacterId('cat')}) => Character(
   id: id,
   role: role,
   ability: ability,
   rarity: Rarity.common,
   statMultipliers: const StatMultipliers({}),
+  sprite: dummySprite,
 );
 
 Stats statsOf({

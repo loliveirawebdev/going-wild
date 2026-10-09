@@ -5,6 +5,7 @@ import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/design/app_shadows.dart';
 
 const _shelfPadding = 5.0;
+const matchShelfChromeHeight = _shelfPadding * 2 + AppBorderWidth.thick * 2 + AppShadows.pressOffset;
 
 class MatchShelf extends StatelessWidget {
   const MatchShelf({required this.child, super.key});

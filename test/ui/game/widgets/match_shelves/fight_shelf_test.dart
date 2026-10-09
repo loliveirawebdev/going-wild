@@ -23,6 +23,7 @@ import 'package:going_wild/ui/game/widgets/match_shelves/fight_shelf.dart';
 import 'package:going_wild/data/repositories/progress_repository.dart';
 import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 
+import '../../../../helpers/unit_atlas_helpers.dart';
 import '../../../../helpers/manual_combat_playback_clock.dart';
 import '../../../../helpers/in_memory_local_storage.dart';
 
@@ -30,6 +31,8 @@ Future<(MatchRepository, CombatPlaybackBloc, ManualCombatPlaybackClock)> showMat
   tester.view.physicalSize = const Size(402 * 3, 874 * 3);
   tester.view.devicePixelRatio = 3;
   addTearDown(tester.view.reset);
+
+  await preloadUnitAtlases(tester);
 
   final clock = ManualCombatPlaybackClock();
   final matchRepository = MatchRepository();

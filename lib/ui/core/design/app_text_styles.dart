@@ -56,6 +56,31 @@ abstract final class AppTextStyles {
     fontWeight: FontWeight.w800,
   );
 
+  static const TextStyle tag = TextStyle(
+    fontSize: 12,
+    height: 16 / 12,
+    color: AppColors.ink,
+    fontFamily: AppFonts.sans,
+    fontWeight: FontWeight.w800,
+  );
+
+  static const TextStyle caption = TextStyle(
+    fontSize: 11,
+    height: 14 / 11,
+    color: AppColors.inkMuted,
+    fontFamily: AppFonts.sans,
+    fontWeight: FontWeight.w800,
+  );
+
+  static const TextStyle overline = TextStyle(
+    fontSize: 11,
+    height: 14 / 11,
+    letterSpacing: 0.6,
+    color: AppColors.inkMuted,
+    fontFamily: AppFonts.sans,
+    fontWeight: FontWeight.w800,
+  );
+
   static const TextStyle label = TextStyle(
     fontSize: 12,
     height: 1.3333,

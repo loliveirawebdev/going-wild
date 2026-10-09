@@ -17,7 +17,8 @@ import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_shop_tile.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_slot.dart';
-import 'package:going_wild/ui/game/widgets/match_shelves/match_bottom.dart';
+import 'package:going_wild/ui/game/widgets/bench/bench_shelf.dart';
+import 'package:going_wild/ui/game/widgets/match_body.dart';
 
 import '../../../../helpers/manual_combat_playback_clock.dart';
 
@@ -38,7 +39,7 @@ Future<void> dragBenchCopy(WidgetTester tester, {required String fromLabel, requ
   await finishResizing(tester);
 }
 
-Future<MatchRepository> showMatchBottom(WidgetTester tester, {List<CharacterCopy> benchCopies = const []}) async {
+Future<MatchRepository> showMatchBody(WidgetTester tester, {List<CharacterCopy> benchCopies = const []}) async {
   final startingMatchProgress = startMatch(backyard, randomGenerator: Random(1));
   var inventory = startingMatchProgress.playerRoster.inventory;
   for (final (slotIndex, characterCopy) in benchCopies.indexed) {
@@ -59,7 +60,7 @@ Future<MatchRepository> showMatchBottom(WidgetTester tester, {List<CharacterCopy
             BlocProvider(create: (context) => PreparationBloc(matchRepository: matchRepository)..add(const PreparationStarted())),
           ],
 
-          child: Scaffold(body: MatchBottom(onClosedBenchTopChanged: (closedBenchTop) {})),
+          child: const Scaffold(body: MatchBody()),
         ),
       ),
     ),
@@ -72,8 +73,16 @@ Future<MatchRepository> showMatchBottom(WidgetTester tester, {List<CharacterCopy
 void main() {
   setUpAll(configurePluralResolvers);
 
+  testWidgets('the closed bench is exactly as tall as the height the field framing counts on', (tester) async {
+    await showMatchBody(tester, benchCopies: [const CharacterCopy(stars: 2, character: cat)]);
+
+    expect(tester.getSize(find.byType(BenchShelf)).height, BenchShelf.closedHeight);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('closed, the bench shows seven small slots without names and the shop button', (tester) async {
-    await showMatchBottom(tester, benchCopies: [const CharacterCopy(stars: 2, character: cat)]);
+    await showMatchBody(tester, benchCopies: [const CharacterCopy(stars: 2, character: cat)]);
 
     expect(find.byType(BenchSlot), findsNWidgets(7));
     expect(find.byType(BenchShopTile), findsOneWidget);
@@ -85,7 +94,7 @@ void main() {
   });
 
   testWidgets('tapping the bench opens it with names and the handle closes it again', (tester) async {
-    await showMatchBottom(tester, benchCopies: [const CharacterCopy(stars: 2, character: cat)]);
+    await showMatchBody(tester, benchCopies: [const CharacterCopy(stars: 2, character: cat)]);
 
     await tester.tap(find.byType(BenchSlot).first);
     await finishResizing(tester);
@@ -99,7 +108,7 @@ void main() {
   });
 
   testWidgets('dragging the handle up opens it and tapping outside closes it', (tester) async {
-    await showMatchBottom(tester, benchCopies: [const CharacterCopy(stars: 2, character: cat)]);
+    await showMatchBody(tester, benchCopies: [const CharacterCopy(stars: 2, character: cat)]);
 
     await tester.fling(find.bySemanticsLabel('Abrir banco'), const Offset(0, -80), 800);
     await finishResizing(tester);
@@ -113,7 +122,7 @@ void main() {
   });
 
   testWidgets('the bench closes when the fight starts', (tester) async {
-    final matchRepository = await showMatchBottom(tester, benchCopies: [const CharacterCopy(stars: 2, character: cat)]);
+    final matchRepository = await showMatchBody(tester, benchCopies: [const CharacterCopy(stars: 2, character: cat)]);
 
     await tester.tap(find.byType(BenchSlot).first);
     await finishResizing(tester);
@@ -127,7 +136,7 @@ void main() {
   });
 
   testWidgets('with the bench open, tapping an animal opens its sheet', (tester) async {
-    await showMatchBottom(tester, benchCopies: [const CharacterCopy(stars: 2, character: cat)]);
+    await showMatchBody(tester, benchCopies: [const CharacterCopy(stars: 2, character: cat)]);
 
     await tester.tap(find.byType(BenchSlot).first);
     await finishResizing(tester);
@@ -141,7 +150,7 @@ void main() {
 
   testWidgets('with the bench open, dragging an animal to an empty slot moves it there', (tester) async {
     const cat2 = CharacterCopy(stars: 2, character: cat);
-    final matchRepository = await showMatchBottom(tester, benchCopies: [cat2]);
+    final matchRepository = await showMatchBody(tester, benchCopies: [cat2]);
 
     await tester.tap(find.byType(BenchSlot).first);
     await finishResizing(tester);
@@ -158,7 +167,7 @@ void main() {
   testWidgets('dropping an animal on another one swaps them', (tester) async {
     const cat2 = CharacterCopy(stars: 2, character: cat);
     const duck1 = CharacterCopy(stars: 1, character: duck);
-    final matchRepository = await showMatchBottom(tester, benchCopies: [cat2, duck1]);
+    final matchRepository = await showMatchBody(tester, benchCopies: [cat2, duck1]);
 
     await tester.tap(find.byType(BenchSlot).first);
     await finishResizing(tester);
@@ -175,7 +184,7 @@ void main() {
 
   testWidgets('with the bench closed, dragging still moves the animal', (tester) async {
     const cat2 = CharacterCopy(stars: 2, character: cat);
-    final matchRepository = await showMatchBottom(tester, benchCopies: [cat2]);
+    final matchRepository = await showMatchBody(tester, benchCopies: [cat2]);
 
     await dragBenchCopy(tester, fromLabel: 'Banco 1: Gato, 2 estrelas', toLabel: 'Banco 3: vazio');
 

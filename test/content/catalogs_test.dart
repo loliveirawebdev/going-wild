@@ -17,14 +17,14 @@ List<String> subdirectoryNamesIn(String directoryPath) => [
 ];
 
 void main() {
-  test('every character file of the team is in allTeamCharacters', () {
-    final characterFileNames = contentFileNamesIn('lib/content/character/team', catalogFileName: 'team.dart');
-    expect(allTeamCharacters, hasLength(characterFileNames.length), reason: characterFileNames.join(', '));
+  test('every character folder of the team is in allTeamCharacters', () {
+    final characterFolderNames = subdirectoryNamesIn('lib/content/character/team');
+    expect(allTeamCharacters, hasLength(characterFolderNames.length), reason: characterFolderNames.join(', '));
   });
 
-  test('every enemy file is in allEnemyCharacters', () {
-    final enemyFileNames = contentFileNamesIn('lib/content/character/enemies', catalogFileName: 'enemies.dart');
-    expect(allEnemyCharacters, hasLength(enemyFileNames.length), reason: enemyFileNames.join(', '));
+  test('every enemy folder is in allEnemyCharacters', () {
+    final enemyFolderNames = subdirectoryNamesIn('lib/content/character/enemies');
+    expect(allEnemyCharacters, hasLength(enemyFolderNames.length), reason: enemyFolderNames.join(', '));
   });
 
   test('every set file is in allSets', () {

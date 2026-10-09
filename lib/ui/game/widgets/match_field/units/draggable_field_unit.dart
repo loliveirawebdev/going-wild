@@ -36,7 +36,7 @@ class DraggableFieldUnit extends StatelessWidget {
     final boardSlot = BoardSlot(position: position);
     final rosterDragViewModel = context.read<RosterDragViewModel>();
     final token = FieldUnitToken(side: FieldUnitSide.team, diameter: diameter, characterCopy: characterCopy);
-    final unit = FieldUnit(side: FieldUnitSide.team, vitals: vitals, diameter: diameter, characterCopy: characterCopy);
+    final unit = FieldUnit(vitals: vitals, diameter: diameter, characterCopy: characterCopy, statusSpot: const BelowFeetStatusSpot());
 
     return IgnorePointer(
       ignoring: isAnotherDragActive,

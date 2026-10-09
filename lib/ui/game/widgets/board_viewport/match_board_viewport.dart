@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/domain/models/match_progress/round_stage.dart';
@@ -13,8 +12,8 @@ import 'package:going_wild/ui/game/widgets/match_field/match_field.dart';
 const _reframeDuration = Duration(milliseconds: 320);
 
 class MatchBoardViewport extends StatefulWidget {
-  final ValueListenable<double?> closedBenchTop;
-  const MatchBoardViewport({required this.closedBenchTop, super.key});
+  final double fieldBottomLimit;
+  const MatchBoardViewport({required this.fieldBottomLimit, super.key});
 
   @override
   State<MatchBoardViewport> createState() => _MatchBoardViewportState();
@@ -29,19 +28,15 @@ class _MatchBoardViewportState extends State<MatchBoardViewport> with SingleTick
   @override
   void initState() {
     super.initState();
-    widget.closedBenchTop.addListener(_onClosedBenchTopChanged);
     _reframeController.addListener(() => _transformation.value = _reframe?.value ?? _transformation.value);
   }
 
   @override
   void dispose() {
-    widget.closedBenchTop.removeListener(_onClosedBenchTopChanged);
     _reframeController.dispose();
     _transformation.dispose();
     super.dispose();
   }
-
-  void _onClosedBenchTopChanged() => setState(() {});
 
   void _followFraming(BoardFraming framing) {
     final previousFraming = _framing;
@@ -82,7 +77,7 @@ class _MatchBoardViewportState extends State<MatchBoardViewport> with SingleTick
           final viewportSize = constraints.biggest;
           final framing = boardFramingOf(
             viewportSize: viewportSize,
-            fieldBottomLimit: widget.closedBenchTop.value ?? viewportSize.height,
+            fieldBottomLimit: widget.fieldBottomLimit,
           );
           _followFraming(framing);
 

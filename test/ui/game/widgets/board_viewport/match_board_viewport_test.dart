@@ -10,6 +10,12 @@ import '../match_field/match_field_test.dart';
 TransformationController transformationOf(WidgetTester tester) =>
     tester.widget<InteractiveViewer>(find.byType(InteractiveViewer)).transformationController!;
 
+Future<void> settleBoard(WidgetTester tester) async {
+  for (var frame = 0; frame < 30; frame++) {
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+}
+
 void main() {
   testWidgets('on a tall screen the field sits just above the closed bench and the board does not scroll', (tester) async {
     await showGameScreen(tester);
@@ -22,7 +28,7 @@ void main() {
 
     final emptySpot = cellCenterOf(tester, const Position(row: 2, column: 2));
     await tester.dragFrom(emptySpot, const Offset(0, -300));
-    await tester.pumpAndSettle();
+    await settleBoard(tester);
 
     expect(transformationOf(tester).value, Matrix4.identity());
   });
@@ -37,7 +43,7 @@ void main() {
 
     final emptySpot = cellCenterOf(tester, const Position(row: 3, column: 2));
     await tester.dragFrom(emptySpot, const Offset(0, 400));
-    await tester.pumpAndSettle();
+    await settleBoard(tester);
 
     expect(transformationOf(tester).value.getTranslation().y, closeTo(0, 0.001));
 
@@ -59,7 +65,7 @@ void main() {
     }
     await firstFinger.up();
     await secondFinger.up();
-    await tester.pumpAndSettle();
+    await settleBoard(tester);
 
     expect(transformation.value.getMaxScaleOnAxis(), greaterThan(1));
     expect(transformation.value.getMaxScaleOnAxis(), lessThanOrEqualTo(maximumBoardZoom));
@@ -67,7 +73,7 @@ void main() {
     await tester.tapAt(emptySpot);
     await tester.pump(const Duration(milliseconds: 80));
     await tester.tapAt(emptySpot);
-    await tester.pumpAndSettle();
+    await settleBoard(tester);
 
     expect(transformation.value, framing);
 

@@ -21,6 +21,16 @@ class Position {
       _axialDirections.map((direction) => Position._fromAxial(_axialColumn + direction.$1, row + direction.$2));
 
   bool isWithinRange(Position other, double range) => distanceToPosition(other) <= range;
+  bool canReach(Position other, double range) => isWithinRange(other, range) && isAlignedWith(other);
+
+  bool isAlignedWith(Position other) {
+    final rowDifference = other.row - row;
+    final axialColumnDifference = other._axialColumn - _axialColumn;
+    final isOnHexLine = rowDifference == 0 || axialColumnDifference == 0 || axialColumnDifference + rowDifference == 0;
+    final isStraightAbove = rowDifference.isEven && 2 * axialColumnDifference == -rowDifference;
+
+    return isOnHexLine || isStraightAbove;
+  }
 
   int distanceToPosition(Position other) {
     final axialColumnDifference = _axialColumn - other._axialColumn;

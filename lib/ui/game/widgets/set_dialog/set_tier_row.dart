@@ -5,6 +5,7 @@ import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/design/app_spacing.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
+import 'package:going_wild/ui/core/widgets/pill.dart';
 
 const _countSize = 28.0;
 
@@ -110,13 +111,10 @@ class _ActiveTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Pill(
+      color: AppColors.grass400,
+      borderColor: AppColors.grass600,
       padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
-      decoration: BoxDecoration(
-        color: AppColors.grass400,
-        borderRadius: AppRadius.pill,
-        border: Border.all(color: AppColors.grass600, width: AppBorderWidth.thin),
-      ),
       child: Text(context.t.game.setDialog.activeTag.toUpperCase(), style: _tagStyle),
     );
   }

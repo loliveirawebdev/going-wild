@@ -96,7 +96,10 @@
     "manaCostLabel": "Costs $cost mana",
     "lowHealthTrigger": "Below $percentage% health",
     "sellButton": "Sell",
-    "sellLabel": "Sell for $value coins",
+    "sellLabel(param=value)": {
+      "one": "Sell for $value coin",
+      "other": "Sell for $value coins"
+    },
     "melee": "Melee",
     "ranged": "Range $range",
     "attackSpeedValue": "$value/s",
@@ -133,7 +136,10 @@
     "rerollButton": "New offers",
     "rerollLabel": "New offers for $cost coins",
     "soldStamp": "Sold",
-    "offerLabel": "$name for $price coins",
+    "offerLabel(param=price)": {
+      "one": "$name for $price coin",
+      "other": "$name for $price coins"
+    },
     "soldOfferLabel": "Sold offer"
   },
   "rejections": {

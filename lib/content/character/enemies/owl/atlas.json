@@ -1,0 +1,254 @@
+{
+  "frames": [
+    {
+      "row": 0,
+      "column": 0,
+      "x": 1105,
+      "y": 0,
+      "width": 166,
+      "height": 250,
+      "offsetX": -83,
+      "offsetY": -174
+    },
+    {
+      "row": 0,
+      "column": 1,
+      "x": 546,
+      "y": 0,
+      "width": 158,
+      "height": 255,
+      "offsetX": -86,
+      "offsetY": -179
+    },
+    {
+      "row": 0,
+      "column": 2,
+      "x": 1271,
+      "y": 0,
+      "width": 166,
+      "height": 250,
+      "offsetX": -83,
+      "offsetY": -174
+    },
+    {
+      "row": 0,
+      "column": 3,
+      "x": 0,
+      "y": 260,
+      "width": 176,
+      "height": 244,
+      "offsetX": -79,
+      "offsetY": -167
+    },
+    {
+      "row": 0,
+      "column": 4,
+      "x": 176,
+      "y": 260,
+      "width": 165,
+      "height": 241,
+      "offsetX": -82,
+      "offsetY": -165
+    },
+    {
+      "row": 0,
+      "column": 5,
+      "x": 851,
+      "y": 260,
+      "width": 192,
+      "height": 239,
+      "offsetX": -96,
+      "offsetY": -163
+    },
+    {
+      "row": 1,
+      "column": 0,
+      "x": 1773,
+      "y": 260,
+      "width": 156,
+      "height": 231,
+      "offsetX": -78,
+      "offsetY": -153
+    },
+    {
+      "row": 1,
+      "column": 1,
+      "x": 1285,
+      "y": 260,
+      "width": 156,
+      "height": 238,
+      "offsetX": -88,
+      "offsetY": -157
+    },
+    {
+      "row": 1,
+      "column": 2,
+      "x": 0,
+      "y": 504,
+      "width": 156,
+      "height": 231,
+      "offsetX": -78,
+      "offsetY": -153
+    },
+    {
+      "row": 1,
+      "column": 3,
+      "x": 1441,
+      "y": 260,
+      "width": 156,
+      "height": 238,
+      "offsetX": -69,
+      "offsetY": -157
+    },
+    {
+      "row": 1,
+      "column": 4,
+      "x": 320,
+      "y": 504,
+      "width": 154,
+      "height": 228,
+      "offsetX": -77,
+      "offsetY": -150
+    },
+    {
+      "row": 1,
+      "column": 5,
+      "x": 1437,
+      "y": 0,
+      "width": 285,
+      "height": 248,
+      "offsetX": -144,
+      "offsetY": -170
+    },
+    {
+      "row": 2,
+      "column": 0,
+      "x": 341,
+      "y": 260,
+      "width": 164,
+      "height": 241,
+      "offsetX": -82,
+      "offsetY": -159
+    },
+    {
+      "row": 2,
+      "column": 1,
+      "x": 1722,
+      "y": 0,
+      "width": 156,
+      "height": 245,
+      "offsetX": -84,
+      "offsetY": -161
+    },
+    {
+      "row": 2,
+      "column": 2,
+      "x": 505,
+      "y": 260,
+      "width": 164,
+      "height": 241,
+      "offsetX": -82,
+      "offsetY": -159
+    },
+    {
+      "row": 2,
+      "column": 3,
+      "x": 1597,
+      "y": 260,
+      "width": 176,
+      "height": 237,
+      "offsetX": -80,
+      "offsetY": -164
+    },
+    {
+      "row": 2,
+      "column": 4,
+      "x": 156,
+      "y": 504,
+      "width": 164,
+      "height": 231,
+      "offsetX": -82,
+      "offsetY": -148
+    },
+    {
+      "row": 2,
+      "column": 5,
+      "x": 1043,
+      "y": 260,
+      "width": 242,
+      "height": 239,
+      "offsetX": -124,
+      "offsetY": -157
+    },
+    {
+      "row": 3,
+      "column": 0,
+      "x": 274,
+      "y": 0,
+      "width": 136,
+      "height": 257,
+      "offsetX": -68,
+      "offsetY": -157
+    },
+    {
+      "row": 3,
+      "column": 1,
+      "x": 0,
+      "y": 0,
+      "width": 137,
+      "height": 260,
+      "offsetX": -80,
+      "offsetY": -164
+    },
+    {
+      "row": 3,
+      "column": 2,
+      "x": 410,
+      "y": 0,
+      "width": 136,
+      "height": 257,
+      "offsetX": -68,
+      "offsetY": -157
+    },
+    {
+      "row": 3,
+      "column": 3,
+      "x": 137,
+      "y": 0,
+      "width": 137,
+      "height": 260,
+      "offsetX": -57,
+      "offsetY": -164
+    },
+    {
+      "row": 3,
+      "column": 4,
+      "x": 704,
+      "y": 0,
+      "width": 135,
+      "height": 255,
+      "offsetX": -67,
+      "offsetY": -155
+    },
+    {
+      "row": 3,
+      "column": 5,
+      "x": 839,
+      "y": 0,
+      "width": 266,
+      "height": 254,
+      "offsetX": -133,
+      "offsetY": -157
+    },
+    {
+      "row": 4,
+      "column": 0,
+      "x": 669,
+      "y": 260,
+      "width": 182,
+      "height": 240,
+      "offsetX": -90,
+      "offsetY": -296
+    }
+  ]
+}

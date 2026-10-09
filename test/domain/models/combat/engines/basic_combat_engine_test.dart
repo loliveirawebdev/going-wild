@@ -48,6 +48,8 @@ CombatResult run({
     manaPerHit: testRules.manaPerHit,
     nearbyRadius: testRules.nearbyRadius,
     ticksPerSecond: testRules.ticksPerSecond,
+    stepSecondsAtBaseMoveSpeed: testRules.stepSecondsAtBaseMoveSpeed,
+    moveSpeedWeightOnSteps: testRules.moveSpeedWeightOnSteps,
   ),
 ).simulate(team: team, enemies: enemies, recordsHistory: recordsHistory, randomGenerator: Random(seed));
 
@@ -64,6 +66,7 @@ Character shieldBomberWith(List<CombatEffect> onExpire) => Character(
   id: const CharacterId('cow'),
   rarity: Rarity.common,
   statMultipliers: const StatMultipliers({Stat.health: 10, Stat.damage: 0.01, Stat.manaStart: 50, Stat.manaMax: 50}),
+  sprite: dummySprite,
   ability: Ability(
     trigger: const ManaFullTrigger(),
     effects: [

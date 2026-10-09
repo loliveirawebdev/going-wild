@@ -17,7 +17,7 @@ const _sealIconSize = 22.0;
 const _bottomEdgeHeight = 7.0;
 const _frameEdgeColor = AppColors.wood700;
 const _coverAlignment = Alignment(0.44, 0);
-const _innerRadius = BorderRadius.all(Radius.circular(22 - _frameWidth));
+final _innerRadius = AppRadius.insideBorderOf(AppRadius.large, borderWidth: _frameWidth);
 
 const _nameStyle = TextStyle(
   fontSize: 22,

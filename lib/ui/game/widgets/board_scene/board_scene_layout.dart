@@ -30,9 +30,25 @@ abstract final class BoardSceneLayout {
 
   static double scaleFor(double displayedWidth) => displayedWidth / imageSize.width;
 
+  static final _cellCentersByBoard = Expando<Map<Position, Offset>>();
+
+  static Map<Position, Offset> _cellCentersOf(Board board) {
+    final cachedCellCenters = _cellCentersByBoard[board];
+    if (cachedCellCenters != null) return cachedCellCenters;
+
+    final cellCountByRow = <int, int>{};
+    final cellCenters = <Position, Offset>{};
+    for (final position in board.allPositions) {
+      final cellIndexInRow = cellCountByRow[position.row] ?? 0;
+      cellCountByRow[position.row] = cellIndexInRow + 1;
+      cellCenters[position] = Offset(rowCenterWidths[position.row][cellIndexInRow], rowCenterHeights[position.row]);
+    }
+
+    return _cellCentersByBoard[board] = Map.unmodifiable(cellCenters);
+  }
+
   static Rect cellRectOf(Board board, Position position, {required double scale}) {
-    final cellIndexInRow = board.allPositions.where((cell) => cell.row == position.row).toList().indexOf(position);
-    final center = Offset(rowCenterWidths[position.row][cellIndexInRow], rowCenterHeights[position.row]);
+    final center = _cellCentersOf(board)[position] ?? (throw RangeError('$position is not on the board'));
     return Rect.fromCenter(center: center * scale, width: cellSize.width * scale, height: cellSize.height * scale);
   }
 

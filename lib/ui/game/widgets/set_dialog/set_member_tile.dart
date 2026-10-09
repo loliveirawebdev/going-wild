@@ -16,7 +16,7 @@ const _rarityFrameWidth = 3.0;
 const _checkSize = 20.0;
 const _nameHeight = 14.0;
 const _checkOverhang = 7.0;
-const _portraitInnerRadius = BorderRadius.all(Radius.circular(14 - _rarityFrameWidth));
+final _portraitInnerRadius = AppRadius.insideBorderOf(AppRadius.medium, borderWidth: _rarityFrameWidth);
 
 const _nameStyle = TextStyle(
   fontSize: 11,

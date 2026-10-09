@@ -8,12 +8,15 @@ import 'package:going_wild/ui/game/view_models/preparation/preparation_bloc.dart
 import 'package:going_wild/ui/game/view_models/preparation/states/preparation_state.dart';
 import 'package:going_wild/ui/game/widgets/bench/animated_bench.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_handle.dart';
+import 'package:going_wild/ui/game/widgets/bench/bench_layout.dart';
 import 'package:going_wild/ui/game/widgets/match_shelves/match_shelf.dart';
 import 'package:going_wild/ui/game/widgets/summon/roster_summons.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/roster_unit_sheet.dart';
 
 class BenchShelf extends StatelessWidget {
   const BenchShelf({required this.isExpanded, required this.onExpandedChanged, super.key});
+
+  static const closedHeight = benchHandleHeight + matchShelfChromeHeight + BenchLayout.closedHeight;
 
   final bool isExpanded;
   final ValueChanged<bool> onExpandedChanged;

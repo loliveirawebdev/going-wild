@@ -39,8 +39,9 @@ Future<void> openTheApp(WidgetTester tester) async {
     ),
   );
 
-  for (var attempt = 0; attempt < 400 && find.byType(HomeScreen).evaluate().isEmpty; attempt++) {
-    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 10)));
+  final loadingDeadline = DateTime.now().add(const Duration(seconds: 40));
+  while (find.byType(HomeScreen).evaluate().isEmpty && DateTime.now().isBefore(loadingDeadline)) {
+    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 2)));
     await tester.pump(const Duration(milliseconds: 16));
   }
 

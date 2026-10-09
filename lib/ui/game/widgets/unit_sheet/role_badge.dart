@@ -14,8 +14,15 @@ class RoleBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final roles = context.t.game.unitSheet.roles;
+
     return UnitBadge(
-      label: context.t['game.unitSheet.roles.${role.name}'] as String? ?? role.name,
+      label: switch (role) {
+        Role.tank => roles.tank,
+        Role.guard => roles.guard,
+        Role.damage => roles.damage,
+        Role.support => roles.support,
+      },
       icon: SvgPicture.asset(roleIconAssetPathOf(role), width: _iconSize, height: _iconSize),
     );
   }

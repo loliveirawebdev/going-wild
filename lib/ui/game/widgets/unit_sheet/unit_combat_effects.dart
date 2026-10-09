@@ -5,10 +5,10 @@ import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_border_width.dart';
 import 'package:going_wild/ui/core/design/app_color_filters.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
-import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
 import 'package:going_wild/ui/core/design/game_icon.dart';
 import 'package:going_wild/ui/core/widgets/game_icon_image.dart';
+import 'package:going_wild/ui/core/widgets/pill.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/combat_effect_badges.dart';
 
 const _iconSize = 16.0;
@@ -16,14 +16,6 @@ const _pillSpacing = 6.0;
 const _rowHeight = _iconSize + 4 + AppBorderWidth.thin * 2;
 const _dashLength = 4.0;
 const _dashGap = 3.0;
-
-const _labelStyle = TextStyle(
-  fontSize: 12,
-  height: 16 / 12,
-  color: AppColors.ink,
-  fontFamily: AppFonts.sans,
-  fontWeight: FontWeight.w800,
-);
 
 class UnitCombatEffects extends StatelessWidget {
   const UnitCombatEffects({required this.combatant, required this.edgeBleed, super.key});
@@ -100,22 +92,13 @@ class _EffectPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Pill(
+      leading: icon,
       height: _rowHeight,
+      color: AppColors.surface200,
+      borderColor: AppColors.outline,
       padding: const EdgeInsets.fromLTRB(3, 0, 8, 0),
-      decoration: BoxDecoration(
-        color: AppColors.surface200,
-        borderRadius: AppRadius.pill,
-        border: Border.all(color: AppColors.outline, width: AppBorderWidth.thin),
-      ),
-      child: Row(
-        spacing: 4,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          icon,
-          Text(label, style: _labelStyle),
-        ],
-      ),
+      child: Text(label, style: AppTextStyles.tag),
     );
   }
 }
@@ -133,7 +116,7 @@ class _NoEffectsPill extends StatelessWidget {
         height: _rowHeight,
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Text(label, style: _labelStyle.copyWith(color: AppColors.inkMuted)),
+        child: Text(label, style: AppTextStyles.tag.copyWith(color: AppColors.inkMuted)),
       ),
     );
   }

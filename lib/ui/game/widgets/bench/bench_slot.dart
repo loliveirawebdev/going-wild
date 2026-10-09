@@ -8,7 +8,7 @@ import 'package:going_wild/ui/core/localization/character_name.dart';
 import 'package:going_wild/ui/game/widgets/bench/bench_unit.dart';
 import 'package:going_wild/ui/game/widgets/summon/summon_appear.dart';
 
-const _innerRadius = BorderRadius.all(Radius.circular(8 - AppBorderWidth.thin));
+final _innerRadius = AppRadius.insideBorderOf(AppRadius.small, borderWidth: AppBorderWidth.thin);
 const _dropTargetDuration = Duration(milliseconds: 120);
 final _dropTargetFill = Color.lerp(AppColors.surface300, AppColors.grass400, 0.35)!;
 

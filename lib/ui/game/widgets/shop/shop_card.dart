@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:going_wild/domain/models/character/stats/stats.dart';
 import 'package:going_wild/domain/models/character/character.dart';
+import 'package:going_wild/domain/models/character/stats/stats.dart';
 import 'package:going_wild/domain/models/set/team_set.dart';
 import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_border_width.dart';
@@ -18,7 +18,7 @@ import 'package:going_wild/ui/game/widgets/shop/sold_stamp.dart';
 
 const shopCardDepth = 5.0;
 const shopCardBandHeight = 30.0;
-const _innerRadius = BorderRadius.all(Radius.circular(14 - AppBorderWidth.thick));
+final _innerRadius = AppRadius.insideBorderOf(AppRadius.medium, borderWidth: AppBorderWidth.thick);
 
 const _nameStyle = TextStyle(
   fontSize: 15,

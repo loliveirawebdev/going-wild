@@ -12,6 +12,8 @@ const _expandedSpacing = 5.0;
 const _expandedShopRadius = 8.0;
 
 class BenchLayout {
+  static const closedHeight = _compactSlotHeight;
+
   final double width;
   final int slotCount;
   final double expansion;

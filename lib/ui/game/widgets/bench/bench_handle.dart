@@ -5,7 +5,8 @@ import 'package:going_wild/ui/core/design/interface_glyph.dart';
 import 'package:going_wild/ui/core/widgets/interface_glyph_image.dart';
 
 const _handleSize = Size(44, 16);
-const _touchAreaSize = Size(88, 28);
+const benchHandleHeight = 28.0;
+const _touchAreaSize = Size(88, benchHandleHeight);
 const _arrowSize = 13.0;
 const _handleRadius = BorderRadius.vertical(top: Radius.circular(10));
 

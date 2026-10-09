@@ -12,8 +12,8 @@ Combat attackTarget(Combat combat, int attackerCombatantId) {
 
   final attackerRange = attackerCombatant.getCurrentStat(Stat.range);
   final targetCombatant = combat.battlefield.combatantWithId(targetCombatantId);
-  final isTargetInRange = attackerCombatant.position.isWithinRange(targetCombatant.position, attackerRange);
-  if (!targetCombatant.isTargetable || !isTargetInRange) return combat;
+  final isTargetInReach = attackerCombatant.position.canReach(targetCombatant.position, attackerRange);
+  if (!targetCombatant.isTargetable || !isTargetInReach) return combat;
 
   final ticksUntilNextAttack = attackerCombatant.ticksUntilNextAttack - 1;
   final waitingAttackerCombatant = attackerCombatant.createCopyWith(ticksUntilNextAttack: ticksUntilNextAttack);

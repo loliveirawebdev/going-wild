@@ -7,6 +7,7 @@ import 'package:going_wild/ui/core/design/app_shadows.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
 import 'package:going_wild/ui/core/design/game_icon.dart';
 import 'package:going_wild/ui/core/widgets/game_icon_image.dart';
+import 'package:going_wild/ui/core/widgets/pill.dart';
 import 'package:going_wild/ui/core/widgets/pressable_surface.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/unit_sale.dart';
 
@@ -57,9 +58,9 @@ class UnitSellButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(translations.sellButton, style: _labelStyle.copyWith(color: foreground)),
-          Container(
+          Pill(
             padding: const EdgeInsets.fromLTRB(7, 2, 5, 2),
-            decoration: BoxDecoration(color: AppColors.surface100.withValues(alpha: 0.25), borderRadius: AppRadius.pill),
+            color: AppColors.surface100.withValues(alpha: 0.25),
             child: Row(
               spacing: 3,
               mainAxisSize: MainAxisSize.min,

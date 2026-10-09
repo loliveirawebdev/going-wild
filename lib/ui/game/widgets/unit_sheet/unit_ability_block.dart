@@ -13,15 +13,6 @@ import 'package:going_wild/ui/core/widgets/game_icon_image.dart';
 
 const _costIconSize = 14.0;
 
-const _titleStyle = TextStyle(
-  fontSize: 11,
-  height: 14 / 11,
-  letterSpacing: 0.6,
-  color: AppColors.inkMuted,
-  fontFamily: AppFonts.sans,
-  fontWeight: FontWeight.w800,
-);
-
 const _costStyle = TextStyle(
   fontSize: 14,
   color: AppColors.ink,
@@ -69,7 +60,7 @@ class UnitAbilityBlock extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: Text(translations.abilityTitle.toUpperCase(), style: _titleStyle)),
+              Expanded(child: Text(translations.abilityTitle.toUpperCase(), style: AppTextStyles.overline)),
               _buildTrigger(context),
             ],
           ),

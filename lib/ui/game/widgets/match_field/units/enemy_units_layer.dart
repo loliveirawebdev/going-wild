@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/combat_history/replay/combat_replay_combatant.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
+import 'package:going_wild/ui/core/widgets/transient_effects.dart';
+import 'package:going_wild/ui/game/unit_stage/unit/unit_head_height.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 import 'package:going_wild/ui/game/widgets/match_field/summons/field_summon_poofs.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/field_unit.dart';
@@ -28,29 +30,21 @@ class EnemyUnitsLayer extends StatefulWidget {
   State<EnemyUnitsLayer> createState() => _EnemyUnitsLayerState();
 }
 
-class _EnemyUnitsLayerState extends State<EnemyUnitsLayer> {
-  var _nextSummonId = 0;
-  var _summonIds = <Position, int>{};
+class _EnemyUnitsLayerState extends State<EnemyUnitsLayer> with TransientEffects<EnemyUnitsLayer, Position> {
+  Iterable<Position> get _wavePositions => widget.matchProgress.currentWave.enemies.map((placement) => placement.position);
 
   @override
   void initState() {
     super.initState();
-    _summonWave();
+    seedEffects(_wavePositions);
   }
 
   @override
   void didUpdateWidget(EnemyUnitsLayer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.matchProgress.currentRoundNumber != oldWidget.matchProgress.currentRoundNumber) _summonWave();
-  }
-
-  void _summonWave() {
-    _summonIds = {for (final placement in widget.matchProgress.currentWave.enemies) placement.position: _nextSummonId++};
-  }
-
-  void _finishSummon(Position position, int summonId) {
-    if (_summonIds[position] != summonId) return;
-    setState(() => _summonIds = {..._summonIds}..remove(position));
+    if (widget.matchProgress.currentRoundNumber != oldWidget.matchProgress.currentRoundNumber) {
+      seedEffects(_wavePositions, replacesEqualEffects: true);
+    }
   }
 
   @override
@@ -58,7 +52,7 @@ class _EnemyUnitsLayerState extends State<EnemyUnitsLayer> {
     final scale = widget.scale;
     final engines = widget.matchProgress.phase.engines;
     final board = engines.combatEngine.board;
-    final summonIds = MediaQuery.disableAnimationsOf(context) ? const <Position, int>{} : _summonIds;
+    final summonIds = MediaQuery.disableAnimationsOf(context) ? const <Position, int>{} : transientEffectIds;
 
     return IgnorePointer(
       ignoring: widget.isDragActive,
@@ -80,10 +74,12 @@ class _EnemyUnitsLayerState extends State<EnemyUnitsLayer> {
                       stats: widget.startingCombatants[placement.position]!.stats,
                     ),
                     child: FieldUnit(
-                      side: FieldUnitSide.enemy,
                       diameter: fieldTokenDiameterFor(scale),
                       characterCopy: placement.characterCopy,
                       vitals: combatVitalsOf(widget.startingCombatants[placement.position]!),
+                      statusSpot: AboveHeadStatusSpot(
+                        headHeight: headHeightAboveCellCenterOf(placement.characterCopy.character.sprite) * scale,
+                      ),
                     ),
                   ),
                 ),
@@ -94,7 +90,7 @@ class _EnemyUnitsLayerState extends State<EnemyUnitsLayer> {
               board: board,
               scale: scale,
               summonIds: summonIds,
-              onSummonFinished: _finishSummon,
+              onSummonFinished: (position, summonId) => finishEffect(summonId),
             ),
           ),
         ],

@@ -9,9 +9,9 @@ import 'package:going_wild/ui/core/design/interface_glyph.dart';
 import 'package:going_wild/ui/core/widgets/round_icon_button.dart';
 
 const _maxDialogWidth = 380.0;
-const _innerRadius = BorderRadius.all(Radius.circular(22 - AppBorderWidth.thick));
 const _scrimColor = Color(0x733A2414);
 const _openingDuration = Duration(milliseconds: 180);
+final _innerRadius = AppRadius.insideBorderOf(AppRadius.large, borderWidth: AppBorderWidth.thick);
 
 const _titleStyle = TextStyle(
   fontSize: 24,

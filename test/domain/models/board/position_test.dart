@@ -38,6 +38,20 @@ void main() {
     expect(at(3, 1).positionAwayFrom(at(3, 1), steps: 2), at(3, 1));
   });
 
+  test('a cell reaches along its hexagon lines and straight up or down, but not in between', () {
+    final center = at(3, 2);
+    final distantPositions = testBoard.allPositions.where((position) => position.distanceToPosition(center) == 2);
+
+    expect(testBoard.neighborPositionsAround(center), everyElement(predicate<Position>(center.isAlignedWith)));
+    expect(center.isAlignedWith(at(3, 4)), isTrue);
+    expect(
+      distantPositions.where((position) => (position.centerX - center.centerX).abs() < 1e-9),
+      everyElement(predicate<Position>(center.isAlignedWith)),
+    );
+    expect(distantPositions.where((position) => !center.isAlignedWith(position)), isNotEmpty);
+    expect(center.canReach(at(1, 1), 2), center.isAlignedWith(at(1, 1)));
+  });
+
   test('positions are values', () {
     expect(at(1, 2), const Position(row: 1, column: 2));
     expect({at(1, 2), at(1, 2)}.length, 1);

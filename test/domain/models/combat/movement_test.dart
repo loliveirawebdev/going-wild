@@ -14,7 +14,7 @@ void main() {
     expect(findCombatant(movedCombat, walker).position, at(6, 0));
   });
 
-  test('moves once per 1 / moveSpeed seconds', () {
+  test('moves once per step of its move speed, and faster walkers step sooner', () {
     final enemy = combatant(at: at(0, 2), faction: Faction.enemy);
     final walker = combatant(
       at: at(7, 2),
@@ -23,14 +23,15 @@ void main() {
     ).createCopyWith(targetCombatantId: enemy.id);
     var combat = combatWith([walker, enemy]);
 
-    for (var tick = 0; tick < testRules.ticksPerSecond; tick++) {
+    for (var tick = 0; tick <= testRules.ticksBetweenSteps(2); tick++) {
       combat = moveTowardTarget(combat, walker.id);
     }
 
     expect(findCombatant(combat, walker).position, at(5, 2));
+    expect(testRules.ticksBetweenSteps(2), lessThan(testRules.ticksBetweenSteps(1)));
   });
 
-  test('a whole number of seconds between steps becomes an exact number of ticks', () {
+  test('a step duration that fits whole ticks becomes an exact number of ticks', () {
     final enemy = combatant(at: at(0, 2), faction: Faction.enemy);
     final walker = combatant(
       at: at(7, 2),
@@ -39,7 +40,7 @@ void main() {
     ).createCopyWith(targetCombatantId: enemy.id);
     var combat = combatWith([walker, enemy]);
 
-    for (var tick = 0; tick <= 2 * testRules.ticksPerSecond; tick++) {
+    for (var tick = 0; tick <= 2 * testRules.ticksBetweenSteps(1); tick++) {
       combat = moveTowardTarget(combat, walker.id);
     }
 

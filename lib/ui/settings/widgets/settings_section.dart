@@ -5,7 +5,7 @@ import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/design/app_shadows.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
 
-const _innerRadius = BorderRadius.all(Radius.circular(22 - AppBorderWidth.thick));
+final _innerRadius = AppRadius.insideBorderOf(AppRadius.large, borderWidth: AppBorderWidth.thick);
 
 const _labelStyle = TextStyle(
   fontSize: 12,

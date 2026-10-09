@@ -931,8 +931,12 @@ class Translations$game$unitSheet$pt {
   /// pt: 'Vender'
   String get sellButton => 'Vender';
 
-  /// pt: 'Vender por $value moedas'
-  String sellLabel({required Object value}) => 'Vender por ${value} moedas';
+  /// pt: '(one) {Vender por $value moeda} (other) {Vender por $value moedas}'
+  String sellLabel({required num value}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+    value,
+    one: 'Vender por ${value} moeda',
+    other: 'Vender por ${value} moedas',
+  );
 
   /// pt: 'Corpo a corpo'
   String get melee => 'Corpo a corpo';
@@ -977,8 +981,12 @@ class Translations$game$shop$pt {
   /// pt: 'Vendido'
   String get soldStamp => 'Vendido';
 
-  /// pt: '$name por $price moedas'
-  String offerLabel({required Object name, required Object price}) => '${name} por ${price} moedas';
+  /// pt: '(one) {$name por $price moeda} (other) {$name por $price moedas}'
+  String offerLabel({required num price, required Object name}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+    price,
+    one: '${name} por ${price} moeda',
+    other: '${name} por ${price} moedas',
+  );
 
   /// pt: 'Oferta vendida'
   String get soldOfferLabel => 'Oferta vendida';
@@ -1535,7 +1543,11 @@ extension on Translations {
       'game.unitSheet.manaCostLabel' => ({required Object cost}) => 'Custa ${cost} de mana',
       'game.unitSheet.lowHealthTrigger' => ({required Object percentage}) => 'Com menos de ${percentage}% de vida',
       'game.unitSheet.sellButton' => 'Vender',
-      'game.unitSheet.sellLabel' => ({required Object value}) => 'Vender por ${value} moedas',
+      'game.unitSheet.sellLabel' => ({required num value}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+        value,
+        one: 'Vender por ${value} moeda',
+        other: 'Vender por ${value} moedas',
+      ),
       'game.unitSheet.melee' => 'Corpo a corpo',
       'game.unitSheet.ranged' => ({required Object range}) => 'Distância ${range}',
       'game.unitSheet.attackSpeedValue' => ({required Object value}) => '${value}/s',
@@ -1564,7 +1576,12 @@ extension on Translations {
       'game.shop.rerollButton' => 'Trocar ofertas',
       'game.shop.rerollLabel' => ({required Object cost}) => 'Trocar ofertas por ${cost} moedas',
       'game.shop.soldStamp' => 'Vendido',
-      'game.shop.offerLabel' => ({required Object name, required Object price}) => '${name} por ${price} moedas',
+      'game.shop.offerLabel' =>
+        ({required num price, required Object name}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(
+          price,
+          one: '${name} por ${price} moeda',
+          other: '${name} por ${price} moedas',
+        ),
       'game.shop.soldOfferLabel' => 'Oferta vendida',
       'game.rejections.fightInProgress' => 'A luta está acontecendo',
       'game.rejections.matchIsOver' => 'A partida acabou',

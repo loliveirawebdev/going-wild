@@ -13,6 +13,8 @@ import 'package:going_wild/domain/models/character/stats/stat_multipliers.dart';
 import 'package:going_wild/domain/models/character/stats/stats.dart';
 import 'package:going_wild/domain/models/combatant/ability_triggers/mana_full_trigger.dart';
 
+import '../../../../helpers/combat_helpers.dart';
+
 Stats statsOf(Character character, int stars) => basicCharacterEngine.statsAtStars(character, stars: stars);
 
 double powerOf(Character character, int stars) {
@@ -59,6 +61,7 @@ void main() {
       rarity: Rarity.common,
       statMultipliers: StatMultipliers({}),
       ability: Ability(effects: [], trigger: ManaFullTrigger()),
+      sprite: dummySprite,
     );
 
     final stats = statsOf(plainCharacter, 1);

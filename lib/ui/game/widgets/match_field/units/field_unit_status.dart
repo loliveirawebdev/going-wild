@@ -6,10 +6,11 @@ import 'package:going_wild/ui/core/design/app_radius.dart';
 import 'package:going_wild/ui/core/widgets/segmented_fill.dart';
 import 'package:going_wild/ui/core/widgets/stars.dart';
 
-const _healthBarHeight = 5.0;
-const _manaBarHeight = 3.0;
+const _healthBarHeight = 3.0;
+const _manaBarHeight = 2.0;
 const _barBorderWidth = 1.0;
 const _barsGap = 1.0;
+const _statusOpacity = 0.65;
 const _starSizeToWidth = 0.3;
 const _mediumHealthFraction = 0.6;
 const _lowHealthFraction = 0.3;
@@ -42,27 +43,30 @@ class FieldUnitStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      child: Column(
-        spacing: _barsGap,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _Bar(
-            height: _healthBarHeight,
-            segments: [
-              (fraction: vitals.healthFraction, color: _healthColor),
-              (fraction: vitals.shieldFraction, color: AppColors.shieldBar),
-            ],
-          ),
-          _Bar(height: _manaBarHeight, segments: [(fraction: vitals.manaFraction, color: AppColors.mana)]),
-          Stars(
-            count: stars,
-            outlineColor: AppColors.ink,
-            size: width * _starSizeToWidth,
-            semanticLabel: context.t.game.bench.stars(count: stars),
-          ),
-        ],
+    return Opacity(
+      opacity: _statusOpacity,
+      child: SizedBox(
+        width: width,
+        child: Column(
+          spacing: _barsGap,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _Bar(
+              height: _healthBarHeight,
+              segments: [
+                (fraction: vitals.healthFraction, color: _healthColor),
+                (fraction: vitals.shieldFraction, color: AppColors.shieldBar),
+              ],
+            ),
+            _Bar(height: _manaBarHeight, segments: [(fraction: vitals.manaFraction, color: AppColors.mana)]),
+            Stars(
+              count: stars,
+              outlineColor: AppColors.ink,
+              size: width * _starSizeToWidth,
+              semanticLabel: context.t.game.bench.stars(count: stars),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -6,25 +6,17 @@ import 'package:going_wild/generated/i18n/translations.g.dart';
 import 'package:going_wild/ui/core/design/app_border_width.dart';
 import 'package:going_wild/ui/core/design/app_colors.dart';
 import 'package:going_wild/ui/core/design/app_radius.dart';
-import 'package:going_wild/ui/core/widgets/segmented_fill.dart';
 import 'package:going_wild/ui/core/design/app_text_styles.dart';
 import 'package:going_wild/ui/core/design/game_icon.dart';
 import 'package:going_wild/ui/core/localization/formatted_number.dart';
 import 'package:going_wild/ui/core/widgets/game_icon_image.dart';
+import 'package:going_wild/ui/core/widgets/segmented_fill.dart';
 
 const _gridSpacing = 6.0;
 const _iconSize = 20.0;
 const _barHeight = 6.0;
 const _barBorderWidth = 1.5;
 const _barRadius = BorderRadius.all(Radius.circular(4));
-
-const _labelStyle = TextStyle(
-  fontSize: 11,
-  height: 14 / 11,
-  color: AppColors.inkMuted,
-  fontFamily: AppFonts.sans,
-  fontWeight: FontWeight.w800,
-);
 
 const _valueStyle = TextStyle(
   fontSize: 17,
@@ -127,7 +119,7 @@ class _StatTile extends StatelessWidget {
             spacing: 6,
             children: [
               GameIconImage(icon, size: _iconSize),
-              Expanded(child: Text(label, style: _labelStyle)),
+              Expanded(child: Text(label, style: AppTextStyles.caption)),
               Text.rich(
                 TextSpan(
                   text: value,

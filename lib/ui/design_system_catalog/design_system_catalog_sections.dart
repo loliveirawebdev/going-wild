@@ -21,6 +21,7 @@ import 'package:going_wild/ui/design_system_catalog/sections/stat_counter/stat_c
 import 'package:going_wild/ui/design_system_catalog/sections/summon_poof/summon_poof_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/tokens/tokens_section.dart';
 import 'package:going_wild/ui/design_system_catalog/sections/unit_sheet/unit_sheet_section.dart';
+import 'package:going_wild/ui/design_system_catalog/sections/unit_sprites/unit_sprites_section.dart';
 
 final designSystemCatalogSections = [
   DesignSystemCatalogSection(title: 'Tokens', builder: (context) => const TokensSection()),
@@ -45,4 +46,5 @@ final designSystemCatalogSections = [
   DesignSystemCatalogSection(title: 'SummonPoof', builder: (context) => const SummonPoofSection()),
   DesignSystemCatalogSection(title: 'RoundBanner', builder: (context) => const RoundBannerSection()),
   DesignSystemCatalogSection(title: 'PhaseResult', builder: (context) => const PhaseResultSection()),
+  DesignSystemCatalogSection(title: 'Sprites', builder: (context) => const UnitSpritesSection()),
 ];

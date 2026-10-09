@@ -8,5 +8,13 @@ const BasicCombatEngine basicCombatEngine = BasicCombatEngine(
   board: board,
   setEngine: basicSetEngine,
   characterEngine: basicCharacterEngine,
-  rules: CombatRules(ticksPerSecond: 10, maxSeconds: 60, manaPerHit: 10, nearbyRadius: 2),
+
+  rules: CombatRules(
+    maxSeconds: 60,
+    manaPerHit: 10,
+    nearbyRadius: 2,
+    ticksPerSecond: 10,
+    moveSpeedWeightOnSteps: 0.2,
+    stepSecondsAtBaseMoveSpeed: 1.4,
+  ),
 );

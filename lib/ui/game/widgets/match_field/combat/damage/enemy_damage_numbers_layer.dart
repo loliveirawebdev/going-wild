@@ -5,6 +5,7 @@ import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/combat_history/entries/combat_history_entry.dart';
 import 'package:going_wild/domain/models/combat_history/replay/combat_replay_frame.dart';
 import 'package:going_wild/domain/models/combatant/faction.dart';
+import 'package:going_wild/ui/core/widgets/transient_effects.dart';
 import 'package:going_wild/ui/game/view_models/combat_playback/combat_playback_bloc.dart';
 import 'package:going_wild/ui/game/view_models/combat_playback/states/combat_playback_state.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
@@ -15,7 +16,7 @@ const _minimumShownDamage = 0.5;
 const _numberBoxSize = Size(48, 16);
 const _sideSpreads = <double>[0, -7, 7];
 
-typedef _DamageNumber = ({int id, int amount, int combatantId, Position position, double sideSpread});
+typedef _DamageNumber = ({int amount, int combatantId, Position position});
 
 class EnemyDamageNumbersLayer extends StatefulWidget {
   final Board board;
@@ -27,32 +28,18 @@ class EnemyDamageNumbersLayer extends StatefulWidget {
   State<EnemyDamageNumbersLayer> createState() => _EnemyDamageNumbersLayerState();
 }
 
-class _EnemyDamageNumbersLayerState extends State<EnemyDamageNumbersLayer> {
-  var _nextNumberId = 0;
-  final _damageNumbers = <_DamageNumber>[];
-
+class _EnemyDamageNumbersLayerState extends State<EnemyDamageNumbersLayer> with TransientEffects<EnemyDamageNumbersLayer, _DamageNumber> {
   void _showDamageOf(BuildContext context, CombatPlaybackState playbackState) {
     if (playbackState is! PlayingCombatPlaybackState || MediaQuery.disableAnimationsOf(context)) return;
 
     final combatantsById = {for (final combatant in playbackState.currentFrame.combatants) combatant.id: combatant};
-
-    final newNumbers = <_DamageNumber>[
+    spawnEffects([
       for (final damage in playbackState.entriesSincePreviousTick.whereType<DamageTakenHistoryEntry>())
         if (combatantsById[damage.combatantId] case final victim?
             when victim.faction == Faction.enemy && damage.amount >= _minimumShownDamage)
-          (
-            id: _nextNumberId,
-            amount: damage.amount.round(),
-            combatantId: victim.id,
-            position: victim.position,
-            sideSpread: _sideSpreads[_nextNumberId++ % _sideSpreads.length],
-          ),
-    ];
-
-    if (newNumbers.isNotEmpty) setState(() => _damageNumbers.addAll(newNumbers));
+          (amount: damage.amount.round(), combatantId: victim.id, position: victim.position),
+    ]);
   }
-
-  void _removeNumber(int numberId) => setState(() => _damageNumbers.removeWhere((damageNumber) => damageNumber.id == numberId));
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +52,9 @@ class _EnemyDamageNumbersLayerState extends State<EnemyDamageNumbersLayer> {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            for (final damageNumber in _damageNumbers)
+            for (final (:id, effect: damageNumber) in transientEffects)
               Positioned.fromRect(
-                key: ValueKey(damageNumber.id),
+                key: ValueKey(id),
                 rect: Rect.fromCenter(
                   width: _numberBoxSize.width,
                   height: _numberBoxSize.height,
@@ -77,10 +64,10 @@ class _EnemyDamageNumbersLayerState extends State<EnemyDamageNumbersLayer> {
                         positionsById[damageNumber.combatantId] ?? damageNumber.position,
                         scale: widget.scale,
                       ).center +
-                      Offset(damageNumber.sideSpread, -tokenRadius),
+                      Offset(_sideSpreads[id % _sideSpreads.length], -tokenRadius),
                 ),
                 child: Center(
-                  child: FloatingDamageNumber(amount: damageNumber.amount, onDone: () => _removeNumber(damageNumber.id)),
+                  child: FloatingDamageNumber(amount: damageNumber.amount, onDone: () => finishEffect(id)),
                 ),
               ),
           ],

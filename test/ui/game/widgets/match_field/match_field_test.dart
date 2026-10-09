@@ -23,11 +23,14 @@ import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 import 'package:going_wild/ui/game/widgets/game_screen.dart';
 import 'package:going_wild/ui/game/widgets/match_field/drop_target/field_drop_target.dart';
 import 'package:going_wild/ui/game/widgets/match_field/match_field.dart';
-import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
+import 'package:going_wild/ui/game/widgets/match_field/units/enemy_units_layer.dart';
+import 'package:going_wild/ui/game/widgets/match_field/units/field_unit.dart';
+import 'package:going_wild/ui/game/widgets/match_field/units/team_units_layer.dart';
 import 'package:going_wild/ui/game/widgets/summon/summon_poof.dart';
 import 'package:going_wild/data/repositories/progress_repository.dart';
 import 'package:going_wild/ui/progress/view_models/phase_progress_view_model.dart';
 
+import '../../../../helpers/unit_atlas_helpers.dart';
 import '../../../../helpers/manual_combat_playback_clock.dart';
 import '../../../../helpers/in_memory_local_storage.dart';
 
@@ -44,6 +47,8 @@ Future<MatchRepository> showGameScreen(
   tester.view.physicalSize = size * 3;
   tester.view.devicePixelRatio = 3;
   addTearDown(tester.view.reset);
+
+  await preloadUnitAtlases(tester);
 
   final startingMatchProgress = startMatch(backyard, randomGenerator: Random(1));
   final inventory = startingMatchProgress.playerRoster.inventory.createCopyWithEntryAt(0, benchCat);
@@ -110,8 +115,7 @@ void main() {
     final matchRepository = await showGameScreen(tester);
     final enemyCount = matchRepository.currentMatchProgress!.currentWave.enemies.length;
 
-    final tokens = tester.widgetList<FieldUnitToken>(find.byType(FieldUnitToken));
-    expect(tokens.where((token) => token.side == FieldUnitSide.enemy), hasLength(enemyCount));
+    expect(find.descendant(of: find.byType(EnemyUnitsLayer), matching: find.byType(FieldUnit)), findsNWidgets(enemyCount));
 
     await tester.pumpWidget(const SizedBox());
   });
@@ -125,7 +129,7 @@ void main() {
     final matchProgress = matchRepository.currentMatchProgress!;
     expect(matchProgress.playerRoster.placements.single.position, teamPosition);
     expect(matchProgress.playerRoster.inventory.entryAt(0), isNull);
-    expect(tester.widgetList<FieldUnitToken>(find.byType(FieldUnitToken)).where((token) => token.side == FieldUnitSide.team), hasLength(1));
+    expect(find.descendant(of: find.byType(TeamUnitsLayer), matching: find.byType(FieldUnit)), findsOneWidget);
     expect(find.descendant(of: find.byType(MatchField), matching: find.byType(SummonPoof)), findsOneWidget);
 
     await tester.pump(const Duration(milliseconds: 300));

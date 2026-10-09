@@ -96,7 +96,10 @@
     "manaCostLabel": "Custa $cost de mana",
     "lowHealthTrigger": "Com menos de $percentage% de vida",
     "sellButton": "Vender",
-    "sellLabel": "Vender por $value moedas",
+    "sellLabel(param=value)": {
+      "one": "Vender por $value moeda",
+      "other": "Vender por $value moedas"
+    },
     "melee": "Corpo a corpo",
     "ranged": "Distância $range",
     "attackSpeedValue": "$value/s",
@@ -133,7 +136,10 @@
     "rerollButton": "Trocar ofertas",
     "rerollLabel": "Trocar ofertas por $cost moedas",
     "soldStamp": "Vendido",
-    "offerLabel": "$name por $price moedas",
+    "offerLabel(param=price)": {
+      "one": "$name por $price moeda",
+      "other": "$name por $price moedas"
+    },
     "soldOfferLabel": "Oferta vendida"
   },
   "rejections": {

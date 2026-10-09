@@ -25,7 +25,7 @@ import 'package:going_wild/ui/game/widgets/unit_sheet/unit_stat_grid.dart';
 
 const _maxSheetWidth = 340.0;
 const _rarityFrameWidth = 3.0;
-const _innerRadius = BorderRadius.all(Radius.circular(22 - _rarityFrameWidth));
+final _innerRadius = AppRadius.insideBorderOf(AppRadius.large, borderWidth: _rarityFrameWidth);
 
 Future<void> presentUnitSheet(
   BuildContext context, {

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:going_wild/domain/models/board/position.dart';
 import 'package:going_wild/domain/models/combat_history/replay/combat_replay_combatant.dart';
 import 'package:going_wild/domain/models/combat_history/replay/combat_replay_frame.dart';
+import 'package:going_wild/domain/models/combatant/faction.dart';
 import 'package:going_wild/domain/models/match_progress/match_progress.dart';
 import 'package:going_wild/domain/models/match_progress/round_stage.dart';
 import 'package:going_wild/domain/models/roster/roster_slot.dart';
@@ -21,9 +22,10 @@ import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag.dart';
 import 'package:going_wild/ui/game/view_models/roster_drag/roster_drag_view_model.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/combat_units_layer.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/damage/enemy_damage_numbers_layer.dart';
-import 'package:going_wild/ui/game/widgets/match_field/combat/projectiles/ranged_attacks_layer.dart';
 import 'package:going_wild/ui/game/widgets/match_field/drop_target/field_drop_target.dart';
 import 'package:going_wild/ui/game/widgets/match_field/rejection/field_rejection_toast.dart';
+import 'package:going_wild/ui/game/widgets/match_field/stage/field_stage.dart';
+import 'package:going_wild/ui/game/widgets/match_field/stage/field_stage_view.dart';
 import 'package:going_wild/ui/game/widgets/match_field/summons/field_summon_poofs.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/enemy_units_layer.dart';
 import 'package:going_wild/ui/game/widgets/match_field/units/team_units_layer.dart';
@@ -41,12 +43,19 @@ class MatchField extends StatefulWidget {
 
 class _MatchFieldState extends State<MatchField> {
   Timer? _toastTimer;
+  FieldStage? _stage;
   ({String message, Position position})? _rejection;
 
   @override
   void dispose() {
     _toastTimer?.cancel();
+    _stage?.unitPoints.dispose();
     super.dispose();
+  }
+
+  FieldStage _stageOf(MatchProgress matchProgress) {
+    final combatEngine = matchProgress.phase.engines.combatEngine;
+    return _stage ??= FieldStage(board: combatEngine.board, rules: combatEngine.rules);
   }
 
   void _dropSlot(RosterSlot draggedSlot, Position position) {
@@ -77,14 +86,40 @@ class _MatchFieldState extends State<MatchField> {
     setState(() => _rejection = (message: rejectionMessageOf(context.t, rejection.error), position: target.position));
   }
 
-  CombatReplayFrame? _combatFrameOf(MatchProgress matchProgress, CombatPlaybackState playbackState) {
-    if (matchProgress.roundStage != RoundStage.fighting) return null;
+  CombatReplayFrame? _combatFrameOf(CombatPlaybackState playbackState) => switch (playbackState) {
+    PlayingCombatPlaybackState() => playbackState.currentFrame,
+    FinishedCombatPlaybackState() => playbackState.finalFrame,
+    IdleCombatPlaybackState() => null,
+  };
 
-    return switch (playbackState) {
-      PlayingCombatPlaybackState() => playbackState.currentFrame,
-      FinishedCombatPlaybackState() => playbackState.finalFrame,
-      IdleCombatPlaybackState() => null,
-    };
+  Widget _buildCombatLayers(MatchProgress matchProgress) {
+    final scale = widget.scale;
+    final board = matchProgress.phase.engines.combatEngine.board;
+
+    return BlocBuilder<CombatPlaybackBloc, CombatPlaybackState>(
+      buildWhen: (previous, current) => !identical(_combatFrameOf(previous), _combatFrameOf(current)),
+      builder: (context, playbackState) {
+        final combatFrame = _combatFrameOf(playbackState);
+        if (combatFrame == null) return const SizedBox.shrink();
+
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned.fill(
+              child: CombatUnitsLayer(
+                scale: scale,
+                combatFrame: combatFrame,
+                matchProgress: matchProgress,
+                unitPoints: _stageOf(matchProgress).unitPoints,
+              ),
+            ),
+            Positioned.fill(
+              child: EnemyDamageNumbersLayer(scale: scale, board: board, combatFrame: combatFrame),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -101,17 +136,14 @@ class _MatchFieldState extends State<MatchField> {
             BoardSlot(:final position) => position,
             InventorySlot() => null,
           },
-          builder: (context, summonIds, onSummonFinished) => BlocBuilder<CombatPlaybackBloc, CombatPlaybackState>(
-            builder: (context, playbackState) => BlocBuilder<RosterDragViewModel, RosterDrag?>(
-              buildWhen: (previous, current) =>
-                  previous?.draggedSlot != current?.draggedSlot || previous?.hoveredPosition != current?.hoveredPosition,
-              builder: (context, drag) => _buildLayers(
-                drag: drag,
-                summonIds: summonIds,
-                matchProgress: matchProgress,
-                onSummonFinished: onSummonFinished,
-                combatFrame: _combatFrameOf(matchProgress, playbackState),
-              ),
+          builder: (context, summonIds, onSummonFinished) => BlocBuilder<RosterDragViewModel, RosterDrag?>(
+            buildWhen: (previous, current) =>
+                previous?.draggedSlot != current?.draggedSlot || previous?.hoveredPosition != current?.hoveredPosition,
+            builder: (context, drag) => _buildLayers(
+              drag: drag,
+              summonIds: summonIds,
+              matchProgress: matchProgress,
+              onSummonFinished: onSummonFinished,
             ),
           ),
         );
@@ -119,17 +151,25 @@ class _MatchFieldState extends State<MatchField> {
     );
   }
 
+  Iterable<CombatReplayCombatant> _standingCombatantsOf(
+    MatchProgress matchProgress, {
+    required Map<Position, CombatReplayCombatant> startingCombatants,
+  }) {
+    if (matchProgress.isInProgress) return startingCombatants.values;
+    return startingCombatants.values.where((combatant) => combatant.faction == Faction.team);
+  }
+
   Widget _buildLayers({
     required RosterDrag? drag,
     required MatchProgress matchProgress,
     required Map<Position, int> summonIds,
-    required CombatReplayFrame? combatFrame,
     required SummonFinished<Position> onSummonFinished,
   }) {
     final scale = widget.scale;
     final rejection = _rejection;
     final isDragActive = drag != null;
-    final startingCombatants = combatFrame != null
+    final isFighting = matchProgress.roundStage == RoundStage.fighting;
+    final startingCombatants = isFighting
         ? const <Position, CombatReplayCombatant>{}
         : {
             for (final combatant in startingCombatantsOf(matchProgress)) combatant.position: CombatReplayCombatant.fromCombatant(combatant),
@@ -146,28 +186,18 @@ class _MatchFieldState extends State<MatchField> {
             onSlotDropped: _dropSlot,
           ),
         ),
+        Positioned.fill(
+          child: FieldStageView(
+            stage: _stageOf(matchProgress),
+            standingCombatants: isFighting ? null : _standingCombatantsOf(matchProgress, startingCombatants: startingCombatants),
+            hiddenIds: {
+              if (drag?.draggedSlot case BoardSlot(:final position)) ?startingCombatants[position]?.id,
+            },
+          ),
+        ),
 
-        if (combatFrame != null) ...[
-          Positioned.fill(
-            child: CombatUnitsLayer(
-              scale: scale,
-              combatFrame: combatFrame,
-              matchProgress: matchProgress,
-            ),
-          ),
-          Positioned.fill(
-            child: RangedAttacksLayer(
-              scale: scale,
-              board: matchProgress.phase.engines.combatEngine.board,
-            ),
-          ),
-          Positioned.fill(
-            child: EnemyDamageNumbersLayer(
-              scale: scale,
-              combatFrame: combatFrame,
-              board: matchProgress.phase.engines.combatEngine.board,
-            ),
-          ),
+        if (isFighting) ...[
+          Positioned.fill(child: _buildCombatLayers(matchProgress)),
         ] else ...[
           Positioned.fill(
             child: TeamUnitsLayer(

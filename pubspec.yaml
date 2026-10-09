@@ -7,6 +7,7 @@ environment:
   sdk: ^3.13.2
 
 dependencies:
+  flame: ^1.38.2
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
@@ -26,6 +27,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
+  image: ^4.10.1
 
 flutter:
   uses-material-design: true
@@ -43,6 +45,62 @@ flutter:
     - lib/content/phase/backyard/cover.jpg
     - lib/content/phase/pond_edge/cover.jpg
     - lib/content/phase/cornfield/cover.jpg
+    - lib/content/character/enemies/alligator/atlas.webp
+    - lib/content/character/enemies/alligator/atlas.json
+    - lib/content/character/enemies/bat/atlas.webp
+    - lib/content/character/enemies/bat/atlas.json
+    - lib/content/character/enemies/bear/atlas.webp
+    - lib/content/character/enemies/bear/atlas.json
+    - lib/content/character/enemies/boar/atlas.webp
+    - lib/content/character/enemies/boar/atlas.json
+    - lib/content/character/enemies/cerberus/atlas.webp
+    - lib/content/character/enemies/cerberus/atlas.json
+    - lib/content/character/enemies/dragon/atlas.webp
+    - lib/content/character/enemies/dragon/atlas.json
+    - lib/content/character/enemies/fox/atlas.webp
+    - lib/content/character/enemies/fox/atlas.json
+    - lib/content/character/enemies/giant_spider/atlas.webp
+    - lib/content/character/enemies/giant_spider/atlas.json
+    - lib/content/character/enemies/hawk/atlas.webp
+    - lib/content/character/enemies/hawk/atlas.json
+    - lib/content/character/enemies/kraken/atlas.webp
+    - lib/content/character/enemies/kraken/atlas.json
+    - lib/content/character/enemies/owl/atlas.webp
+    - lib/content/character/enemies/owl/atlas.json
+    - lib/content/character/enemies/rat/atlas.webp
+    - lib/content/character/enemies/rat/atlas.json
+    - lib/content/character/enemies/skunk/atlas.webp
+    - lib/content/character/enemies/skunk/atlas.json
+    - lib/content/character/enemies/snake/atlas.webp
+    - lib/content/character/enemies/snake/atlas.json
+    - lib/content/character/team/bull/atlas.webp
+    - lib/content/character/team/bull/atlas.json
+    - lib/content/character/team/cat/atlas.webp
+    - lib/content/character/team/cat/atlas.json
+    - lib/content/character/team/chicken/atlas.webp
+    - lib/content/character/team/chicken/atlas.json
+    - lib/content/character/team/cow/atlas.webp
+    - lib/content/character/team/cow/atlas.json
+    - lib/content/character/team/dog/atlas.webp
+    - lib/content/character/team/dog/atlas.json
+    - lib/content/character/team/duck/atlas.webp
+    - lib/content/character/team/duck/atlas.json
+    - lib/content/character/team/goat/atlas.webp
+    - lib/content/character/team/goat/atlas.json
+    - lib/content/character/team/guinea_pig/atlas.webp
+    - lib/content/character/team/guinea_pig/atlas.json
+    - lib/content/character/team/horse/atlas.webp
+    - lib/content/character/team/horse/atlas.json
+    - lib/content/character/team/queen_bee/atlas.webp
+    - lib/content/character/team/queen_bee/atlas.json
+    - lib/content/character/team/rabbit/atlas.webp
+    - lib/content/character/team/rabbit/atlas.json
+    - lib/content/character/team/rooster/atlas.webp
+    - lib/content/character/team/rooster/atlas.json
+    - lib/content/character/team/sheep/atlas.webp
+    - lib/content/character/team/sheep/atlas.json
+    - lib/content/character/team/sow/atlas.webp
+    - lib/content/character/team/sow/atlas.json
 
   fonts:
     - family: LilitaOne

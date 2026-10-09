@@ -5,4 +5,7 @@ abstract final class AppRadius {
   static const BorderRadius medium = BorderRadius.all(Radius.circular(14));
   static const BorderRadius large = BorderRadius.all(Radius.circular(22));
   static const BorderRadius pill = BorderRadius.all(Radius.circular(999));
+
+  static BorderRadius insideBorderOf(BorderRadius outerRadius, {required double borderWidth}) =>
+      BorderRadius.all(Radius.circular(outerRadius.topLeft.x - borderWidth));
 }

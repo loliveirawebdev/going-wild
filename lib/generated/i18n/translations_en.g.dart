@@ -783,7 +783,11 @@ class _Translations$game$unitSheet$en implements Translations$game$unitSheet$pt 
   @override
   String get sellButton => 'Sell';
   @override
-  String sellLabel({required Object value}) => 'Sell for ${value} coins';
+  String sellLabel({required num value}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+    value,
+    one: 'Sell for ${value} coin',
+    other: 'Sell for ${value} coins',
+  );
   @override
   String get melee => 'Melee';
   @override
@@ -820,7 +824,11 @@ class _Translations$game$shop$en implements Translations$game$shop$pt {
   @override
   String get soldStamp => 'Sold';
   @override
-  String offerLabel({required Object name, required Object price}) => '${name} for ${price} coins';
+  String offerLabel({required num price, required Object name}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+    price,
+    one: '${name} for ${price} coin',
+    other: '${name} for ${price} coins',
+  );
   @override
   String get soldOfferLabel => 'Sold offer';
 }
@@ -1315,7 +1323,11 @@ extension on TranslationsEn {
       'game.unitSheet.manaCostLabel' => ({required Object cost}) => 'Costs ${cost} mana',
       'game.unitSheet.lowHealthTrigger' => ({required Object percentage}) => 'Below ${percentage}% health',
       'game.unitSheet.sellButton' => 'Sell',
-      'game.unitSheet.sellLabel' => ({required Object value}) => 'Sell for ${value} coins',
+      'game.unitSheet.sellLabel' => ({required num value}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+        value,
+        one: 'Sell for ${value} coin',
+        other: 'Sell for ${value} coins',
+      ),
       'game.unitSheet.melee' => 'Melee',
       'game.unitSheet.ranged' => ({required Object range}) => 'Range ${range}',
       'game.unitSheet.attackSpeedValue' => ({required Object value}) => '${value}/s',
@@ -1344,7 +1356,12 @@ extension on TranslationsEn {
       'game.shop.rerollButton' => 'New offers',
       'game.shop.rerollLabel' => ({required Object cost}) => 'New offers for ${cost} coins',
       'game.shop.soldStamp' => 'Sold',
-      'game.shop.offerLabel' => ({required Object name, required Object price}) => '${name} for ${price} coins',
+      'game.shop.offerLabel' =>
+        ({required num price, required Object name}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(
+          price,
+          one: '${name} for ${price} coin',
+          other: '${name} for ${price} coins',
+        ),
       'game.shop.soldOfferLabel' => 'Sold offer',
       'game.rejections.fightInProgress' => 'The fight is happening',
       'game.rejections.matchIsOver' => 'The match is over',

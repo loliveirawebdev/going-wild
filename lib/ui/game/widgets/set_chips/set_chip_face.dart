@@ -9,7 +9,7 @@ import 'package:going_wild/ui/game/widgets/set_chips/celebration/set_chip_shine.
 import 'package:going_wild/ui/game/widgets/set_chips/set_chip_tone.dart';
 
 const _faceBaseHeight = 4.0;
-const _faceInnerRadius = BorderRadius.all(Radius.circular(14 - AppBorderWidth.thick));
+final _faceInnerRadius = AppRadius.insideBorderOf(AppRadius.medium, borderWidth: AppBorderWidth.thick);
 
 class SetChipFace extends StatelessWidget {
   final SetId setId;

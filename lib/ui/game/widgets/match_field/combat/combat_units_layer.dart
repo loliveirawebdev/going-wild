@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:going_wild/domain/models/combat_history/replay/combat_replay_combatant.dart';
 import 'package:going_wild/domain/models/combat_history/replay/combat_replay_frame.dart';
@@ -9,44 +10,47 @@ import 'package:going_wild/ui/game/view_models/preparation/player_options.dart';
 import 'package:going_wild/ui/game/widgets/board_scene/board_scene_layout.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/combat_unit.dart';
 import 'package:going_wild/ui/game/widgets/match_field/combat/live_combat_unit_sheet.dart';
-import 'package:going_wild/ui/game/widgets/match_field/units/field_unit_token.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/unit_sale.dart';
 import 'package:going_wild/ui/game/widgets/unit_sheet/unit_side.dart';
-
-const _combatStepDuration = Duration(milliseconds: 180);
 
 class CombatUnitsLayer extends StatelessWidget {
   final double scale;
   final CombatReplayFrame combatFrame;
   final MatchProgress matchProgress;
-  const CombatUnitsLayer({required this.scale, required this.combatFrame, required this.matchProgress, super.key});
+  final ValueListenable<Map<int, Offset>> unitPoints;
+  const CombatUnitsLayer({
+    required this.scale,
+    required this.unitPoints,
+    required this.combatFrame,
+    required this.matchProgress,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final board = matchProgress.phase.engines.combatEngine.board;
-    final combatantsInPaintOrder = [
-      ...combatFrame.combatants.where((combatant) => !combatant.isAlive),
-      ...combatFrame.combatants.where((combatant) => combatant.isAlive),
-    ];
+    final cellSize = BoardSceneLayout.cellSize * scale;
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        for (final combatant in combatantsInPaintOrder)
-          AnimatedPositioned.fromRect(
-            key: ValueKey(combatant.id),
-            curve: Curves.easeOut,
-            duration: _combatStepDuration,
-            rect: BoardSceneLayout.cellRectOf(board, combatant.position, scale: scale),
-            child: OverflowBox(
-              maxHeight: double.infinity,
-              child: GestureDetector(
-                onTap: () => _openSheetOf(context, combatant),
-                child: CombatUnit(diameter: fieldTokenDiameterFor(scale), combatant: combatant),
-              ),
-            ),
-          ),
-      ],
+    return ValueListenableBuilder(
+      valueListenable: unitPoints,
+      builder: (context, points, child) => Stack(
+        clipBehavior: Clip.none,
+        children: [
+          for (final combatant in combatFrame.combatants)
+            if (combatant.isAlive)
+              if (points[combatant.id] case final point?)
+                Positioned.fromRect(
+                  key: ValueKey(combatant.id),
+                  rect: Rect.fromCenter(center: point * scale, width: cellSize.width, height: cellSize.height),
+                  child: OverflowBox(
+                    maxHeight: double.infinity,
+                    child: GestureDetector(
+                      onTap: () => _openSheetOf(context, combatant),
+                      child: CombatUnit(scale: scale, combatant: combatant),
+                    ),
+                  ),
+                ),
+        ],
+      ),
     );
   }
 

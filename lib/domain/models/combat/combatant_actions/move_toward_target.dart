@@ -14,8 +14,8 @@ Combat moveTowardTarget(Combat combat, int combatantId) {
 
   final combatantRange = combatant.getCurrentStat(Stat.range);
   final targetCombatant = combat.battlefield.combatantWithId(targetCombatantId);
-  final isTargetInRange = combatant.position.isWithinRange(targetCombatant.position, combatantRange);
-  if (!targetCombatant.isTargetable || isTargetInRange) return combat;
+  final isTargetInReach = combatant.position.canReach(targetCombatant.position, combatantRange);
+  if (!targetCombatant.isTargetable || isTargetInReach) return combat;
 
   final ticksUntilNextStep = combatant.ticksUntilNextStep - 1;
   final waitingCombatant = combatant.createCopyWith(ticksUntilNextStep: ticksUntilNextStep);
@@ -27,12 +27,16 @@ Combat moveTowardTarget(Combat combat, int combatantId) {
 
   final movedCombat = waitingCombat.createCopyWithCombatantMovedTo(combatantId, nextStepPosition);
   final movedCombatant = movedCombat.battlefield.combatantWithId(combatantId);
-  final ticksUntilStepAfterMoving = combat.rules.ticksBetweenActions(movedCombatant.getCurrentStat(Stat.moveSpeed));
+  final ticksUntilStepAfterMoving = combat.rules.ticksBetweenSteps(movedCombatant.getCurrentStat(Stat.moveSpeed));
 
   return movedCombat.createCopyWithCombatant(movedCombatant.createCopyWith(ticksUntilNextStep: ticksUntilStepAfterMoving));
 }
 
-Position? findNextStepToward(Combat combat, Combatant combatant, Combatant targetCombatant) {
+Position? findNextStepToward(Combat combat, Combatant combatant, Combatant targetCombatant) =>
+    _findNextStepToward(combat, combatant, targetCombatant, isDiagonalOnly: true) ??
+    _findNextStepToward(combat, combatant, targetCombatant, isDiagonalOnly: false);
+
+Position? _findNextStepToward(Combat combat, Combatant combatant, Combatant targetCombatant, {required bool isDiagonalOnly}) {
   final range = combatant.getCurrentStat(Stat.range);
 
   final previousPositionOf = <Position, Position?>{combatant.position: null};
@@ -42,12 +46,17 @@ Position? findNextStepToward(Combat combat, Combatant combatant, Combatant targe
   while (positionsToVisit.isNotEmpty) {
     final visitingPosition = positionsToVisit.removeFirst();
 
-    if (visitingPosition != combatant.position && visitingPosition.isWithinRange(targetCombatant.position, range)) {
+    if (visitingPosition != combatant.position && visitingPosition.canReach(targetCombatant.position, range)) {
       destinationPosition = visitingPosition;
       break;
     }
 
-    for (final neighborPosition in _neighborPositionsClosestToGoal(combat, visitingPosition, targetCombatant.position)) {
+    for (final neighborPosition in _neighborPositionsClosestToGoal(
+      combat,
+      visitingPosition,
+      targetCombatant.position,
+      isDiagonalOnly: isDiagonalOnly,
+    )) {
       final wasAlreadyVisited = previousPositionOf.containsKey(neighborPosition);
       if (wasAlreadyVisited || !combat.battlefield.isPositionFree(neighborPosition)) continue;
 
@@ -64,8 +73,17 @@ Position? findNextStepToward(Combat combat, Combatant combatant, Combatant targe
   return firstStepPosition;
 }
 
-List<Position> _neighborPositionsClosestToGoal(Combat combat, Position fromPosition, Position goalPosition) {
-  return combat.battlefield.board.neighborPositionsAround(fromPosition).toList()..sort((firstNeighbor, secondNeighbor) {
+List<Position> _neighborPositionsClosestToGoal(
+  Combat combat,
+  Position fromPosition,
+  Position goalPosition, {
+  required bool isDiagonalOnly,
+}) {
+  final neighborPositions = combat.battlefield.board
+      .neighborPositionsAround(fromPosition)
+      .where((neighbor) => !isDiagonalOnly || neighbor.row != fromPosition.row);
+
+  return neighborPositions.toList()..sort((firstNeighbor, secondNeighbor) {
     final distanceOrder = firstNeighbor.distanceToPosition(goalPosition).compareTo(secondNeighbor.distanceToPosition(goalPosition));
     if (distanceOrder != 0) return distanceOrder;
 
